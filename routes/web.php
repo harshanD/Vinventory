@@ -14,6 +14,7 @@
 Route::get('/', function () {
     return redirect('login');
 });
+Auth::routes(['verify' => true]);
 
 Route::get('/user/create', function () {return view('vendor.adminlte.users.create');});
 Route::get('/user/manage', function () {return view('vendor.adminlte.users.index');});
