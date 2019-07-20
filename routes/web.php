@@ -13,7 +13,8 @@
 
 Route::get('/', function () {
     return redirect('login');
-});
+})->middleware('verified');
+
 Auth::routes(['verify' => true]);
 
 Route::get('/user/create', function () {return view('vendor.adminlte.users.create');});
