@@ -15,10 +15,10 @@ class CreatePoHeaderTable extends Migration
     {
         Schema::create('po_header', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('location');
+            $table->integer('location')->unsigned();
             $table->foreign('location')->references('id')->on('location')->onDelete('cascade');
-            $table->integer('supplier');
-            $table->foreign('supplier')->references('id')->on('suppliers')->onDelete('cascade');
+            $table->integer('supplier')->unsigned();
+            $table->foreign('supplier')->references('id')->on('supplier')->onDelete('cascade');
             $table->date('due_date');
             $table->integer('status');
             $table->string('remark')->nullable();

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTaxProfilesTable extends Migration
+class CreateCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateTaxProfilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tax_profiles', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->double('value');
-            $table->tinyInteger('status');
+            $table->string('brand')->unique();
+            $table->integer('status');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateTaxProfilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tax_profiles');
+        Schema::dropIfExists('categories');
     }
 }

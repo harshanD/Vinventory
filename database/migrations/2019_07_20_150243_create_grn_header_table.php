@@ -14,16 +14,16 @@ class CreateGrnHeaderTable extends Migration
     public function up()
     {
         Schema::create('grn_header', function (Blueprint $table) {
-            $table->integer('id');
-            $table->integer('location');
+            $table->increments('id');
+            $table->integer('location')->unsigned();
             $table->foreign('location')->references('id')->on('location')->onDelete('cascade');
-            $table->integer('supplier');
+            $table->integer('supplier')->unsigned();
             $table->foreign('supplier')->references('id')->on('supplier')->onDelete('cascade');
-            $table->integer('invoice');
+            $table->integer('invoice')->unsigned();
             $table->foreign('invoice')->references('id')->on('invoice')->onDelete('cascade');
-            $table->double('total_ net_with_tax');
-            $table->double('total_ net_without_tax');
-            $table->double('total_ discount');
+            $table->double('total_net_with_tax');
+            $table->double('total_net_without_tax');
+            $table->double('total_discount');
             $table->tinyInteger('status');
             $table->tinyInteger('tax_status');
             $table->integer('authorized_or_rejected_by');

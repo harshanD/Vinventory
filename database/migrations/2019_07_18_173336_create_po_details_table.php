@@ -17,7 +17,7 @@ class CreatePoDetailsTable extends Migration
             $table->increments('id');
             $table->integer('po_header')->unsigned();
             $table->foreign ('po_header')->references('id')->on('po_header')->onDelete('cascade');
-            $table->integer('item_id');
+            $table->integer('item_id')->unsigned();
             $table->foreign ('item_id')->references('id')->on('products')->onDelete('cascade');
             $table->double('cost_price');
             $table->double('qty');

@@ -15,9 +15,9 @@ class CreateGtnTable extends Migration
     {
         Schema::create('gtn', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('location');
+            $table->integer('location')->unsigned();
             $table->foreign ('location')->references('id')->on('location')->onDelete('cascade');
-            $table->integer('destination_location');
+            $table->integer('destination_location')->unsigned();
             $table->foreign ('destination_location')->references('id')->on('location')->onDelete('cascade');
             $table->text('remarks');
             $table->tinyInteger('status');

@@ -14,10 +14,10 @@ class CreateStockReturnDetailsTable extends Migration
     public function up()
     {
         Schema::create('stock_return_details', function (Blueprint $table) {
-            $table->integer('id');
-            $table->integer('return_id');
+            $table->increments('id');
+            $table->integer('return_id')->unsigned();
             $table->foreign ('return_id')->references('id')->on('stock_return')->onDelete('cascade');
-            $table->integer('product_id');
+            $table->integer('product_id')->unsigned();
             $table->foreign ('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->double('qty');
             $table->double('cost_price');

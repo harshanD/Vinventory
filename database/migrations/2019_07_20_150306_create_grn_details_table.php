@@ -14,10 +14,10 @@ class CreateGrnDetailsTable extends Migration
     public function up()
     {
         Schema::create('grn_details', function (Blueprint $table) {
-            $table->integer('id');
-            $table->integer('grn_id');
-            $table->foreign ('grn_id')->references('id')->on('grn')->onDelete('cascade');
-            $table->integer('product_id');
+            $table->increments('id');
+            $table->integer('grn_id')->unsigned();
+            $table->foreign ('grn_id')->references('id')->on('grn_header')->onDelete('cascade');
+            $table->integer('product_id')->unsigned();
             $table->foreign ('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->double('qty');
             $table->double('price_cost_with_tax');
