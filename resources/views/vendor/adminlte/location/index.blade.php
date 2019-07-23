@@ -6,17 +6,18 @@
  * Time: 3:50 AM
  */
 ?>
-@extends('adminlte::layouts.app')
+@extends('adminlte::page')
 
-@section('htmlheader_title')
-    User Create
-@endsection
+@section('title', 'AdminLTE')
 
+@section('content_header')
+    <h1>Dashboard</h1>
+@stop
 
-@section('main-content')
+@section('content')
     <!-- Main content -->
     <section class="content">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add Category</button>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add Location</button>
         <br /> <br />
         <!-- Default box -->
         <div class="box">
@@ -73,7 +74,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Edit Category</h4>
+                    <h4 class="modal-title">Edit Location</h4>
                 </div>
 
                 <form role="form" action="" method="post" id="updateForm">
@@ -82,8 +83,8 @@
                         <div id="messages"></div>
 
                         <div class="form-group">
-                            <label for="edit_brand_name">Category Name</label>
-                            <input type="text" class="form-control" id="edit_category_name" name="edit_category_name" placeholder="Enter category name" autocomplete="off">
+                            <label for="edit_brand_name">Location Name</label>
+                            <input type="text" class="form-control" id="edit_category_name" name="edit_category_name" placeholder="Enter Location name" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label for="edit_active">Status</label>

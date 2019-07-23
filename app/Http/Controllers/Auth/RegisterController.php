@@ -4,14 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Role;
 use App\User;
-use Validator;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
-/**
- * Class RegisterController
- * @package %%NAMESPACE%%\Http\Controllers\Auth
- */
 class RegisterController extends Controller
 {
     /*
@@ -28,17 +25,7 @@ class RegisterController extends Controller
     use RegistersUsers;
 
     /**
-     * Show the application registration form.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function showRegistrationForm()
-    {
-        return view('adminlte::auth.register');
-    }
-
-    /**
-     * Where to redirect users after login / registration.
+     * Where to redirect users after registration.
      *
      * @var string
      */
@@ -57,24 +44,24 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param array $data
+     * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
+            'name' => ['required', 'string', 'max:255'],
             'username' => 'sometimes|required|max:255|unique:users',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
 
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param array $data
-     * @return User
+     * @param  array  $data
+     * @return \App\User
      */
     protected function create(array $data)
     {

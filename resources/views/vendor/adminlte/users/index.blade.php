@@ -6,14 +6,15 @@
  * Time: 3:32 AM
  */
 ?>
-@extends('adminlte::layouts.app')
+@extends('adminlte::page')
 
-@section('htmlheader_title')
-    User Create
-@endsection
+@section('title', 'AdminLTE')
 
+@section('content_header')
+    <h1>Dashboard</h1>
+@stop
 
-@section('main-content')
+@section('content')
     <!-- Main content -->
     <section class="content">
 

@@ -15,11 +15,20 @@ Route::get('/', function () {
     return redirect('login');
 })->middleware('verified');
 
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
 Auth::routes(['verify' => true]);
 
 Route::get('/user/create', function () {return view('vendor.adminlte.users.create');});
 Route::get('/user/manage', function () {return view('vendor.adminlte.users.index');});
-Route::get('/brands', function () {return view('vendor.adminlte.brands.index');});
+
+Route::get('/brands', 'BrandsController@index');
+
+Route::post('brands/create', 'BrandsController@create');
+//Route::get('/brands', function () {return view('vendor.adminlte.brands.index');});
+
 Route::get('/category', function () {return view('vendor.adminlte.category.index');});
 Route::get('/location', function () {return view('vendor.adminlte.location.index');});
 Route::get('/products/create', function () {return view('vendor.adminlte.products.create');});
