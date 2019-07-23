@@ -19,9 +19,9 @@ class CreateGtnDetailsTable extends Migration
             $table->foreign ('gtn_id')->references('id')->on('gtn')->onDelete('cascade');
             $table->integer('product_id');
             $table->double('qty');
-            $table->double('cost_price');
-            $table->double('selling_price');
-            $table->tinyInteger('status');
+            $table->double('cost_price')->nullable();
+            $table->double('selling_price')->nullable();
+            $table->tinyInteger('status')->length(2)->comment('1=delete,0=active')->default(0);
             $table->timestamps();
         });
     }

@@ -22,8 +22,8 @@ class CreateStockReturnTable extends Migration
             $table->integer('supplier')->unsigned();
             $table->foreign ('supplier')->references('id')->on('supplier')->onDelete('cascade');
             $table->integer('return_type');
-            $table->string('remarks');
-            $table->tinyInteger('status');
+            $table->string('remarks')->nullable();
+            $table->tinyInteger('status')->length(2)->comment('1=delete,0=active')->default(0);
             $table->timestamps();
         });
     }

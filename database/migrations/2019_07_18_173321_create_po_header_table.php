@@ -19,8 +19,8 @@ class CreatePoHeaderTable extends Migration
             $table->foreign('location')->references('id')->on('location')->onDelete('cascade');
             $table->integer('supplier')->unsigned();
             $table->foreign('supplier')->references('id')->on('supplier')->onDelete('cascade');
-            $table->date('due_date');
-            $table->integer('status');
+            $table->date('due_date')->nullable();
+            $table->tinyInteger('status')->length(2)->comment('1=delete,0=active')->default(0);
             $table->string('remark')->nullable();
             $table->timestamps();
         });

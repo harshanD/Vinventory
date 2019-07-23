@@ -16,7 +16,7 @@ class CreateProductCategoryTable extends Migration
         Schema::create('product_category', function (Blueprint $table) {
             $table->increments('id');
             $table->string('category')->unique();
-            $table->integer('status');
+            $table->tinyInteger('status')->length(2)->comment('1=delete,0=active')->default(0);
             $table->timestamps();
         });
     }

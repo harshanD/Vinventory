@@ -19,9 +19,9 @@ class CreateStockReturnDetailsTable extends Migration
             $table->foreign ('return_id')->references('id')->on('stock_return')->onDelete('cascade');
             $table->integer('product_id')->unsigned();
             $table->foreign ('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->double('qty');
-            $table->double('cost_price');
-            $table->double('selling_price');
+            $table->double('qty')->nullable();
+            $table->double('cost_price')->nullable();
+            $table->double('selling_price')->nullable();
             $table->timestamps();
         });
     }

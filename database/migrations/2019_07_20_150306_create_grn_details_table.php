@@ -20,10 +20,10 @@ class CreateGrnDetailsTable extends Migration
             $table->integer('product_id')->unsigned();
             $table->foreign ('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->double('qty');
-            $table->double('price_cost_with_tax');
-            $table->double('price_cost_without_tax');
-            $table->double('price_selling_with_tax');
-            $table->double('price_selling_without_tax');
+            $table->double('price_cost_with_tax')->nullable();
+            $table->double('price_cost_without_tax')->nullable();
+            $table->double('price_selling_with_tax')->nullable();
+            $table->double('price_selling_without_tax')->nullable();
             $table->timestamps();
         });
     }
