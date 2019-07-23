@@ -17,7 +17,7 @@
 @section('content')
     <!-- Main content -->
     <section class="content">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#addModal" onclick="abd()">Add Brand</button>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#addModal" >Add Brand</button>
         <br/> <br/>
         <!-- Default box -->
         <div class="box">
@@ -84,7 +84,7 @@
 
                         <div class="form-group">
                             <label for="edit_brand_name">Brand Name</label>
-                            <input type="text" class="form-control" id="brand_name" name="brand_name"
+                            <input type="text" class="form-control" id="brand" name="brand"
                                    placeholder="Enter Brand name" autocomplete="off">
                         </div>
                         <div class="form-group">
@@ -110,21 +110,19 @@
 
     <script type="text/javascript">
         var manageTable;
-function abd(){alert('abd')}
+
         $(document).ready(function () {
-alert('asd')
-            $("#brandNav").addClass('active');
 
             // initialize the datatable
             manageTable = $('#manageTable').DataTable({
-                'ajax': 'fetchBrandData',
+                'ajax': '/brands/fetchBrandData',
                 'order': []
             });
 
             // submit the create from
             $("#createBrandForm").unbind('submit').on('submit', function () {
                 var form = $(this);
-alert('asd')
+
                 // remove the text-danger
                 $(".text-danger").remove();
 

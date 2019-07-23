@@ -129,7 +129,7 @@ return [
         [
             'text' => 'Categories',
             'url' => '/category',
-            'icon' => 'glyphicon-duplicate',
+            'icon' => 'duplicate',
             'label_color' => 'success',
         ],
         [
@@ -140,7 +140,7 @@ return [
         ],
         [
             'text' => 'Supplier',
-            'url' => '/home',
+            'url' => '/supplier',
             'icon' => 'truck',
             'label_color' => 'success',
         ],

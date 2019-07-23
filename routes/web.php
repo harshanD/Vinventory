@@ -25,6 +25,7 @@ Route::get('/user/create', function () {return view('vendor.adminlte.users.creat
 Route::get('/user/manage', function () {return view('vendor.adminlte.users.index');});
 
 Route::get('/brands', 'BrandsController@index');
+Route::get('/brands/fetchBrandData', 'BrandsController@fetchBrandData');
 
 Route::post('brands/create', 'BrandsController@create');
 //Route::get('/brands', function () {return view('vendor.adminlte.brands.index');});
