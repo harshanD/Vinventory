@@ -3,14 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Brands;
+//use App\User;
+//use App\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use League\Flysystem\Config;
+//use App\Http\Controllers\Permissions;
 
 class BrandsController extends Controller
 {
+
     public function index()
     {
-
+echo '<pre>';
+        print_r(Permissions::getRolePermissions('createUser'));
+        echo '</pre>';
         return view('vendor.adminlte.brands.index');
     }
 
