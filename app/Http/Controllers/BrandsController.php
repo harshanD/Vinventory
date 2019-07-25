@@ -3,21 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Brands;
-//use App\User;
+use App\User;
 //use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use League\Flysystem\Config;
+
 //use App\Http\Controllers\Permissions;
 
 class BrandsController extends Controller
 {
 
-    public function index()
+    public function index(User $user)
     {
-echo '<pre>';
-        print_r(Permissions::getRolePermissions('createUser'));
-        echo '</pre>';
+//        Auth::user()->hasRole('Admin'); // individually check role has accessibility
+//        Auth::user()->hasAnyRole(['Admin', 'Employer']); // check for roles accessibility using array
+//        Auth::user()->authorizeRoles('Admin'); // if unauthorized then show error window
+//        print_r(Permissions::getRolePermissions('createUser')); check User permission
+
         return view('vendor.adminlte.brands.index');
     }
 
