@@ -134,7 +134,7 @@ return [
         ],
         [
             'text' => 'Locations',
-            'url' => '/location',
+            'url' => '/locations',
             'icon' => 'map-marker',
             'label_color' => 'success',
         ],

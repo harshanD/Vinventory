@@ -36,6 +36,7 @@ Route::post('/brands/edit/{id}', 'BrandsController@editBrandData');
 Route::post('/brands/remove', 'BrandsController@removeBrandData');
 Route::post('/brands/create', 'BrandsController@create');
 
+/*Categories*/
 Route::get('/categories', 'CategoriesController@index');
 Route::get('/categories/fetchCategoryData', 'CategoriesController@fetchCategoryData');
 Route::post('/categories/fetchCategoryDataById/{id}', 'CategoriesController@fetchCategoryDataById');
@@ -43,12 +44,16 @@ Route::post('/categories/edit/{id}', 'CategoriesController@editCategoryData');
 Route::post('/categories/remove', 'CategoriesController@removeCategoryData');
 Route::post('/categories/create', 'CategoriesController@create');
 
+/*Locations*/
+Route::get('/locations', 'LocationsController@index');
+Route::get('/locations/fetchLocationData', 'LocationsController@fetchLocationData');
+Route::post('/locations/fetchLocationDataById/{id}', 'LocationsController@fetchLocationDataById');
+Route::post('/locations/edit/{id}', 'LocationsController@editLocationData');
+Route::post('/locations/remove', 'LocationsController@removeLocationData');
+Route::post('/locations/create', 'LocationsController@create');
 
 //Route::get('/brands', function () {return view('vendor.adminlte.brands.index');});
 
-Route::get('/location', function () {
-    return view('vendor.adminlte.location.index');
-});
 Route::get('/products/create', function () {
     return view('vendor.adminlte.products.create');
 });

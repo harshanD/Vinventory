@@ -16,7 +16,7 @@ class CreateInvoiceTable extends Migration
         Schema::create('invoice', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('location')->unsigned();
-            $table->foreign ('location')->references('id')->on('location')->onDelete('cascade');
+            $table->foreign ('location')->references('id')->on('locations')->onDelete('cascade');
             $table->integer('customer_id')->unsigned();
             $table->double('invoice_amount');
             $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);

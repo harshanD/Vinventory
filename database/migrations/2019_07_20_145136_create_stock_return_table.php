@@ -16,9 +16,9 @@ class CreateStockReturnTable extends Migration
         Schema::create('stock_return', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('source_location')->unsigned();
-            $table->foreign ('source_location')->references('id')->on('location')->onDelete('cascade');
+            $table->foreign ('source_location')->references('id')->on('locations')->onDelete('cascade');
             $table->integer('destination_location')->unsigned();
-            $table->foreign ('destination_location')->references('id')->on('location')->onDelete('cascade');
+            $table->foreign ('destination_location')->references('id')->on('locations')->onDelete('cascade');
             $table->integer('supplier')->unsigned();
             $table->foreign ('supplier')->references('id')->on('supplier')->onDelete('cascade');
             $table->integer('return_type');
