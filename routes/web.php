@@ -21,22 +21,40 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes(['verify' => true]);
 
-Route::get('/user/create', function () {return view('vendor.adminlte.users.create');});
-Route::get('/user/manage', function () {return view('vendor.adminlte.users.index');});
+Route::get('/user/create', function () {
+    return view('vendor.adminlte.users.create');
+});
+Route::get('/user/manage', function () {
+    return view('vendor.adminlte.users.index');
+});
 
+/*Brands*/
 Route::get('/brands', 'BrandsController@index');
 Route::get('/brands/fetchBrandData', 'BrandsController@fetchBrandData');
 Route::post('/brands/fetchBrandDataById/{id}', 'BrandsController@fetchBrandDataById');
 Route::post('/brands/edit/{id}', 'BrandsController@editBrandData');
 Route::post('/brands/remove', 'BrandsController@removeBrandData');
+Route::post('/brands/create', 'BrandsController@create');
 
-Route::post('brands/create', 'BrandsController@create');
+Route::get('/categories', 'CategoriesController@index');
+Route::get('/categories/fetchCategoryData', 'CategoriesController@fetchCategoryData');
+Route::post('/categories/fetchCategoryDataById/{id}', 'CategoriesController@fetchCategoryDataById');
+Route::post('/categories/edit/{id}', 'CategoriesController@editCategoryData');
+Route::post('/categories/remove', 'CategoriesController@removeCategoryData');
+Route::post('/categories/create', 'CategoriesController@create');
+
+
 //Route::get('/brands', function () {return view('vendor.adminlte.brands.index');});
 
-Route::get('/category', function () {return view('vendor.adminlte.category.index');});
-Route::get('/location', function () {return view('vendor.adminlte.location.index');});
-Route::get('/products/create', function () {return view('vendor.adminlte.products.create');});
-Route::get('/products', function () {return view('vendor.adminlte.products.index');});
+Route::get('/location', function () {
+    return view('vendor.adminlte.location.index');
+});
+Route::get('/products/create', function () {
+    return view('vendor.adminlte.products.create');
+});
+Route::get('/products', function () {
+    return view('vendor.adminlte.products.index');
+});
 
 
 Route::group(['middleware' => 'auth'], function () {
