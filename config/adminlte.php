@@ -128,7 +128,7 @@ return [
         ],
         [
             'text' => 'Categories',
-            'url' => '/category',
+            'url' => '/categories',
             'icon' => 'duplicate',
             'label_color' => 'success',
         ],
