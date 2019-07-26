@@ -16,7 +16,8 @@ class CreateTaxProfilesTable extends Migration
         Schema::create('tax_profiles', function (Blueprint $table) {
             $table->increments('id');
             $table->double('value');
-            $table->tinyInteger('status')->length(2)->comment('1=delete,0=active')->default(0);
+            $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -24,11 +24,12 @@ class CreateGrnHeaderTable extends Migration
             $table->double('total_net_with_tax')->nullable();
             $table->double('total_net_without_tax')->nullable();
             $table->double('total_discount')->nullable();
-            $table->tinyInteger('status')->length(2)->comment('1=delete,0=active')->default(0);
+            $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
             $table->tinyInteger('tax_status')->nullable();
             $table->integer('authorized_or_rejected_by')->nullable();
             $table->integer('authorized_or_rejected_timestamp')->nullable();
             $table->string('remarks')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

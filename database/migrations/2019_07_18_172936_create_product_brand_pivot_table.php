@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProductBrandTable extends Migration
+class CreateProductBrandPivotTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,9 @@ class CreateProductBrandTable extends Migration
     public function up()
     {
         Schema::create('product_brand', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('brand')->unique();
-            $table->tinyInteger('status')->length(2)->comment('1=delete,0=active')->default(0);
+            $table->integer('product_id');
+            $table->integer('brand_id');
+            $table->primary(['product_id', 'brand_id']);
             $table->timestamps();
         });
     }

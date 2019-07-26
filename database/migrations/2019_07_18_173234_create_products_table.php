@@ -30,8 +30,9 @@ class CreateProductsTable extends Migration
             $table->double('selling_price');
             $table->double('cost_price');
             $table->double('availability');
-            $table->tinyInteger('status')->length(2)->comment('1=delete,0=active')->default(0);
+            $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
             $table->integer('status_tax')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

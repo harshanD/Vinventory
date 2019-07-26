@@ -23,7 +23,8 @@ class CreateLocationTable extends Migration
             $table->integer('type');
             $table->integer('created_by');
             $table->integer('updated_by');
-            $table->tinyInteger('status')->length(2)->comment('1=delete,0=active')->default(0);
+            $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

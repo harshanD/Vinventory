@@ -20,7 +20,8 @@ class CreateGtnTable extends Migration
             $table->integer('destination_location')->unsigned();
             $table->foreign ('destination_location')->references('id')->on('location')->onDelete('cascade');
             $table->text('remarks')->nullable();
-            $table->tinyInteger('status')->length(2)->comment('1=delete,0=active')->default(0);
+            $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -19,8 +19,9 @@ class CreateInvoiceTable extends Migration
             $table->foreign ('location')->references('id')->on('location')->onDelete('cascade');
             $table->integer('customer_id')->unsigned();
             $table->double('invoice_amount');
-            $table->tinyInteger('status')->length(2)->comment('1=delete,0=active')->default(0);
+            $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
             $table->text('remarks');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

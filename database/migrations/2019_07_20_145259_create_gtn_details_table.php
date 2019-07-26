@@ -21,7 +21,7 @@ class CreateGtnDetailsTable extends Migration
             $table->double('qty');
             $table->double('cost_price')->nullable();
             $table->double('selling_price')->nullable();
-            $table->tinyInteger('status')->length(2)->comment('1=delete,0=active')->default(0);
+            $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
             $table->timestamps();
         });
     }
