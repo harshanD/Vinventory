@@ -17,7 +17,15 @@
 @section('content')
     <!-- Main content -->
     <section class="content">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#addModal" >Add Brand</button>
+        <div id="messages"></div>
+        @if($errors->any())
+            <div class="alert alert-danger">
+                @foreach($errors->all() as $error)
+                    <li>{{$error}}</li>
+                @endforeach
+            </div>
+        @endif
+        <button class="btn btn-primary" data-toggle="modal" data-target="#addBrandModal">Add Brand</button>
         <br/> <br/>
         <!-- Default box -->
         <div class="box">
@@ -67,8 +75,8 @@
 
     </section>
 
-    <!-- edit brand modal -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="addModal">
+    <!-- add brand modal -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="addBrandModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -76,12 +84,10 @@
                                 aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Add Brand</h4>
                 </div>
-
+                <div id="create_model_messages"></div>
                 <form role="form" action="{{ url('brands/create') }}" method="post" id="createBrandForm">
                     {{ @csrf_field() }}
                     <div class="modal-body">
-                        <div id="messages"></div>
-
                         <div class="form-group">
                             <label for="edit_brand_name">Brand Name</label>
                             <input type="text" class="form-control" id="brand" name="brand"
@@ -89,9 +95,9 @@
                         </div>
                         <div class="form-group">
                             <label for="active">Status</label>
-                            <select class="form-control" id="active" name="active">
-                                <option value="1">Active</option>
-                                <option value="2">Inactive</option>
+                            <select class="form-control" id="status" name="status">
+                                <option value="0">Active</option>
+                                <option value="1">Inactive</option>
                             </select>
                         </div>
                     </div>
@@ -108,11 +114,74 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+    <!-- edit brand modal -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="editBrandModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Edit Brand</h4>
+                </div>
+                <div id="edit_model_messages"></div>
+                <form role="form" action="{{ url('brands/edit') }}" method="post" id="updateBrandForm">
+                    {{ @csrf_field() }}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="edit_brand_name">Brand Name</label>
+                            <input type="text" class="form-control" id="edit_brand_name" name="edit_brand_name"
+                                   placeholder="Enter Brand name" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="active">Status</label>
+                            <select class="form-control" id="edit_status" name="edit_status">
+                                <option value="0">Active</option>
+                                <option value="1">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+
+                </form>
+
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- remove brand modal -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="removeBrandModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Remove Brand</h4>
+                </div>
+
+                <form role="form" action="{{ url('brands/remove') }}" method="post" id="removeBrandForm">
+                    <div class="modal-body">
+                        <p>Do you really want to remove?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     <script type="text/javascript">
         var manageTable;
 
         $(document).ready(function () {
-
             // initialize the datatable
             manageTable = $('#manageTable').DataTable({
                 'ajax': '/brands/fetchBrandData',
@@ -170,15 +239,157 @@
                                     '</div>');
                             }
                         }
+                    },
+                    error: function (response) {
+
+                        $("#create_model_messages").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                            '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>' + response.responseJSON.errors.brand +
+                            '</div>');
                     }
                 });
+                return false;
+            });
+        });
 
+        function editBrand(id) {
+            $.ajax({
+                url: '/brands/fetchBrandDataById/' + id,
+                type: 'post',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                },
+                dataType: 'json',
+                success: function (response) {
+
+                    $("#edit_brand_name").val(response.name);
+                    $("#edit_status").val(response.status);
+
+                    // submit the edit from
+                    $("#updateBrandForm").unbind('submit').bind('submit', function () {
+                        var form = $(this);
+
+                        // remove the text-danger
+                        $(".text-danger").remove();
+
+                        $.ajax({
+                            url: form.attr('action') + '/' + id,
+                            type: form.attr('method'),
+                            data: form.serialize(), // /converting the form data into array and sending it to server
+                            dataType: 'json',
+                            success: function (response) {
+
+                                manageTable.ajax.reload(null, false);
+
+                                if (response.success === true) {
+                                    $("#messages").html('<div class="alert alert-success alert-dismissible" role="alert">' +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                                        '<strong> <span class="glyphicon glyphicon-ok-sign"></span> </strong>' + response.messages +
+                                        '</div>');
+
+
+                                    // hide the modal
+                                    $("#editBrandModal").modal('hide');
+                                    // reset the form
+                                    $("#updateBrandForm .form-group").removeClass('has-error').removeClass('has-success');
+
+                                } else {
+
+                                    if (response.messages instanceof Object) {
+                                        $.each(response.messages, function (index, value) {
+                                            var id = $("#" + index);
+
+                                            id.closest('.form-group')
+                                                .removeClass('has-error')
+                                                .removeClass('has-success')
+                                                .addClass(value.length > 0 ? 'has-error' : 'has-success');
+
+                                            id.after(value);
+
+                                        });
+                                    } else {
+                                        $("#messages").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                                            '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>' + response.messages +
+                                            '</div>');
+                                    }
+                                }
+                            },
+                            error: function (response) {
+                                console.log(response.responseJSON.errors)
+                                $("#edit_model_messages").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
+                                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                                    '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>' + response.responseJSON.errors.edit_brand_name +
+                                    '</div>');
+                            }
+                        });
+
+                        return false;
+                    });
+
+                }
+            });
+        }
+
+        function removeBrand(id) {
+            // submit the remove from
+            $("#removeBrandForm").on('submit', function () {
+                var form = $(this);
+
+                // remove the text-danger
+                $(".text-danger").remove();
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: {
+                        brand_id: id,
+                        "_token": "{{ csrf_token() }}",
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+
+                        manageTable.ajax.reload(null, false);
+
+                        if (response.success === true) {
+                            $("#messages").html('<div class="alert alert-success alert-dismissible" role="alert">' +
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                                '<strong> <span class="glyphicon glyphicon-ok-sign"></span> </strong>' + response.messages +
+                                '</div>');
+
+
+                            // hide the modal
+                            $("#removeBrandModal").modal('hide');
+                            // reset the form
+                            $("#updateBrandForm .form-group").removeClass('has-error').removeClass('has-success');
+
+                        } else {
+
+                            if (response.messages instanceof Object) {
+                                $.each(response.messages, function (index, value) {
+                                    var id = $("#" + index);
+
+                                    id.closest('.form-group')
+                                        .removeClass('has-error')
+                                        .removeClass('has-success')
+                                        .addClass(value.length > 0 ? 'has-error' : 'has-success');
+
+                                    id.after(value);
+
+                                });
+                            } else {
+                                $("#messages").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
+                                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                                    '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>' + response.messages +
+                                    '</div>');
+                            }
+                        }
+                    },
+                });
                 return false;
             });
 
-
-        });
-
+        }
     </script>
 
 @stop
