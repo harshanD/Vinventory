@@ -21,12 +21,11 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes(['verify' => true]);
 
-Route::get('/user/create', function () {
-    return view('vendor.adminlte.users.create');
-});
-Route::get('/user/manage', function () {
-    return view('vendor.adminlte.users.index');
-});
+Route::get('/user/register', 'HomeController@registerUserView');
+Route::post('user/create', 'HomeController@registerUser');
+
+
+Route::get('/user/manage', ['as'=>'users.manage', 'uses' =>'HomeController@userList']);
 
 /*Brands*/
 Route::get('/brands', 'BrandsController@index');

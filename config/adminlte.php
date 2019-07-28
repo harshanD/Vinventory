@@ -171,7 +171,7 @@ return [
                 [
                     'text' => 'Add Users',
                     'icon' => 'user',
-                    'url'  => '/user/create',
+                    'url'  => '/user/register',
                 ],[
                     'text' => 'Manage users',
                     'icon' => 'user',
