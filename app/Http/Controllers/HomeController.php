@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -97,6 +98,46 @@ class HomeController extends Controller
     public function userList()
     {
         return view('vendor.adminlte.users.index');
+    }
+
+    public function fetchUsersData()
+    {
+        if (Permissions::getRolePermissions('viewUserList')) {
+            $users = User::with('roles')->get();
+        } else {
+            $users = User::with('roles')
+                ->where('users.id', Auth::id())
+                ->get();
+        }
+
+        $result = array('data' => array());
+
+
+        foreach ($users as $key => $value) {
+            // button
+            $buttons = '';
+
+            if (Permissions::getRolePermissions('updateUser')) {
+                $buttons .= '<button type="button" class="btn btn-default" onclick="editUser(' . $value->id . ')" data-toggle="modal" data-target="#editBrandModal"><i class="fa fa-pencil"></i></button>';
+            }
+
+            if (Permissions::getRolePermissions('deleteUser')) {
+                $buttons .= ' <button type="button" class="btn btn-default" onclick="removeUser(' . $value->id . ')" data-toggle="modal" data-target="#removeBrandModal"><i class="fa fa-trash"></i></button>';
+            }
+
+            $status = ($value->status == \Config::get('constants.status.Active')) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
+
+            $result['data'][$key] = array(
+                $value->name,
+                $value->email,
+                $status,
+                ($value->phone == null) ? '--' : $value->phone,
+                $value->roles[0]->name,
+                $buttons
+            );
+        } // /foreach
+
+        echo json_encode($result);
     }
 
 }

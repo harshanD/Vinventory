@@ -33,21 +33,23 @@
                 </div>
             </div>
             <div class="box-body">
-               @if(session()->has('message'))
+                @if(session()->has('message'))
                     <div class="alert alert-success alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <strong> <span class="glyphicon glyphicon-ok-sign"></span> </strong> {{ session()->get('message') }}
-                </div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <strong> <span class="glyphicon glyphicon-ok-sign"></span>
+                        </strong> {{ session()->get('message') }}
+                    </div>
                 @endif
 
-                <table id="userTable"  class="table table-bordered table-striped">
+                <table id="userTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th>Username</th>
+                        <th>Full Name</th>
                         <th>Email</th>
-                        <th>Name</th>
+                        <th>status</th>
                         <th>Phone</th>
-                        <th>Group</th>
+                        <th>Role</th>
 
                         <th>Action</th>
                     </tr>
@@ -75,9 +77,25 @@
         {{--</div>--}}
         <!-- /.box-footer-->
         </div>
+
         <!-- /.box -->
+
+
+
 
     </section>
 
 
+    <script type="text/javascript">
+        var manageTable;
+        $(document).ready(function () {
+            // table = $("table.table").dataTable();
+            // table.fnPageChange("first", 1);
+            // initialize the datatable
+            manageTable = $('#userTable').DataTable({
+                'ajax': '/user/fetchUsersData',
+                'order': []
+            });
+        })
+    </script>
 @endsection

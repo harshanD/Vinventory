@@ -26,6 +26,7 @@ Route::post('user/create', 'HomeController@registerUser');
 
 
 Route::get('/user/manage', ['as'=>'users.manage', 'uses' =>'HomeController@userList']);
+Route::get('/user/fetchUsersData', 'HomeController@fetchUsersData');
 
 /*Brands*/
 Route::get('/brands', 'BrandsController@index');
