@@ -41,6 +41,14 @@
                         </strong> {{ session()->get('message') }}
                     </div>
                 @endif
+                @if(session()->has('error'))
+                    <div class="alert alert-warning alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <strong> <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        </strong> {{ session()->get('error') }}
+                    </div>
+                @endif
 
                 <table id="userTable" class="table table-bordered table-striped">
                     <thead>
@@ -79,8 +87,6 @@
         </div>
 
         <!-- /.box -->
-
-
 
 
     </section>

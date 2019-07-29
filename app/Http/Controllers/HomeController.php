@@ -6,6 +6,7 @@ use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -45,15 +46,14 @@ class HomeController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required:min:6',
             'cpassword' => 'required|same:password',
-            'fname' => 'required|max:100|regex:/^[\pL\s\-]+$/u',
+            'fname' => 'required|min:4|max:100|regex:/^[\pL\s\-]+$/u',
             'phone' => 'required|between:10,12',
             'gender' => 'required',
         ]);
 
         $niceNames = array(
             'cpassword' => 'confirm password',
-            'fname' => 'first name',
-            'lname' => 'last name',
+            'fname' => 'full name',
             'email' => 'email address',
         );
 
@@ -84,8 +84,72 @@ class HomeController extends Controller
         } else {
             return redirect()->back()->with('message', 'Error in the database while adding the brand information');
         }
+    }
+
+    public function editSave(Request $request)
+    {
+        if (!Permissions::getRolePermissions('updateUser')) {
+            return redirect()->route('users.manage')->with('error', 'You haven\'t permission');
+        }
+        $userId = $request->input('userid');
+        $user = User::find($userId);
+
+        $validator = Validator::make($request->all(), [
+            'role' => ['required', Rule::notIn(['0'])],
+            'email' => 'required|email|unique:users,email,' . $userId,
+            'fname' => 'required|min:4|max:100|regex:/^[\pL\s\-]+$/u',
+            'phone' => 'required|between:10,12',
+            'gender' => 'required',
+        ]);
 
 
+        if (($request->input('password')) != '' || ($request->input('new_password')) != '' || ($request->input('password_confirmation')) != '') {
+            $this->validate($request, [
+                'password' => 'required',
+                'new_password' => 'required|min:6',
+                'password_confirmation' => 'required|same:new_password|different:password',
+            ]);
+
+            if (!Hash::check($request->input('password'), Auth::user()->password)) {
+                return redirect()->back()->withInput()->with('error', 'Your Password was Incorrect');
+//                return redirect()->back()
+//                    ->withErrors('Your Password was Incorrect')
+//                    ->withInput();
+            }
+            $user->password = Hash::make($request['password']);
+        }
+
+        $niceNames = array(
+            'cpassword' => 'confirm password',
+            'fname' => 'full name',
+            'email' => 'email address',
+        );
+
+        $validator->setAttributeNames($niceNames);
+        if (!$validator->validate()) {
+            return redirect()->back()->withInput();
+        }
+
+        if ($request->file('avatar') != null) {
+            $path = $request->file('avatar')->store('avatars');
+            $user->avatar = $path;
+        }
+
+
+        $user->name = $request->input('fname');
+        $user->email = $request->input('email');
+        $user->phone = $request->input('phone');
+        $user->gender = $request->input('gender');
+
+        $user->save();
+
+        $user->roles()->sync($request->input('role'));
+
+        if ($user) {
+            return redirect()->route('users.manage')->with('message', 'Successfully Updated');
+        } else {
+            return redirect()->back()->with('error', 'Error in the database while updating the brand information');
+        }
     }
 
     public function setAttributeNames(array $attributes)
@@ -98,6 +162,15 @@ class HomeController extends Controller
     public function userList()
     {
         return view('vendor.adminlte.users.index');
+    }
+
+    public function userEditView($id)
+    {
+        $data = Role::orderBy('name', 'asc')->get();
+        $user = User::with('roles')
+            ->where('users.id', $id)
+            ->get();
+        return view('vendor.adminlte.users.edit', ['roles' => $data, 'user' => $user]);
     }
 
     public function fetchUsersData()
@@ -118,11 +191,11 @@ class HomeController extends Controller
             $buttons = '';
 
             if (Permissions::getRolePermissions('updateUser')) {
-                $buttons .= '<button type="button" class="btn btn-default" onclick="editUser(' . $value->id . ')" data-toggle="modal" data-target="#editBrandModal"><i class="fa fa-pencil"></i></button>';
+                $buttons .= '<a  href="' . url("/user/edit/" . $value->id) . '" class="btn btn-default"><i class="fa fa-pencil"></i></a>';
             }
 
             if (Permissions::getRolePermissions('deleteUser')) {
-                $buttons .= ' <button type="button" class="btn btn-default" onclick="removeUser(' . $value->id . ')" data-toggle="modal" data-target="#removeBrandModal"><i class="fa fa-trash"></i></button>';
+                $buttons .= '<button type="button" class="btn btn-default" onclick="removeUser(' . $value->id . ')" data-toggle="modal" data-target="#removeBrandModal"><i class="fa fa-trash"></i></button>';
             }
 
             $status = ($value->status == \Config::get('constants.status.Active')) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
