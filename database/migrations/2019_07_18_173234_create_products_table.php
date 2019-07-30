@@ -19,6 +19,7 @@ class CreateProductsTable extends Migration
             $table->string('sku')->nullable();
             $table->string('item_code')->unique();
             $table->string('name')->unique();
+            $table->string('short_name')->unique();
             $table->text('description');
             $table->string('img_url')->nullable();
             $table->integer('category')->unsigned();
@@ -29,9 +30,14 @@ class CreateProductsTable extends Migration
             $table->foreign('supplier')->references('id')->on('supplier')->onDelete('cascade');
             $table->double('selling_price');
             $table->double('cost_price');
+            $table->double('weight');
+            $table->string('unit')->comment('meter=1,piece=2,kilogram=3');
             $table->double('availability');
+            $table->double('reorder_level');
+            $table->double('reorder_activation');
+            $table->integer('tax')->nullable();
+            $table->integer('tax_method')->nullable()->comment('exclusive=1,inclusive=2');
             $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
-            $table->integer('status_tax')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

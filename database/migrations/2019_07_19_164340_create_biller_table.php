@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLocationsTable extends Migration
+class CreateBillerTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,15 @@ class CreateLocationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('locations', function (Blueprint $table) {
+        Schema::create('biller', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name',100)->unique();
-            $table->string('code',100)->unique();
-            $table->string('address',200);
-            $table->integer('telephone');
-            $table->string('email',100);
-            $table->string('contact_person',100);
-            $table->integer('type');
-            $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->string('company');
+            $table->string('name')->unique();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable()->length(12);
+            $table->string('address');
+            $table->text('invoice_footer');
+            $table->text('invoice_footer');
             $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
             $table->softDeletes();
             $table->timestamps();
@@ -37,6 +35,6 @@ class CreateLocationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('locations');
+        Schema::dropIfExists('biller');
     }
 }
