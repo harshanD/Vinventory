@@ -15,13 +15,12 @@ class CreateBillerTable extends Migration
     {
         Schema::create('biller', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('company');
+            $table->string('company')->nullable();
             $table->string('name')->unique();
             $table->string('email')->nullable();
             $table->string('phone')->nullable()->length(12);
-            $table->string('address');
-            $table->text('invoice_footer');
-            $table->text('invoice_footer');
+            $table->string('address')->nullable();
+            $table->text('invoice_footer')->nullable();
             $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
             $table->softDeletes();
             $table->timestamps();

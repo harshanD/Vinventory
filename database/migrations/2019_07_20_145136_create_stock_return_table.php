@@ -24,7 +24,7 @@ class CreateStockReturnTable extends Migration
             $table->foreign ('biller')->references('id')->on('biller')->onDelete('cascade');
             $table->integer('customer_id')->unsigned();
             $table->foreign ('customer_id')->references('id')->on('customer')->onDelete('cascade');
-            $table->integer('return_type');
+            $table->integer('return_type')->comment('1=sr,2=mr')->default(1);
             $table->string('return_note')->nullable();
             $table->string('staff_note')->nullable();
             $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);

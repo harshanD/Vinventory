@@ -34,6 +34,8 @@ class BrandsController extends Controller
 
         $brands = new Brands();
         $brands->brand = $request->input('brand');
+        $brands->code = $request->input('code');
+        $brands->description = $request->input('description');
         $brands->status = $request->input('status');
 
         if (!$brands->save()) {
@@ -68,6 +70,7 @@ class BrandsController extends Controller
             $status = ($value->status == \Config::get('constants.status.Active')) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
 
             $result['data'][$key] = array(
+                $value->code,
                 $value->brand,
                 $status,
                 $buttons
@@ -80,20 +83,22 @@ class BrandsController extends Controller
     public function fetchBrandDataById($id)
     {
         $data = (Object)Brands::find($id)->toArray();
-        echo json_encode(array('name' => $data->brand, 'status' => $data->status));
+        echo json_encode(array('name' => $data->brand,'code' => $data->code,'description' => $data->description, 'status' => $data->status));
 
     }
 
     public function editBrandData(Request $request, $id)
     {
         $request->validate([
-            'edit_brand_name' => 'required|unique:brands,brand|max:191',
+            'edit_brand_name' => 'required|unique:brands,brand,'.$id.'|max:191',
             'edit_status' => 'required',
         ]);
 
         $brand = Brands::find($id);
 
         $brand->brand = $request->input('edit_brand_name');
+        $brand->code = $request->input('edit_code');
+        $brand->description = $request->input('edit_description');
         $brand->status = $request->input('edit_status');
 
         if (!$brand->save()) {

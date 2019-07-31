@@ -27,6 +27,8 @@ class CategoriesController extends Controller
 
         $categories = new Categories();
         $categories->category = $request->input('category');
+        $categories->code = $request->input('code');
+        $categories->description = $request->input('description');
         $categories->status = $request->input('status');
 
         if (!$categories->save()) {
@@ -61,6 +63,7 @@ class CategoriesController extends Controller
             $status = ($value->status == \Config::get('constants.status.Active')) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
 
             $result['data'][$key] = array(
+                $value->code,
                 $value->category,
                 $status,
                 $buttons
@@ -73,20 +76,22 @@ class CategoriesController extends Controller
     public function fetchCategoryDataById($id)
     {
         $data = (Object)Categories::find($id)->toArray();
-        echo json_encode(array('name' => $data->category, 'status' => $data->status));
+        echo json_encode(array('name' => $data->category, 'description' => $data->description, 'code' => $data->code, 'status' => $data->status));
 
     }
 
     public function editCategoryData(Request $request, $id)
     {
         $request->validate([
-            'edit_category_name' => 'required|unique:categories,category|max:191',
+            'edit_category_name' => 'required|unique:categories,category,'.$id.'|max:191',
             'edit_status' => 'required',
         ]);
 
         $category = Categories::find($id);
 
         $category->category = $request->input('edit_category_name');
+        $category->code = $request->input('edit_code');
+        $category->description = $request->input('edit_description');
         $category->status = $request->input('edit_status');
 
         if (!$category->save()) {

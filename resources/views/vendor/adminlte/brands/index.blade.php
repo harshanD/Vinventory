@@ -46,6 +46,7 @@
                 <table id="manageTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
+                        <th>Code</th>
                         <th>Brand Name</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -89,9 +90,19 @@
                     {{ @csrf_field() }}
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="edit_brand_name">Brand Name</label>
+                            <label for="edit_code_name">Code</label>
+                            <input type="text" class="form-control" id="code" name="code"
+                                   placeholder="Enter Code" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_brand_name">Brand Name *</label>
                             <input type="text" class="form-control" id="brand" name="brand"
                                    placeholder="Enter Brand name" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_description">Description</label>
+                            <input type="text" class="form-control" id="description" name="description"
+                                   placeholder="Enter Description" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label for="active">Status</label>
@@ -128,9 +139,19 @@
                     {{ @csrf_field() }}
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="edit_brand_name">Brand Name</label>
+                            <label for="edit_code_name">Code</label>
+                            <input type="text" class="form-control" id="edit_code" name="edit_code"
+                                   placeholder="Enter Code" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_brand_name">Brand Name *</label>
                             <input type="text" class="form-control" id="edit_brand_name" name="edit_brand_name"
                                    placeholder="Enter Brand name" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_description">Description</label>
+                            <input type="text" class="form-control" id="edit_description" name="edit_description"
+                                   placeholder="Enter Description" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label for="active">Status</label>
@@ -263,6 +284,8 @@
                 success: function (response) {
 
                     $("#edit_brand_name").val(response.name);
+                    $("#edit_code").val(response.code);
+                    $("#edit_description").val(response.description);
                     $("#edit_status").val(response.status);
 
                     // submit the edit from

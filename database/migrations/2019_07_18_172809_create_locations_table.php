@@ -16,14 +16,12 @@ class CreateLocationsTable extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name',100)->unique();
-            $table->string('code',100)->unique();
+            $table->string('code',100)->nullable();
             $table->string('address',200);
-            $table->integer('telephone');
+            $table->string('telephone')->length(12);
             $table->string('email',100);
             $table->string('contact_person',100);
             $table->integer('type');
-            $table->integer('created_by');
-            $table->integer('updated_by');
             $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
             $table->softDeletes();
             $table->timestamps();

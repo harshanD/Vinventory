@@ -16,6 +16,16 @@
 
 @section('content')
     <!-- Main content -->
+    <style>
+        .help-block {
+            color: red;
+        }
+
+        .avatar-pic {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
     <section class="content">
         <div id="messages"></div>
         @if($errors->any())
@@ -46,6 +56,7 @@
                 <table id="manageTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
+                        <th>Code</th>
                         <th>Location Name</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -53,6 +64,7 @@
                     </thead>
                     <tbody>
                     <tr>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td>
@@ -89,9 +101,41 @@
                     {{ @csrf_field() }}
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="edit_location_name">Location Name</label>
+                            <label for="edit_location_name">Code *</label>
+                            <input type="text" class="form-control" id="code" name="code"
+                                   placeholder="Enter Code" autocomplete="off">
+                            <p class="help-block" id="error_code"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_location_name">Location Name *</label>
                             <input type="text" class="form-control" id="location" name="location"
                                    placeholder="Enter Location name" autocomplete="off">
+                            <p class="help-block" id="error_location"></p>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_location_name">Contact Person *</label>
+                            <input type="text" class="form-control" id="person" name="person"
+                                   placeholder="Enter Contact Person" autocomplete="off">
+                            <p class="help-block" id="error_person"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_location_name">Phone *</label>
+                            <input type="text" class="form-control" id="phone" name="phone"
+                                   placeholder="Enter Phone" autocomplete="off">
+                            <p class="help-block" id="error_phone"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_location_name">Email *</label>
+                            <input type="text" class="form-control" id="email" name="email"
+                                   placeholder="Enter Phone" autocomplete="off">
+                            <p class="help-block" id="error_email"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_location_name">Address *</label>
+                            <input type="text" class="form-control" id="address" name="address"
+                                   placeholder="Enter Address" autocomplete="off">
+                            <p class="help-block" id="error_address"></p>
                         </div>
                         <div class="form-group">
                             <label for="active">Status</label>
@@ -127,10 +171,42 @@
                 <form role="form" action="{{ url('locations/edit') }}" method="post" id="updateLocationForm">
                     {{ @csrf_field() }}
                     <div class="modal-body">
+
                         <div class="form-group">
-                            <label for="edit_location_name">Location Name</label>
-                            <input type="text" class="form-control" id="edit_location_name" name="edit_location_name"
+                            <label for="edit_location_name">Code *</label>
+                            <input type="text" class="form-control" id="edit_code" name="edit_code"
+                                   placeholder="Enter Code" autocomplete="off">
+                            <p class="help-block" id="error_e_code"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_location_name">Location Name *</label>
+                            <input type="text" class="form-control" id="edit_location" name="edit_location"
                                    placeholder="Enter Location name" autocomplete="off">
+                            <p class="help-block" id="error_e_location"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_location_name">Contact Person *</label>
+                            <input type="text" class="form-control" id="edit_person" name="edit_person"
+                                   placeholder="Enter Contact Person" autocomplete="off">
+                            <p class="help-block" id="error_e_person"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_location_name">Phone *</label>
+                            <input type="text" class="form-control" id="edit_phone" name="edit_phone"
+                                   placeholder="Enter Phone" autocomplete="off">
+                            <p class="help-block" id="error_e_phone"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_location_name">Email *</label>
+                            <input type="text" class="form-control" id="edit_email" name="edit_email"
+                                   placeholder="Enter Phone" autocomplete="off">
+                            <p class="help-block" id="error_e_email"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_location_name">Address *</label>
+                            <input type="text" class="form-control" id="edit_address" name="edit_address"
+                                   placeholder="Enter Address" autocomplete="off">
+                            <p class="help-block" id="error_e_address"></p>
                         </div>
                         <div class="form-group">
                             <label for="active">Status</label>
@@ -241,11 +317,27 @@
                         }
                     },
                     error: function (response) {
+                        // alert(response.responseJSON.errors.location)
+                        if (response.responseJSON.errors.location) {
+                            $('#error_location').html(response.responseJSON.errors.location[0]);
+                        }
+                        if (response.responseJSON.errors.code) {
+                            $('#error_code').html(response.responseJSON.errors.code[0]);
+                        }
+                        if (response.responseJSON.errors.address) {
+                            $('#error_address').html(response.responseJSON.errors.address[0]);
+                        }
+                        if (response.responseJSON.errors.person) {
+                            $('#error_person').html(response.responseJSON.errors.person[0]);
+                        }
+                        if (response.responseJSON.errors.phone) {
+                            $('#error_phone').html(response.responseJSON.errors.phone[0]);
+                        }
+                        if (response.responseJSON.errors.email) {
+                            $('#error_email').html(response.responseJSON.errors.email[0]);
+                        }
 
-                        $("#create_model_messages").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
-                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-                            '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>' + response.responseJSON.errors.location +
-                            '</div>');
+
                     }
                 });
                 return false;
@@ -262,7 +354,12 @@
                 dataType: 'json',
                 success: function (response) {
 
-                    $("#edit_location_name").val(response.name);
+                    $("#edit_location").val(response.name);
+                    $("#edit_code").val(response.code);
+                    $("#edit_person").val(response.person);
+                    $("#edit_phone").val(response.phone);
+                    $("#edit_address").val(response.address);
+                    $("#edit_email").val(response.email);
                     $("#edit_status").val(response.status);
 
                     // submit the edit from
@@ -316,11 +413,25 @@
                                 }
                             },
                             error: function (response) {
-                                console.log(response.responseJSON.errors)
-                                $("#edit_model_messages").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
-                                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-                                    '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>' + response.responseJSON.errors.edit_location_name +
-                                    '</div>');
+                                if (response.responseJSON.errors.edit_location) {
+                                    $('#error_e_location').html(response.responseJSON.errors.edit_location[0]);
+                                }
+                                if (response.responseJSON.errors.edit_code) {
+                                    $('#error_e_code').html(response.responseJSON.errors.edit_code[0]);
+                                }
+                                if (response.responseJSON.errors.edit_ddress) {
+                                    $('#error_e_address').html(response.responseJSON.errors.edit_address[0]);
+                                }
+                                if (response.responseJSON.errors.edit_person) {
+                                    $('#error_e_person').html(response.responseJSON.errors.edit_person[0]);
+                                }
+                                if (response.responseJSON.errors.edit_phone) {
+                                    $('#error_e_phone').html(response.responseJSON.errors.edit_phone[0]);
+                                }
+                                if (response.responseJSON.errors.edit_email) {
+                                    $('#error_e_email').html(response.responseJSON.errors.edit_email[0]);
+                                }
+
                             }
                         });
 
