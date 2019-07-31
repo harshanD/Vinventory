@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Supplier extends Model
 {
     //
+    protected $table ="Supplier";
     use SoftDeletes;
 }

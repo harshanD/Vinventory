@@ -16,10 +16,9 @@ class CreateSupplierTable extends Migration
         Schema::create('supplier', function (Blueprint $table) {
             $table->increments('id');
             $table->string('company', 100);
-            $table->string('contact_person', 100)->unique();
-            $table->string('telephone');
-            $table->string('fax')->nullable();
-            $table->string('mobile');
+            $table->string('name', 100)->unique();
+            $table->string('address', 200)->unique();
+            $table->string('phone')->nullable();
             $table->string('email', 30)->nullable();
             $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
             $table->softDeletes();

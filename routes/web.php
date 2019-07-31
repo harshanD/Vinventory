@@ -54,6 +54,14 @@ Route::post('/locations/edit/{id}', 'LocationsController@editLocationData');
 Route::post('/locations/remove', 'LocationsController@removeLocationData');
 Route::post('/locations/create', 'LocationsController@create');
 
+/*Supplier*/
+Route::get('/supplier', 'SupplierController@index');
+Route::get('/supplier/fetchSupplierData', 'SupplierController@fetchSupplierData');
+Route::post('/supplier/fetchSupplierDataById/{id}', 'SupplierController@fetchSupplierDataById');
+Route::post('/supplier/edit/{id}', 'SupplierController@editSupplierData');
+Route::post('/supplier/remove', 'SupplierController@removeSupplierData');
+Route::post('/supplier/create', 'SupplierController@create');
+
 //Route::get('/brands', function () {return view('vendor.adminlte.brands.index');});
 
 Route::get('/products/create', function () {
