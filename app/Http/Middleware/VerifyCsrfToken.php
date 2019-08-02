@@ -19,6 +19,9 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+//        'throttle:60,1',
+//        'auth:api',
+//        'api/*',
+//        'http://vinventory.offilne/products/create',
     ];
 }

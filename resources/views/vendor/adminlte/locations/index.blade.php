@@ -17,10 +17,6 @@
 @section('content')
     <!-- Main content -->
     <style>
-        .help-block {
-            color: red;
-        }
-
         .avatar-pic {
             width: 100px;
             height: 100px;

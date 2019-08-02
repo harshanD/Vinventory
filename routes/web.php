@@ -64,12 +64,12 @@ Route::post('/supplier/create', 'SupplierController@create');
 
 //Route::get('/brands', function () {return view('vendor.adminlte.brands.index');});
 
-Route::get('/products/create', function () {
-    return view('vendor.adminlte.products.create');
-});
-Route::get('/products', function () {
-    return view('vendor.adminlte.products.index');
-});
+
+/*Products*/
+Route::get('/products/create', 'ProductsController@index');
+Route::post('/products/create', 'ProductsController@create');
+Route::get('/products', 'ProductsController@manageForList');
+Route::get('/products/fetchProductsData', 'ProductsController@fetchProductsData');
 
 
 Route::group(['middleware' => 'auth'], function () {

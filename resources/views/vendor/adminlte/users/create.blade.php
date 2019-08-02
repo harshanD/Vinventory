@@ -58,7 +58,6 @@
                                 @if(old("role") == 0)
                                     <option selected="selected" value="0">Select Role</option>
                                 @endif
-
                                 @foreach($roles as $role)
                                     <option value="{{ $role['id'] }}" {{ (old("role") == $role['id'] ? "selected":"") }}>{{ $role['name'] }}</option>
                                 @endforeach
