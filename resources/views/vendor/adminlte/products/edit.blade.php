@@ -247,7 +247,7 @@
 
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
-                                <a href="" class="btn btn-warning">Back</a>
+                                <a href="{{url('/products')}}" class="btn btn-warning">Back</a>
                             </div>
 
                         </div>
@@ -284,6 +284,9 @@
                     </form>
                 </div>
             </div>
+
+
+
             <!-- /.box-body -->
         {{--<div class="box-footer">--}}
         {{--Footer--}}
@@ -298,6 +301,7 @@
             //Initialize Select2 Elements
             $('.select2').select2()
         })
+
     </script>
 
 @endsection

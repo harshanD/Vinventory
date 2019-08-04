@@ -72,6 +72,7 @@ Route::get('/products/edit/{id}', 'ProductsController@editView');
 Route::post('/products/edit', 'ProductsController@editProductData');
 Route::get('/products', ['as' => 'products.manage', 'uses' => 'ProductsController@manageForList']);
 Route::get('/products/fetchProductsData', 'ProductsController@fetchProductsData');
+Route::post('/products/remove', 'ProductsController@removeProductData');
 
 
 Route::group(['middleware' => 'auth'], function () {

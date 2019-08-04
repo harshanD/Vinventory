@@ -32,6 +32,7 @@
                         <i class="fa fa-times"></i></button>
                 </div>
             </div>
+            <div id="messages"></div>
             <div class="box-body">
                 @if(session()->has('message'))
                     <div class="alert alert-success alert-dismissible" role="alert">
@@ -99,6 +100,30 @@
 
         <!-- /.box -->
 
+        <!-- remove supplier modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="removeProductModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Remove Product</h4>
+                    </div>
+
+                    <form role="form" action="{{ url('products/remove') }}" method="post" id="removeProductForm">
+                        <div class="modal-body">
+                            <p>Do you really want to remove?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
 
     </section>
 
@@ -114,5 +139,65 @@
                 'order': []
             });
         })
+
+        function removeProduct(id) {
+            // submit the remove from
+            $("#removeProductForm").on('submit', function () {
+                var form = $(this);
+
+                // remove the text-danger
+                $(".text-danger").remove();
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: {
+                        id: id,
+                        "_token": "{{ csrf_token() }}",
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+
+                        manageTable.ajax.reload(null, false);
+
+                        if (response.success === true) {
+                            $("#messages").html('<div class="alert alert-success alert-dismissible" role="alert">' +
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                                '<strong> <span class="glyphicon glyphicon-ok-sign"></span> </strong>' + response.messages +
+                                '</div>');
+
+
+                            // hide the modal
+                            $("#removeProductModal").modal('hide');
+                            // reset the form
+                            $("#removeProductForm .form-group").removeClass('has-error').removeClass('has-success');
+
+                        } else {
+
+                            if (response.messages instanceof Object) {
+                                $.each(response.messages, function (index, value) {
+                                    var id = $("#" + index);
+
+                                    id.closest('.form-group')
+                                        .removeClass('has-error')
+                                        .removeClass('has-success')
+                                        .addClass(value.length > 0 ? 'has-error' : 'has-success');
+
+                                    id.after(value);
+
+                                });
+                            } else {
+                                $("#messages").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
+                                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                                    '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>' + response.messages +
+                                    '</div>');
+                            }
+                        }
+                    },
+                });
+                return false;
+            });
+
+        }
     </script>
 @endsection

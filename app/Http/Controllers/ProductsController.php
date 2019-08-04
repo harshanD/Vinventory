@@ -212,7 +212,7 @@ class ProductsController extends Controller
     public function removeProductData(Request $request)
     {
 
-        $product = Products::find($request->input('product_id'));
+        $product = Products::find($request->input('id'));
 
         if (!$product->delete()) {
             $response['success'] = false;
