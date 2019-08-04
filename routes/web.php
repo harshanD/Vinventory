@@ -25,7 +25,7 @@ Route::get('/user/register', 'HomeController@registerUserView');
 Route::post('user/create', 'HomeController@registerUser');
 
 
-Route::get('/user/manage', ['as'=>'users.manage', 'uses' =>'HomeController@userList']);
+Route::get('/user/manage', ['as' => 'users.manage', 'uses' => 'HomeController@userList']);
 Route::get('/user/fetchUsersData', 'HomeController@fetchUsersData');
 Route::get('/user/edit/{id}', 'HomeController@userEditView');
 Route::post('user/editSave', 'HomeController@editSave');
@@ -68,7 +68,9 @@ Route::post('/supplier/create', 'SupplierController@create');
 /*Products*/
 Route::get('/products/create', 'ProductsController@index');
 Route::post('/products/create', 'ProductsController@create');
-Route::get('/products', 'ProductsController@manageForList');
+Route::get('/products/edit/{id}', 'ProductsController@editView');
+Route::post('/products/edit', 'ProductsController@editProductData');
+Route::get('/products', ['as' => 'products.manage', 'uses' => 'ProductsController@manageForList']);
 Route::get('/products/fetchProductsData', 'ProductsController@fetchProductsData');
 
 

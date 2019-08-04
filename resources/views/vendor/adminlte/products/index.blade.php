@@ -63,6 +63,7 @@
                         <th>Quantity</th>
                         <th>Unit</th>
                         <th>Alert Quantity</th>
+                        <th>status</th>
 
                         <th>Action</th>
                     </tr>

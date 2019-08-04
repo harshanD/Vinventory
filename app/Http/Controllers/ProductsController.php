@@ -42,6 +42,7 @@ class ProductsController extends Controller
             'reorder_level' => ($request['reorder_level'] != '') ? 'required|regex:/^\d+(\.\d{1,2})?$/' : '',
             'description' => ($request['description'] != '') ? 'required' : '',
             'supplier' => 'required',
+            'secondary_name' => ($request['secondary_name'] != '') ? 'required|unique:products,short_name' : '',
         ]);
 
         $product = new Products();
@@ -62,45 +63,40 @@ class ProductsController extends Controller
         $product->tax_method = $request->input('tax_activation');
         $product->availability = 0;
 
-        $path = "/img/default.jpg";
+        $path = "products/default.jpg";
         if ($request->file('product_image') != null) {
             $path = $request->file('product_image')->store('products');
         }
         $product->img_url = $path;
         $product->save();
 
-        $product->supplier()->attach(Supplier::where('id', $request['supplier'])->get());
-        if (!$product) {
-            $response['success'] = false;
-            $response['messages'] = 'Error in the database while creating the product information';
-        } else {
-            $response['success'] = true;
-            $response['messages'] = 'Successfully created';
+        foreach ($request['supplier'] as $supplierid) {
+            $product->supplier()->attach(Supplier::where('id', $supplierid)->get());
         }
-        echo json_encode($response);
+        if (!$product) {
+            return redirect()->back()->with('error', 'Error in the database while creating the brand information');
+        } else {
+            return redirect()->route('products.manage')->with('message', 'Successfully created');
+        }
     }
 
     public function manageForList()
     {
         return view('vendor.adminlte.products.index');
     }
-    
+
     public function fetchProductsData()
     {
         $result = array('data' => array());
 
-//        $data = Products::with('categories')->orderBy('name', 'asc')->get();
-        $data = Products::with('categories')->get();
-//        brands
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
+        $data = Products::get();
+
         foreach ($data as $key => $value) {
             // button
             $buttons = '';
 
 //            if (Permissions::getRolePermissions('viewProduct')) {
-            $buttons .= '<button type="button" class="btn btn-default" onclick="editProduct(' . $value->id . ')" data-toggle="modal" data-target="#editProductModal"><i class="fa fa-pencil"></i></button>';
+            $buttons .= '<a  href="' . url("/products/edit/" . $value->id) . '" class="btn btn-default"><i class="fa fa-pencil"></i></a>';
 //            }
 
 //            if (Permissions::getRolePermissions('deleteProduct')) {
@@ -109,28 +105,36 @@ class ProductsController extends Controller
 
             $status = ($value->status == \Config::get('constants.status.Active')) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
 
-$url =
 
-
-            $image = '<img src="'.asset(\Storage::url($value->img_url)).'" style="width:50px;height:50px" class="rounded-circle z-depth-1-half avatar-pic" alt="placeholder avatar">';
+            $image = '<img src="' . asset(\Storage::url($value->img_url)) . '" style="width:50px;height:50px" class="rounded-circle z-depth-1-half avatar-pic" alt="placeholder avatar">';
 
             $result['data'][$key] = array(
                 $image,
                 $value->item_code,
                 $value->name,
-                $value->brand,
-                $value->categories,
+                $value->brands->brand,
+                $value->categories->category,
                 $value->cost_price,
                 $value->selling_price,
                 $value->availability,
-                \Config::get('constants.unit_put.'.$value->unit),
+                \Config::get('constants.unit_put.' . $value->unit),
                 $value->reorder_level,
-                $value->reorder_level,
-//                $buttons
+                $status,
+                $buttons
             );
         } // /foreach
 
         echo json_encode($result);
+    }
+
+    public function editView($id)
+    {
+        $brands = Brands::where('status', \Config::get('constants.status.Active'))->orderBy('brand', 'asc')->get();
+        $categories = Categories::where('status', \Config::get('constants.status.Active'))->orderBy('category', 'asc')->get();
+        $suppliers = Supplier::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
+        $product = Products::find($id);
+
+        return view('vendor.adminlte.products.edit', ['product' => $product, 'brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers]);
     }
 
     public function fetchProductDataById($id)
@@ -142,41 +146,65 @@ $url =
 
     }
 
-    public function editProductData(Request $request, $id)
+    public function editProductData(Request $request)
     {
+        $id = $request['id'];
         $validator = Validator::make($request->all(), [
-            'edit_product' => 'required|unique:product,name,' . $id . '|max:100',
-            'edit_company' => 'required|max:100',
-            'edit_address' => 'required|max:200',
-            'edit_phone' => 'required|between:10,12',
-            'edit_email' => 'required|email|max:100',
+               'product_name' => 'required|unique:products,name,' . $id . '|max:100|regex:/(^[A-Za-z0-9 ]+$)+/',
+            'product_code' => 'required|max:191',
+            'sku' => 'required|max:191',
+            'weight' => 'required',
+            'brand' => ['required', Rule::notIn(['0'])],
+            'category' => ['required', Rule::notIn(['0'])],
+            'unit' => ['required', Rule::notIn(['0'])],
+            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'cost' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'reorder_level' => ($request['reorder_level'] != '') ? 'required|regex:/^\d+(\.\d{1,2})?$/' : '',
+            'description' => ($request['description'] != '') ? 'required' : '',
+            'supplier' => 'required',
+            'secondary_name' => ($request['secondary_name'] != '') ? 'required|unique:products,short_name,' . $id . '' : '',
         ]);
 
+
+
         $niceNames = array(
-            'edit_product' => 'Products',
-            'edit_company' => 'Code',
-            'edit_address' => 'Address',
-            'edit_phone' => 'Phone',
-            'edit_email' => 'Email',
+//            'product_name' => 'Products',
         );
+
         $validator->setAttributeNames($niceNames);
         $validator->validate();
 
         $product = Products::find($id);
 
-        $product->name = $request->input('edit_product');
-        $product->company = $request->input('edit_company');
-        $product->address = $request->input('edit_address');
-        $product->phone = $request->input('edit_phone');
-        $product->email = $request->input('edit_email');
-        $product->status = $request->input('edit_status');
+        $product->name = $request->input('product_name');
+        $product->item_code = $request->input('product_code');
+        $product->short_name = $request->input('secondary_name');
+        $product->sku = $request->input('sku');
+        $product->weight = $request->input('weight');
+        $product->brand = $request->input('brand');
+        $product->category = $request->input('category');
+        $product->unit = $request->input('unit');
+        $product->selling_price = $request->input('price');
+        $product->cost_price = $request->input('cost');
+        $product->reorder_level = ($request->input('reorder_level') != '') ? $request->input('reorder_level') : 0;
+        $product->description = ($request->input('description') != '') ? $request->input('description') : '';
+        $product->reorder_activation = ($request->input('reorder_activate') != '') ? 0 : '1';
+        $product->tax = $request->input('tax');
+        $product->tax_method = $request->input('tax_activation');
+        $product->availability = 0;
+
+        if ($request->file('product_image') != null) {
+            $path = $request->file('product_image')->store('products');
+            $product->img_url = $path;
+        }
+
+
+        $product->supplier()->sync($request['supplier']);
 
         if (!$product->save()) {
-            $response['success'] = false;
-            $response['messages'] = 'Error in the database while updating the product information';
+            return redirect()->back()->with('error', 'Error in the database while updating the brand information');
         } else {
-            $response['success'] = true;
-            $response['messages'] = 'Successfully Updated';
+            return redirect()->route('products.manage')->with('message', 'Successfully Updated');
         }
         echo json_encode($response);
     }

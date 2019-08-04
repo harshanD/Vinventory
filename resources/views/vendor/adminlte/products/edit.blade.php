@@ -21,7 +21,7 @@
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">Products Create</h3>
+                <h3 class="box-title">Products Update</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -35,14 +35,17 @@
 
             <div class="box-body">
                 <div class="row">
-                    <form role="form" action="{{url('products/create')}}" method="post" enctype="multipart/form-data">
+                    <form role="form" action="{{url('products/edit')}}" method="post" enctype="multipart/form-data">
                         <div class="col-md-6">
 
                             <div class="box-body">
                                 {{csrf_field()}}
                                 <div class="form-group">
                                     <label for="product_name">Product Name *</label>
-                                    <input type="text" value="{{ old('product_name') }}" class="form-control"
+                                    <input type="hidden" id="id" name="id" value="{{$product->id}}">
+                                    <input type="text"
+                                           value="<?= (old('product_name') != '') ? old('product_name') : $product->name;?>"
+                                           class="form-control"
                                            id="product_name" name="product_name"
                                            placeholder="Enter product name" autocomplete="off"/>
                                     @error('product_name')
@@ -51,7 +54,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="product_name">Product Code *</label>
-                                    <input type="text" value="{{ old('product_code') }}" class="form-control"
+                                    <input type="text"
+                                           value="<?= (old('product_code') != '') ? old('product_code') : $product->item_code;?>"
+                                           class="form-control"
                                            id="product_code" name="product_code"
                                            placeholder="Enter product code" autocomplete="off"/>
                                     @error('product_code')
@@ -61,7 +66,8 @@
 
                                 <div class="form-group">
                                     <label for="sku">SKU *</label>
-                                    <input type="text" value="{{ old('sku') }}" class="form-control" id="sku" name="sku"
+                                    <input type="text" value="<?= (old('sku') != '') ? old('sku') : $product->sku;?>"
+                                           class="form-control" id="sku" name="sku"
                                            placeholder="Enter sku"
                                            autocomplete="off"/>
                                     @error('sku')
@@ -71,7 +77,9 @@
 
                                 <div class="form-group">
                                     <label for="product_name">Secondary Name</label>
-                                    <input type="text" value="{{ old('secondary_name') }}" class="form-control"
+                                    <input type="text"
+                                           value="<?= (old('secondary_name') != '') ? old('secondary_name') : $product->short_name;?>"
+                                           class="form-control"
                                            id="secondary_name" name="secondary_name"
                                            placeholder="Enter secondary name" autocomplete="off"/>
                                     @error('secondary_name')
@@ -81,7 +89,9 @@
 
                                 <div class="form-group">
                                     <label for="product_name">Weight *</label>
-                                    <input type="text" value="{{ old('weight') }}" class="form-control" id="weight"
+                                    <input type="text"
+                                           value="<?= (old('weight') != '') ? old('weight') : $product->weight;?>"
+                                           class="form-control" id="weight"
                                            name="weight"
                                            placeholder="Enter Weight" autocomplete="off"/>
                                     @error('weight')
@@ -95,7 +105,12 @@
                                             <option selected="selected" value="0">Select Brand</option>
                                         @endif
                                         @foreach($brands as $brand)
-                                            <option value="{{ $brand['id'] }}" {{ (old("brand") == $brand['id'] ? "selected":"") }}>{{ $brand->brand }}</option>
+                                            @if($product->brands->id==$brand['id'])
+                                                <option value="{{ $brand['id'] }}"
+                                                        selected>{{ $brand->brand }}</option>
+                                            @else
+                                                <option value="{{ $brand['id'] }}" {{ (old("brand") == $brand['id'] ? "selected":"") }}>{{ $brand->brand }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                     @error('brand')
@@ -109,7 +124,12 @@
                                             <option selected="selected" value="0">Select Category</option>
                                         @endif
                                         @foreach($categories as $category)
-                                            <option value="{{ $category->id}}" {{ (old("category") == $category->id? "selected":"") }}>{{ $category->category }}</option>
+                                            @if($product->categories->id==$category['id'])
+                                                <option value="{{ $category->id}}"
+                                                        selected>{{ $category->category }}</option>
+                                            @else
+                                                <option value="{{ $category->id}}" {{ (old("category") == $category->id? "selected":"") }}>{{ $category->category }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                     @error('category')
@@ -122,9 +142,15 @@
                                         @if(old("unit") == 0)
                                             <option selected="selected" value="0">Select Unit</option>
                                         @endif
-                                        <option value="1" {{ (old("unit") == 1? "selected":"") }}>Meter (m)</option>
-                                        <option value="2" {{ (old("unit") == 2? "selected":"") }}>Piece (pc)</option>
-                                        <option value="3" {{ (old("unit") == 3? "selected":"") }}>Kilogram (Kg)</option>
+                                        <option value="1" {{ (old("unit")||$product->unit == 1? "selected":"") }}>
+                                            Meter (m)
+                                        </option>
+                                        <option value="2" {{ (old("unit")||$product->unit == 2? "selected":"") }}>
+                                            Piece (pc)
+                                        </option>
+                                        <option value="3" {{ (old("unit")||$product->unit == 3? "selected":"") }}>
+                                            Kilogram (Kg)
+                                        </option>
                                     </select>
                                     @error('unit')
                                     <p class="help-block">{{ $message }}</p>
@@ -132,7 +158,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="price">Product Price *</label>
-                                    <input type="text" value="{{ old('price') }}" class="form-control" id="price"
+                                    <input type="text"
+                                           value="<?= (old('price') != '') ? old('price') : $product->selling_price;?>"
+                                           class="form-control" id="price"
                                            name="price"
                                            placeholder="Enter price"
                                            autocomplete="off"/>
@@ -142,7 +170,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="price">Product Cost *</label>
-                                    <input type="text" value="{{ old('cost') }}" class="form-control" id="cost"
+                                    <input type="text"
+                                           value="<?= (old('cost') != '') ? old('cost') : $product->cost_price;?>"
+                                           class="form-control" id="cost"
                                            name="cost"
                                            placeholder="Enter cost"
                                            autocomplete="off"/>
@@ -159,9 +189,11 @@
                                 <div class="form-group">
                                     <label for="price">Tax Method</label>
                                     <select class="form-control" name="tax_activation" id="tax_activation">
-                                        <option value="1" {{ (old("tax_activation") == 1? "selected":"") }}>Exclusive
+                                        <option value="1" {{ (old("tax_activation")||$product->tax_method == 1? "selected":"") }}>
+                                            Exclusive
                                         </option>
-                                        <option value="2" {{ (old("tax_activation") == 2? "selected":"") }}>Inclusive
+                                        <option value="2" {{ (old("tax_activation")||$product->tax_method == 2? "selected":"") }}>
+                                            Inclusive
                                         </option>
                                     </select>
                                 </div>
@@ -170,7 +202,7 @@
                                     <label for="description">Description</label>
                                     <textarea type="text" class="form-control" id="description" name="description"
                                               placeholder="Enter description"
-                                              autocomplete="off">{{ old('description') }}</textarea>
+                                              autocomplete="off"><?= (old('description') != '') ? old('description') : $product->description;?></textarea>
 
                                 </div>
                                 <div class="form-group">
@@ -178,10 +210,12 @@
                                     <div class="input-group">
                                             <span class="input-group-addon">
                                               <input type="checkbox"
-                                                     {{ (old("reorder_activate") == 'on'? "checked":"") }} name="reorder_activate"
+                                                     {{ (old("reorder_activate") == 'on'|| $product->reorder_activation==0? "checked":"") }} name="reorder_activate"
                                                      id="reorder_activate">
                                             </span>
-                                        <input type="text" value="{{ old('reorder_level') }}" class="form-control"
+                                        <input type="text"
+                                               value="<?= (old('reorder_level') != '') ? old('reorder_level') : $product->reorder_level;?>"
+                                               class="form-control"
                                                name="reorder_level"
                                                placeholder="Reorder level"
                                                id="reorder_level">
@@ -196,10 +230,9 @@
                                     <label for="product_image">Image</label>
                                     <br>
                                     <br>
-                                    <?php
-                                    $url = asset(url('/img/default.jpg'));
-                                    ?>
-                                    <img src="{{$url}}" class="rounded-circle z-depth-1-half avatar-pic"
+
+                                    <img src="{{asset(\Storage::url($product->img_url))}}"
+                                         class="rounded-circle z-depth-1-half avatar-pic"
                                          alt="placeholder default" style="width: 200px;height: 200px">
 
                                     <div class="btn btn-mdb-color btn-rounded float-center">
@@ -221,13 +254,24 @@
                         <div class="col-md-6">
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label>Supplier/s *<?php print_r(old("supplier"))?></label>
+                                    <label>Supplier/s *</label>
                                     <select class="form-control select2" multiple="multiple" name="supplier[]"
                                             id="supplier"
                                             data-placeholder="Select a State"
                                             style="width: 100%;">
                                         @foreach($suppliers as $key =>  $supplier)
-                                            <option value="{{ $supplier->id}}" {{ (isset(old("supplier")[$key]))?(old("supplier")[$key]== $supplier->id? "selected":""):'' }}>{{ $supplier->name }}</option>
+                                            <?php $count = 1;?>
+                                            @foreach($product->supplier as $selectedsup)
+                                                @if($selectedsup->id==$supplier->id || isset(old("supplier")[$key]))
+                                                    <?php if($count == 1){ $count++;  ?>
+                                                    <option value="{{ $supplier->id}}"
+                                                            selected>{{$selectedsup->name }}</option>
+                                                    <?php }?>
+                                                @endif
+                                            @endforeach
+                                            @if($count==1)
+                                                <option value="{{ $supplier->id}}" {{ (isset(old("supplier")[$key]))?(old("supplier")[$key]== $supplier->id? "selected":""):'' }}>{{ $supplier->name }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                     @error('supplier')
