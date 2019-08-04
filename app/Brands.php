@@ -12,5 +12,8 @@ class Brands extends Model
     protected $fillable = ['brand'];
     use SoftDeletes;
 
-
+    public function products()
+    {
+        return $this->belongsTo(Products::class);
+    }
 }

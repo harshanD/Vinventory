@@ -17,11 +17,11 @@ class Products extends Model
 
     public function categories()
     {
-        return $this->belongsTo(Categories::class);
+        return $this->hasOne(Categories::class ,'id','category' );
     }
 
     public function brands()
     {
-        return $this->belongsTo(Brands::class);
+        return $this->hasOne(Brands::class,'id','brand');
     }
 }

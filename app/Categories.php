@@ -13,6 +13,6 @@ class Categories extends Model
 
     public function products()
     {
-        return $this->belongsTo(Products::class);
+        return $this->belongsTo(Products::class,'category_id');
     }
 }
