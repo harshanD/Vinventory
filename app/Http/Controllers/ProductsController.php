@@ -150,7 +150,7 @@ class ProductsController extends Controller
     {
         $id = $request['id'];
         $validator = Validator::make($request->all(), [
-               'product_name' => 'required|unique:products,name,' . $id . '|max:100|regex:/(^[A-Za-z0-9 ]+$)+/',
+            'product_name' => 'required|unique:products,name,' . $id . '|max:100|regex:/(^[A-Za-z0-9 ]+$)+/',
             'product_code' => 'required|max:191',
             'sku' => 'required|max:191',
             'weight' => 'required',
@@ -166,9 +166,7 @@ class ProductsController extends Controller
         ]);
 
 
-
-        $niceNames = array(
-//            'product_name' => 'Products',
+        $niceNames = array(//            'product_name' => 'Products',
         );
 
         $validator->setAttributeNames($niceNames);
@@ -206,7 +204,6 @@ class ProductsController extends Controller
         } else {
             return redirect()->route('products.manage')->with('message', 'Successfully Updated');
         }
-        echo json_encode($response);
     }
 
     public function removeProductData(Request $request)
@@ -223,4 +220,33 @@ class ProductsController extends Controller
         }
         echo json_encode($response);
     }
+
+    public function fetchProductsList()
+    {
+        $products = Products::get();
+
+        $list = array();
+        foreach ($products as $key => $product) {
+            $list[$key] = array(
+                'id' => $product->id,
+                'name' => $product->name,
+                'short_name' => $product->short_name,
+                'item_code' => $product->item_code,
+                'description' => $product->description,
+                'img_url' => $product->img_url,
+                'img_url' => $product->img_url,
+                'selling_price' => $product->selling_price,
+                'cost_price' => $product->cost_price,
+                'weight' => $product->weight,
+                'unit' => $product->unit,
+                'reorder_level' => $product->reorder_level,
+                'discount' => 0,
+                'reorder_activation' => $product->reorder_activation,
+                'tax' => 0,
+            );
+        }
+
+        echo json_encode($list);
+    }
+
 }

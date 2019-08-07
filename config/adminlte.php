@@ -178,6 +178,20 @@ return [
                     'url'  => '/user/manage',
                 ],
             ]
+        ],[
+            'text' => 'Purchase Order',
+            'icon' => 'user',
+            'submenu' => [
+                [
+                    'text' => 'Add PO',
+                    'icon' => 'user',
+                    'url'  => '/po/add',
+                ],[
+                    'text' => 'PO manage',
+                    'icon' => 'user',
+                    'url'  => '/user/manage',
+                ],
+            ]
         ],
         'ACCOUNT SETTINGS',
         [
