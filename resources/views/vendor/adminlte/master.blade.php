@@ -19,6 +19,9 @@
 
     {{-- Date picker    --}}
     <link rel="stylesheet" href="{{ asset('css/bootstrap-datepicker.min.css') }}">
+
+{{-- icheck --}}
+{{--    <link rel="stylesheet" href="{{ asset('custom/icheck/css/all.css') }}">--}}
 @if(config('adminlte.plugins.select2'))
     <!-- Select2 -->
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css">
@@ -44,7 +47,18 @@
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
+        <script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.min.js') }}"></script>
 
+        <script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.slimscroll.min.js') }}"></script>
+        <script src="{{ asset('vendor/adminlte/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+
+        <script src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
+
+        {{--easyautocomplete--}}
+        <script src="{{ asset('custom/easyautocomplete/js/jquery.easy-autocomplete.min.js') }}"></script>
+
+    {{--icheck--}}
+    {{--<script src="{{ asset('custom/icheck/js/icheck.min.js') }}"></script>--}}
         <!-- Google Font -->
         <link rel="stylesheet"
               href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -52,14 +66,7 @@
 <body class="hold-transition @yield('body_class')">
 
 @yield('body')
-<script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.min.js') }}"></script>
 
-<script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.slimscroll.min.js') }}"></script>
-<script src="{{ asset('vendor/adminlte/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-
-<script src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
-{{--easyautocomplete--}}
-<script src="{{ asset('custom/easyautocomplete/js/jquery.easy-autocomplete.min.js') }}"></script>
 
 @if(config('adminlte.plugins.select2'))
     <!-- Select2 -->
@@ -83,13 +90,30 @@
     $('#datepicker').datepicker({
         autoclose: true
     })
-
     $(function () {
         //Initialize Select2 Elements
         $('.select2').select2()
     })
+    // //iCheck for checkbox and radio inputs
+    // $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+    //     checkboxClass: 'icheckbox_minimal-blue',
+    //     radioClass   : 'iradio_minimal-blue'
+    // })
+    // //Red color scheme for iCheck
+    // $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+    //     checkboxClass: 'icheckbox_minimal-red',
+    //     radioClass   : 'iradio_minimal-red'
+    // })
+    // //Flat red color scheme for iCheck
+    // $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+    //     checkboxClass: 'icheckbox_flat-green',
+    //     radioClass   : 'iradio_flat-green'
+    // })
+    $('.collapse').collapse();
+    if ( typeof  autoCompleteId !== 'undefined') {
+        $("#" + autoCompleteId).easyAutocomplete(options);
+    }
 
-    $("#"+autoCompleteId).easyAutocomplete(options);
 </script>
 </body>
 </html>

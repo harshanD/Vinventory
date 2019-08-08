@@ -119,9 +119,6 @@
                     </form>
                 </div>
                 <!-- /.box -->
-            </div>
-            <!-- /.box-body -->
-            <div class="box-body">
                 <div class="input-group input-group-lg">
                   <span class="input-group-btn">
                             <a class="btn btn-app">
@@ -137,11 +134,6 @@
                     </span>
                 </div>
             </div>
-        {{--<div class="box-footer">--}}
-        {{--Footer--}}
-        {{--</div>--}}
-        <!-- /.box-footer-->
-
 
             <div class="box-body">
                 <table id="poTable" class="table table-bordered table-striped">
@@ -163,12 +155,88 @@
                 </table>
             </div>
 
+            <div class="box-body">
+                <div class="checkbox">
+                    <label data-toggle="collapse" data-target="#collapseOptions" class="collapsed"
+                           aria-expanded="false">
+                        <input type="checkbox" checked class="flat-red"/>More Options
+                    </label>
+                </div>
+
+                <!-- /.box -->
+            </div>
+            <div class="box-body">
+                <div id="collapseOptions" class="collapse">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Order Tax</label>
+
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <select class="form-control select2" name="wholeTax" id="wholeTax">
+                                        <option selected="selected" value="0">Select Status</option>
+                                        <option value="1">Received</option>
+                                        <option value="2">Pending</option>
+                                        <option value="3">Ordered</option>
+
+                                    </select>
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Discount (5/7%)</label>
+
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <select class="form-control select2" name="wholeDiscount" id="wholeDiscount">
+                                        <option selected="selected" value="0">Select Status</option>
+                                        <option value="1">Received</option>
+                                        <option value="2">Pending</option>
+                                        <option value="3">Ordered</option>
+
+                                    </select>
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Note</label>
+
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        {{--                                        <i class="fa fa-calendar"></i>--}}
+                                    </div>
+                                    <textarea type="text" class="form-control" id="note" name="note"
+                                              placeholder="Note"
+                                              autocomplete="off"></textarea>
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </div>
+                <div id="footer" class="box-body"></div>
+            </div>
+
         </div>
         <!-- /.box -->
 
     </section>
 
     <script>
+
+
         var autoCompleteId = 'product';
         var options = {
 
@@ -207,7 +275,7 @@
                 var row = '<tr id="row_' + index.id + '" style="text-align: right">' +
                     "<td style=\"text-align: left\">" + index.name + "( " + index.item_code + " )" + "</td>" +
                     "<td id='costPrice_" + index.id + "'>" + index.cost_price + "</td>" +
-                    "<td ><input type='text' style=\"text-align: center\" onkeyup='qtyChanging(" + index.id + ")' id='quantity_" + index.id + "' value='" + 0 + "'></td>" +
+                    "<td style=\"text-align: center\"><input type='text'   style=\"text-align: center\" onkeyup='qtyChanging(" + index.id + ")' id='quantity_" + index.id + "' value='" + 0 + "'></td>" +
                     "<td>" + index.discount + "</td>" +
                     "<td>" + index.tax + "</td>" +
                     "<td class='subtot' id='subtot_" + index.id + "'>" + 0 + "</td>" +
@@ -243,10 +311,26 @@
                 "<td colspan='3' style='text-align: left'>Total</td>" +
                 "<td id='sumQuantity'>" + 0 + "</td>" +
                 "<td id='sumDiscount'>" + 0 + "</td>" +
-                "<td id='sumTax' style='align:right'>" + sum.toFixed(2) + "</td></tr>";
+                "<td id='sumTax' style='align:right'>" + sum.toFixed(2) + "</td><td style='text-align: center'><i class=\"fa fa-trash\"></i></td></tr>";
 
             $('.lastRow').remove();
             $('#poBody').append(lastRow);
+
+            var footerRow = "<table class=\"table table-bordered\" ><tr style=\"font-weight: bold;text-align: right;color: #0d6aad\">" +
+                "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Items</td>" +
+                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + ($('#poTable tr').length - 2) + "</td>" +
+                "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Total</td>" +
+                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + sum + "</td>" +
+                "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Order Discount</td>" +
+                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + 0 + "</td>" +
+                "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Order Tax</td>" +
+                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + 0 + "</td>" +
+                "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Grand Total</td>" +
+                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + 0 + "</td><tr></table>";
+
+
+
+            $('#footer').html(footerRow);
         }
 
         function removeThis(removeRow) {
