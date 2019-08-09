@@ -123,7 +123,7 @@ class TaxController extends Controller
     public function removeTaxData(Request $request)
     {
 
-        $tax = Tax::find($request->input('location_id'));
+        $tax = Tax::find($request->input('id'));
 
         if (!$tax->delete()) {
             $response['success'] = false;

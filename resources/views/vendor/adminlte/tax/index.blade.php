@@ -380,8 +380,8 @@
                                 if (response.responseJSON.errors.edit_tax) {
                                     $('#edit_e_tax').html(response.responseJSON.errors.edit_tax[0]);
                                 }
-                                if (response.responseJSON.errors.edit_code) {
-                                    $('#edit_e_taxRate').html(response.responseJSON.errors.edit_code[0]);
+                                if (response.responseJSON.errors.edit_taxRate) {
+                                    $('#edit_e_taxRate').html(response.responseJSON.errors.edit_taxRate[0]);
                                 }
 
                             }
@@ -406,7 +406,7 @@
                     url: form.attr('action'),
                     type: form.attr('method'),
                     data: {
-                        tax_id: id,
+                        id: id,
                         "_token": "{{ csrf_token() }}",
                     },
                     dataType: 'json',
