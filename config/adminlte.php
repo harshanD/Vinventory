@@ -205,14 +205,17 @@ return [
             'icon' => 'lock',
         ],
         [
-            'text'    => 'Multilevel',
+            'text'    => 'Settings',
             'icon'    => 'share',
             'submenu' => [
                 [
-                    'text' => 'Level One',
-                    'url'  => '#',
+                    'text' => 'Tax Rates',
+                    'url'  => 'tax/',
                 ],
                 [
+                    'text' => 'Level One',
+                    'url'  => '#',
+                ],[
                     'text'    => 'Level One',
                     'url'     => '#',
                     'submenu' => [
@@ -235,10 +238,6 @@ return [
                             ],
                         ],
                     ],
-                ],
-                [
-                    'text' => 'Level One',
-                    'url'  => '#',
                 ],
             ],
         ],

@@ -75,8 +75,17 @@ Route::get('/products/fetchProductsData', 'ProductsController@fetchProductsData'
 Route::get('/products/fetchProductsList', 'ProductsController@fetchProductsList');
 Route::post('/products/remove', 'ProductsController@removeProductData');
 
-/*PO*/
+/* PO */
 Route::get('/po/add', 'POController@index');
+
+
+/* Tax */
+Route::get('/tax', 'TaxController@index');
+Route::get('/tax/fetchTaxData', 'TaxController@fetchTaxData');
+Route::post('/tax/fetchTaxDataById/{id}', 'TaxController@fetchTaxDataById');
+Route::post('/tax/edit/{id}', 'TaxController@editTaxData');
+Route::post('/tax/remove', 'TaxController@removeTaxData');
+Route::post('/tax/create', 'TaxController@create');
 
 
 Route::group(['middleware' => 'auth'], function () {

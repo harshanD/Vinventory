@@ -88,6 +88,19 @@
                             <!-- /.input group -->
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Reference No</label>
+
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control"  name="referenceNo" id="referenceNo">
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
@@ -226,6 +239,10 @@
                         <!-- /.col -->
                     </div>
                 </div>
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="" class="btn btn-warning">Back</a>
+                </div>
                 <div id="footer" class="box-body"></div>
             </div>
 
@@ -263,7 +280,6 @@
             theme: "plate-dark"
         };
 
-        var localData;
         var itemCount = 0;
 
         function changeProduct(index) {
@@ -327,7 +343,6 @@
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + 0 + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Grand Total</td>" +
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + 0 + "</td><tr></table>";
-
 
 
             $('#footer').html(footerRow);

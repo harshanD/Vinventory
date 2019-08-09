@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Tax extends Model
 {
     //
+    protected $table='tax_profiles';
     use SoftDeletes;
 }
