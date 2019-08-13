@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Supplier extends Model
 {
     //
-    protected $table ="Supplier";
+    protected $table ="supplier";
     use SoftDeletes;
 //
-//    public function products()
-//    {
-//        return $this->belongsTo(Products::class);
-//    }
+    public function products()
+    {
+        return $this->belongsToMany(Products::class);
+    }
 }

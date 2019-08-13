@@ -19,6 +19,7 @@ class CreatePoHeaderTable extends Migration
             $table->foreign('location')->references('id')->on('locations')->onDelete('cascade');
             $table->integer('supplier')->unsigned();
             $table->foreign('supplier')->references('id')->on('supplier')->onDelete('cascade');
+            $table->string('referenceCode',100)->nullable()->unique();
             $table->date('due_date')->nullable();
             $table->double('tax')->unsigned();
             $table->double('discount')->unsigned();

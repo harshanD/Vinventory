@@ -20,17 +20,21 @@
     {{-- Date picker    --}}
     <link rel="stylesheet" href="{{ asset('css/bootstrap-datepicker.min.css') }}">
 
-{{-- icheck --}}
-{{--    <link rel="stylesheet" href="{{ asset('custom/icheck/css/all.css') }}">--}}
-@if(config('adminlte.plugins.select2'))
+    {{-- icheck --}}
+    {{--    <link rel="stylesheet" href="{{ asset('custom/icheck/css/all.css') }}">--}}
+    @if(config('adminlte.plugins.select2'))
     <!-- Select2 -->
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css">
-@endif
+    @endif
 
 <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/AdminLTE.min.css') }}">
-
-@if(config('adminlte.plugins.datatables'))
+    <style>
+        .redErrorInput{
+            background-color:red;
+        }
+    </style>
+    @if(config('adminlte.plugins.datatables'))
     <!-- DataTables with bootstrap 3 style -->
         <link rel="stylesheet" href="//cdn.datatables.net/v/bs/dt-1.10.18/datatables.min.css">
         <style>
@@ -54,14 +58,15 @@
 
         <script src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
 
+        <script src="{{ asset('js/numeric.js') }}"></script>
+
         {{--easyautocomplete--}}
         <script src="{{ asset('custom/easyautocomplete/js/jquery.easy-autocomplete.min.js') }}"></script>
 
     {{--icheck--}}
     {{--<script src="{{ asset('custom/icheck/js/icheck.min.js') }}"></script>--}}
-        <!-- Google Font -->
-        <link rel="stylesheet"
-              href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <!-- Google Font -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition @yield('body_class')">
 
@@ -93,6 +98,8 @@
     $(function () {
         //Initialize Select2 Elements
         $('.select2').select2()
+
+
     })
     // //iCheck for checkbox and radio inputs
     // $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
@@ -110,9 +117,7 @@
     //     radioClass   : 'iradio_flat-green'
     // })
     $('.collapse').collapse();
-    if ( typeof  autoCompleteId !== 'undefined') {
-        $("#" + autoCompleteId).easyAutocomplete(options);
-    }
+
 
 </script>
 </body>

@@ -69,14 +69,17 @@ Route::post('/supplier/create', 'SupplierController@create');
 Route::get('/products/create', 'ProductsController@index');
 Route::post('/products/create', 'ProductsController@create');
 Route::get('/products/edit/{id}', 'ProductsController@editView');
+Route::post('/products/edit', 'ProductsController@editProductData');
 Route::post('/products/listJson', 'ProductsController@productListJson');
 Route::get('/products', ['as' => 'products.manage', 'uses' => 'ProductsController@manageForList']);
 Route::get('/products/fetchProductsData', 'ProductsController@fetchProductsData');
-Route::get('/products/fetchProductsList', 'ProductsController@fetchProductsList');
+Route::get('/products/fetchProductsList/{id}', 'ProductsController@fetchProductsList');
 Route::post('/products/remove', 'ProductsController@removeProductData');
+Route::post('/products/fetchProductDataById', 'ProductsController@fetchProductDataById');
 
 /* PO */
 Route::get('/po/add', 'POController@index');
+Route::post('po/create', 'POController@create');
 
 
 /* Tax */

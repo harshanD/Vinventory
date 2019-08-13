@@ -137,12 +137,30 @@ class ProductsController extends Controller
         return view('vendor.adminlte.products.edit', ['product' => $product, 'brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers]);
     }
 
-    public function fetchProductDataById($id)
+    public function fetchProductDataById(Request $request)
     {
-        $data = (Object)Products::find($id)->toArray();
-
-        echo json_encode(array('name' => $data->name, 'address' => $data->address, 'phone' => $data->phone,
-            'company' => $data->company, 'address' => $data->address, 'email' => $data->email, 'status' => $data->status));
+        $data = (object)Products::where(['id' => $request['id'], 'status' => \Config::get('constants.status.Active')])->get();
+        echo json_encode(array(
+            'barcode' => $data[0]->barcode,
+            'sku' => $data[0]->sku,
+            'item_code' => $data[0]->item_code,
+            'name' => $data[0]->name,
+            'short_name' => $data[0]->short_name,
+            'description' => $data[0]->description,
+            'img_url' => $data[0]->img_url,
+            'selling_price' => $data[0]->selling_price,
+            'cost_price' => $data[0]->cost_price,
+            'weight' => $data[0]->weight,
+            'unit' => $data[0]->unit,
+            'availability' => $data[0]->availability,
+            'reorder_level' => $data[0]->reorder_level,
+            'reorder_activation' => $data[0]->reorder_activation,
+            'categoryID' => $data[0]->category,
+            'category' => $data[0]->categories->category,
+            'brandID' => $data[0]->brand,
+            'brand' => $data[0]->brands->brand,
+            'tax' => $data[0]->tax,
+        ));
 
     }
 
@@ -221,9 +239,11 @@ class ProductsController extends Controller
         echo json_encode($response);
     }
 
-    public function fetchProductsList()
+    public function fetchProductsList($id)
     {
-        $products = Products::get();
+//        echo $id;
+        $supplier = Supplier::find($id);
+        $products = $supplier->products;
 
         $list = array();
         foreach ($products as $key => $product) {
