@@ -32,8 +32,25 @@
                         <i class="fa fa-times"></i></button>
                 </div>
             </div>
-            <form role="form" enctype="multipart/form-data" action="{{url('po/create')}}" method="post">
+            <form role="form" id="pocreate" enctype="multipart/form-data" action="{{url('po/create')}}" method="post">
                 <div class="box-body">
+                    @if(session()->has('message'))
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            <strong> <span class="glyphicon glyphicon-ok-sign"></span>
+                            </strong> {{ session()->get('message') }}
+                        </div>
+                    @endif
+                    @if(session()->has('error'))
+                        <div class="alert alert-warning alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            <strong> <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            </strong> {{ session()->get('error') }}
+                        </div>
+                    @endif
+
                     {{csrf_field()}}
                     <div class="box-body">
                         <div class="row">
@@ -49,6 +66,7 @@
                                                class="form-control pull-right" id="datepicker">
                                     </div>
                                     <!-- /.input group -->
+                                    <p class="help-block" id="datepicker_error"></p>
                                 </div>
                             </div>
                             <!-- /.col -->
@@ -58,7 +76,7 @@
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
+                                            <i class="fa fa-hourglass-end"></i>
                                         </div>
                                         <select class="form-control select2" name="status" id="status">
                                             <option value="0">Select Status</option>
@@ -69,6 +87,7 @@
                                         </select>
                                     </div>
                                     <!-- /.input group -->
+                                    <p class="help-block" id="status_error"></p>
                                 </div>
                             </div>
                             <!-- /.col -->
@@ -78,7 +97,7 @@
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
+                                            <i class="fa fa-location-arrow"></i>
                                         </div>
                                         <select class="form-control select2" name="location" id="location">
                                             <option value="0">Select Location</option>
@@ -88,6 +107,7 @@
                                         </select>
                                     </div>
                                     <!-- /.input group -->
+                                    <p class="help-block" id="location_error"></p>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -96,11 +116,12 @@
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
+                                            <i class="fa  fa-barcode"></i>
                                         </div>
                                         <input type="text" class="form-control" name="referenceNo" id="referenceNo">
                                     </div>
                                     <!-- /.input group -->
+                                    <p class="help-block" id="referenceNo_error"></p>
                                 </div>
                             </div>
                             <!-- /.col -->
@@ -118,7 +139,7 @@
 
                                 <div class="input-group date col-xs-4">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
+                                        <i class="fa fa-user-secret"></i>
                                     </div>
                                     <select class="form-control col-xs-4 select2" name="supplier" id="supplier">
                                         <option value="0">Select Supplier</option>
@@ -127,8 +148,9 @@
                                         @endforeach
 
                                     </select>
-                                </div>
 
+                                </div>
+                                <p class="help-block" id="supplier_error"></p>
                                 <!-- /.box-body -->
 
                             </form>
@@ -169,7 +191,7 @@
                             </tbody>
                         </table>
                     </div>
-
+                    <p class="help-block" id="items_error"></p>
                     <div class="box-body">
                         <div class="checkbox">
                             <label data-toggle="collapse" data-target="#collapseOptions" class="collapsed"
@@ -189,7 +211,7 @@
 
                                         <div class="input-group date">
                                             <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
+                                                <i class="fa fa-circle"></i>
                                             </div>
                                             <select class="form-control select2" name="wholeTax" id="wholeTax"
                                                     onchange="lastRowDesign()">
@@ -201,6 +223,7 @@
                                             </select>
                                         </div>
                                         <!-- /.input group -->
+                                        {{--                                        <p class="help-block" id="datepicker_error"></p>--}}
                                     </div>
                                 </div>
                                 <!-- /.col -->
@@ -210,12 +233,13 @@
 
                                         <div class="input-group">
                                             <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
+                                                <i class="fa fa-circle"></i>
                                             </div>
-                                            <input type="text" class="form-control" name="wholeDiscount"
+                                            <input type="text" class="form-control" name="wholeDiscount" value="0"
                                                    id="wholeDiscount" onkeyup="lastRowDesign()">
                                         </div>
                                         <!-- /.input group -->
+                                        {{--                                        <p class="help-block" id="datepicker_error"></p>--}}
                                     </div>
                                 </div>
                                 <!-- /.col -->
@@ -225,13 +249,14 @@
 
                                         <div class="input-group">
                                             <div class="input-group-addon">
-                                                {{--                                        <i class="fa fa-calendar"></i>--}}
+                                                <i class="fa fa-sticky-note"></i>
                                             </div>
                                             <textarea type="text" class="form-control" id="note" name="note"
                                                       placeholder="Note"
                                                       autocomplete="off"></textarea>
                                         </div>
                                         <!-- /.input group -->
+                                        {{--                                        <p class="help-block" id="datepicker_error"></p>--}}
                                     </div>
                                 </div>
                                 <!-- /.col -->
@@ -240,9 +265,6 @@
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary">Save</button>
                             <a href="" class="btn btn-warning">Back</a>
-                            <a onclick="itemDetails(13)" class="btn btn-warning">Back</a>
-                            <td style="text-align: center"><input type='text' style="text-align: center"
-                                                                  id='quantity_13' value="0">
                         </div>
                         <div id="footer" class="box-body"></div>
                     </div>
@@ -441,6 +463,55 @@
 
             });
 
+            $("#pocreate").unbind('submit').on('submit', function () {
+                var form = $(this);
+
+                if (($('#poTable tr').length - 2) < 1) {
+                    $('#items_error').html('Items required');
+                    return false
+                }
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(), // /converting the form data into array and sending it to server
+                    dataType: 'json',
+                    success: function (response) {
+                        // window.location = data;
+                        console.log(response)
+                        if(response.success){
+                            window.location.href ='/po/add';
+                        }
+
+
+                    },
+                    error: function(request,status,errorThrown) {
+
+                        $('.help-block').html('');
+                        if (typeof request.responseJSON.errors.datepicker !== 'undefined') {
+                            $('#datepicker_error').html(request.responseJSON.errors.datepicker[0]);
+                        }
+                        if (typeof request.responseJSON.errors.status !== 'undefined') {
+                            $('#status_error').html(request.responseJSON.errors.status[0]);
+                        }
+                        if (typeof request.responseJSON.errors.location !== 'undefined') {
+                            $('#location_error').html(request.responseJSON.errors.location[0]);
+                        }
+                        if (typeof request.responseJSON.errors.referenceNo !== 'undefined') {
+                            $('#referenceNo_error').html(request.responseJSON.errors.referenceNo[0]);
+                        }
+                        if (typeof request.responseJSON.errors.supplier !== 'undefined') {
+                            $('#supplier_error').html(request.responseJSON.errors.supplier[0]);
+                        }
+
+
+                    }
+
+                });
+                return false;
+            })
+
+
         });
         //
         // function checkValuesExistsInProducts() {
@@ -459,11 +530,21 @@
                 itemCount++;
 
                 var row = '<tr id="row_' + index.id + '" style="text-align: right">' +
-                    "<td style=\"text-align: left\">" + index.name + "( " + index.item_code + " )" + "</td>" +
+                    "<td style=\"text-align: left\">" + index.name + "( " + index.item_code + " )" + "  <i  class=\"fa fa-edit\" onclick='itemDetails(" + index.id + ")' style='float: right;cursor: pointer'></i></td>" +
                     "<td id='costPrice_" + index.id + "'>" + index.cost_price + "</td>" +
                     "<td style=\"text-align: center\"><input type='text'   style=\"text-align: center\" class='qy' onkeyup='qtyChanging(" + index.id + ")' id='quantity_" + index.id + "' value='" + 0 + "'></td>" +
                     "<td id='discount_" + index.id + "'>" + index.discount + "</td>" +
-                    "<td hidden id='hidden_data_" + index.id + "'><input type='hidden' id='unit_" + index.id + "'><input type='hidden' id='p_tax_" + index.id + "'></td>" +
+                    "<td hidden id='hidden_data_" + index.id + "'>" +
+
+                    "<input type='hidden' name='discount[]' id='discount_h" + index.id + "' value='0'>" +
+                    "<input type='hidden' name='quantity[]' id='quantity_h" + index.id + "' value='" + 0 + "'>" +
+                    "<input type='hidden' name='costPrice[]' id='costPrice_h" + index.id + "' value='" + index.cost_price + "'>" +
+                    "<input type='hidden' name='item[]' id='item_h" + index.id + "' value='" + index.id + "''>" +
+                    "<input type='hidden' name='unit[]' id='unit_h" + index.id + "' value='1'>" +
+                    "<input type='hidden'  name='p_tax[]' id='p_tax_h" + index.id + "'  value='0'>" +
+                    "<input type='hidden'  name='subtot[]' id='subtot_h" + index.id + "'>" +
+
+                    "</td>" +
                     "<td class='tax' id='tax_" + index.id + "'>" + index.tax + "</td>" +
                     "<td class='subtot' id='subtot_" + index.id + "'>" + 0 + "</td>" +
                     '<td style="text-align: center"><i class="glyphicon glyphicon-remove" onclick="removeThis(' + index.id + ')" style="cursor: pointer"></i></td>';
@@ -475,9 +556,11 @@
         }
 
         function qtyChanging(id) {
-            var subTot = ((toNumber($('#costPrice_' + id).text()) * toNumber($('#quantity_' + id).val())) + toNumber(($('#tax_' + id).text())))
+            var subTot = ((toNumber($('#costPrice_' + id).text()) * toNumber($('#quantity_' + id).val())) + toNumber(($('#tax_' + id).text())));
+            $('#quantity_h' + id).val(toNumber($('#quantity_' + id).val()));
 // alert($('#costPrice_' + id).text()+" == "+ $('#quantity_' + id).val()+" ==== "+$('#unit_' + id).val())
             $('#subtot_' + id).text(((!isNaN(subTot)) ? subTot : 0).format(2));
+            $('#subtot_h' + id).val(toNumber((!isNaN(subTot)) ? subTot.format(2) : 0));
 
             lastRowDesign();
         }
@@ -489,7 +572,7 @@
             });
             var qtySum = 0;
             $('.qy').each(function () {
-                qtySum += toNumber($(this).text());  // Or this.innerHTML, this.innerText
+                qtySum += toNumber($(this).val());  // Or this.innerHTML, this.innerText
             });
 
             var lastRow = '<tr class="lastRow" style="font-weight: bold;text-align: right">' +
@@ -501,14 +584,14 @@
             $('.lastRow').remove();
             $('#poBody').append(lastRow);
 
-            var wdisco = (($('#wholeDiscount').val()).indexOf('%') > -1) ? (sum * $('#wholeDiscount').val().replace('%', '') / 100) : ($('#wholeDiscount').val());
+            var wdisco = (($('#wholeDiscount').val()).indexOf('%') > -1) ? toNumber(sum * $('#wholeDiscount').val().replace('%', '') / 100) : toNumber($('#wholeDiscount').val());
             var wtax = ((toNumber(sum - wdisco) * toNumber($('#wholeTax').val())) / 100);
             var gtot = (sum - wdisco) + wtax;
             // var gtot = taxdeductSum - wdisco;
 
             var footerRow = "<table class=\"table table-bordered\" ><tr style=\"font-weight: bold;text-align: right;color: #0d6aad\">" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Items</td>" +
-                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + ($('#poTable tr').length - 2)+ " ("+ qtySum +") "+ "</td>" +
+                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + ($('#poTable tr').length - 2) + " (" + qtySum + ") " + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Total</td>" +
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + sum.format(2) + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Order Discount</td>" +
@@ -516,7 +599,7 @@
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Order Tax</td>" +
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + wtax.format(2) + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Grand Total</td>" +
-                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + gtot.format(2) + "</td><tr></table>";
+                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'><input type='hidden' name='grand_total' id='grand_total' value='" + toNumber(gtot.format(2)) + "'>" + gtot.format(2) + "</td><tr></table>";
 
 
             $('#footer').html(footerRow);
@@ -591,15 +674,27 @@
         function modalDataSetToTable() {
             var itemId = $('#modalItem').val();
             $('#tax_' + itemId).text((toNumber($('#ptx').text()) * $('#pQty').val()).format(2));
+            $('#p_tax_h' + itemId).val(toNumber((toNumber($('#ptx').text()) * $('#pQty').val()).format(2)));
+
             $('#p_tax_' + itemId).text((toNumber($('#ptx').text())).format(2));
+
+
             $('#quantity_' + itemId).val($('#pQty').val());
+            $('#quantity_h' + itemId).val($('#pQty').val());
+
             $('#unit_' + itemId).val(toNumber($('#pUnit').val()));
+            $('#unit_h' + itemId).val(toNumber($('#pUnit').val()));
+
             $('#costPrice_' + itemId).text($('#nucost').text());
+            $('#costPrice_h' + itemId).val($('#nucost').text());
+
             $('#discount_' + itemId).text(($('#pDisco').val() * $('#pQty').val()).format(2));
+            $('#discount_h' + itemId).val(toNumber(($('#pDisco').val() * $('#pQty').val()).format(2)));
             qtyChanging(itemId)
             $('#itemDetails').modal('toggle');
 
         }
+
 
     </script>
 @endsection

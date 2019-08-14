@@ -78,7 +78,7 @@ Route::post('/products/remove', 'ProductsController@removeProductData');
 Route::post('/products/fetchProductDataById', 'ProductsController@fetchProductDataById');
 
 /* PO */
-Route::get('/po/add', 'POController@index');
+Route::get('/po/add', ['as' => 'po.add', 'uses' => 'POController@index']);
 Route::post('po/create', 'POController@create');
 
 

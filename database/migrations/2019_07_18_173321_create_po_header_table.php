@@ -23,6 +23,7 @@ class CreatePoHeaderTable extends Migration
             $table->date('due_date')->nullable();
             $table->double('tax')->unsigned();
             $table->double('discount')->unsigned();
+            $table->double('grand_total')->unsigned();
             $table->tinyInteger('status')->length(2)->comment('1=received,2=ordered,3=pending,4=canceled')->default(0);
             $table->string('remark')->nullable();
             $table->softDeletes();

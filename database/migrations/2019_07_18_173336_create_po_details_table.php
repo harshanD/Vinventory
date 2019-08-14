@@ -21,6 +21,9 @@ class CreatePoDetailsTable extends Migration
             $table->foreign ('item_id')->references('id')->on('products')->onDelete('cascade');
             $table->double('cost_price');
             $table->double('qty');
+            $table->double('tax_val')->nullable();
+            $table->double('discount')->nullable();
+            $table->double('sub_total');
             $table->timestamps();
         });
     }

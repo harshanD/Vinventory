@@ -6,8 +6,10 @@ use App\Locations;
 use App\Supplier;
 use App\Tax;
 use App\PO;
+use App\PoDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class POController extends Controller
 {
@@ -21,31 +23,66 @@ class POController extends Controller
 
     public function create(Request $request)
     {
-        print_r($request->input());
-        return 'sss';
         $request->validate([
-            'po' => 'required|unique:po_profiles,name|max:100',
-            'poRate' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'datepicker' => 'required|date',
+            'status' => ['required', Rule::notIn(['0'])],
+            'location' => ['required', Rule::notIn(['0'])],
+            'referenceNo' => 'required|unique:po_header,referenceCode',
+            'supplier' => ['required', Rule::notIn(['0'])],
+
         ]);
 
         $po = new PO();
-        $po->name = $request->input('po');
-        $po->code = $request->input('code');
-        $po->type = $request->input('type');
-        $po->value = $request->input('poRate');
-        $po->status = \Config::get('constants.status.Active');
+        $po->due_date = $request->input('datepicker');
+        $po->location = $request->input('location');
+        $po->referenceCode = $request->input('referenceNo');
+        $po->supplier = $request->input('supplier');
+        $po->tax = $request->input('wholeTax');
+        $po->discount = $request->input('wholeDiscount');
+        $po->remark = $request->input('note');
+        $po->status = $request->input('status');
+        $po->grand_total = $request->input('grand_total');
 
-        if (!$po->save()) {
-            $response['success'] = false;
-            $response['messages'] = 'Error in the database while creating the po information';
-        } else {
-            $response['success'] = true;
-            $response['messages'] = 'Successfully created';
+        $po->save();
+
+        $items = $request->input('item');
+        $quantity = $request->input('quantity');
+        $costPrice = $request->input('costPrice');
+        $p_tax = $request->input('p_tax');
+        $unit = $request->input('unit');
+        $subtot = $request->input('subtot');
+        $discount = $request->input('discount');
+
+        foreach ($items as $id => $item) {
+
+            if ($subtot[$id] > 0) {
+                $poItems = new PoDetails();
+
+                $poItems->item_id = $item;
+                $poItems->cost_price = $costPrice[$id];
+                $poItems->qty = $quantity[$id];
+                $poItems->tax_val = $p_tax[$id];
+                $poItems->discount = $discount[$id];
+                $poItems->sub_total = $subtot[$id];
+
+                $po->poDetails()->save($poItems);
+            }
+
         }
-        echo json_encode($response);
+
+
+        if (!$po) {
+            $request->session()->flash('message', 'Error in the database while creating the PO');
+            $request->session()->flash('message-type', 'error');
+        } else {
+            $request->session()->flash('message', 'Successfully created ' . "[ Ref NO:" . $request->input('referenceNo') . " ]");
+            $request->session()->flash('message-type', 'success');
+        }
+        echo json_encode(array('success' => true));
     }
 
-    public function fetchPOData()
+    public
+    function fetchPOData()
     {
         $result = array('data' => array());
 
@@ -79,7 +116,8 @@ class POController extends Controller
         echo json_encode($result);
     }
 
-    public function fetchPODataById($id)
+    public
+    function fetchPODataById($id)
     {
         $data = (Object)PO::find($id)->toArray();
 
@@ -88,7 +126,8 @@ class POController extends Controller
 
     }
 
-    public function editPOData(Request $request, $id)
+    public
+    function editPOData(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
             'edit_po' => 'required|unique:po_profiles,name,' . $id . '|max:100',
@@ -122,7 +161,8 @@ class POController extends Controller
         echo json_encode($response);
     }
 
-    public function removePOData(Request $request)
+    public
+    function removePOData(Request $request)
     {
 
         $po = PO::find($request->input('id'));
