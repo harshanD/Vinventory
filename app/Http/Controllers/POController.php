@@ -27,7 +27,7 @@ class POController extends Controller
             'datepicker' => 'required|date',
             'status' => ['required', Rule::notIn(['0'])],
             'location' => ['required', Rule::notIn(['0'])],
-            'referenceNo' => 'required|unique:po_header,referenceCode',
+            'referenceNo' => 'required|unique:po_header,referenceCode|max:100',
             'supplier' => ['required', Rule::notIn(['0'])],
 
         ]);
@@ -70,7 +70,6 @@ class POController extends Controller
 
         }
 
-
         if (!$po) {
             $request->session()->flash('message', 'Error in the database while creating the PO');
             $request->session()->flash('message-type', 'error');
@@ -81,33 +80,84 @@ class POController extends Controller
         echo json_encode(array('success' => true));
     }
 
-    public
-    function fetchPOData()
+    public function poList()
+    {
+        return view('vendor.adminlte.po.index');
+    }
+
+    public function editView($id)
+    {
+        $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
+        $supplier = Supplier::where('status', \Config::get('constants.status.Active'))->get();
+        $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
+
+        $podata = PO::find($id);
+
+        return view('vendor.adminlte.po.edit', ['locations' => $locations, 'suppliers' => $supplier, 'tax' => $tax, 'po' => $podata]);
+    }
+
+    public function fetchPOData()
     {
         $result = array('data' => array());
 
 //        $data = PO::where('status', \Config::get('constants.status.Active'))->orderBy('po', 'asc')->get();
-        $data = PO::orderBy('name', 'asc')->get();
+//        $data = PO::orderBy('due_date', 'desc')->get();
+        $data = PO::get();
 
         foreach ($data as $key => $value) {
             // button
             $buttons = '';
 
-//            if (Permissions::getRolePermissions('viewPO')) {
+//            if (Permissions::getRolePermissions('vi   ewPO')) {
             $buttons .= '<button type="button" class="btn btn-default" onclick="editPO(' . $value->id . ')" data-toggle="modal" data-target="#editPOModal"><i class="fa fa-pencil"></i></button>';
 //            }
 
 //            if (Permissions::getRolePermissions('deletePO')) {
             $buttons .= ' <button type="button" class="btn btn-default" onclick="removePO(' . $value->id . ')" data-toggle="modal" data-target="#removePOModal"><i class="fa fa-trash"></i></button>';
 //            }
+            $buttons = "<div class=\"btn-group\">
+                  <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
+                  <button type=\"button\" class=\"btn btn-default btn-flat dropdown-toggle\" data-toggle=\"dropdown\">
+                    <span class=\"caret\"></span>
+                    <span class=\"sr-only\">Toggle Dropdown</span>
+                  </button>
+                  <ul class=\"dropdown-menu\" role=\"menu\">
+                    <li><a href=\"/po/edit/" . $value->id . "\">Edit purchase</a></li>
+                    <li><a href=\"#\">Purchase details</a></li>
+                    <li><a href=\"#\">Something else here</a></li>
+                    <li class=\"divider\"></li>
+                    <li><a href=\"#\">Separated link</a></li>
+                  </ul>
+                </div>";
 
-            $status = ($value->status == \Config::get('constants.status.Active')) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
+            switch ($value->status):
+                case 1:
+                    $status = '<span class="label label-success">Received</span>';
+                    break;
+                case 2:
+                    $status = '<span class="label label-success">Ordered</span>';
+                    break;
+                case 3:
+                    $status = '<span class="label label-success">pending</span>';
+                    break;
+                case 4:
+                    $status = '<span class="label label-warning">canceled</span>';
+                    break;
+                default:
+                    $status = '<span class="label label-warning">Nothing</span>';
+                    break;
+            endswitch;
 
             $result['data'][$key] = array(
-                $value->name,
-                $value->code,
-                $value->value,
-                $value->type,
+                $value->due_date,
+                $value->referenceCode,
+                $value->suppliers->name,
+                $value->status,
+                $value->grand_total,
+                100,
+                100,
+//                $value->paid,
+//                $value->balance,
                 $status,
                 $buttons
             );
@@ -116,8 +166,7 @@ class POController extends Controller
         echo json_encode($result);
     }
 
-    public
-    function fetchPODataById($id)
+    public function fetchPODataById($id)
     {
         $data = (Object)PO::find($id)->toArray();
 
@@ -126,43 +175,82 @@ class POController extends Controller
 
     }
 
-    public
-    function editPOData(Request $request, $id)
+    public function editPOData(Request $request, $id)
     {
+//        echo $id;
+//        print_r($request->input('supplier'));
+//        return 'ss';
         $validator = Validator::make($request->all(), [
-            'edit_po' => 'required|unique:po_profiles,name,' . $id . '|max:100',
-            'edit_poRate' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'datepicker' => 'required|date',
+            'status' => ['required', Rule::notIn(['0'])],
+            'location' => ['required', Rule::notIn(['0'])],
+            'referenceNo' => 'required|unique:po_header,referenceCode,' . $id . '|max:100',
+            'supplier' => ['required', Rule::notIn(['0'])],
         ]);
 
-        $niceNames = array(
-            'edit_po' => 'PO',
-            'edit_code' => 'Code',
-            'edit_type' => 'Type',
-            'edit_poRate' => 'PO Rate',
-        );
-        $validator->setAttributeNames($niceNames);
+//        $niceNames = array(
+//            'edit_po' => 'PO',
+//            'edit_code' => 'Code',
+//            'edit_type' => 'Type',
+//            'edit_poRate' => 'PO Rate',
+//        );
+//        $validator->setAttributeNames($niceNames);
         $validator->validate();
 
         $po = PO::find($id);
+        $po->due_date = $request->input('datepicker');
+        $po->location = $request->input('location');
+        $po->referenceCode = $request->input('referenceNo');
+        $po->supplier = $request->input('supplier');
+        $po->tax = $request->input('wholeTax');
+        $po->discount = $request->input('wholeDiscount');
+        $po->remark = $request->input('note');
+        $po->status = $request->input('status');
+        $po->grand_total = $request->input('grand_total');
 
-        $po->name = $request->input('edit_po');
-        $po->code = $request->input('edit_code');
-        $po->type = $request->input('edit_type');
-        $po->value = $request->input('edit_poRate');
-        $po->status = $request->input('edit_status');
+        $items = $request->input('item');
+        $quantity = $request->input('quantity');
+        $costPrice = $request->input('costPrice');
+        $p_tax = $request->input('p_tax');
+        $unit = $request->input('unit');
+        $subtot = $request->input('subtot');
+        $discount = $request->input('discount');
 
-        if (!$po->save()) {
-            $response['success'] = false;
-            $response['messages'] = 'Error in the database while updating the po information';
-        } else {
-            $response['success'] = true;
-            $response['messages'] = 'Successfully Updated';
+        $deletedItems = $request->input('deletedItems');
+
+        PoDetails::destroy($deletedItems);
+
+        foreach ($items as $i => $item) {
+            echo $id.'=='.$item;
+            if ($subtot[$i] > 0) {
+
+                $poItem = PoDetails::updateOrCreate(
+                    [
+                        'po_header' => $id,
+                        'item_id' => $item
+                    ],
+                    [
+                        'cost_price' => $costPrice[$i],
+                        'qty' => $quantity[$i],
+                        'tax_val' => $p_tax[$i],
+                        'discount' => $discount[$i],
+                        'sub_total' => $subtot[$i],
+                    ]);
+
+            }
         }
-        echo json_encode($response);
+
+//        if (!$poItem) {
+//            $response['success'] = false;
+//            $response['messages'] = 'Error in the database while updating the po information';
+//        } else {
+//            $response['success'] = true;
+//            $response['messages'] = 'Successfully Updated';
+//        }
+//        echo json_encode($response);
     }
 
-    public
-    function removePOData(Request $request)
+    public function removePOData(Request $request)
     {
 
         $po = PO::find($request->input('id'));

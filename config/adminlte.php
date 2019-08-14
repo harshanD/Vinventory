@@ -189,7 +189,7 @@ return [
                 ],[
                     'text' => 'PO manage',
                     'icon' => 'user',
-                    'url'  => '/user/manage',
+                    'url'  => '/po/manage',
                 ],
             ]
         ],

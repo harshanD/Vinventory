@@ -4,7 +4,9 @@ Number.prototype.format = function (n, x) {
 };
 
 function toNumber(val, defaultVal = 0) {
-    // alert(val)
+  // alert('|'+val+'|')
+  //   (isNumeric(val)) ? val.toString() : '';
+
     val = val.toString().replace(/\,/g, ''); // 1125, but a string, so convert it to number
     if (Number(val) === 0 || isNaN(val) || val == 'Nam') {
         return defaultVal;
