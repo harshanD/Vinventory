@@ -29,6 +29,7 @@ class POController extends Controller
             'location' => ['required', Rule::notIn(['0'])],
             'referenceNo' => 'required|unique:po_header,referenceCode|max:100',
             'supplier' => ['required', Rule::notIn(['0'])],
+            'grand_tax_id' => 'required',
 
         ]);
 
@@ -37,11 +38,13 @@ class POController extends Controller
         $po->location = $request->input('location');
         $po->referenceCode = $request->input('referenceNo');
         $po->supplier = $request->input('supplier');
-        $po->tax = $request->input('wholeTax');
-        $po->discount = $request->input('wholeDiscount');
+        $po->tax = $request->input('grand_tax');
+        $po->discount = $request->input('grand_discount');
+        $po->discount_val_or_per = ($request->input('wholeDiscount') == '') ? 0 : $request->input('wholeDiscount');
         $po->remark = $request->input('note');
         $po->status = $request->input('status');
         $po->grand_total = $request->input('grand_total');
+        $po->tax_percentage = $request->input('grand_tax_id');
 
         $po->save();
 
@@ -52,6 +55,7 @@ class POController extends Controller
         $unit = $request->input('unit');
         $subtot = $request->input('subtot');
         $discount = $request->input('discount');
+        $tax_id = $request->input('tax_id');
 
         foreach ($items as $id => $item) {
 
@@ -63,6 +67,7 @@ class POController extends Controller
                 $poItems->qty = $quantity[$id];
                 $poItems->tax_val = $p_tax[$id];
                 $poItems->discount = $discount[$id];
+                $poItems->tax_percentage = $tax_id[$id];
                 $poItems->sub_total = $subtot[$id];
 
                 $po->poDetails()->save($poItems);
@@ -179,22 +184,17 @@ class POController extends Controller
     {
 //        echo $id;
 //        print_r($request->input('supplier'));
-//        return 'ss';
+////        return 'ss';
         $validator = Validator::make($request->all(), [
             'datepicker' => 'required|date',
             'status' => ['required', Rule::notIn(['0'])],
             'location' => ['required', Rule::notIn(['0'])],
             'referenceNo' => 'required|unique:po_header,referenceCode,' . $id . '|max:100',
             'supplier' => ['required', Rule::notIn(['0'])],
+            'grand_tax_id' => 'required',
         ]);
 
-//        $niceNames = array(
-//            'edit_po' => 'PO',
-//            'edit_code' => 'Code',
-//            'edit_type' => 'Type',
-//            'edit_poRate' => 'PO Rate',
-//        );
-//        $validator->setAttributeNames($niceNames);
+
         $validator->validate();
 
         $po = PO::find($id);
@@ -202,17 +202,20 @@ class POController extends Controller
         $po->location = $request->input('location');
         $po->referenceCode = $request->input('referenceNo');
         $po->supplier = $request->input('supplier');
-        $po->tax = $request->input('wholeTax');
-        $po->discount = $request->input('wholeDiscount');
+        $po->tax = $request->input('grand_tax');
+        $po->discount = $request->input('grand_discount');
+        $po->discount_val_or_per = ($request->input('wholeDiscount') == '') ? 0 : $request->input('wholeDiscount');
         $po->remark = $request->input('note');
         $po->status = $request->input('status');
         $po->grand_total = $request->input('grand_total');
+        $po->tax_percentage = $request->input('grand_tax_id');
 
         $items = $request->input('item');
         $quantity = $request->input('quantity');
         $costPrice = $request->input('costPrice');
         $p_tax = $request->input('p_tax');
         $unit = $request->input('unit');
+        $tax_id = $request->input('tax_id');
         $subtot = $request->input('subtot');
         $discount = $request->input('discount');
 
@@ -221,7 +224,8 @@ class POController extends Controller
         PoDetails::destroy($deletedItems);
 
         foreach ($items as $i => $item) {
-            echo $id.'=='.$item;
+//            print_r($tax_id);
+//            echo $id . '==' . $item;
             if ($subtot[$i] > 0) {
 
                 $poItem = PoDetails::updateOrCreate(
@@ -230,9 +234,10 @@ class POController extends Controller
                         'item_id' => $item
                     ],
                     [
-                        'cost_price' => $costPrice[$i],
+                        'cost_pricess' => $costPrice[$i],
                         'qty' => $quantity[$i],
                         'tax_val' => $p_tax[$i],
+                        'tax_percentage' => $tax_id[$i],
                         'discount' => $discount[$i],
                         'sub_total' => $subtot[$i],
                     ]);
@@ -240,14 +245,15 @@ class POController extends Controller
             }
         }
 
-//        if (!$poItem) {
-//            $response['success'] = false;
-//            $response['messages'] = 'Error in the database while updating the po information';
-//        } else {
-//            $response['success'] = true;
-//            $response['messages'] = 'Successfully Updated';
-//        }
-//        echo json_encode($response);
+
+        if (!$po->save()) {
+            $request->session()->flash('message', 'Error in the database while updating the PO');
+            $request->session()->flash('message-type', 'error');
+        } else {
+            $request->session()->flash('message', 'Successfully Updated ' . "[ Ref NO:" . $request->input('referenceNo') . " ]");
+            $request->session()->flash('message-type', 'success');
+        }
+        echo json_encode(array('success' => true));
     }
 
     public function removePOData(Request $request)

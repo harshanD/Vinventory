@@ -16,12 +16,13 @@ class CreatePoDetailsTable extends Migration
         Schema::create('po_details', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('po_header')->unsigned();
-            $table->foreign ('po_header')->references('id')->on('po_header')->onDelete('cascade');
+            $table->foreign('po_header')->references('id')->on('po_header')->onDelete('cascade');
             $table->integer('item_id')->unsigned();
-            $table->foreign ('item_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('item_id')->references('id')->on('products')->onDelete('cascade');
             $table->double('cost_price');
             $table->double('qty');
             $table->double('tax_val')->nullable();
+            $table->integer('tax_percentage')->unsigned()->default(0);
             $table->double('discount')->nullable();
             $table->double('sub_total');
             $table->timestamps();

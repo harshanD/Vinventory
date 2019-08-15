@@ -86,10 +86,11 @@
                                             </option>
                                             <option value="1" {{ ($po->status== 1? "selected":"") }}>Received
                                             </option>
-                                            <option value="2" {{ ($po->status== 2? "selected":"") }}>Pending
+                                            <option value="2" {{ ($po->status== 2? "selected":"") }}>Ordered
                                             </option>
-                                            <option value="3" {{ ($po->status== 3? "selected":"") }}>Ordered
+                                            <option value="3" {{ ($po->status== 3? "selected":"") }}>Pending
                                             </option>
+
                                         </select>
                                     </div>
                                     <!-- /.input group -->
@@ -217,18 +218,15 @@
                                     <td id='discount_{{ $poItem->item_id }}'>{{number_format($poItem->discount,2)}}</td>
                                     <td hidden id='hidden_data_{{ $poItem->item_id }}'>
 
-                                        <input type='hidden' name='discount[]' id='discount_h{{ $poItem->item_id }}'
-                                               value='{{number_format($poItem->discount,2)}}'>
-                                        <input type='hidden' name='quantity[]' id='quantity_h{{ $poItem->item_id }}'
-                                               value='{{ $poItem->qty }}'>
-                                        <input type='hidden' name='costPrice[]' id='costPrice_h{{ $poItem->item_id }}'
-                                               value='{{ number_format($poItem->cost_price,2) }}'>
-                                        <input type='hidden' name='item[]' id='item_h{{ $poItem->item_id }}'
-                                               value='{{ $poItem->item_id }}'>
+                                        <input type='hidden' name='discount[]' id='discount_h{{ $poItem->item_id }}' value='{{($poItem->discount)}}'>
+                                        <input type='hidden' name='quantity[]' id='quantity_h{{ $poItem->item_id }}' value='{{ $poItem->qty }}'>
+                                        <input type='hidden' name='costPrice[]' id='costPrice_h{{ $poItem->item_id }}' value='{{ ($poItem->cost_price) }}'>
+                                        <input type='hidden' name='item[]' id='item_h{{ $poItem->item_id }}' value='{{ $poItem->item_id }}'>
                                         <input type='hidden' name='unit[]' id='unit_h{{ $poItem->item_id }}'>
-                                        <input type='hidden' name='p_tax[]' id='p_tax_h{{ $poItem->item_id }}'
-                                               value='{{ $poItem->tax_val }}'>
-                                        <input type='hidden' name='subtot[]' id='subtot_h{{ $poItem->item_id }}'>
+                                        <input type='hidden' name='p_tax[]' id='p_tax_h{{ $poItem->item_id }}' value='{{ $poItem->tax_val }}'>
+                                        <input type='hidden' name='subtot[]' id='subtot_h{{ $poItem->item_id }}' value='{{ $poItem->sub_total }}'>
+                                        <input type='hidden' name='tax_id[]' id='tax_id_h{{ $poItem->item_id }}' value="{{ $poItem->tax_percentage }}">
+
 
                                     </td>
                                     <td class='tax'
@@ -272,7 +270,7 @@
                                                     onchange="lastRowDesign()">
                                                 <option value="0">Select tax</option>
                                                 @foreach($tax as $ta)
-                                                    <option value="{{$ta->value}}">{{$ta->name ."-".$ta->code}}</option>
+                                                    <option value="{{$ta->value}}" {{($po->tax_percentage==$ta->value? "selected":"")}}>{{$ta->name ."-".$ta->code}}</option>
                                                 @endforeach
 
                                             </select>
@@ -290,7 +288,8 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-circle"></i>
                                             </div>
-                                            <input type="text" class="form-control" name="wholeDiscount" value="0"
+                                            <input type="text" class="form-control" name="wholeDiscount"
+                                                   value="{{$po->discount_val_or_per}}"
                                                    id="wholeDiscount" onkeyup="lastRowDesign()">
                                         </div>
                                         <!-- /.input group -->
@@ -308,7 +307,7 @@
                                             </div>
                                             <textarea type="text" class="form-control" id="note" name="note"
                                                       placeholder="Note"
-                                                      autocomplete="off"></textarea>
+                                                      autocomplete="off">{{$po->remark}}</textarea>
                                         </div>
                                         <!-- /.input group -->
                                         {{--                                        <p class="help-block" id="datepicker_error"></p>--}}
@@ -473,7 +472,7 @@
         var acurl = '';
 
         $(document).ready(function () {
-
+            lastRowDesign()
             // itemsLoad()
 
             var options = {
@@ -522,8 +521,16 @@
             $("#pocreate").unbind('submit').on('submit', function () {
                 var form = $(this);
 
+                var qtySum = 0;
+                $('.qy').each(function () {
+                    qtySum += toNumber($(this).val());  // Or this.innerHTML, this.innerText
+                });
+
                 if (($('#poTable tr').length - 2) < 1) {
                     $('#items_error').html('Items required');
+                    return false
+                } else if (qtySum < 1) {
+                    $('#items_error').html('Fill Items Qty required');
                     return false
                 }
 
@@ -536,7 +543,7 @@
                         // window.location = data;
                         console.log(response)
                         if (response.success) {
-                            window.location.href = '/po/add';
+                            window.location.href = '/po/manage';
                         }
 
 
@@ -611,6 +618,7 @@
                     "<input type='hidden' name='unit[]' id='unit_h" + index.id + "' value='1'>" +
                     "<input type='hidden'  name='p_tax[]' id='p_tax_h" + index.id + "'  value='0'>" +
                     "<input type='hidden'  name='subtot[]' id='subtot_h" + index.id + "'>" +
+                    "<input type='hidden'   name='tax_id[]' id='tax_id_h" + index.id + "' value='0'>" +
 
                     "</td>" +
                     "<td class='tax' id='tax_" + index.id + "'>" + index.tax + "</td>" +
@@ -667,7 +675,12 @@
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Order Tax</td>" +
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + wtax.format(2) + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Grand Total</td>" +
-                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'><input type='hidden' name='grand_total' id='grand_total' value='" + toNumber(gtot.format(2)) + "'>" + gtot.format(2) + "</td><tr></table>";
+                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" +
+                "<input type='hidden' name='grand_total' id='grand_total' value='" + toNumber(gtot.format(2)) + "'>" +
+                "<input type='hidden' name='grand_tax_id' id='grand_tax_id' value='" + $('#wholeTax').val() + "'>" +
+                "<input type='hidden' name='grand_discount' id='grand_discount' value='" + toNumber(wdisco) + "'>" +
+                "<input type='hidden' name='grand_tax' id='grand_tax' value='" + toNumber(wtax) + "'>" + gtot.format(2) + "" +
+                "</td><tr></table>";
 
 
             $('#footer').html(footerRow);
@@ -699,28 +712,22 @@
                 },
                 success: function (data, status, xhr) {
                     var item = JSON.parse(data);
+                    // alert(toNumber($('#quantity_' + id).val()))
+                    if (toNumber($('#quantity_' + id).val()) > 0) {
+                        $('#pCost').val((toNumber(toNumber($('#costPrice_' + id).text()) + (toNumber($('#tax_' + id).text()) / toNumber($('#quantity_' + id).val())) + (toNumber($('#discount_' + id).text()) / toNumber($('#quantity_' + id).val())))).format(2));
+                    } else {
+                        $('#pCost').val(toNumber($('#costPrice_' + id).text()))
+                    }
 
-                    $('#pCost').val((toNumber(toNumber($('#costPrice_' + id).text()) + (toNumber($('#tax_' + id).text()) / toNumber($('#quantity_' + id).val())) + (toNumber($('#discount_' + id).text()) / toNumber($('#quantity_' + id).val())))).format(2));
+
                     $('#itemName').text(item.name + " ( " + item.item_code + ") ");
                     $('#pQty').val($('#quantity_' + id).val());
-                    $('#pDisco').val((toNumber($('#discount_' + id).text()) / toNumber($('#quantity_' + id).val())).format(2));
+                    $('#pDisco').val((toNumber(toNumber($('#discount_' + id).text()) / toNumber($('#quantity_' + id).val()))).format(2));
 
-                    // all options get
-                    // var loopender = true;
-                    // $("#pTax option").each(function () {
-                    //     // Add $(this).val() to your list
-                    //     // alert(toNumber(toNumber(toNumber(toNumber($('#pCost').val())) * toNumber($(this).val())) / (100 + toNumber($(this).val()))));
-                    //     if (loopender && toNumber($('#tax_' + id).text()) == toNumber(toNumber(toNumber($('#costPrice_' + id).text()) * toNumber($(this).val())) / (100 + toNumber($(this).val())))) {
-                    //         loopender = false;
-                    //         alert($(this).val())
-                    //         $("#pTax select").val($(this).val());
-                    //     }
-                    //
-                    // });
+                    $("#pTax").select2("val", "0");
+                    $("#pTax").val($('#tax_id_h' + id).val()).trigger('change');
 
-                    // toNumber(toNumber(toNumber($('#costPrice_' + id).text()) * toNumber($('#pTax').val())) / (100 + toNumber($('#pTax').val())));
-                    var taxCal =
-                        $('#pUnit').html("");
+                    $('#pUnit').html("");
                     if (item.unit == '2') { /*piece*/
                         var unitSelecter = "<option value='1'>Piece</option>" +
                             "<option value='12'>Dozen Box</option>";
@@ -768,7 +775,7 @@
             $('#p_tax_h' + itemId).val(toNumber((toNumber($('#ptx').text()) * $('#pQty').val()).format(2)));
 
             $('#p_tax_' + itemId).text((toNumber($('#ptx').text())).format(2));
-
+            $('#tax_id_h' + itemId).val($('#pTax').val())
 
             $('#quantity_' + itemId).val($('#pQty').val());
             $('#quantity_h' + itemId).val($('#pQty').val());

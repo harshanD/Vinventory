@@ -81,8 +81,9 @@
                                         <select class="form-control select2" name="status" id="status">
                                             <option value="0">Select Status</option>
                                             <option value="1">Received</option>
-                                            <option value="2">Pending</option>
-                                            <option value="3">Ordered</option>
+                                            <option value="2">Ordered</option>
+                                            <option value="3">Pending</option>
+
 
                                         </select>
                                     </div>
@@ -192,6 +193,7 @@
                         </table>
                     </div>
                     <p class="help-block" id="items_error"></p>
+                    {{--                    <p class="help-block" id="grand_tax_id"></p>--}}
                     <div class="box-body">
                         <div class="checkbox">
                             <label data-toggle="collapse" data-target="#collapseOptions" class="collapsed"
@@ -466,8 +468,16 @@
             $("#pocreate").unbind('submit').on('submit', function () {
                 var form = $(this);
 
+                var qtySum = 0;
+                $('.qy').each(function () {
+                    qtySum += toNumber($(this).val());  // Or this.innerHTML, this.innerText
+                });
+
                 if (($('#poTable tr').length - 2) < 1) {
                     $('#items_error').html('Items required');
+                    return false
+                } else if (qtySum < 1) {
+                    $('#items_error').html('Fill Items Qty required');
                     return false
                 }
 
@@ -479,13 +489,13 @@
                     success: function (response) {
                         // window.location = data;
                         console.log(response)
-                        if(response.success){
-                            window.location.href ='/po/add';
+                        if (response.success) {
+                            window.location.href = '/po/add';
                         }
 
 
                     },
-                    error: function(request,status,errorThrown) {
+                    error: function (request, status, errorThrown) {
 
                         $('.help-block').html('');
                         if (typeof request.responseJSON.errors.datepicker !== 'undefined') {
@@ -543,6 +553,7 @@
                     "<input type='hidden' name='unit[]' id='unit_h" + index.id + "' value='1'>" +
                     "<input type='hidden'  name='p_tax[]' id='p_tax_h" + index.id + "'  value='0'>" +
                     "<input type='hidden'  name='subtot[]' id='subtot_h" + index.id + "'>" +
+                    "<input type='hidden'   name='tax_id[]' id='tax_id_h" + index.id + "' value='0'>" +
 
                     "</td>" +
                     "<td class='tax' id='tax_" + index.id + "'>" + index.tax + "</td>" +
@@ -599,7 +610,12 @@
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Order Tax</td>" +
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + wtax.format(2) + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Grand Total</td>" +
-                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'><input type='hidden' name='grand_total' id='grand_total' value='" + toNumber(gtot.format(2)) + "'>" + gtot.format(2) + "</td><tr></table>";
+                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" +
+                "<input type='hidden' name='grand_total' id='grand_total' value='" + toNumber(gtot.format(2)) + "'>" +
+                "<input type='hidden' name='grand_tax_id' id='grand_tax_id' value='" + $('#wholeTax').val() + "'>" +
+                "<input type='hidden' name='grand_discount' id='grand_discount' value='" + toNumber(wdisco) + "'>" +
+                "<input type='hidden' name='grand_tax' id='grand_tax' value='" + toNumber(wtax) + "'>" + gtot.format(2) + "" +
+                "</td><tr></table>";
 
 
             $('#footer').html(footerRow);
@@ -625,10 +641,21 @@
                 },
                 success: function (data, status, xhr) {
                     var item = JSON.parse(data);
-                    $('#pCost').val((toNumber(toNumber($('#costPrice_' + id).text()) + (toNumber($('#tax_' + id).text()) / toNumber($('#quantity_' + id).val())) + (toNumber($('#discount_' + id).text()) / toNumber($('#quantity_' + id).val())))).format(2));
+                    // alert(toNumber($('#quantity_' + id).val()))
+                    if (toNumber($('#quantity_' + id).val()) > 0) {
+                        $('#pCost').val((toNumber(toNumber($('#costPrice_' + id).text()) + (toNumber($('#tax_' + id).text()) / toNumber($('#quantity_' + id).val())) + (toNumber($('#discount_' + id).text()) / toNumber($('#quantity_' + id).val())))).format(2));
+                    } else {
+                        $('#pCost').val(toNumber($('#costPrice_' + id).text()))
+                    }
+
+
                     $('#itemName').text(item.name + " ( " + item.item_code + ") ");
                     $('#pQty').val($('#quantity_' + id).val());
-                    $('#pDisco').val();
+                    $('#pDisco').val((toNumber(toNumber($('#discount_' + id).text()) / toNumber($('#quantity_' + id).val()))).format(2));
+
+                    $("#pTax").select2("val", "0");
+                    $("#pTax").val($('#tax_id_h' + id).val()).trigger('change');
+
                     $('#pUnit').html("");
                     if (item.unit == '2') { /*piece*/
                         var unitSelecter = "<option value='1'>Piece</option>" +
@@ -677,7 +704,7 @@
             $('#p_tax_h' + itemId).val(toNumber((toNumber($('#ptx').text()) * $('#pQty').val()).format(2)));
 
             $('#p_tax_' + itemId).text((toNumber($('#ptx').text())).format(2));
-
+            $('#tax_id_h' + itemId).val($('#pTax').val())
 
             $('#quantity_' + itemId).val($('#pQty').val());
             $('#quantity_h' + itemId).val($('#pQty').val());
