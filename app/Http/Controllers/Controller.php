@@ -12,5 +12,12 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-
+    
+    public static function replace($matches)
+    {
+        if (isset($matches[1])) {
+            $length = strlen($matches[1]);
+            return sprintf("%0" . $length . "d", ++$matches[1]);
+        }
+    }
 }
