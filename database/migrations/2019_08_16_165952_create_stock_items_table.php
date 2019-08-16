@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePoDetailsTable extends Migration
+class CreateStockItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,14 @@ class CreatePoDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('po_details', function (Blueprint $table) {
+        Schema::create('stock_items', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('po_header')->unsigned();
-            $table->foreign('po_header')->references('id')->on('po_header')->onDelete('cascade');
+            $table->integer('stock_id')->unsigned();
+            $table->foreign('stock_id')->references('id')->on('stock')->onDelete('cascade');
             $table->integer('item_id')->unsigned();
             $table->foreign('item_id')->references('id')->on('products')->onDelete('cascade');
-            $table->double('cost_price');
             $table->double('qty');
-            $table->double('received_qty')->default(0);
-            $table->double('tax_val')->nullable();
-            $table->integer('tax_percentage')->unsigned()->default(0);
-            $table->double('discount')->nullable();
-            $table->double('sub_total');
+            $table->string('method', 10)->comment('add=A  , subtract=S')->default('A');
             $table->timestamps();
         });
     }
@@ -37,6 +32,6 @@ class CreatePoDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('po_details');
+        Schema::dropIfExists('stock_items');
     }
 }

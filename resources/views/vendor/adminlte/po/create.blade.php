@@ -63,7 +63,7 @@
                                             <i class="fa fa-calendar"></i>
                                         </div>
                                         <input type="text" placeholder="Select Date" name="datepicker"
-                                               class="form-control pull-right" id="datepicker">
+                                            value="{{date('Y-m-d')}}"   class="form-control pull-right" id="datepicker">
                                     </div>
                                     <!-- /.input group -->
                                     <p class="help-block" id="datepicker_error"></p>
@@ -119,7 +119,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa  fa-barcode"></i>
                                         </div>
-                                        <input type="text" class="form-control" name="referenceNo" id="referenceNo">
+                                        <input type="text" class="form-control" name="referenceNo" id="referenceNo" readonly value="{{$lastRefCode}}">
                                     </div>
                                     <!-- /.input group -->
                                     <p class="help-block" id="referenceNo_error"></p>

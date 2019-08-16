@@ -50,7 +50,7 @@
                     </div>
                 @endif
 
-                <table id="userTable" class="table table-bordered table-striped">
+                <table id="poTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
                         <th>Date</th>
@@ -93,6 +93,51 @@
 
         <!-- /.box -->
 
+        <!-- remove location modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="poReceivedModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Receive All</h4>
+                    </div>
+
+                    <form role="form" action="{{ url('po/receiveAll/') }}" method="post" id="poReceivedForm">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="edit_location_name">Purchase Receive *</label>
+                                <input type="text" class="form-control" id="recNo" name="recNo" readonly
+                                       placeholder="Enter Phone" autocomplete="off">
+                                <p class="help-block" id="error_e_email"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_location_name">Receive Date *</label>
+                                <input type="text" placeholder="Select Date" name="datepicker"
+                                       value="{{date('Y-m-d')}}"
+                                       class="form-control pull-right" id="datepicker">
+                                <p class="help-block" id="error_e_email"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_location_name">Notes</label>
+                                <input type="text" class="form-control" id="edit_email" name="edit_email"
+                                       placeholder="Enter Phone" autocomplete="off">
+                                <textarea type="text" class="form-control" id="note" name="note"
+                                          placeholder="Note"
+                                          autocomplete="off"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
 
     </section>
 
@@ -103,10 +148,21 @@
             // table = $("table.table").dataTable();
             // table.fnPageChange("first", 1);
             // initialize the datatable
-            manageTable = $('#userTable').DataTable({
+            manageTable = $('#poTable').DataTable({
                 'ajax': '/po/fetchPOData',
                 'order': []
             });
         })
+
+        function receiveAll(id) {
+
+            $('#recNo').val($('#recNo_' + id).val());
+
+
+            $('#poReceivedModal').modal({
+                show: 'true'
+            });
+            // alert(id)
+        }
     </script>
 @endsection

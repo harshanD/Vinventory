@@ -13,13 +13,20 @@ use Illuminate\Validation\Rule;
 
 class POController extends Controller
 {
+
+
     public function index()
     {
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
         $supplier = Supplier::where('status', \Config::get('constants.status.Active'))->get();
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
-        return view('vendor.adminlte.po.create', ['locations' => $locations, 'suppliers' => $supplier, 'tax' => $tax]);
+        $lastRefCode = PO::all()->last();
+        $data = (isset($lastRefCode->referenceCode)) ? $lastRefCode->referenceCode : 'PO-000000';
+
+        $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
+        return view('vendor.adminlte.po.create', ['locations' => $locations, 'suppliers' => $supplier, 'tax' => $tax, 'lastRefCode' => $code]);
     }
+
 
     public function create(Request $request)
     {
@@ -120,6 +127,9 @@ class POController extends Controller
 //            if (Permissions::getRolePermissions('deletePO')) {
             $buttons .= ' <button type="button" class="btn btn-default" onclick="removePO(' . $value->id . ')" data-toggle="modal" data-target="#removePOModal"><i class="fa fa-trash"></i></button>';
 //            }
+
+            $hiddenData = '<input type="hidden" id="recNo_' . $value->id . '" value="' . 'PR-' . '">';
+
             $buttons = "<div class=\"btn-group\">
                   <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
                   <button type=\"button\" class=\"btn btn-default btn-flat dropdown-toggle\" data-toggle=\"dropdown\">
@@ -127,13 +137,14 @@ class POController extends Controller
                     <span class=\"sr-only\">Toggle Dropdown</span>
                   </button>
                   <ul class=\"dropdown-menu\" role=\"menu\">
-                    <li><a href=\"/po/edit/" . $value->id . "\">Edit purchase</a></li>
+                    <li><a href=\"/po/edit/" . $value->id . "\">Edit Purchase</a></li>
+                    <li><a onclick=\"receiveAll(" . $value->id . ")\">Receive All</a></li>
                     <li><a href=\"#\">Purchase details</a></li>
                     <li><a href=\"#\">Something else here</a></li>
                     <li class=\"divider\"></li>
                     <li><a href=\"#\">Separated link</a></li>
                   </ul>
-                </div>";
+                </div>" . $hiddenData;
 
             switch ($value->status):
                 case 1:
@@ -269,5 +280,16 @@ class POController extends Controller
             $response['messages'] = 'Successfully Removed';
         }
         echo json_encode($response);
+    }
+
+    public function receiveAll($id)
+    {
+        $po = PO::find($id);
+
+        foreach ($po->poDetails as $poItem) {
+            $poitemOb = PoDetails::find($poItem->id);
+            $poitemOb->received_qty = $poItem->qty;
+        }
+        $poitemOb->save();
     }
 }
