@@ -103,11 +103,13 @@
                         <h4 class="modal-title">Receive All</h4>
                     </div>
 
-                    <form role="form" action="{{ url('po/receiveAll/') }}" method="post" id="poReceivedForm">
+                    <form role="form" action="{{ url('po/receiveAll') }}" method="post" id="poReceivedForm">
                         <div class="modal-body">
+                            {{csrf_field()}}
+                            <input type="hidden" name="poId" id="poId">
                             <div class="form-group">
                                 <label for="edit_location_name">Purchase Receive *</label>
-                                <input type="text" class="form-control" id="recNo" name="recNo" readonly
+                                <input type="text" class="form-control" id="recNo" name="recNo"
                                        placeholder="Enter Phone" autocomplete="off">
                                 <p class="help-block" id="error_e_email"></p>
                             </div>
@@ -120,7 +122,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="edit_location_name">Notes</label>
-                                <input type="text" class="form-control" id="edit_email" name="edit_email"
+                                <input type="text" class="form-control" id="note" name="note"
                                        placeholder="Enter Phone" autocomplete="off">
                                 <textarea type="text" class="form-control" id="note" name="note"
                                           placeholder="Note"
@@ -139,6 +141,31 @@
         </div><!-- /.modal -->
 
 
+        <!-- remove supplier modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="recConditonalProductModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">proceed confirm</h4>
+                    </div>
+
+                    <form id="recConditonalProductForm">
+                        <div class="modal-body">
+                            <p>This action will mark all the items as received. Do you really want to proceed?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" onclick="proceedReceiveAll()" class="btn btn-primary">Proceed</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
     </section>
 
 
@@ -155,14 +182,20 @@
         })
 
         function receiveAll(id) {
-
             $('#recNo').val($('#recNo_' + id).val());
-
-
-            $('#poReceivedModal').modal({
+            $('#poId').val(id);
+            $('#recConditonalProductModal').modal({
                 show: 'true'
             });
-            // alert(id)
+        }
+
+        function proceedReceiveAll() {
+            $('#recConditonalProductModal').modal('hide');
+
+            $('#poReceivedModal').modal({
+                hidden: 'true'
+            });
+
         }
     </script>
 @endsection

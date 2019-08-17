@@ -7,6 +7,8 @@ use App\Supplier;
 use App\Tax;
 use App\PO;
 use App\PoDetails;
+use App\Stock;
+use App\StockItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -128,7 +130,19 @@ class POController extends Controller
             $buttons .= ' <button type="button" class="btn btn-default" onclick="removePO(' . $value->id . ')" data-toggle="modal" data-target="#removePOModal"><i class="fa fa-trash"></i></button>';
 //            }
 
-            $hiddenData = '<input type="hidden" id="recNo_' . $value->id . '" value="' . 'PR-' . '">';
+            //incremental code
+            $lastStockRefCode = Stock::all()->last();
+            $data = (isset($lastStockRefCode->receive_code)) ? $lastStockRefCode->receive_code : 'PR-000000';
+            $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
+
+            $statusOfReceiveAll = "";
+            $oneLoop = true;
+            foreach ($value->poDetails as $poitem) {
+                if ($poitem->qty != $poitem->received_qty && $oneLoop) {
+                    $statusOfReceiveAll = "<li><a style='cursor: pointer' onclick=\"receiveAll(" . $value->id . ")\">Receive All</a></li>";
+                    $oneLoop = false;
+                }
+            }
 
             $buttons = "<div class=\"btn-group\">
                   <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
@@ -138,13 +152,13 @@ class POController extends Controller
                   </button>
                   <ul class=\"dropdown-menu\" role=\"menu\">
                     <li><a href=\"/po/edit/" . $value->id . "\">Edit Purchase</a></li>
-                    <li><a onclick=\"receiveAll(" . $value->id . ")\">Receive All</a></li>
+                    " . $statusOfReceiveAll . "
                     <li><a href=\"#\">Purchase details</a></li>
                     <li><a href=\"#\">Something else here</a></li>
                     <li class=\"divider\"></li>
                     <li><a href=\"#\">Separated link</a></li>
                   </ul>
-                </div>" . $hiddenData;
+                </div><input type='hidden' id='recNo_" . $value->id . "' value='" . $code . "'>";
 
             switch ($value->status):
                 case 1:
@@ -193,9 +207,6 @@ class POController extends Controller
 
     public function editPOData(Request $request, $id)
     {
-//        echo $id;
-//        print_r($request->input('supplier'));
-////        return 'ss';
         $validator = Validator::make($request->all(), [
             'datepicker' => 'required|date',
             'status' => ['required', Rule::notIn(['0'])],
@@ -282,14 +293,42 @@ class POController extends Controller
         echo json_encode($response);
     }
 
-    public function receiveAll($id)
+    public function receiveAll(Request $request)
     {
-        $po = PO::find($id);
+
+        $po = PO::find($request->input('poId'));
+        $po->status = 1;
+        $po->save();
+
+        $stock = new Stock();
+        $stock->po_reference_code = $po->referenceCode;
+        $stock->receive_code = $request->input('recNo');
+        $stock->location = $po->location;
+        $stock->receive_date = $request->input('datepicker');
+        $stock->remarks = $request->input('note');
+        $stock->save();
 
         foreach ($po->poDetails as $poItem) {
+
             $poitemOb = PoDetails::find($poItem->id);
-            $poitemOb->received_qty = $poItem->qty;
+            $receQty = ($poItem->qty - $poitemOb->received_qty);
+            $poitemOb->received_qty = $receQty;
+
+            $stockItems = new StockItems();
+            $stockItems->item_id = $poItem->id;
+            $stockItems->qty = $receQty;
+            $stock->stockItems()->save($stockItems);
+
         }
-        $poitemOb->save();
+
+
+        if (!($poitemOb->save())) {
+            $request->session()->flash('message', 'Error in the database while updating the PO');
+            $request->session()->flash('message-type', 'error');
+        } else {
+            $request->session()->flash('message', 'Successfully Received All' . "[ Ref NO:" . $stock->receive_code . " ]");
+            $request->session()->flash('message-type', 'success');
+        }
+        return redirect()->route('po.manage');
     }
 }

@@ -84,7 +84,7 @@ Route::post('po/create', 'POController@create');
 Route::get('po/manage', ['as' => 'po.manage', 'uses' => 'POController@poList']);
 Route::get('po/fetchPOData', 'POController@fetchPOData');
 Route::post('po/edit/{id}', 'POController@editPOData');
-Route::get('po/receiveAll/{id}', 'POController@receiveAll');
+Route::post('po/receiveAll', 'POController@receiveAll');
 
 
 /* Tax */

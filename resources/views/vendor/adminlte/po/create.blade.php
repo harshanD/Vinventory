@@ -119,7 +119,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa  fa-barcode"></i>
                                         </div>
-                                        <input type="text" class="form-control" name="referenceNo" id="referenceNo" readonly value="{{$lastRefCode}}">
+                                        <input type="text" class="form-control" name="referenceNo" id="referenceNo"  value="{{$lastRefCode}}">
                                     </div>
                                     <!-- /.input group -->
                                     <p class="help-block" id="referenceNo_error"></p>

@@ -17,6 +17,7 @@ class CreateStockTable extends Migration
             $table->increments('id');
             $table->string('po_reference_code', 100);
             $table->string('receive_code', 100)->unique();
+            $table->date('receive_date');
             $table->integer('location')->unsigned();
             $table->foreign('location')->references('id')->on('locations')->onDelete('cascade');
             $table->text('remarks')->nullable();
