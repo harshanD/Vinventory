@@ -96,6 +96,10 @@
         autoclose: true,
         format: 'yyyy-mm-dd'
     })
+    $('#datepicker1').datepicker({
+        autoclose: true,
+        format: 'yyyy-mm-dd'
+    })
     $(function () {
         //Initialize Select2 Elements
         $('.select2').select2()

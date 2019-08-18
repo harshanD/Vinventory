@@ -227,6 +227,7 @@ class POController extends Controller
         foreach ($data->poDetails as $key => $item) {
             $items[$key] = array(
                 'name' => $item->product->name,
+                'id' => $item->id,
                 'item_id' => $item->item_id,
                 'cost_price' => $item->cost_price,
                 'qty' => $item->qty,
@@ -375,5 +376,58 @@ class POController extends Controller
             $request->session()->flash('message-type', 'success');
         }
         return redirect()->route('po.manage');
+    }
+
+    public function partiallyReceive(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'datepicker' => 'required|date',
+            'recNo' => 'required|unique:stock,receive_code|max:100',
+        ]);
+
+        $niceNames = array(
+            'recNo' => 'receive code',
+            'datepicker' => 'receive date',
+        );
+        $validator->setAttributeNames($niceNames);
+
+        $validator->validate();
+
+        $po = PO::find($request->input('poId'));
+        $po->status = 1;
+        $po->save();
+
+        $stock = new Stock();
+        $stock->po_reference_code = $po->referenceCode;
+        $stock->receive_code = $request->input('recNo');
+        $stock->location = $po->location;
+        $stock->receive_date = $request->input('datepicker');
+        $stock->remarks = $request->input('note');
+        $stock->save();
+
+        $poItemsIds = $request->input('poItemsId');
+        $par_qty = $request->input('par_qty');
+
+        foreach ($poItemsIds as $key => $poItem) {
+
+            $poitemOb = PoDetails::find($poItem);
+            $poitemOb->received_qty = $poitemOb->received_qty + $par_qty[$key];
+
+            $stockItems = new StockItems();
+            $stockItems->item_id = $poitemOb->item_id;
+            $stockItems->qty = $par_qty[$key];
+            $stock->stockItems()->save($stockItems);
+
+        }
+
+        if (!($poitemOb->save())) {
+            $response['success'] = false;
+            $response['messages'] = 'Error in the database while receiving the po information';
+        } else {
+            $response['success'] = true;
+            $response['messages'] = 'Successfully received';
+        }
+        echo json_encode($response);
     }
 }

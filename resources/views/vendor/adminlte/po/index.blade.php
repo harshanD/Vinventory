@@ -106,10 +106,10 @@
                     <form role="form" action="{{ url('po/receiveAll') }}" method="post" id="poReceivedForm">
                         <div class="modal-body">
                             {{csrf_field()}}
-                            <input type="hidden" name="poId" id="poId">
+                            <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
                                 <label for="edit_location_name">Purchase Receive *</label>
-                                <input type="text" class="form-control" id="recNo" name="recNo"
+                                <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_e_email"></p>
                             </div>
@@ -172,44 +172,43 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                     aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Receive All</h4>
+                        <h4 class="modal-title">Partially Receive</h4>
                     </div>
 
-                    <form role="form" action="{{ url('po/partiallyReceive') }}" method="post"
-                          id="poPartiallyReceivedForm">
+                    <form role="form" id="poPartiallyReceivedForm" enctype="multipart/form-data"
+                          action="{{ url('po/partiallyReceive') }}" method="post"
+                    >
                         <div class="modal-body">
                             {{csrf_field()}}
-                            <input type="hidden" name="poId" id="poId">
+                            <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
                                 <label for="edit_location_name">Purchase Receive *</label>
-                                <input type="text" class="form-control" id="recNo" name="recNo"
+                                <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
-                                <p class="help-block" id="error_e_email"></p>
+                                <p class="help-block" id="error_recNo"></p>
                             </div>
                             <div class="form-group">
                                 <label for="edit_location_name">Receive Date *</label>
                                 <input type="text" placeholder="Select Date" name="datepicker"
                                        value="{{date('Y-m-d')}}"
-                                       class="form-control pull-right" id="datepicker">
-                                <p class="help-block" id="error_e_email"></p>
+                                       class="form-control pull-right" id="datepicker1">
+                                <p class="help-block" id="error_datepicker"></p>
                             </div>
 
                             <div class="form-group">
-                                <form action="">
-                                    <table class="table">
-                                        <thead>
-                                        <th>Item</th>
-                                        <th>Ordered</th>
-                                        <th>Received</th>
-                                        <th>Quantity to Receive</th>
-                                        </thead>
-                                        <tbody id="partialTable">
-                                        {{--                                        @foreach()--}}
-                                        </tbody>
-                                    </table>
-                                </form>
-
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <th>Item</th>
+                                    <th>Ordered</th>
+                                    <th>Received</th>
+                                    <th>Quantity to Receive</th>
+                                    </thead>
+                                    <tbody id="partialTable">
+                                    {{--                                        @foreach()--}}
+                                    </tbody>
+                                </table>
                             </div>
+                            <p class="help-block" id="items_error"></p>
                             <div class="form-group">
                                 <label for="edit_location_name">Notes</label>
 
@@ -242,11 +241,58 @@
                 'ajax': '/po/fetchPOData',
                 'order': []
             });
+
+
+            $("#poPartiallyReceivedForm").unbind('submit').on('submit', function () {
+
+                var form = $(this);
+
+                var qtySum = 0;
+                $('.qy').each(function () {
+                    qtySum += toNumber($(this).val());  // Or this.innerHTML, this.innerText
+                });
+
+                if (qtySum < 1) {
+                    $('#items_error').html('Fill Items Qty required');
+                    return false
+                }
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(), // /converting the form data into array and sending it to server
+                    dataType: 'json',
+                    success: function (response) {
+                        // window.location = data;
+                        console.log(response)
+                        if (response.success) {
+                            window.location.href = '/po/manage';
+                        }
+
+
+                    },
+                    error: function (request, status, errorThrown) {
+
+                        $('.help-block').html('');
+                        if (typeof request.responseJSON.errors.recNo !== 'undefined') {
+                            $('#error_recNo').html(request.responseJSON.errors.recNo[0]);
+                        }
+                        if (typeof request.responseJSON.errors.datepicker !== 'undefined') {
+                            $('#error_datepicker').html(request.responseJSON.errors.datepicker[0]);
+                        }
+
+                    }
+
+                });
+                return false;
+            })
+
+
         })
 
         function receiveAll(id) {
-            $('#recNo').val($('#recNo_' + id).val());
-            $('#poId').val(id);
+            $('.recNo').val($('#recNo_' + id).val());
+            $('.poId').val(id);
             $('#recConditonalProductModal').modal({
                 show: 'true'
             });
@@ -262,6 +308,8 @@
 
         function partiallyReceive(id) {
             // $('#recConditonalProductModal').modal('hide');
+            $('.recNo').val($('#recNo_' + id).val());
+            $('.poId').val(id);
             itemDetails(id)
             $('#poPartiallyReceivedModal').modal({
                 hidden: 'true'
@@ -285,14 +333,14 @@
                     var item = JSON.parse(data);
 
                     var rows = '';
-
+                    $('#partialTable').html('');
                     for (var i = 0; i < item.items.length; i++) {
 
                         rows += '<tr>' +
                             '<td>' + item.items[i].name + '</td>' +
-                            '<td id="qty_' + item.items[i].item_id + '">' + item.items[i].qty + '</td>' +
-                            '<td id="res_' + item.items[i].item_id + '">' + item.items[i].received_qty + '</td>' +
-                            '<td ><input type="text" name="par_qty[]" onchange="itemsQtyVali(' + item.items[i].item_id + ')" id="par_qty_' + item.items[i].item_id + '">' + (item.items[i].qty - item.items[i].received_qty) + '</td>' +
+                            '<td>' + item.items[i].qty + '</td>' +
+                            '<td><input hidden name="poItemsId[]" value="' + item.items[i].id + '">' + item.items[i].received_qty + '</td>' +
+                            '<td ><input hidden id="max_' + item.items[i].item_id + '"  value="' + toNumber(item.items[i].qty - item.items[i].received_qty) + '"><input type="text" style="text-align: center" value="0" class="qy" name="par_qty[]"  onkeyup="itemsQtyVali(' + item.items[i].item_id + ')" id="par_qty_' + item.items[i].item_id + '"></td>' +
                             '</tr>';
                     }
                     $('#partialTable').append(rows);
@@ -303,9 +351,19 @@
                 }
             });
         }
-function itemsQtyVali(id) {
- $('#par_qty_'+id).val()
-}
+
+        function itemsQtyVali(id) {
+            // alert($.isNumeric($('#par_qty_' + id).val()));
+            if (toNumber($('#par_qty_' + id).val()) > toNumber($('#max_' + id).val()) || !$.isNumeric($('#par_qty_' + id).val())) {
+                $('#par_qty_' + id).css('background', 'red')
+                $('#par_qty_' + id).val('')
+                setTimeout(function () {
+                    $('#par_qty_' + id).css('background', 'white')
+                    $('#par_qty_' + id).val('0').focus
+                }, 500);
+            }
+        }
+
 
     </script>
 @endsection

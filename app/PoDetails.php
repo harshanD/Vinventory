@@ -11,7 +11,7 @@ class PoDetails extends Model
 //    use SoftDeletes;
     public $timestamps = true;
     protected $table = 'po_details';
-    protected $fillable = array('cost_price', 'qty', 'tax_val', 'discount', 'sub_total','tax_percentage');
+    protected $fillable = array('cost_price', 'qty', 'tax_val', 'discount', 'sub_total','tax_percentage','product.name');
 
     function poHeader()
     {
