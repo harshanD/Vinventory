@@ -136,12 +136,24 @@ class POController extends Controller
             $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
 
             $statusOfReceiveAll = "";
-            $oneLoop = true;
+            $statusOfpartiallyReceiveAll = "";
+            $poQty = 0;
+            $recQty = 0;
             foreach ($value->poDetails as $poitem) {
-                if ($poitem->qty != $poitem->received_qty && $oneLoop) {
-                    $statusOfReceiveAll = "<li><a style='cursor: pointer' onclick=\"receiveAll(" . $value->id . ")\">Receive All</a></li>";
-                    $oneLoop = false;
-                }
+                $poQty += $poitem->qty;
+                $recQty += $poitem->received_qty;
+            }
+            if ($recQty < $poQty) {
+                $statusOfReceiveAll = "<li><a style='cursor: pointer' onclick=\"receiveAll(" . $value->id . ")\">Receive All</a></li>";
+                $statusOfpartiallyReceiveAll = "<li><a style='cursor: pointer' onclick=\"partiallyReceive(" . $value->id . ")\">Partially Receive</a></li>";
+            }
+
+
+            $receivedIcon = '<i  class="fa fa-circle-thin"></i>';
+            if ($poQty == $recQty) {
+                $receivedIcon = '<i  class="fa fa-circle"></i>';
+            } else if ($recQty != 0 && $recQty < $poQty) {
+                $receivedIcon = '<i  class="fa fa-adjust"></i>';
             }
 
             $buttons = "<div class=\"btn-group\">
@@ -153,6 +165,7 @@ class POController extends Controller
                   <ul class=\"dropdown-menu\" role=\"menu\">
                     <li><a href=\"/po/edit/" . $value->id . "\">Edit Purchase</a></li>
                     " . $statusOfReceiveAll . "
+                    " . $statusOfpartiallyReceiveAll . "
                     <li><a href=\"#\">Purchase details</a></li>
                     <li><a href=\"#\">Something else here</a></li>
                     <li class=\"divider\"></li>
@@ -182,7 +195,7 @@ class POController extends Controller
                 $value->due_date,
                 $value->referenceCode,
                 $value->suppliers->name,
-                $value->status,
+                $receivedIcon,
                 $value->grand_total,
                 100,
                 100,
@@ -202,6 +215,38 @@ class POController extends Controller
 
         echo json_encode(array('name' => $data->name, 'code' => $data->code, 'value' => $data->value,
             'type' => $data->type, 'status' => $data->status));
+
+    }
+
+    public function fetchPOItemsDataById(Request $request)
+    {
+
+        $data = PO::find($request->input('id'));
+
+        $items = array();
+        foreach ($data->poDetails as $key => $item) {
+            $items[$key] = array(
+                'name' => $item->product->name,
+                'item_id' => $item->item_id,
+                'cost_price' => $item->cost_price,
+                'qty' => $item->qty,
+                'received_qty' => $item->received_qty,
+                'tax_val' => $item->tax_val,
+                'tax_percentage' => $item->tax_percentage,
+                'discount' => $item->discount,
+                'sub_total' => $item->sub_total,
+            );
+        }
+
+        echo json_encode(array(
+            'supplier' => $data->supplier,
+            'location' => $data->location,
+            'referenceCode' => $data->referenceCode,
+            'discount' => $data->discount,
+            'grand_total' => $data->grand_total,
+            'items' => $items
+
+        ));
 
     }
 

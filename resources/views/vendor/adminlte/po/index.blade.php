@@ -56,11 +56,11 @@
                         <th>Date</th>
                         <th>Reference No</th>
                         <th>Supplier</th>
-                        <th>Purchase status</th>
+                        <th>Reserved status</th>
                         <th>Grand Total</th>
                         <th>Paid</th>
                         <th>Balance</th>
-                        <th>Payment Status</th>
+                        <th>PO Status</th>
                         <th>Actions</th>
 
                     </tr>
@@ -110,7 +110,7 @@
                             <div class="form-group">
                                 <label for="edit_location_name">Purchase Receive *</label>
                                 <input type="text" class="form-control" id="recNo" name="recNo"
-                                       placeholder="Enter Phone" autocomplete="off">
+                                       placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_e_email"></p>
                             </div>
                             <div class="form-group">
@@ -122,8 +122,6 @@
                             </div>
                             <div class="form-group">
                                 <label for="edit_location_name">Notes</label>
-                                <input type="text" class="form-control" id="note" name="note"
-                                       placeholder="Enter Phone" autocomplete="off">
                                 <textarea type="text" class="form-control" id="note" name="note"
                                           placeholder="Note"
                                           autocomplete="off"></textarea>
@@ -166,6 +164,71 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
 
+
+        <!-- remove location modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="poPartiallyReceivedModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Receive All</h4>
+                    </div>
+
+                    <form role="form" action="{{ url('po/partiallyReceive') }}" method="post"
+                          id="poPartiallyReceivedForm">
+                        <div class="modal-body">
+                            {{csrf_field()}}
+                            <input type="hidden" name="poId" id="poId">
+                            <div class="form-group">
+                                <label for="edit_location_name">Purchase Receive *</label>
+                                <input type="text" class="form-control" id="recNo" name="recNo"
+                                       placeholder="Purchase Receive Code" autocomplete="off">
+                                <p class="help-block" id="error_e_email"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_location_name">Receive Date *</label>
+                                <input type="text" placeholder="Select Date" name="datepicker"
+                                       value="{{date('Y-m-d')}}"
+                                       class="form-control pull-right" id="datepicker">
+                                <p class="help-block" id="error_e_email"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <form action="">
+                                    <table class="table">
+                                        <thead>
+                                        <th>Item</th>
+                                        <th>Ordered</th>
+                                        <th>Received</th>
+                                        <th>Quantity to Receive</th>
+                                        </thead>
+                                        <tbody id="partialTable">
+                                        {{--                                        @foreach()--}}
+                                        </tbody>
+                                    </table>
+                                </form>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_location_name">Notes</label>
+
+                                <textarea type="text" class="form-control" id="note" name="note"
+                                          placeholder="Note"
+                                          autocomplete="off"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
     </section>
 
 
@@ -195,7 +258,54 @@
             $('#poReceivedModal').modal({
                 hidden: 'true'
             });
-
         }
+
+        function partiallyReceive(id) {
+            // $('#recConditonalProductModal').modal('hide');
+            itemDetails(id)
+            $('#poPartiallyReceivedModal').modal({
+                hidden: 'true'
+            });
+        }
+
+        function itemDetails(id) {
+            $.ajax('/po/fetchPOItemsDataById', {
+                type: 'post',  // http method
+                data: {
+                    id: id,
+                    "_token": "{{ csrf_token() }}",
+                },  // data to submit
+                // beforeSend: function () {
+                //     // $('#itemDetails').modal({
+                //     //     show: 'true'
+                //     // });
+                //     // $('#modalItem').val(id)
+                // },
+                success: function (data, status, xhr) {
+                    var item = JSON.parse(data);
+
+                    var rows = '';
+
+                    for (var i = 0; i < item.items.length; i++) {
+
+                        rows += '<tr>' +
+                            '<td>' + item.items[i].name + '</td>' +
+                            '<td id="qty_' + item.items[i].item_id + '">' + item.items[i].qty + '</td>' +
+                            '<td id="res_' + item.items[i].item_id + '">' + item.items[i].received_qty + '</td>' +
+                            '<td ><input type="text" name="par_qty[]" onchange="itemsQtyVali(' + item.items[i].item_id + ')" id="par_qty_' + item.items[i].item_id + '">' + (item.items[i].qty - item.items[i].received_qty) + '</td>' +
+                            '</tr>';
+                    }
+                    $('#partialTable').append(rows);
+
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    $('p').append('Error' + errorMessage);
+                }
+            });
+        }
+function itemsQtyVali(id) {
+ $('#par_qty_'+id).val()
+}
+
     </script>
 @endsection
