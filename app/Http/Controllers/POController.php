@@ -424,10 +424,15 @@ class POController extends Controller
         if (!($poitemOb->save())) {
             $response['success'] = false;
             $response['messages'] = 'Error in the database while receiving the po information';
+            $request->session()->flash('message', 'Error in the database while updating the PO');
+            $request->session()->flash('message-type', 'error');
         } else {
             $response['success'] = true;
             $response['messages'] = 'Successfully received';
+            $request->session()->flash('message', 'Successfully Partially Received ' . "[ Res NO:" . $stock->receive_code . " ]");
+            $request->session()->flash('message-type', 'success');
         }
+
         echo json_encode($response);
     }
 }

@@ -264,10 +264,10 @@
                     dataType: 'json',
                     success: function (response) {
                         // window.location = data;
-                        console.log(response)
-                        if (response.success) {
+                        // console.log(response)
+                        // if (response.success) {
                             window.location.href = '/po/manage';
-                        }
+                        // }
 
 
                     },
