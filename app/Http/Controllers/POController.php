@@ -166,7 +166,7 @@ class POController extends Controller
                     <li><a href=\"/po/edit/" . $value->id . "\">Edit Purchase</a></li>
                     " . $statusOfReceiveAll . "
                     " . $statusOfpartiallyReceiveAll . "
-                    <li><a href=\"#\">Purchase details</a></li>
+                    <li><a href=\"/po/view/" . $value->id . "\">Purchase details view</a></li>
                     <li><a href=\"#\">Something else here</a></li>
                     <li class=\"divider\"></li>
                     <li><a href=\"#\">Separated link</a></li>
@@ -380,7 +380,6 @@ class POController extends Controller
 
     public function partiallyReceive(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'datepicker' => 'required|date',
             'recNo' => 'required|unique:stock,receive_code|max:100',
@@ -422,17 +421,23 @@ class POController extends Controller
         }
 
         if (!($poitemOb->save())) {
-            $response['success'] = false;
-            $response['messages'] = 'Error in the database while receiving the po information';
             $request->session()->flash('message', 'Error in the database while updating the PO');
             $request->session()->flash('message-type', 'error');
         } else {
-            $response['success'] = true;
-            $response['messages'] = 'Successfully received';
             $request->session()->flash('message', 'Successfully Partially Received ' . "[ Res NO:" . $stock->receive_code . " ]");
             $request->session()->flash('message-type', 'success');
         }
 
-        echo json_encode($response);
+        echo json_encode(array('success' => true));
+    }
+
+    public function view($id)
+    {
+        $podata = PO::find($id);
+
+        $locations = $podata->locations;
+        $supplier = $podata->suppliers;
+
+        return view('vendor.adminlte.po.view', ['locations' => $locations, 'suppliers' => $supplier, 'po' => $podata]);
     }
 }

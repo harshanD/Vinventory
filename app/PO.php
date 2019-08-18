@@ -21,6 +21,10 @@ class PO extends Model
     {
         return $this->hasOne(Supplier::class, 'id', 'supplier');
     }
+    public function locations()
+    {
+        return $this->hasOne(Locations::class, 'id', 'location');
+    }
 
 
 }
