@@ -22,6 +22,8 @@ class CreateTaxProfilesTable extends Migration
             $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
             $table->softDeletes();
             $table->timestamps();
+            $table->userstamps();
+            $table->softUserstamps();
         });
     }
 

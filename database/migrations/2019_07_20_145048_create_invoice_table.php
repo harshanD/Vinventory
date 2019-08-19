@@ -16,7 +16,7 @@ class CreateInvoiceTable extends Migration
         Schema::create('invoice', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('location')->unsigned();
-            $table->foreign ('location')->references('id')->on('locations')->onDelete('cascade');
+            $table->foreign('location')->references('id')->on('locations')->onDelete('cascade');
             $table->integer('biller')->unsigned();
             $table->double('invoice_amount');
             $table->double('discount');
@@ -29,6 +29,8 @@ class CreateInvoiceTable extends Migration
             $table->text('staff_note');
             $table->softDeletes();
             $table->timestamps();
+            $table->userstamps();
+            $table->softUserstamps();
         });
     }
 

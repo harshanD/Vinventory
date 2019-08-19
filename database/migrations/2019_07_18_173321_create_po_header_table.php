@@ -30,6 +30,8 @@ class CreatePoHeaderTable extends Migration
             $table->string('remark')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->userstamps();
+            $table->softUserstamps();
         });
     }
 
