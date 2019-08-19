@@ -440,4 +440,20 @@ class POController extends Controller
 
         return view('vendor.adminlte.po.view', ['locations' => $locations, 'suppliers' => $supplier, 'po' => $podata]);
     }
+
+    public function delete(Request $request, $id)
+    {
+
+        $podata = PO::find($id);
+
+        if (!$podata->delete()) {
+            $request->session()->flash('message', 'Error in the database while deleting the PO');
+            $request->session()->flash('message-type', 'error');
+            return redirect()->back();
+        } else {
+            $request->session()->flash('message', 'Successfully Deleted');
+            $request->session()->flash('message-type', 'success');
+            return redirect()->route('po.manage');
+        }
+    }
 }

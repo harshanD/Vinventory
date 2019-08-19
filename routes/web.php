@@ -88,6 +88,7 @@ Route::post('po/receiveAll', 'POController@receiveAll');
 Route::post('po/partiallyReceive', 'POController@partiallyReceive');
 Route::post('po/fetchPOItemsDataById', 'POController@fetchPOItemsDataById');
 Route::get('po/view/{id}', 'POController@view');
+Route::get('po/delete/{id}', 'POController@delete');
 
 
 /* Tax */
