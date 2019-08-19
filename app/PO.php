@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Wildside\Userstamps\Userstamps;
 
 class PO extends Model
 {
@@ -11,6 +12,7 @@ class PO extends Model
     use SoftDeletes;
     public $timestamps = true;
     protected $table = 'po_header';
+    use Userstamps;
 
     function poDetails()
     {
@@ -21,6 +23,7 @@ class PO extends Model
     {
         return $this->hasOne(Supplier::class, 'id', 'supplier');
     }
+
     public function locations()
     {
         return $this->hasOne(Locations::class, 'id', 'location');
