@@ -168,7 +168,7 @@ class POController extends Controller
                     " . $statusOfReceiveAll . "
                     " . $statusOfpartiallyReceiveAll . "
                     <li><a href=\"/po/view/" . $value->id . "\">Purchase details view</a></li>
-                    <li><a href=\"#\">Something else here</a></li>
+                    <li><a onclick=\"deletePo(" . $value->id . ")\">Delete</a></li>
                     <li class=\"divider\"></li>
                     <li><a href=\"#\">Separated link</a></li>
                   </ul>

@@ -228,12 +228,39 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
 
+        <!-- remove supplier modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="deleteProductModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Delete Confirm</h4>
+                    </div>
+
+                    <form id="deleteProductForm">
+                        <div class="modal-body">
+                            <p>Do you really want to remove?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-primary" href="" role="button" id="deleteBtn">Delete</a>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
     </section>
 
 
     <script type="text/javascript">
         var manageTable;
         $(document).ready(function () {
+            // $('[data-toggle="popover"]').popover();
             // table = $("table.table").dataTable();
             // table.fnPageChange("first", 1);
             // initialize the datatable
@@ -266,7 +293,7 @@
                         // window.location = data;
                         // console.log(response)
                         // if (response.success) {
-                            window.location.href = '/po/manage';
+                        window.location.href = '/po/manage';
                         // }
 
 
@@ -364,6 +391,13 @@
             }
         }
 
+        function deletePo(id) {
+            $('#deleteProductModal').modal({
+                hidden: 'true'
+            });
+
+            $('#deleteBtn').attr("href", ('/po/delete/') +id);
+        }
 
     </script>
 @endsection
