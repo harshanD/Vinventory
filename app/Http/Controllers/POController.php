@@ -12,6 +12,7 @@ use App\StockItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class POController extends Controller
 {
@@ -262,7 +263,6 @@ class POController extends Controller
             'grand_tax_id' => 'required',
         ]);
 
-
         $validator->validate();
 
         $po = PO::find($id);
@@ -293,7 +293,7 @@ class POController extends Controller
 
         foreach ($items as $i => $item) {
 //            print_r($tax_id);
-//            echo $id . '==' . $item;
+//            echo $id . '==' . $item. '==' .$costPrice[$i]. '==' . $quantity[$i]. '=='.$p_tax[$i] . '=='. $tax_id[$i]. '=='.$discount[$i]. '=='.$subtot[$i]. '///';
             if ($subtot[$i] > 0) {
 
                 $poItem = PoDetails::updateOrCreate(
@@ -302,7 +302,7 @@ class POController extends Controller
                         'item_id' => $item
                     ],
                     [
-                        'cost_pricess' => $costPrice[$i],
+                        'cost_price' => $costPrice[$i],
                         'qty' => $quantity[$i],
                         'tax_val' => $p_tax[$i],
                         'tax_percentage' => $tax_id[$i],
@@ -433,6 +433,7 @@ class POController extends Controller
 
     public function view($id)
     {
+
         $podata = PO::find($id);
 
         $locations = $podata->locations;
@@ -455,5 +456,24 @@ class POController extends Controller
             $request->session()->flash('message-type', 'success');
             return redirect()->route('po.manage');
         }
+    }
+
+    public function printPO($id)
+    {
+        $podata = PO::find($id);
+        $locations = $podata->locations;
+        $supplier = $podata->suppliers;
+//        return view('vendor.adminlte.po.printPo', ['locations' => $locations, 'suppliers' => $supplier, 'po' => $podata]);
+
+
+//        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadView('vendor.adminlte.po.printPo', ['locations' => $locations, 'suppliers' => $supplier, 'po' => $podata]);
+//        $pdf->render();
+//        $pdf = PDF::loadView('vendor.adminlte.po.test');
+//        $pdf->save(storage_path().'printPo.pdf');
+//        return $pdf->stream('printPo.pdf');
+        return $pdf->download('printPo.pdf');
+//        exit(0);
+
     }
 }
