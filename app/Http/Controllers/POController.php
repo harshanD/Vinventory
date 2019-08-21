@@ -342,6 +342,19 @@ class POController extends Controller
 
     public function receiveAll(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'datepicker' => 'required|date',
+            'recNo' => 'required|unique:stock,receive_code|max:100',
+        ]);
+
+        $niceNames = array(
+            'recNo' => 'receive code',
+            'datepicker' => 'receive date',
+        );
+        $validator->setAttributeNames($niceNames);
+
+        $validator->validate();
+
 
         $po = PO::find($request->input('poId'));
         $po->status = 1;

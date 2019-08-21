@@ -111,14 +111,14 @@
                                 <label for="edit_location_name">Purchase Receive *</label>
                                 <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
-                                <p class="help-block" id="error_e_email"></p>
+                                <p class="help-block" id="error_recNo_a"></p>
                             </div>
                             <div class="form-group">
                                 <label for="edit_location_name">Receive Date *</label>
                                 <input type="text" placeholder="Select Date" name="datepicker"
                                        value="{{date('Y-m-d')}}"
                                        class="form-control pull-right" id="datepicker">
-                                <p class="help-block" id="error_e_email"></p>
+                                <p class="help-block" id="error_datepicker_a"></p>
                             </div>
                             <div class="form-group">
                                 <label for="edit_location_name">Notes</label>
@@ -314,6 +314,40 @@
                 return false;
             })
 
+            $("#poReceivedForm").unbind('submit').on('submit', function () {
+
+                var form = $(this);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(), // /converting the form data into array and sending it to server
+                    dataType: 'json',
+                    success: function (response) {
+                        // window.location = data;
+                        // console.log(response)
+                        // if (response.success) {
+                        window.location.href = '/po/manage';
+                        // }
+
+
+                    },
+                    error: function (request, status, errorThrown) {
+
+                        $('.help-block').html('');
+                        if (typeof request.responseJSON.errors.recNo !== 'undefined') {
+                            $('#error_recNo_a').html(request.responseJSON.errors.recNo[0]);
+                        }
+                        if (typeof request.responseJSON.errors.datepicker !== 'undefined') {
+                            $('#error_datepicker_a').html(request.responseJSON.errors.datepicker[0]);
+                        }
+
+                    }
+
+                });
+                return false;
+            })
+
 
         })
 
@@ -396,7 +430,7 @@
                 hidden: 'true'
             });
 
-            $('#deleteBtn').attr("href", ('/po/delete/') +id);
+            $('#deleteBtn').attr("href", ('/po/delete/') + id);
         }
 
     </script>
