@@ -134,7 +134,7 @@ class POController extends Controller
 
             //incremental code
             $lastStockRefCode = Stock::all()->last();
-            $data = (isset($lastStockRefCode->receive_code)) ? $lastStockRefCode->receive_code : 'PR-000000';
+            $data = (isset($lastStockRefCode->receive_code)) ? str_replace("TR-", "PR-", str_replace("-S", "", str_replace("-A", "", $lastStockRefCode->receive_code))) : 'PR-000000';
             $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
 
             $statusOfReceiveAll = "";
@@ -360,6 +360,7 @@ class POController extends Controller
             $poitemOb = PoDetails::find($poItem->id);
             $receQty = ($poItem->qty - $poitemOb->received_qty);
             $poitemOb->received_qty = $receQty;
+            $poitemOb->save();
 
 //            products foe add as available stock qty
             $products = Products::find($poitemOb->item_id);
@@ -370,12 +371,14 @@ class POController extends Controller
             $stockItems = new StockItems();
             $stockItems->item_id = $poItem->id;
             $stockItems->qty = $receQty;
+            $stockItems->cost_price = $poitemOb->cost_price;
+            $stockItems->tax_per = $poitemOb->tax_percentage;
             $stock->stockItems()->save($stockItems);
 
         }
 
 
-        if (!($poitemOb->save())) {
+        if (!($stock)) {
             $request->session()->flash('message', 'Error in the database while updating the PO');
             $request->session()->flash('message-type', 'error');
         } else {
@@ -419,7 +422,7 @@ class POController extends Controller
 
             $poitemOb = PoDetails::find($poItem);
             $poitemOb->received_qty = $poitemOb->received_qty + $par_qty[$key];
-
+            $poitemOb->save();
             //            products foe add as available stock qty
             $products = Products::find($poitemOb->item_id);
             $products->availability = $products->availability + $par_qty[$key];
@@ -428,11 +431,13 @@ class POController extends Controller
             $stockItems = new StockItems();
             $stockItems->item_id = $poitemOb->item_id;
             $stockItems->qty = $par_qty[$key];
+            $stockItems->cost_price = $poitemOb->cost_price;
+            $stockItems->tax_per = $poitemOb->tax_percentage;
             $stock->stockItems()->save($stockItems);
 
         }
 
-        if (!($poitemOb->save())) {
+        if (!($stock)) {
             $request->session()->flash('message', 'Error in the database while updating the PO');
             $request->session()->flash('message-type', 'error');
         } else {
