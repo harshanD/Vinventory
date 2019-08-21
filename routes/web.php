@@ -102,6 +102,7 @@ Route::post('/tax/create', 'TaxController@create');
 
 /*transfers*/
 Route::get('transfer/add', 'TransfersController@index');
+Route::post('transfer/create', 'TransfersController@create');
 
 
 /*stocks*/

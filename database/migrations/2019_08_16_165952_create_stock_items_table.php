@@ -20,6 +20,8 @@ class CreateStockItemsTable extends Migration
             $table->integer('item_id')->unsigned();
             $table->foreign('item_id')->references('id')->on('products')->onDelete('cascade');
             $table->double('qty');
+            $table->double('cost_price');
+            $table->double('tax_per')->nullable();
             $table->string('method', 10)->comment('add=A  , subtract=S')->default('A');
             $table->timestamps();
         });

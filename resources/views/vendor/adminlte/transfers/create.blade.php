@@ -49,7 +49,8 @@
                         <i class="fa fa-times"></i></button>
                 </div>
             </div>
-            <form role="form" id="pocreate" enctype="multipart/form-data" action="{{url('po/create')}}" method="post">
+            <form role="form" id="pocreate" enctype="multipart/form-data" action="{{url('transfer/create')}}"
+                  method="post">
                 <div class="box-body">
                     @if(session()->has('message'))
                         <div class="alert alert-success alert-dismissible" role="alert">
@@ -113,6 +114,7 @@
                                             <i class="fa fa-location-arrow"></i>
                                         </div>
                                         <select class="form-control select2" name="toLocation" id="toLocation">
+                                            <option value="0">Select To Warehouse</option>
                                             @foreach($locations as $location)
                                                 <option value="{{$location->id}}">{{$location->name}}</option>
                                             @endforeach
@@ -443,6 +445,12 @@
             });
 
             $("#fromLocation").change(function () {
+
+                if ($('#fromLocation').val() == $('#toLocation').val()) {
+                    $('#fromLocation_error').html('Please select different warehouse');
+                    return false
+                }
+
                 acurl = $('#fromLocation').val();
 
 
@@ -495,6 +503,11 @@
                     return false
                 }
 
+                if ($('#fromLocation').val() == $('#toLocation').val()) {
+                    $('#fromLocation_error').html('Cannot be same to Location and From location');
+                    return false
+                }
+
                 $.ajax({
                     url: form.attr('action'),
                     type: form.attr('method'),
@@ -518,14 +531,14 @@
                         if (typeof request.responseJSON.errors.status !== 'undefined') {
                             $('#status_error').html(request.responseJSON.errors.status[0]);
                         }
-                        if (typeof request.responseJSON.errors.location !== 'undefined') {
-                            $('#location_error').html(request.responseJSON.errors.location[0]);
+                        if (typeof request.responseJSON.errors.tolocation !== 'undefined') {
+                            $('#location_error').html(request.responseJSON.errors.tolocation[0]);
+                        }
+                        if (typeof request.responseJSON.errors.fromlocation !== 'undefined') {
+                            $('#location_error').html(request.responseJSON.errors.fromlocation[0]);
                         }
                         if (typeof request.responseJSON.errors.referenceNo !== 'undefined') {
                             $('#referenceNo_error').html(request.responseJSON.errors.referenceNo[0]);
-                        }
-                        if (typeof request.responseJSON.errors.fromLocation !== 'undefined') {
-                            $('#fromLocation_error').html(request.responseJSON.errors.fromLocation[0]);
                         }
 
 
