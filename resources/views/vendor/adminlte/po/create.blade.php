@@ -63,7 +63,8 @@
                                             <i class="fa fa-calendar"></i>
                                         </div>
                                         <input type="text" placeholder="Select Date" name="datepicker"
-                                            value="{{date('Y-m-d')}}"   class="form-control pull-right" id="datepicker">
+                                               value="{{date('Y-m-d')}}" class="form-control pull-right"
+                                               id="datepicker">
                                     </div>
                                     <!-- /.input group -->
                                     <p class="help-block" id="datepicker_error"></p>
@@ -119,7 +120,8 @@
                                         <div class="input-group-addon">
                                             <i class="fa  fa-barcode"></i>
                                         </div>
-                                        <input type="text" class="form-control" name="referenceNo" id="referenceNo"  value="{{$lastRefCode}}">
+                                        <input type="text" class="form-control" name="referenceNo" id="referenceNo"
+                                               value="{{$lastRefCode}}">
                                     </div>
                                     <!-- /.input group -->
                                     <p class="help-block" id="referenceNo_error"></p>
@@ -539,11 +541,14 @@
                 localStorage.setItem('item', JSON.stringify(index.id));
                 itemCount++;
 
+                var taxval = (toNumber(toNumber(index.cost_price * toNumber(index.tax)) / (100 + toNumber(index.tax)))).format(2);
+                var cost = (index.cost_price - taxval).format(2);
+
                 var row = '<tr id="row_' + index.id + '" style="text-align: right">' +
                     "<td style=\"text-align: left\">" + index.name + "( " + index.item_code + " )" + "  <i  class=\"fa fa-edit\" onclick='itemDetails(" + index.id + ")' style='float: right;cursor: pointer'></i></td>" +
-                    "<td id='costPrice_" + index.id + "'>" + index.cost_price + "</td>" +
-                    "<td style=\"text-align: center\"><input type='text'   style=\"text-align: center\" class='qy' onkeyup='qtyChanging(" + index.id + ")' id='quantity_" + index.id + "' value='" + 0 + "'></td>" +
-                    "<td id='discount_" + index.id + "'>" + index.discount + "</td>" +
+                    "<td id='costPrice_" + index.id + "'>" + cost + "</td>" +
+                    "<td style=\"text-align: center\"><input type='text'   style=\"text-align: center\" class='qy' onkeyup='qtyChanging(" + index.id + ")' id='quantity_" + index.id + "' value='" + 1 + "'></td>" +
+                    "<td class='disco' id='discount_" + index.id + "'>" + index.discount + "</td>" +
                     "<td hidden id='hidden_data_" + index.id + "'>" +
 
                     "<input type='hidden' name='discount[]' id='discount_h" + index.id + "' value='0'>" +
@@ -551,28 +556,29 @@
                     "<input type='hidden' name='costPrice[]' id='costPrice_h" + index.id + "' value='" + index.cost_price + "'>" +
                     "<input type='hidden' name='item[]' id='item_h" + index.id + "' value='" + index.id + "''>" +
                     "<input type='hidden' name='unit[]' id='unit_h" + index.id + "' value='1'>" +
-                    "<input type='hidden'  name='p_tax[]' id='p_tax_h" + index.id + "'  value='0'>" +
+                    "<input type='hidden'  name='p_tax[]' id='p_tax_h" + index.id + "'  value='" + taxval + "'>" +
                     "<input type='hidden'  name='subtot[]' id='subtot_h" + index.id + "'>" +
-                    "<input type='hidden'   name='tax_id[]' id='tax_id_h" + index.id + "' value='0'>" +
+                    "<input type='hidden'   name='tax_id[]' id='tax_id_h" + index.id + "' value='" + index.tax + "'>" +
 
                     "</td>" +
-                    "<td class='tax' id='tax_" + index.id + "'>" + index.tax + "</td>" +
+                    "<td class='tax'  id='tax_" + index.id + "'>" + taxval + "</td>" +
                     "<td class='subtot' id='subtot_" + index.id + "'>" + 0 + "</td>" +
                     '<td style="text-align: center"><i class="glyphicon glyphicon-remove" onclick="removeThis(' + index.id + ')" style="cursor: pointer"></i></td>';
 
                 row += '</tr>';
                 $('.lastRow').remove()
                 $('#poBody').append(row);
+                qtyChanging(index.id)
             }
         }
 
         function qtyChanging(id) {
+
+            $('#tax_' + id).text((toNumber($('#p_tax_h' + id).val()) * $('#quantity_' + id).val()).format(2));
             var subTot = ((toNumber($('#costPrice_' + id).text()) * toNumber($('#quantity_' + id).val())) + toNumber(($('#tax_' + id).text())));
             $('#quantity_h' + id).val(toNumber($('#quantity_' + id).val()));
-// alert($('#costPrice_' + id).text()+" == "+ $('#quantity_' + id).val()+" ==== "+$('#unit_' + id).val())
             $('#subtot_' + id).text(((!isNaN(subTot)) ? subTot : 0).format(2));
             $('#subtot_h' + id).val(toNumber((!isNaN(subTot)) ? subTot.format(2) : 0));
-
             lastRowDesign();
         }
 
@@ -586,10 +592,20 @@
                 qtySum += toNumber($(this).val());  // Or this.innerHTML, this.innerText
             });
 
+            var txSum = 0
+            $('.tax').each(function () {
+                txSum += toNumber($(this).text());  // Or this.innerHTML, this.innerText
+            });
+            var disco = 0
+            $('.disco').each(function () {
+                disco += toNumber($(this).text());  // Or this.innerHTML, this.innerText
+            });
+
+
             var lastRow = '<tr class="lastRow" style="font-weight: bold;text-align: right">' +
                 "<td colspan='3' style='text-align: left'>Total</td>" +
-                "<td id='sumQuantity'>" + 0 + "</td>" +
-                "<td id='sumDiscount'>" + 0 + "</td>" +
+                "<td id='sumDiscount'>" + disco.format(2) + "</td>" +
+                "<td id='sumTax'>" + txSum.format(2) + "</td>" +
                 "<td id='sumTax' style='align:right'>" + sum.format(2) + "</td><td style='text-align: center'><i class=\"fa fa-trash\"></i></td></tr>";
 
             $('.lastRow').remove();
@@ -642,11 +658,11 @@
                 success: function (data, status, xhr) {
                     var item = JSON.parse(data);
                     // alert(toNumber($('#quantity_' + id).val()))
-                    if (toNumber($('#quantity_' + id).val()) > 0) {
-                        $('#pCost').val((toNumber(toNumber($('#costPrice_' + id).text()) + (toNumber($('#tax_' + id).text()) / toNumber($('#quantity_' + id).val())) + (toNumber($('#discount_' + id).text()) / toNumber($('#quantity_' + id).val())))).format(2));
-                    } else {
-                        $('#pCost').val(toNumber($('#costPrice_' + id).text()))
-                    }
+                    // if (toNumber($('#quantity_' + id).val()) > 0) {
+                    //         $('#pCost').val((toNumber(toNumber($('#costPrice_' + id).text()) + (toNumber($('#tax_' + id).text()) / toNumber($('#quantity_' + id).val())) + (toNumber($('#discount_' + id).text()) / toNumber($('#quantity_' + id).val())))).format(2));
+                    // } else {
+                    $('#pCost').val(toNumber($('#costPrice_h' + id).val()))
+                    // }
 
 
                     $('#itemName').text(item.name + " ( " + item.item_code + ") ");
@@ -700,10 +716,10 @@
 
         function modalDataSetToTable() {
             var itemId = $('#modalItem').val();
-            $('#tax_' + itemId).text((toNumber($('#ptx').text()) * $('#pQty').val()).format(2));
-            $('#p_tax_h' + itemId).val(toNumber((toNumber($('#ptx').text()) * $('#pQty').val()).format(2)));
+            // $('#tax_' + itemId).text((toNumber($('#ptx').text()) * $('#pQty').val()).format(2));
+            // $('#p_tax_h' + itemId).val(toNumber((toNumber($('#ptx').text()) * $('#pQty').val()).format(2)));
 
-            $('#p_tax_' + itemId).text((toNumber($('#ptx').text())).format(2));
+            $('#p_tax_h' + itemId).val((toNumber($('#ptx').text())).format(2));
             $('#tax_id_h' + itemId).val($('#pTax').val())
 
             $('#quantity_' + itemId).val($('#pQty').val());
@@ -713,7 +729,7 @@
             $('#unit_h' + itemId).val(toNumber($('#pUnit').val()));
 
             $('#costPrice_' + itemId).text($('#nucost').text());
-            $('#costPrice_h' + itemId).val($('#nucost').text());
+            $('#costPrice_h' + itemId).val($('#pCost').val());
 
             $('#discount_' + itemId).text(($('#pDisco').val() * $('#pQty').val()).format(2));
             $('#discount_h' + itemId).val(toNumber(($('#pDisco').val() * $('#pQty').val()).format(2)));

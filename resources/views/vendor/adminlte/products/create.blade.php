@@ -153,7 +153,12 @@
                                 <div class="form-group">
                                     <label for="price">Product Tax</label>
                                     <select class="form-control" name="tax" id="tax">
-                                        <option value="0">No tax</option>
+                                        @if(old("tax") == 0)
+                                            <option selected="selected" value="0">No Tax</option>
+                                        @endif
+                                        @foreach($taxes as $tax)
+                                            <option value="{{ $tax->id}}" {{ (old("category") == $tax->id? "selected":"") }}>{{ $tax->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
