@@ -6,6 +6,7 @@ use App\Categories;
 use App\Products;
 use App\Brands;
 use App\Supplier;
+use App\Tax;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -22,8 +23,9 @@ class ProductsController extends Controller
         $brands = Brands::where('status', \Config::get('constants.status.Active'))->orderBy('brand', 'asc')->get();
         $categories = Categories::where('status', \Config::get('constants.status.Active'))->orderBy('category', 'asc')->get();
         $suppliers = Supplier::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
+        $taxes = Tax::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
 
-        return view('vendor.adminlte.products.create', ['brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers]);
+        return view('vendor.adminlte.products.create', ['brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers,'taxes'=>$taxes]);
     }
 
     public function create(Request $request)
@@ -132,9 +134,11 @@ class ProductsController extends Controller
         $brands = Brands::where('status', \Config::get('constants.status.Active'))->orderBy('brand', 'asc')->get();
         $categories = Categories::where('status', \Config::get('constants.status.Active'))->orderBy('category', 'asc')->get();
         $suppliers = Supplier::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
+        $taxes = Tax::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
         $product = Products::find($id);
 
-        return view('vendor.adminlte.products.edit', ['product' => $product, 'brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers]);
+
+        return view('vendor.adminlte.products.edit', ['product' => $product, 'brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers,'taxes'=>$taxes]);
     }
 
     public function fetchProductDataById(Request $request)
@@ -262,11 +266,12 @@ class ProductsController extends Controller
                 'reorder_level' => $product->reorder_level,
                 'discount' => 0,
                 'reorder_activation' => $product->reorder_activation,
-                'tax' => 0,
+                'tax' => (\Config::get('constants.taxActive.Active') == $product->tax_method) ? Tax::find($product->tax)->get()->toArray()[0]['value'] : 0,
             );
         }
 
         echo json_encode($list);
     }
+
 
 }
