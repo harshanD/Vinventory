@@ -19,6 +19,9 @@ return [
         '2' => 'Ordered',
         '3' => 'Pending',
         '4' => 'Canceled',
+    ], 'taxActive' => [
+        'Active' => '2',
+        'Inactive' => '1',
     ]
 
 ];
