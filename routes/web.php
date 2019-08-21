@@ -100,6 +100,15 @@ Route::post('/tax/edit/{id}', 'TaxController@editTaxData');
 Route::post('/tax/remove', 'TaxController@removeTaxData');
 Route::post('/tax/create', 'TaxController@create');
 
+/*transfers*/
+Route::get('transfer/add', 'TransfersController@index');
+
+
+/*stocks*/
+Route::get('/stock/fetchProductsListWarehouseWise/{id}', 'StockController@fetchProductsListWarehouseWise');
+
+
+
 
 Route::group(['middleware' => 'auth'], function () {
     //    Route::get('/link1', function ()    {
