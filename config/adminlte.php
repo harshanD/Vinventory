@@ -192,6 +192,20 @@ return [
                     'url'  => '/po/manage',
                 ],
             ]
+        ],[
+            'text' => 'Transfers',
+            'icon' => 'user',
+            'submenu' => [
+                [
+                    'text' => 'Add Transfer',
+                    'icon' => 'user',
+                    'url'  => '/transfer/add',
+                ],[
+                    'text' => 'List Transfer',
+                    'icon' => 'user',
+                    'url'  => '/transfer/manage',
+                ],
+            ]
         ],
         'ACCOUNT SETTINGS',
         [
