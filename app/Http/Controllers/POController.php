@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Locations;
+use App\Products;
 use App\Supplier;
 use App\Tax;
 use App\PO;
@@ -360,6 +361,12 @@ class POController extends Controller
             $receQty = ($poItem->qty - $poitemOb->received_qty);
             $poitemOb->received_qty = $receQty;
 
+//            products foe add as available stock qty
+            $products = Products::find($poitemOb->item_id);
+            $products->availability = $products->availability + $receQty;
+            $products->save();
+
+//            stock items for add reserving qty
             $stockItems = new StockItems();
             $stockItems->item_id = $poItem->id;
             $stockItems->qty = $receQty;
@@ -412,6 +419,11 @@ class POController extends Controller
 
             $poitemOb = PoDetails::find($poItem);
             $poitemOb->received_qty = $poitemOb->received_qty + $par_qty[$key];
+
+            //            products foe add as available stock qty
+            $products = Products::find($poitemOb->item_id);
+            $products->availability = $products->availability + $par_qty[$key];
+            $products->save();
 
             $stockItems = new StockItems();
             $stockItems->item_id = $poitemOb->item_id;
