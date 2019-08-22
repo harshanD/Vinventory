@@ -22,7 +22,7 @@ class TransfersController extends Controller
         $supplier = Supplier::where('status', \Config::get('constants.status.Active'))->get();
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
         $lastRefCode = Transfers::all()->last();
-        $data = (isset($lastRefCode->referenceCode)) ? $lastRefCode->referenceCode : 'TR-000000';
+        $data = (isset($lastRefCode->tr_reference_code)) ? $lastRefCode->tr_reference_code : 'TR-000000';
 
         $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
         return view('vendor.adminlte.transfers.create', ['locations' => $locations, 'suppliers' => $supplier, 'tax' => $tax, 'lastRefCode' => $code]);
@@ -34,20 +34,22 @@ class TransfersController extends Controller
         $request->validate([
             'datepicker' => 'required|date',
             'status' => ['required', Rule::notIn(['0'])],
-            'referenceNo' => 'required|unique:po_header,referenceCode|max:100',
+            'referenceNo' => 'required|unique:transfers,tr_reference_code|max:100',
             'fromLocation' => ['required', Rule::notIn(['0'])],
             'toLocation' => ['required', Rule::notIn(['0'])],
         ]);
 
+//        print_r($request->input());
+//        return 'ss';
         $tr = new Transfers();
         $tr->tr_reference_code = $request->input('referenceNo');
         $tr->tr_date = $request->input('datepicker');
         $tr->from_location = $request->input('fromLocation');
         $tr->to_location = $request->input('toLocation');
-        $tr->grand_total = $request->input('grand_total');
+        $tr->grand_total = self::numberFormatRemove($request->input('grand_total'));
         $tr->remarks = $request->input('note');
         $tr->status = $request->input('status');
-
+        $tr->tot_tax = self::numberFormatRemove($request->input('grand_tax'));
 
         // add stock to stock table
         $stockAdd = new Stock();
@@ -58,7 +60,7 @@ class TransfersController extends Controller
         $stockAdd->remarks = $request->input('note');
         $stockAdd->save();
 
-        // add subtract from stock table
+        //  subtract from stock table
         $stockSubstct = new Stock();
         $stockSubstct->po_reference_code = 'TRANSFER-S';
         $stockSubstct->receive_code = $request->input('referenceNo') . '-S';
@@ -76,30 +78,27 @@ class TransfersController extends Controller
         $discount = $request->input('discount');
         $tax_id = $request->input('tax_id');
 
-        $totTax = 0;
         foreach ($items as $id => $item) {
 
             if ($subtot[$id] > 0) {
                 $stockItemsAdd = new StockItems();
                 $stockItemsAdd->item_id = $item;
-                $stockItemsAdd->qty = $quantity[$id];
-                $stockItemsAdd->cost_price = $costPrice[$id];
+                $stockItemsAdd->qty = self::numberFormatRemove($quantity[$id]);
+                $stockItemsAdd->cost_price = self::numberFormatRemove($costPrice[$id]);
                 $stockItemsAdd->tax_per = $tax_id[$id];
                 $stockAdd->stockItems()->save($stockItemsAdd);
 
                 $stockItemsSubstct = new StockItems();
                 $stockItemsSubstct->item_id = $item;
-                $stockItemsSubstct->qty = $quantity[$id];
-                $stockItemsSubstct->cost_price = $costPrice[$id];
+                $stockItemsSubstct->qty = self::numberFormatRemove($quantity[$id]);
+                $stockItemsSubstct->cost_price = self::numberFormatRemove($costPrice[$id]);
                 $stockItemsSubstct->tax_per = $tax_id[$id];
                 $stockItemsSubstct->method = "S";
-                $totTax += $p_tax[$id];
                 $stockSubstct->stockItems()->save($stockItemsSubstct);
             }
 
         }
 
-        $tr->tot_tax = $totTax;
 
         if (!($tr->save())) {
             $request->session()->flash('message', 'Error in the database while creating the Transfers');
@@ -111,7 +110,7 @@ class TransfersController extends Controller
         echo json_encode(array('success' => true));
     }
 
-    public function poList()
+    public function transList()
     {
         return view('vendor.adminlte.transfers.index');
     }
@@ -122,12 +121,15 @@ class TransfersController extends Controller
         $supplier = Supplier::where('status', \Config::get('constants.status.Active'))->get();
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
 
-        $podata = Transfers::find($id);
-
-        return view('vendor.adminlte.transfers.edit', ['locations' => $locations, 'suppliers' => $supplier, 'tax' => $tax, 'transfers' => $podata]);
+        $trdata = Transfers::find($id);
+        $stockData = Stock::with(['stockItems', 'stockItems.products'])->where('receive_code', $trdata->tr_reference_code . '-A')->get()->toArray();
+//   echo '<pre>';
+//        print_r($stockData[0]['stock_items']);
+//        echo '</pre>';
+        return view('vendor.adminlte.transfers.edit', ['locations' => $locations, 'suppliers' => $supplier, 'tax' => $tax, 'transfers' => $trdata, 'transfer_items' => ($stockData[0]['stock_items'])]);
     }
 
-    public function fetchPOData()
+    public function fetchTransData()
     {
         $result = array('data' => array());
 
@@ -147,31 +149,6 @@ class TransfersController extends Controller
             $buttons .= ' <button type="button" class="btn btn-default" onclick="removePO(' . $value->id . ')" data-toggle="modal" data-target="#removePOModal"><i class="fa fa-trash"></i></button>';
 //            }
 
-            //incremental code
-            $lastStockRefCode = Stock::all()->last();
-            $data = (isset($lastStockRefCode->receive_code)) ? $lastStockRefCode->receive_code : 'PR-000000';
-            $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
-
-            $statusOfReceiveAll = "";
-            $statusOfpartiallyReceiveAll = "";
-            $poQty = 0;
-            $recQty = 0;
-            foreach ($value->poDetails as $poitem) {
-                $poQty += $poitem->qty;
-                $recQty += $poitem->received_qty;
-            }
-            if ($recQty < $poQty) {
-                $statusOfReceiveAll = "<li><a style='cursor: pointer' onclick=\"receiveAll(" . $value->id . ")\">Receive All</a></li>";
-                $statusOfpartiallyReceiveAll = "<li><a style='cursor: pointer' onclick=\"partiallyReceive(" . $value->id . ")\">Partially Receive</a></li>";
-            }
-
-
-            $receivedIcon = '<i  class="fa fa-circle-thin"></i>';
-            if ($poQty == $recQty) {
-                $receivedIcon = '<i  class="fa fa-circle"></i>';
-            } else if ($recQty != 0 && $recQty < $poQty) {
-                $receivedIcon = '<i  class="fa fa-adjust"></i>';
-            }
 
             $buttons = "<div class=\"btn-group\">
                   <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
@@ -180,28 +157,26 @@ class TransfersController extends Controller
                     <span class=\"sr-only\">Toggle Dropdown</span>
                   </button>
                   <ul class=\"dropdown-menu\" role=\"menu\">
-                    <li><a href=\"/transfers/edit/" . $value->id . "\">Edit Purchase</a></li>
-                    " . $statusOfReceiveAll . "
-                    " . $statusOfpartiallyReceiveAll . "
-                    <li><a href=\"/transfers/view/" . $value->id . "\">Purchase details view</a></li>
+                    <li><a href=\"/transfer/edit/" . $value->id . "\">Edit Purchase</a></li>
+                    <li><a href=\"/transfer/view/" . $value->id . "\">Purchase details view</a></li>
                     <li><a onclick=\"deletePo(" . $value->id . ")\">Delete</a></li>
                     <li class=\"divider\"></li>
                     <li><a href=\"#\">Separated link</a></li>
                   </ul>
-                </div><input type='hidden' id='recNo_" . $value->id . "' value='" . $code . "'>";
+                </div>";
 
             switch ($value->status):
                 case 1:
-                    $status = '<span class="label label-success">Received</span>';
+                    $status = '<span class="label label-success">Completed</span>';
                     break;
                 case 2:
-                    $status = '<span class="label label-success">Ordered</span>';
+                    $status = '<span class="label label-success">Pending</span>';
                     break;
                 case 3:
-                    $status = '<span class="label label-success">pending</span>';
+                    $status = '<span class="label label-success">Send</span>';
                     break;
                 case 4:
-                    $status = '<span class="label label-warning">canceled</span>';
+                    $status = '<span class="label label-warning">Canceled</span>';
                     break;
                 default:
                     $status = '<span class="label label-warning">Nothing</span>';
@@ -209,15 +184,13 @@ class TransfersController extends Controller
             endswitch;
 
             $result['data'][$key] = array(
-                $value->due_date,
-                $value->referenceCode,
-                $value->suppliers->name,
-                $receivedIcon,
-                $value->grand_total,
-                100,
-                100,
-//                $value->paid,
-//                $value->balance,
+                $value->tr_date,
+                $value->tr_reference_code,
+                (Locations::find($value->from_location)->toArray())['name'],
+                (Locations::find($value->to_location)->toArray())['name'],
+                ($value->grand_total - $value->tot_tax),
+                ($value->tot_tax),
+                ($value->grand_total),
                 $status,
                 $buttons
             );
@@ -268,31 +241,67 @@ class TransfersController extends Controller
 
     }
 
-    public function editPOData(Request $request, $id)
+    public function editTransferData(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
+//      $ss1 =  StockItems::where('stock_id',23)->where('item_id',1)->firstOrFail()->toArray(); /*To*/
+//      $ss2 =  StockItems::where('stock_id',24)->where('item_id',1)->firstOrFail()->toArray(); /*From*/
+//      echo ($ss1['qty']);
+//      if($ss1['qty']<4){
+//          $ss1->qty =4;
+//
+//      }else{
+//
+//      }
+//
+//      if($ss2['qty']<4){
+//          $ss2->qty =4;
+//
+//      }else{
+//
+//      }
+//      return '</br>s';
+
+        $request->validate([
             'datepicker' => 'required|date',
             'status' => ['required', Rule::notIn(['0'])],
-            'location' => ['required', Rule::notIn(['0'])],
-            'referenceNo' => 'required|unique:po_header,referenceCode,' . $id . '|max:100',
-            'supplier' => ['required', Rule::notIn(['0'])],
-            'grand_tax_id' => 'required',
+            'referenceNo' => 'required|unique:transfers,tr_reference_code,' . $id . '|max:100',
+            'fromLocation' => ['required', Rule::notIn(['0'])],
+            'toLocation' => ['required', Rule::notIn(['0'])],
         ]);
 
-        $validator->validate();
 
-        $po = Transfers::find($id);
-        $po->due_date = $request->input('datepicker');
-        $po->location = $request->input('location');
-        $po->referenceCode = $request->input('referenceNo');
-        $po->supplier = $request->input('supplier');
-        $po->tax = $request->input('grand_tax');
-        $po->discount = $request->input('grand_discount');
-        $po->discount_val_or_per = ($request->input('wholeDiscount') == '') ? 0 : $request->input('wholeDiscount');
-        $po->remark = $request->input('note');
-        $po->status = $request->input('status');
-        $po->grand_total = $request->input('grand_total');
-        $po->tax_percentage = $request->input('grand_tax_id');
+        $tr = Transfers::find($id);
+        $olederRefCode = $tr->tr_reference_code;
+        $tr->tr_reference_code = $request->input('referenceNo');
+        $tr->tr_date = $request->input('datepicker');
+        $tr->from_location = $request->input('fromLocation');
+        $tr->to_location = $request->input('toLocation');
+        $tr->grand_total = self::numberFormatRemove($request->input('grand_total'));
+        $tr->remarks = $request->input('note');
+        $tr->status = $request->input('status');
+        $tr->tot_tax = self::numberFormatRemove($request->input('grand_tax'));
+
+
+        // add stock to stock table
+        $stockAdd = Stock::updateOrCreate([                             /* TO */
+            'receive_code' => $olederRefCode . '-A'
+        ], [
+            'receive_code' => $request->input('referenceNo') . '-A',
+            'receive_date' => $request->input('datepicker'),
+            'remarks' => $request->input('note'),
+            'location' => $request->input('toLocation'),
+        ]);
+
+        //  subtract from stock table
+        $stockSubstct = Stock::updateOrCreate([                         /* FROM */
+            'receive_code' => $olederRefCode . '-S'
+        ], [
+            'receive_code' => $request->input('referenceNo') . '-S',
+            'receive_date' => $request->input('datepicker'),
+            'remarks' => $request->input('note'),
+            'location' => $request->input('fromLocation'),
+        ]);
+
 
         $items = $request->input('item');
         $quantity = $request->input('quantity');
@@ -303,34 +312,58 @@ class TransfersController extends Controller
         $subtot = $request->input('subtot');
         $discount = $request->input('discount');
 
-        $deletedItems = $request->input('deletedItems');
-
-        PoDetails::destroy($deletedItems);
-
-        foreach ($items as $i => $item) {
-//            print_r($tax_id);
-//            echo $id . '==' . $item. '==' .$costPrice[$i]. '==' . $quantity[$i]. '=='.$p_tax[$i] . '=='. $tax_id[$i]. '=='.$discount[$i]. '=='.$subtot[$i]. '///';
-            if ($subtot[$i] > 0) {
-
-                $poItem = PoDetails::updateOrCreate(
-                    [
-                        'po_header' => $id,
-                        'item_id' => $item
-                    ],
-                    [
-                        'cost_price' => $costPrice[$i],
-                        'qty' => $quantity[$i],
-                        'tax_val' => $p_tax[$i],
-                        'tax_percentage' => $tax_id[$i],
-                        'discount' => $discount[$i],
-                        'sub_total' => $subtot[$i],
-                    ]);
-
-            }
+        $deletedItems = (isset($request->deletedItems)) ? $request->deletedItems : '';
+//        echo '11';
+//print_r($deletedItems);
+//        echo '22';
+        if (is_array($deletedItems)&& isset($deletedItems[0])) {
+            $stockDelete = Stock::where('receive_code', 'like', '%' . $olederRefCode . '-%')->firstOrFail();
+            $stockDelete->stockItems()->delete($deletedItems);
         }
 
 
-        if (!$po->save()) {
+//        StockItems::destroy($deletedItems);
+        if (is_array($items)) {
+            foreach ($items as $id => $item) {
+
+                if ($subtot[$id] > 0) {
+
+                    StockItems::updateOrCreate(                             /* To */
+                        [
+                            'stock_id' => $stockAdd->id,
+                            'item_id' => $item
+                        ],
+                        [
+                            'qty' => self::numberFormatRemove($quantity[$id]),
+                            'cost_price' => self::numberFormatRemove($costPrice[$id]),
+                            'tax_per' => $tax_id[$id],
+                            'method' => 'A',
+                        ]
+                    );
+
+                    StockItems::updateOrCreate(                             /* From */
+                        [
+                            'stock_id' => $stockSubstct->id,
+                            'item_id' => $item
+                        ],
+                        [
+                            'qty' => self::numberFormatRemove($quantity[$id]),
+                            'cost_price' => self::numberFormatRemove($costPrice[$id]),
+                            'tax_per' => $tax_id[$id],
+                            'method' => 'S',
+                        ]
+                    );
+
+                }
+            }
+        }
+
+//        echo '<pre>';
+////        print_r($request->input());
+//        echo '</pre>';
+//        echo '===='.$stockSubstct->id.'====';
+//        return 'd';
+        if (!$tr->save()) {
             $request->session()->flash('message', 'Error in the database while updating the Transfers');
             $request->session()->flash('message-type', 'error');
         } else {
@@ -338,6 +371,7 @@ class TransfersController extends Controller
             $request->session()->flash('message-type', 'success');
         }
         echo json_encode(array('success' => true));
+
     }
 
     public function removePOData(Request $request)

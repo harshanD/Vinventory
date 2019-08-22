@@ -222,7 +222,7 @@
                     <div class="box-body">
                         <div id="collapseOptions" class="collapse">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-4" hidden>
                                     <div class="form-group">
                                         <label>Order Tax</label>
 
@@ -244,7 +244,7 @@
                                     </div>
                                 </div>
                                 <!-- /.col -->
-                                <div class="col-md-4">
+                                <div class="col-md-4" hidden>
                                     <div class="form-group">
                                         <label>Discount (5/5%)</label>
 
@@ -260,7 +260,7 @@
                                     </div>
                                 </div>
                                 <!-- /.col -->
-                                <div class="col-md-4">
+                                <div class="col-md-4 float-right">
                                     <div class="form-group">
                                         <label>Note</label>
 
@@ -445,7 +445,7 @@
             });
 
             $("#fromLocation").change(function () {
-
+                $('#fromLocation_error').html('');
                 if ($('#fromLocation').val() == $('#toLocation').val()) {
                     $('#fromLocation_error').html('Please select different warehouse');
                     return false
@@ -517,13 +517,13 @@
                         // window.location = data;
                         console.log(response)
                         if (response.success) {
-                            window.location.href = '/po/add';
+                            window.location.href = '/transfer/manage';
                         }
 
 
                     },
                     error: function (request, status, errorThrown) {
-
+// console.log(request.responseJSON.errors.referenceNo[0])
                         $('.help-block').html('');
                         if (typeof request.responseJSON.errors.datepicker !== 'undefined') {
                             $('#datepicker_error').html(request.responseJSON.errors.datepicker[0]);
@@ -531,11 +531,11 @@
                         if (typeof request.responseJSON.errors.status !== 'undefined') {
                             $('#status_error').html(request.responseJSON.errors.status[0]);
                         }
-                        if (typeof request.responseJSON.errors.tolocation !== 'undefined') {
-                            $('#location_error').html(request.responseJSON.errors.tolocation[0]);
+                        if (typeof request.responseJSON.errors.toLocation !== 'undefined') {
+                            $('#toLocation_error').html(request.responseJSON.errors.toLocation[0]);
                         }
-                        if (typeof request.responseJSON.errors.fromlocation !== 'undefined') {
-                            $('#location_error').html(request.responseJSON.errors.fromlocation[0]);
+                        if (typeof request.responseJSON.errors.fromLocation !== 'undefined') {
+                            $('#fromLocation_error').html(request.responseJSON.errors.fromLocation[0]);
                         }
                         if (typeof request.responseJSON.errors.referenceNo !== 'undefined') {
                             $('#referenceNo_error').html(request.responseJSON.errors.referenceNo[0]);
@@ -558,13 +558,12 @@
         //     }
         // }
 
-        var itemCount = 0;
 
         function changeProduct(index) {
             // localStorage.clear();
             if (document.getElementById("row_" + index.id) === null) {
                 localStorage.setItem('item', JSON.stringify(index.id));
-                itemCount++;
+                $('#fromLocation').attr('readonly', true);
 
 
                 var taxval = (toNumber(toNumber(index.cost_price * toNumber(index.tax)) / (100 + toNumber(index.tax)))).format(2);
@@ -669,7 +668,7 @@
                 "<input type='hidden' name='grand_total' id='grand_total' value='" + toNumber(gtot.format(2)) + "'>" +
                 "<input type='hidden' name='grand_tax_id' id='grand_tax_id' value='" + $('#wholeTax').val() + "'>" +
                 "<input type='hidden' name='grand_discount' id='grand_discount' value='" + toNumber(wdisco) + "'>" +
-                "<input type='hidden' name='grand_tax' id='grand_tax' value='" + toNumber(wtax) + "'>" + gtot.format(2) + "" +
+                "<input type='hidden' name='grand_tax' id='grand_tax' value='" + txSum + "'>" + gtot.format(2) + "" +
                 "</td><tr></table>";
 
 

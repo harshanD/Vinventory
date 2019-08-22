@@ -15,13 +15,30 @@
 @stop
 
 @section('content')
+    <style>
+        select[readonly].select2 + .select2-container {
+            pointer-events: none;
+            touch-action: none;
+
+        .select2-selection {
+            background: #eee;
+            box-shadow: none;
+        }
+
+        .select2-selection__arrow,
+        .select2-selection__clear {
+            display: none;
+        }
+
+        }
+    </style>
     <!-- Main content -->
     <section class="content">
 
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">Edit Purchase Order</h3>
+                <h3 class="box-title">Edit Transfer</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -32,8 +49,10 @@
                         <i class="fa fa-times"></i></button>
                 </div>
             </div>
-            <form role="form" id="pocreate" enctype="multipart/form-data" action="{{url('po/edit/'.$po->id)}}"
+            <form role="form" id="pocreate" enctype="multipart/form-data"
+                  action="{{url('transfer/edit/'.$transfers->id)}}"
                   method="post">
+
                 <div class="box-body">
                     @if(session()->has('message'))
                         <div class="alert alert-success alert-dismissible" role="alert">
@@ -64,7 +83,7 @@
                                             <i class="fa fa-calendar"></i>
                                         </div>
                                         <input type="text" placeholder="Select Date" name="datepicker"
-                                               value="{{$po->due_date}}"
+                                               value="{{$transfers->tr_date}}"
                                                class="form-control pull-right" id="datepicker">
                                     </div>
                                     <!-- /.input group -->
@@ -74,51 +93,6 @@
                             <!-- /.col -->
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Status *</label>
-
-                                    <div class="input-group date">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-hourglass-end"></i>
-                                        </div>
-                                        <select class="form-control select2" name="status" id="status">
-                                            <option value="0" {{ ($po->status== 0? "selected":"") }}>Select
-                                                Status
-                                            </option>
-                                            <option value="1" {{ ($po->status== 1? "selected":"") }}>Received
-                                            </option>
-                                            <option value="2" {{ ($po->status== 2? "selected":"") }}>Ordered
-                                            </option>
-                                            <option value="3" {{ ($po->status== 3? "selected":"") }}>Pending
-                                            </option>
-
-                                        </select>
-                                    </div>
-                                    <!-- /.input group -->
-                                    <p class="help-block" id="status_error"></p>
-                                </div>
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Location *</label>
-
-                                    <div class="input-group date">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-location-arrow"></i>
-                                        </div>
-                                        <select class="form-control select2" name="location" id="location">
-                                            <option value="0">Select Location</option>
-                                            @foreach($locations as $location)
-                                                <option value="{{  $location->id}}" {{ ($po->location == $location->id? "selected":"")}}>{{$location->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <!-- /.input group -->
-                                    <p class="help-block" id="location_error"></p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
                                     <label>Reference No</label>
 
                                     <div class="input-group date">
@@ -126,11 +100,53 @@
                                             <i class="fa  fa-barcode"></i>
                                         </div>
                                         <input type="text" class="form-control" name="referenceNo" id="referenceNo"
-                                               readonly
-                                               value="{{$po->referenceCode}}">
+                                               value="{{$transfers->tr_reference_code}}">
                                     </div>
                                     <!-- /.input group -->
                                     <p class="help-block" id="referenceNo_error"></p>
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>To Warehouse *</label>
+
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-location-arrow"></i>
+                                        </div>
+                                        <select class="form-control select2" name="toLocation" id="toLocation">
+                                            <option value="0">Select To Warehouse</option>
+                                            @foreach($locations as $location)
+                                                <option value="{{  $location->id}}" {{ ($transfers->to_location == $location->id? "selected":"")}}>{{$location->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <!-- /.input group -->
+                                    <p class="help-block" id="toLocation_error"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Status *</label>
+
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-hourglass-end"></i>
+                                        </div>
+                                        <select class="form-control select2" name="status" id="status">
+                                            <option value="0" {{$transfers->status ==0?'selected':''}}>Select Status
+                                            </option>
+                                            <option value="1" {{$transfers->status ==1?'selected':''}}>Completed
+                                            </option>
+                                            <option value="2" {{$transfers->status ==2?'selected':''}}>Pending</option>
+                                            <option value="3" {{$transfers->status ==4?'selected':''}}>Sent</option>
+
+
+                                        </select>
+                                    </div>
+                                    <!-- /.input group -->
+                                    <p class="help-block" id="status_error"></p>
                                 </div>
                             </div>
                             <!-- /.col -->
@@ -144,25 +160,22 @@
                             <!-- form start -->
                             <form class="form-horizontal">
 
-                                <label>Supplier *</label>
+                                <label>From Warehouse *</label>
 
                                 <div class="input-group date col-xs-4">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-secret"></i>
                                     </div>
-                                    <input type="hidden" name="supplier" id="supplier" value="{{$po->supplier}}">
-                                    <input type="hidden" name="deletedItems[]" id="deletedItems">
-                                    <select class="form-control col-xs-4 select2"
-                                            disabled="true">
-                                        <option value="0">Select Supplier</option>
-                                        @foreach($suppliers as $supplier)
-                                            <option value="{{$supplier->id}}" {{($po->supplier== $supplier->id? "selected":"")}}>{{$supplier->name}}</option>
+                                    <select class="form-control col-xs-4 select2" name="fromLocation" id="fromLocation">
+                                        <option value="0">Select From Warehouse</option>
+                                        @foreach($locations as $location)
+                                            <option value="{{$location->id}}" {{($transfers->from_location== $location->id? "selected":"")}}>{{$location->name}}</option>
                                         @endforeach
 
                                     </select>
 
                                 </div>
-                                <p class="help-block" id="supplier_error"></p>
+                                <p class="help-block" id="fromLocation_error"></p>
                                 <!-- /.box-body -->
 
                             </form>
@@ -170,24 +183,16 @@
                         <!-- /.box -->
                         <div class="input-group input-group-lg">
                   <span class="input-group-btn">
-                            <a class="btn btn-app" href="{{url('products')}}">
+                            <a class="btn btn-app">
                                 <i class="fa fa-barcode"></i>
                             </a>
                    </span>
                             <input type="text" id="product" class="form-control input-lg"
                                    placeholder="Please add products to order list">
-                            <span class="input-group-btn">
-                                  <a class="btn btn-app" href="{{url('products/create')}}">
-                                <i class="fa glyphicon glyphicon-plus"></i>
-                            </a>
-                    </span>
+
                         </div>
                     </div>
-                    <?php
-                    //                            echo '<pre>';
-                    //                        print_r($po->poDetails);
-                    //                        echo '</pre>';
-                    ?>
+
                     <div class="box-body">
                         <table id="poTable" class="table table-bordered table-striped">
                             <thead>
@@ -195,48 +200,60 @@
                                 <th>Product (Code - Name)</th>
                                 <th>Net Unit Cost</th>
                                 <th>Quantity</th>
-                                <th>Discount</th>
                                 <th>Product Tax</th>
                                 <th>Subtotal</th>
                                 <th style="text-align:center"><i class="fa fa-trash"></i></th>
                             </tr>
                             </thead>
                             <tbody id="poBody">
-                            @foreach($po->poDetails as $poItem)
+                            @foreach($transfer_items as $trItem)
+                                <?php
+                                $taxval = number_format((($trItem['cost_price'] * $trItem['tax_per']) / (100 + $trItem['tax_per'])), 2);
+                                $cost = number_format($trItem['cost_price'] - $taxval, 2);
+                                ?>
 
-                                <tr id="row_deletable_{{ $poItem->id }}" style="text-align: right">
-                                    <td style="text-align: left">{{ $poItem->product->name }}
-                                        ( {{ $poItem->product->item_code }} )<i
-                                                class="fa fa-edit" onclick='itemDetails({{ $poItem->item_id }})'
+                                <tr id="row_deletable_{{ $trItem['item_id'] }}" style="text-align: right">
+                                    <td style="text-align: left">{{ $trItem['products']['name'] }}
+                                        ( {{  $trItem['products']['item_code'] }} )<i
+                                                class="fa fa-edit" onclick='itemDetails({{ $trItem['item_id'] }})'
                                                 style='float: right;cursor: pointer'></i></td>
-                                    <td id='costPrice_{{ $poItem->item_id }}'>{{ $poItem->cost_price }}</td>
+                                    <td id='costPrice_{{ $trItem['item_id'] }}'>{{ $cost }}</td>
                                     <td style="text-align: center"><input type='text' style="text-align: center"
                                                                           class='qy'
-                                                                          onkeyup='qtyChanging({{ $poItem->item_id }})'
-                                                                          id='quantity_{{ $poItem->item_id }}'
-                                                                          value='{{ $poItem->qty }}'></td>
-                                    <td id='discount_{{ $poItem->item_id }}'>{{number_format($poItem->discount,2)}}</td>
-                                    <td hidden id='hidden_data_{{ $poItem->item_id }}'>
+                                                                          onkeyup='qtyChanging({{ $trItem['item_id'] }})'
+                                                                          id='quantity_{{ $trItem['item_id'] }}'
+                                                                          value='{{ $trItem['qty'] }}'></td>
+                                    <td hidden id='discount_{{ $trItem['item_id'] }}'>{{number_format(0,2)}}</td>
+                                    <td hidden id='hidden_data_{{ $trItem['item_id'] }}'>
 
-                                        <input type='hidden' name='discount[]' id='discount_h{{ $poItem->item_id }}' value='{{($poItem->discount)}}'>
-                                        <input type='hidden' name='quantity[]' id='quantity_h{{ $poItem->item_id }}' value='{{ $poItem->qty }}'>
-                                        <input type='hidden' name='costPrice[]' id='costPrice_h{{ $poItem->item_id }}' value='{{ ($poItem->cost_price) }}'>
-                                        <input type='hidden' name='item[]' id='item_h{{ $poItem->item_id }}' value='{{ $poItem->item_id }}'>
-                                        <input type='hidden' name='unit[]' id='unit_h{{ $poItem->item_id }}'>
-                                        <input type='hidden' name='p_tax[]' id='p_tax_h{{ $poItem->item_id }}' value='{{ $poItem->tax_val }}'>
-                                        <input type='hidden' name='subtot[]' id='subtot_h{{ $poItem->item_id }}' value='{{ $poItem->sub_total }}'>
-                                        <input type='hidden' name='tax_id[]' id='tax_id_h{{ $poItem->item_id }}' value="{{ $poItem->tax_percentage }}">
-
+                                        <input type='hidden' name='discount[]' id='discount_h{{ $trItem['item_id'] }}'
+                                               value='{{(0)}}'>
+                                        <input type='hidden' name='quantity[]' id='quantity_h{{ $trItem['item_id'] }}'
+                                               value='{{ $trItem['qty'] }}'>
+                                        <input type='hidden' name='costPrice[]' id='costPrice_h{{ $trItem['item_id'] }}'
+                                               value='{{ ($trItem['cost_price']) }}'>
+                                        <input type='hidden' name='item[]' id='item_h{{ $trItem['item_id'] }}'
+                                               value='{{ $trItem['item_id'] }}'>
+                                        <input type='hidden' name='unit[]' id='unit_h{{ $trItem['item_id'] }}'>
+                                        <input type='hidden' name='p_tax[]' id='p_tax_h{{ $trItem['item_id'] }}'
+                                               value='{{ $taxval }}'>
+                                        <input type='hidden' name='subtot[]' id='subtot_h{{ $trItem['item_id'] }}'
+                                               value='{{ 0 }}'>
+                                        <input type='hidden' name='tax_id[]' id='tax_id_h{{ $trItem['item_id'] }}'
+                                               value="{{ $trItem['tax_per'] }}">
+                                        <input type='hidden' name='availableStock_id[]'
+                                               id='availableStock_h{{ $trItem['item_id'] }}' value=''>
 
                                     </td>
                                     <td class='tax'
-                                        id='tax_{{ $poItem->item_id }}'>{{ number_format($poItem->tax_val,2)}}</td>
+                                        id='tax_{{ $trItem['item_id'] }}'>{{ number_format($taxval,2)}}</td>
                                     <td class='subtot'
-                                        id='subtot_{{ $poItem->item_id }}'>{{ number_format($poItem->sub_total,2) }}</td>
+                                        id='subtot_{{ $trItem['item_id'] }}'>{{ number_format($trItem['cost_price']*$trItem['qty'],2) }}</td>
                                     <td style="text-align: center"><i class="glyphicon glyphicon-remove"
-                                                                      onclick="deleteThis({{ $poItem->id }})"
+                                                                      onclick="deleteThis({{ $trItem['item_id'] }})"
                                                                       style="cursor: pointer"></i></td>
-                                </tr>
+                                </tr><input type="hidden" name="deletedItems[]"
+                                            id="deletedItems_h{{ $trItem['item_id'] }}">
 
                             @endforeach
 
@@ -258,7 +275,7 @@
                     <div class="box-body">
                         <div id="collapseOptions" class="collapse">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-4" hidden>
                                     <div class="form-group">
                                         <label>Order Tax</label>
 
@@ -270,7 +287,7 @@
                                                     onchange="lastRowDesign()">
                                                 <option value="0">Select tax</option>
                                                 @foreach($tax as $ta)
-                                                    <option value="{{$ta->value}}" {{($po->tax_percentage==$ta->value? "selected":"")}}>{{$ta->name ."-".$ta->code}}</option>
+                                                    <option value="{{$ta->value}}" {{($transfers->tax_percentage==$ta->value? "selected":"")}}>{{$ta->name ."-".$ta->code}}</option>
                                                 @endforeach
 
                                             </select>
@@ -280,7 +297,7 @@
                                     </div>
                                 </div>
                                 <!-- /.col -->
-                                <div class="col-md-4">
+                                <div class="col-md-4" hidden>
                                     <div class="form-group">
                                         <label>Discount (5/5%)</label>
 
@@ -289,7 +306,7 @@
                                                 <i class="fa fa-circle"></i>
                                             </div>
                                             <input type="text" class="form-control" name="wholeDiscount"
-                                                   value="{{$po->discount_val_or_per}}"
+                                                   value="{{$transfers->discount_val_or_per}}"
                                                    id="wholeDiscount" onkeyup="lastRowDesign()">
                                         </div>
                                         <!-- /.input group -->
@@ -297,7 +314,7 @@
                                     </div>
                                 </div>
                                 <!-- /.col -->
-                                <div class="col-md-4">
+                                <div class="col-md-4 float-right">
                                     <div class="form-group">
                                         <label>Note</label>
 
@@ -307,7 +324,7 @@
                                             </div>
                                             <textarea type="text" class="form-control" id="note" name="note"
                                                       placeholder="Note"
-                                                      autocomplete="off">{{$po->remark}}</textarea>
+                                                      autocomplete="off">{{$transfers->remarks}}</textarea>
                                         </div>
                                         <!-- /.input group -->
                                         {{--                                        <p class="help-block" id="datepicker_error"></p>--}}
@@ -363,7 +380,8 @@
                                     <label for="inputEmail3" class="col-sm-3 control-label">Product Tax</label>
                                     <input type="hidden" id="modalItem">
                                     <div class="col-sm-6">
-                                        <select class="form-control select2" name="pTax" id="pTax" style="width: 100%;"
+                                        <select class="form-control select2" readonly name="pTax" id="pTax"
+                                                style="width: 100%;"
                                                 onchange="itemQtyCostUnitChange()">
                                             <option value="0">No tax</option>
                                             @foreach($tax as $ta)
@@ -392,7 +410,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" hidden>
                                     <label for="inputPassword3" class="col-sm-3 control-label">Product Discount</label>
 
                                     <div class="col-sm-6">
@@ -424,7 +442,7 @@
                                     </thead>
                                 </table>
                                 <br>
-                                <div class="panel panel-default">
+                                <div class="panel panel-default" hidden>
                                     <div class="panel-heading">Calculate Unit Cost</div>
                                     <div class="panel-body">
                                         <div class="form-group">
@@ -470,14 +488,15 @@
 
         var autoCompleteId = 'product';
         var acurl = '';
-
+        acurl = $('#fromLocation').val();
         $(document).ready(function () {
             lastRowDesign()
             // itemsLoad()
 
             var options = {
 
-                url: "/products/fetchProductsList/" + $('#supplier').val(),
+
+                url: "/stock/fetchProductsListWarehouseWise/" + acurl,
 
                 getValue: "name",
 
@@ -512,12 +531,6 @@
                 checkValuesExistsInProducts()
             });
 
-            $("#supplier").change(function () {
-
-
-            });
-
-
             $("#pocreate").unbind('submit').on('submit', function () {
                 var form = $(this);
 
@@ -526,11 +539,16 @@
                     qtySum += toNumber($(this).val());  // Or this.innerHTML, this.innerText
                 });
 
-                if (($('#poTable tr').length - 2) < 1) {
-                    $('#items_error').html('Items required');
-                    return false
-                } else if (qtySum < 1) {
-                    $('#items_error').html('Fill Items Qty required');
+                // if (($('#poTable tr').length - 2) < 1) {
+                //     $('#items_error').html('Items required');
+                //     return false
+                // } else if (qtySum < 1) {
+                //     $('#items_error').html('Fill Items Qty required');
+                //     return false
+                // }
+
+                if ($('#fromLocation').val() == $('#toLocation').val()) {
+                    $('#fromLocation_error').html('Cannot be same to Location and From location');
                     return false
                 }
 
@@ -543,7 +561,7 @@
                         // window.location = data;
                         console.log(response)
                         if (response.success) {
-                            window.location.href = '/po/manage';
+                            window.location.href = '/transfer/manage';
                         }
 
 
@@ -557,14 +575,14 @@
                         if (typeof request.responseJSON.errors.status !== 'undefined') {
                             $('#status_error').html(request.responseJSON.errors.status[0]);
                         }
-                        if (typeof request.responseJSON.errors.location !== 'undefined') {
-                            $('#location_error').html(request.responseJSON.errors.location[0]);
+                        if (typeof request.responseJSON.errors.toLocation !== 'undefined') {
+                            $('#toLocation_error').html(request.responseJSON.errors.toLocation[0]);
+                        }
+                        if (typeof request.responseJSON.errors.fromLocation !== 'undefined') {
+                            $('#fromLocation_error').html(request.responseJSON.errors.fromLocation[0]);
                         }
                         if (typeof request.responseJSON.errors.referenceNo !== 'undefined') {
                             $('#referenceNo_error').html(request.responseJSON.errors.referenceNo[0]);
-                        }
-                        if (typeof request.responseJSON.errors.supplier !== 'undefined') {
-                            $('#supplier_error').html(request.responseJSON.errors.supplier[0]);
                         }
 
 
@@ -577,19 +595,6 @@
 
         });
 
-        {{--function itemsLoad() {--}}
-        {{--    $.ajax('/products/fetchProductDataById', {--}}
-        {{--        type: 'post',  // http method--}}
-        {{--        data: {--}}
-        {{--            id: id,--}}
-        {{--            "_token": "{{ csrf_token() }}",--}}
-        {{--        },--}}
-        {{--        success: function (data, status, xhr) {--}}
-
-
-        {{--        }--}}
-        {{--    })--}}
-        {{--}--}}
         //
         function checkValuesExistsInProducts() {
             var containerList = $('#product').next('.easy-autocomplete-container').find('ul');
@@ -601,14 +606,18 @@
 
         function changeProduct(index) {
             // localStorage.clear();
-            if (document.getElementById("row_" + index.id) === null) {
+            if (document.getElementById("quantity_" + index.id) === null) {
                 localStorage.setItem('item', JSON.stringify(index.id));
+
+
+                var taxval = (toNumber(toNumber(index.cost_price * toNumber(index.tax)) / (100 + toNumber(index.tax)))).format(2);
+                var cost = (index.cost_price - taxval).format(2);
 
                 var row = '<tr id="row_' + index.id + '" style="text-align: right">' +
                     "<td style=\"text-align: left\">" + index.name + "( " + index.item_code + " )" + "  <i  class=\"fa fa-edit\" onclick='itemDetails(" + index.id + ")' style='float: right;cursor: pointer'></i></td>" +
-                    "<td id='costPrice_" + index.id + "'>" + index.cost_price + "</td>" +
-                    "<td style=\"text-align: center\"><input type='text'   style=\"text-align: center\" class='qy' onkeyup='qtyChanging(" + index.id + ")' id='quantity_" + index.id + "' value='" + 0 + "'></td>" +
-                    "<td id='discount_" + index.id + "'>" + index.discount + "</td>" +
+                    "<td id='costPrice_" + index.id + "'>" + cost + "</td>" +
+                    "<td style=\"text-align: center\"><input type='text'   style=\"text-align: center\" class='qy' onkeyup='qtyChanging(" + index.id + ")' id='quantity_" + index.id + "' value='" + 1 + "'></td>" +
+                    "<td hidden id='discount_" + index.id + "'>" + index.discount + "</td>" +
                     "<td hidden id='hidden_data_" + index.id + "'>" +
 
                     "<input type='hidden' name='discount[]' id='discount_h" + index.id + "' value='0'>" +
@@ -616,22 +625,52 @@
                     "<input type='hidden' name='costPrice[]' id='costPrice_h" + index.id + "' value='" + index.cost_price + "'>" +
                     "<input type='hidden' name='item[]' id='item_h" + index.id + "' value='" + index.id + "''>" +
                     "<input type='hidden' name='unit[]' id='unit_h" + index.id + "' value='1'>" +
-                    "<input type='hidden'  name='p_tax[]' id='p_tax_h" + index.id + "'  value='0'>" +
+                    "<input type='hidden'  name='p_tax[]' id='p_tax_h" + index.id + "'  value='" + taxval + "'>" +
                     "<input type='hidden'  name='subtot[]' id='subtot_h" + index.id + "'>" +
-                    "<input type='hidden'   name='tax_id[]' id='tax_id_h" + index.id + "' value='0'>" +
+                    "<input type='hidden'   name='tax_id[]' id='tax_id_h" + index.id + "' value='" + index.tax + "'>" +
+                    "<input type='hidden'   name='availableStock_id[]' id='availableStock_h" + index.id + "' value='" + index.sum + "'>" +
 
                     "</td>" +
-                    "<td class='tax' id='tax_" + index.id + "'>" + index.tax + "</td>" +
+                    "<td class='tax' id='tax_" + index.id + "'>" + taxval + "</td>" +
                     "<td class='subtot' id='subtot_" + index.id + "'>" + 0 + "</td>" +
                     '<td style="text-align: center"><i class="glyphicon glyphicon-remove" onclick="removeThis(' + index.id + ')" style="cursor: pointer"></i></td>';
 
                 row += '</tr>';
                 $('.lastRow').remove()
                 $('#poBody').append(row);
+                qtyChanging(index.id)
             }
         }
 
         function qtyChanging(id) {
+            if ($('#availableStock_h' + id).val() == '') {
+
+                $.ajax('/stock/fetchProductsOneWarehouseWiseItem', {
+                    type: 'post',  // http method
+                    data: {
+                        wh: $('#fromLocation').val(),
+                        idItem: id,
+                        "_token": "{{ csrf_token() }}",
+                    },  // data to submit
+                    success: function (data, status, xhr) {
+                        var item = JSON.parse(data);
+                        // console.log(item[0].sum)
+                        if (item.length != 0) {
+                            $('#availableStock_h' + id).val(item[0].sum)
+                        } else {
+                            $('#availableStock_h' + id).val(0)
+                        }
+
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+                        $('p').append('Error' + errorMessage);
+                    }
+                });
+
+            }
+            // alert($('#p_tax_h' + id).val() + '=' + ($('#tax_' + id).text() + '=' + $('#costPrice_' + id).text() + '=' + $('#availableStock_h' + id).val() + '=' + $('#quantity_' + id).val()));
+            itemsQtyVali(id)
+            $('#tax_' + id).text((toNumber($('#p_tax_h' + id).val()) * $('#quantity_' + id).val()).format(2));
             var subTot = ((toNumber($('#costPrice_' + id).text()) * toNumber($('#quantity_' + id).val())) + toNumber(($('#tax_' + id).text())));
             $('#quantity_h' + id).val(toNumber($('#quantity_' + id).val()));
 // alert($('#costPrice_' + id).text()+" == "+ $('#quantity_' + id).val()+" ==== "+$('#unit_' + id).val())
@@ -639,6 +678,18 @@
             $('#subtot_h' + id).val(toNumber((!isNaN(subTot)) ? subTot.format(2) : 0));
 
             lastRowDesign();
+        }
+
+        function itemsQtyVali(id) {
+            if (toNumber($('#quantity_' + id).val()) > toNumber($('#availableStock_h' + id).val()) || !$.isNumeric($('#quantity_' + id).val())) {
+                $('#quantity_' + id).css('background', 'red')
+                $('#quantity_' + id).val('')
+                setTimeout(function () {
+                    $('#quantity_' + id).css('background', 'white')
+                    $('#quantity_' + id).val('0').focus
+                }, 500);
+                return false;
+            }
         }
 
         function lastRowDesign() {
@@ -651,10 +702,20 @@
                 qtySum += toNumber($(this).val());  // Or this.innerHTML, this.innerText
             });
 
+            var txSum = 0
+            $('.tax').each(function () {
+                txSum += toNumber($(this).text());  // Or this.innerHTML, this.innerText
+            });
+            var disco = 0
+            $('.disco').each(function () {
+                disco += toNumber($(this).text());  // Or this.innerHTML, this.innerText
+            });
+
+
             var lastRow = '<tr class="lastRow" style="font-weight: bold;text-align: right">' +
                 "<td colspan='3' style='text-align: left'>Total</td>" +
-                "<td id='sumQuantity'>" + 0 + "</td>" +
-                "<td id='sumDiscount'>" + 0 + "</td>" +
+                "<td id='sumDiscount' hidden>" + disco.format(2) + "</td>" +
+                "<td id='dd'>" + txSum.format(2) + "</td>" +
                 "<td id='sumTax' style='align:right'>" + sum.format(2) + "</td><td style='text-align: center'><i class=\"fa fa-trash\"></i></td></tr>";
 
             $('.lastRow').remove();
@@ -670,16 +731,14 @@
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + ($('#poTable tr').length - 2) + " (" + qtySum + ") " + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Total</td>" +
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + sum.format(2) + "</td>" +
-                "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Order Discount</td>" +
-                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + wdisco.format(2) + "</td>" +
-                "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Order Tax</td>" +
-                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + wtax.format(2) + "</td>" +
+                "<td style='text-align: left;background-color: #dfe4da;width: 13%' hidden>Order Tax</td>" +
+                "<td style='text-align: right;background-color: #c2c7bd;width: 7%' hidden>" + wtax.format(2) + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Grand Total</td>" +
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" +
                 "<input type='hidden' name='grand_total' id='grand_total' value='" + toNumber(gtot.format(2)) + "'>" +
                 "<input type='hidden' name='grand_tax_id' id='grand_tax_id' value='" + $('#wholeTax').val() + "'>" +
                 "<input type='hidden' name='grand_discount' id='grand_discount' value='" + toNumber(wdisco) + "'>" +
-                "<input type='hidden' name='grand_tax' id='grand_tax' value='" + toNumber(wtax) + "'>" + gtot.format(2) + "" +
+                "<input type='hidden' name='grand_tax' id='grand_tax' value='" + txSum + "'>" + gtot.format(2) + "" +
                 "</td><tr></table>";
 
 
@@ -692,7 +751,7 @@
         }
 
         function deleteThis(removeItem) {
-            $('#deletedItems').val(removeItem);
+            $('#deletedItems_h' + removeItem).val(removeItem);
             $('#row_deletable_' + removeItem).remove()
             lastRowDesign()
         }
@@ -713,11 +772,11 @@
                 success: function (data, status, xhr) {
                     var item = JSON.parse(data);
                     // alert(toNumber($('#quantity_' + id).val()))
-                    if (toNumber($('#quantity_' + id).val()) > 0) {
-                        $('#pCost').val((toNumber(toNumber($('#costPrice_' + id).text()) + (toNumber($('#tax_' + id).text()) / toNumber($('#quantity_' + id).val())) + (toNumber($('#discount_' + id).text()) / toNumber($('#quantity_' + id).val())))).format(2));
-                    } else {
-                        $('#pCost').val(toNumber($('#costPrice_' + id).text()))
-                    }
+                    // if (toNumber($('#quantity_' + id).val()) > 0) {
+                    //         $('#pCost').val((toNumber(toNumber($('#costPrice_' + id).text()) + (toNumber($('#tax_' + id).text()) / toNumber($('#quantity_' + id).val())) + (toNumber($('#discount_' + id).text()) / toNumber($('#quantity_' + id).val())))).format(2));
+                    // } else {
+                    $('#pCost').val(toNumber($('#costPrice_h' + id).val()))
+                    // }
 
 
                     $('#itemName').text(item.name + " ( " + item.item_code + ") ");
@@ -771,10 +830,10 @@
 
         function modalDataSetToTable() {
             var itemId = $('#modalItem').val();
-            $('#tax_' + itemId).text((toNumber($('#ptx').text()) * $('#pQty').val()).format(2));
-            $('#p_tax_h' + itemId).val(toNumber((toNumber($('#ptx').text()) * $('#pQty').val()).format(2)));
+            // $('#tax_' + itemId).text((toNumber($('#ptx').text()) * $('#pQty').val()).format(2));
+            // $('#p_tax_h' + itemId).val(toNumber((toNumber($('#ptx').text()) * $('#pQty').val()).format(2)));
 
-            $('#p_tax_' + itemId).text((toNumber($('#ptx').text())).format(2));
+            $('#p_tax_h' + itemId).val((toNumber($('#ptx').text())).format(2));
             $('#tax_id_h' + itemId).val($('#pTax').val())
 
             $('#quantity_' + itemId).val($('#pQty').val());
@@ -784,7 +843,7 @@
             $('#unit_h' + itemId).val(toNumber($('#pUnit').val()));
 
             $('#costPrice_' + itemId).text($('#nucost').text());
-            $('#costPrice_h' + itemId).val($('#nucost').text());
+            $('#costPrice_h' + itemId).val($('#pCost').val());
 
             $('#discount_' + itemId).text(($('#pDisco').val() * $('#pQty').val()).format(2));
             $('#discount_h' + itemId).val(toNumber(($('#pDisco').val() * $('#pQty').val()).format(2)));

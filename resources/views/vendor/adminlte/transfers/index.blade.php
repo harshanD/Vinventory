@@ -21,7 +21,7 @@
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">Purchases</h3>
+                <h3 class="box-title">Transfers</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -55,12 +55,12 @@
                     <tr>
                         <th>Date</th>
                         <th>Reference No</th>
-                        <th>Supplier</th>
-                        <th>Reserved status</th>
-                        <th>Grand Total</th>
-                        <th>Paid</th>
-                        <th>Balance</th>
-                        <th>PO Status</th>
+                        <th>Warehouse (From)</th>
+                        <th>Warehouse (To)</th>
+                        <th>Total</th>
+                        <th>Tax</th>
+                        <th>Grand total</th>
+                        <th>Status</th>
                         <th>Actions</th>
 
                     </tr>
@@ -73,10 +73,8 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                         <td>
-                            <a href="" class="btn btn-default"><i class="fa fa-edit"></i></a>
-                            <a href="" class="btn btn-default"><i class="fa fa-trash"></i></a>
+
                         </td>
                     </tr>
 
@@ -265,7 +263,7 @@
             // table.fnPageChange("first", 1);
             // initialize the datatable
             manageTable = $('#poTable').DataTable({
-                'ajax': '/po/fetchPOData',
+                'ajax': '/transfer/fetchTransData',
                 'order': []
             });
 
