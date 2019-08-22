@@ -49,7 +49,7 @@
                         <i class="fa fa-times"></i></button>
                 </div>
             </div>
-            <form role="form" id="pocreate" enctype="multipart/form-data"
+            <form role="form" id="trcreate" enctype="multipart/form-data"
                   action="{{url('transfer/edit/'.$transfers->id)}}"
                   method="post">
 
@@ -253,7 +253,7 @@
                                                                       onclick="deleteThis({{ $trItem['item_id'] }})"
                                                                       style="cursor: pointer"></i></td>
                                 </tr><input type="hidden" name="deletedItems[]"
-                                            id="deletedItems_h{{ $trItem['item_id'] }}">
+                                            id="deletedItems_h{{ $trItem['item_id'] }}" value="0">
 
                             @endforeach
 
@@ -489,9 +489,44 @@
         var autoCompleteId = 'product';
         var acurl = '';
         acurl = $('#fromLocation').val();
+
+
         $(document).ready(function () {
-            lastRowDesign()
-            // itemsLoad()
+
+            $("#fromLocation").change(function () {
+                acurl = $('#fromLocation').val();
+
+                var options = {
+
+
+                    url: "/stock/fetchProductsListWarehouseWise/" + acurl,
+
+                    getValue: "name",
+
+                    list: {
+                        maxNumberOfElements: 8,
+                        match: {
+                            enabled: true
+                        },
+                        sort: {
+                            enabled: true
+                        },
+                        onChooseEvent: function () {
+                            var index = $("#" + autoCompleteId).getSelectedItemData();
+                            $('#product').val('');
+                            changeProduct(index)
+                        },
+                    },
+
+                    // theme: "square"
+                    theme: "plate-dark"
+                };
+
+                if (typeof autoCompleteId !== 'undefined') {
+                    $("#" + autoCompleteId).easyAutocomplete(options);
+                }
+
+            });
 
             var options = {
 
@@ -523,6 +558,13 @@
                 $("#" + autoCompleteId).easyAutocomplete(options);
             }
 
+
+
+
+            lastRowDesign()
+            // itemsLoad()
+
+
             $("#product").keyup(function () {
                 // $('#modal-danger').modal({
                 //     show: 'true'
@@ -531,7 +573,7 @@
                 checkValuesExistsInProducts()
             });
 
-            $("#pocreate").unbind('submit').on('submit', function () {
+            $("#trcreate").unbind('submit').on('submit', function () {
                 var form = $(this);
 
                 var qtySum = 0;
