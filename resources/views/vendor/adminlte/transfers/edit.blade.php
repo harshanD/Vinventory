@@ -559,8 +559,6 @@
             }
 
 
-
-
             lastRowDesign()
             // itemsLoad()
 
@@ -581,13 +579,13 @@
                     qtySum += toNumber($(this).val());  // Or this.innerHTML, this.innerText
                 });
 
-                // if (($('#poTable tr').length - 2) < 1) {
-                //     $('#items_error').html('Items required');
-                //     return false
-                // } else if (qtySum < 1) {
-                //     $('#items_error').html('Fill Items Qty required');
-                //     return false
-                // }
+                if (($('#poTable tr').length - 2) < 1) {
+                    $('#items_error').html('Items required');
+                    return false
+                } else if (qtySum < 1) {
+                    $('#items_error').html('Fill Items Qty required');
+                    return false
+                }
 
                 if ($('#fromLocation').val() == $('#toLocation').val()) {
                     $('#fromLocation_error').html('Cannot be same to Location and From location');

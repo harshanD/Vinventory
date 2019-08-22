@@ -243,23 +243,6 @@ class TransfersController extends Controller
 
     public function editTransferData(Request $request, $id)
     {
-//      $ss1 =  StockItems::where('stock_id',23)->where('item_id',1)->firstOrFail()->toArray(); /*To*/
-//      $ss2 =  StockItems::where('stock_id',24)->where('item_id',1)->firstOrFail()->toArray(); /*From*/
-//      echo ($ss1['qty']);
-//      if($ss1['qty']<4){
-//          $ss1->qty =4;
-//
-//      }else{
-//
-//      }
-//
-//      if($ss2['qty']<4){
-//          $ss2->qty =4;
-//
-//      }else{
-//
-//      }
-//      return '</br>s';
 
         $request->validate([
             'datepicker' => 'required|date',
@@ -313,12 +296,14 @@ class TransfersController extends Controller
         $discount = $request->input('discount');
 
         $deletedItems = (isset($request->deletedItems)) ? $request->deletedItems : '';
-//        echo '11';
-//print_r($deletedItems);
-//        echo '22';
-        if (is_array($deletedItems)&& isset($deletedItems[0])) {
-            $stockDelete = Stock::where('receive_code', 'like', '%' . $olederRefCode . '-%')->firstOrFail();
-            $stockDelete->stockItems()->delete($deletedItems);
+
+
+        if (is_array($deletedItems) && isset($deletedItems[0])) {
+            $stockDelete_A = Stock::where('receive_code', 'like', '%' . $olederRefCode . '-A%')->firstOrFail();
+            $stockDelete_A->stockItems()->whereIn('item_id', $deletedItems)->delete();
+
+            $stockDelete_S = Stock::where('receive_code', 'like', '%' . $olederRefCode . '-S%')->firstOrFail();
+            $stockDelete_S->stockItems()->whereIn('item_id', $deletedItems)->delete();
         }
 
 
