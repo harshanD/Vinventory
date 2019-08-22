@@ -601,7 +601,7 @@
 
         function changeProduct(index) {
             // localStorage.clear();
-            if (document.getElementById("row_" + index.id) === null) {
+            if (document.getElementById("quantity_" + index.id) === null) {
                 localStorage.setItem('item', JSON.stringify(index.id));
 
                 var taxval = (toNumber(toNumber(index.cost_price * toNumber(index.tax)) / (100 + toNumber(index.tax)))).format(2);
