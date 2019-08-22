@@ -103,11 +103,14 @@ Route::post('/tax/create', 'TaxController@create');
 /*transfers*/
 Route::get('transfer/add', 'TransfersController@index');
 Route::post('transfer/create', 'TransfersController@create');
-
+Route::get('transfer/manage', 'TransfersController@transList');
+Route::get('transfer/fetchTransData', 'TransfersController@fetchTransData');
+Route::get('transfer/edit/{id}', 'TransfersController@editView');
+Route::post('transfer/edit/{id}', 'TransfersController@editTransferData');
 
 /*stocks*/
 Route::get('/stock/fetchProductsListWarehouseWise/{id}', 'StockController@fetchProductsListWarehouseWise');
-
+Route::post('/stock/fetchProductsOneWarehouseWiseItem', 'StockController@fetchProductsOneWarehouseWiseItem');
 
 
 
