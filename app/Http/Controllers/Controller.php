@@ -20,4 +20,10 @@ class Controller extends BaseController
             return sprintf("%0" . $length . "d", ++$matches[1]);
         }
     }
+
+    public static function numberFormatRemove($number)
+    {
+        $number = str_replace(",", "", $number);
+        return $number;
+    }
 }
