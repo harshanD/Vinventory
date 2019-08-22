@@ -394,7 +394,7 @@
                 hidden: 'true'
             });
 
-            $('#deleteBtn').attr("href", ('/po/delete/') +id);
+            $('#deleteBtn').attr("href", ('/transfer/delete/') +id);
         }
 
     </script>

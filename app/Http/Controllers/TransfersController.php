@@ -343,11 +343,6 @@ class TransfersController extends Controller
             }
         }
 
-//        echo '<pre>';
-////        print_r($request->input());
-//        echo '</pre>';
-//        echo '===='.$stockSubstct->id.'====';
-//        return 'd';
         if (!$tr->save()) {
             $request->session()->flash('message', 'Error in the database while updating the Transfers');
             $request->session()->flash('message-type', 'error');
@@ -480,9 +475,11 @@ class TransfersController extends Controller
     public function delete(Request $request, $id)
     {
 
-        $podata = Transfers::find($id);
+        $trdata = Transfers::find($id);
+        Stock::where('receive_code', '=', $trdata->tr_reference_code . '-A')->firstOrFail()->delete();
+        Stock::where('receive_code', '=', $trdata->tr_reference_code . '-S')->firstOrFail()->delete();
 
-        if (!$podata->delete()) {
+        if (!$trdata->delete()) {
             $request->session()->flash('message', 'Error in the database while deleting the Transfers');
             $request->session()->flash('message-type', 'error');
             return redirect()->back();
