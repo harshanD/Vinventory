@@ -433,21 +433,23 @@ class POController extends Controller
 
         foreach ($poItemsIds as $key => $poItem) {
 
-            $poitemOb = PoDetails::find($poItem);
-            $poitemOb->received_qty = $poitemOb->received_qty + $par_qty[$key];
-            $poitemOb->save();
-            //            products foe add as available stock qty
-            $products = Products::find($poitemOb->item_id);
-            $products->availability = $products->availability + $par_qty[$key];
-            $products->save();
+            if ($par_qty[$key] > 0) {
 
-            $stockItems = new StockItems();
-            $stockItems->item_id = $poitemOb->item_id;
-            $stockItems->qty = $par_qty[$key];
-            $stockItems->cost_price = $poitemOb->cost_price;
-            $stockItems->tax_per = $poitemOb->tax_percentage;
-            $stock->stockItems()->save($stockItems);
+                $poitemOb = PoDetails::find($poItem);
+                $poitemOb->received_qty = $poitemOb->received_qty + $par_qty[$key];
+                $poitemOb->save();
+                //            products foe add as available stock qty
+                $products = Products::find($poitemOb->item_id);
+                $products->availability = $products->availability + $par_qty[$key];
+                $products->save();
 
+                $stockItems = new StockItems();
+                $stockItems->item_id = $poitemOb->item_id;
+                $stockItems->qty = $par_qty[$key];
+                $stockItems->cost_price = $poitemOb->cost_price;
+                $stockItems->tax_per = $poitemOb->tax_percentage;
+                $stock->stockItems()->save($stockItems);
+            }
         }
 
         if (!($stock)) {
