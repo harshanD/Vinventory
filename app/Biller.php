@@ -10,4 +10,5 @@ class Biller extends Model
 {
     use SoftDeletes;
     use Userstamps;
+    protected $table = 'biller';
 }

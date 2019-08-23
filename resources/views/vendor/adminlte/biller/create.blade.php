@@ -21,7 +21,7 @@
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">Products Create</h3>
+                <h3 class="box-title">Biller Create</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -35,7 +35,7 @@
 
             <div class="box-body">
                 <div class="row">
-                    <form role="form" action="{{url('customer/create')}}" method="post" enctype="multipart/form-data">
+                    <form role="form" action="{{url('biller/create')}}" method="post" enctype="multipart/form-data">
                         <div class="col-md-6">
                             @if(session()->has('message'))
                                 <div class="alert alert-success alert-dismissible" role="alert">
@@ -103,6 +103,15 @@
                                            placeholder="Enter cost"
                                            autocomplete="off"/>
                                     @error('address')
+                                    <p class="help-block">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="price">Invoice Footer</label>
+                                    <textarea class="form-control" id="invoFooter"
+                                              name="invoFooter">{{ old('invoFooter') }}</textarea>
+
+                                    @error('invoFooter')
                                     <p class="help-block">{{ $message }}</p>
                                     @enderror
                                 </div>
