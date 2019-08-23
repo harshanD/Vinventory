@@ -4,11 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Wildside\Userstamps\Userstamps;
 
 class Products extends Model
 {
     //
     use SoftDeletes;
+    use Userstamps;
 
     public function supplier()
     {

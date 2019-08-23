@@ -14,6 +14,7 @@ class PoDetails extends Model
     protected $fillable = array('cost_price', 'qty', 'tax_val', 'received_qty',
         'discount', 'sub_total', 'tax_percentage', 'updated_at', 'created_at', 'item_id', 'po_header');
 
+
     function poHeader()
     {
         return $this->hasOne(poDetails::class, 'po_header');

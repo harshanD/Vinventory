@@ -103,15 +103,16 @@ Route::post('/tax/create', 'TaxController@create');
 /*transfers*/
 Route::get('transfer/add', 'TransfersController@index');
 Route::post('transfer/create', 'TransfersController@create');
-Route::get('transfer/manage', 'TransfersController@transList');
+Route::get('transfer/manage', ['as' => 'transfers.manage', 'uses' => 'TransfersController@transList']);
 Route::get('transfer/fetchTransData', 'TransfersController@fetchTransData');
 Route::get('transfer/edit/{id}', 'TransfersController@editView');
 Route::post('transfer/edit/{id}', 'TransfersController@editTransferData');
+Route::get('transfer/delete/{id}', 'TransfersController@delete');
+Route::get('transfer/view/{id}', 'TransfersController@view');
 
 /*stocks*/
 Route::get('/stock/fetchProductsListWarehouseWise/{id}', 'StockController@fetchProductsListWarehouseWise');
 Route::post('/stock/fetchProductsOneWarehouseWiseItem', 'StockController@fetchProductsOneWarehouseWiseItem');
-
 
 
 Route::group(['middleware' => 'auth'], function () {
