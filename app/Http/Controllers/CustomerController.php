@@ -29,14 +29,23 @@ class CustomerController extends Controller
         $customer->email = $request->input('email');
         $customer->phone = $request->input('phone');
         $customer->address = $request->input('address');
-        $customer->save();
+
+        if (!($customer->save())) {
+            $request->session()->flash('message', 'Error in the database while creating the Customer');
+            $request->session()->flash('message-type', 'error');
+        } else {
+            $request->session()->flash('message', 'Successfully Created !');
+            $request->session()->flash('message-type', 'success');
+        }
+        return redirect()->route('customer.manage');
     }
 
     public function update(Request $request, $id)
     {
+
         $request->validate([
             'company' => 'required|max:100|regex:/(^[A-Za-z0-9 ]+$)+/',
-            'name' => 'required|max:100|unique,customer,name,' . $id . '|regex:/(^[A-Za-z0-9 ]+$)+/',
+            'name' => 'required|max:100|unique:customer,name,' . $id . '|regex:/(^[A-Za-z0-9 ]+$)+/',
             'email' => 'required|email|max:191|',
             'phone' => 'required|between:10,12',
             'address' => 'required|max:191|',
@@ -50,7 +59,16 @@ class CustomerController extends Controller
         $customer->email = $request->input('email');
         $customer->phone = $request->input('phone');
         $customer->address = $request->input('address');
-        $customer->save();
+
+
+        if (!($customer->save())) {
+            $request->session()->flash('message', 'Error in the database while updating the Customer');
+            $request->session()->flash('message-type', 'error');
+        } else {
+            $request->session()->flash('message', 'Successfully Updated !');
+            $request->session()->flash('message-type', 'success');
+        }
+        return redirect()->route('customer.manage');
     }
 
     public function fetchTransData()
@@ -118,4 +136,12 @@ class CustomerController extends Controller
     {
         return view('vendor.adminlte.customer.index');
     }
+
+    public function editView($id)
+    {
+        $cus = Customer::find($id)->get()->first();
+
+        return view('vendor.adminlte.customer.edit', ['customer' => $cus]);
+    }
+
 }
