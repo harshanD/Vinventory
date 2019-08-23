@@ -109,6 +109,7 @@ Route::get('transfer/edit/{id}', 'TransfersController@editView');
 Route::post('transfer/edit/{id}', 'TransfersController@editTransferData');
 Route::get('transfer/delete/{id}', 'TransfersController@delete');
 Route::get('transfer/view/{id}', 'TransfersController@view');
+Route::get('transfer/print/{id}', 'TransfersController@print');
 
 /*stocks*/
 Route::get('/stock/fetchProductsListWarehouseWise/{id}', 'StockController@fetchProductsListWarehouseWise');

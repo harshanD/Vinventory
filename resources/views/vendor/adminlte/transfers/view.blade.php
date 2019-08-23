@@ -116,53 +116,32 @@
                             </table>
                         </div>
                         <div class="row">
-                            <div class="col-xs-12">
+                            <div class="col-xs-4 col-xs-offset-1 align-self-end" style="float: right">
+                                <div class="well well-sm">
+                                    <p>Created by : {{$transfers->creator->name}} </p>
+                                    <p>Date: {{date('Y-m-d H:i:s')}}</p>
+                                </div>
                             </div>
-                            <div class="col-xs-4 pull-left">
-                                <p>Created by: {{$transfers->creator->name}} </p>
-                                <p>&nbsp;</p>
-                                <p>&nbsp;</p>
-                                <hr>
-                                <p>Stamp &amp; Signature</p>
-                            </div>
-                            <div class="col-xs-4 col-xs-offset-1 pull-right">
-                                <p>Received by: </p>
-                                <p>&nbsp;</p>
-                                <p>&nbsp;</p>
-                                <hr>
-                                <p>Stamp &amp; Signature</p>
-                            </div>
+
                         </div>
-                        <div class="buttons">
-                            <div class="btn-group btn-group-justified">
-                                <div class="btn-group">
-                                    <a href="https://sma.tecdiary.com/admin/transfers/email/1" data-toggle="modal"
-                                       data-target="#myModal2" class="tip btn btn-primary" title=""
-                                       data-original-title="Email">
-                                        <i class="fa fa-envelope-o"></i>
-                                        <span class="hidden-sm hidden-xs">Email</span>
+                        <!-- this row will not appear when printing -->
+                        <div class="row no-print">
+                            <div class="col-xs-12">
+                                {{--                        <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i>--}}
+                                {{--                            Print</a>--}}
+                                <div style="float: right">
+                                    <a class="btn btn-success" href='{{url('transfer/print/'.$transfers->id)}}'>
+                                        <i class="fa fa-file-pdf-o"></i><span class="hidden-sm hidden-xs"> PDF</span>
                                     </a>
-                                </div>
-                                <div class="btn-group">
-                                    <a href="https://sma.tecdiary.com/admin/transfers/pdf/1" class="tip btn btn-primary"
-                                       title="" data-original-title="Download as PDF">
-                                        <i class="fa fa-download"></i>
-                                        <span class="hidden-sm hidden-xs">PDF</span>
+                                    <a class="btn btn-warning" href='{{url('transfer/edit/'.$transfers->id)}}'>
+                                        <i class="glyphicon glyphicon-edit"></i><span
+                                                class="hidden-sm hidden-xs"> Edit</span>
                                     </a>
-                                </div>
-                                <div class="btn-group">
-                                    <a href="https://sma.tecdiary.com/admin/transfers/edit/1"
-                                       class="tip btn btn-warning sledit" title="" data-original-title="Edit">
-                                        <i class="fa fa-edit"></i>
-                                        <span class="hidden-sm hidden-xs">Edit</span>
-                                    </a>
-                                </div>
-                                <div class="btn-group">
-                                    <a href="#" class="tip btn btn-danger bpo" title=""
-                                       data-content="<div style='width:150px;'><p>Are you sure?</p><a class='btn btn-danger' href='https://sma.tecdiary.com/admin/transfers/delete/1'>Yes I'm sure</a> <button class='btn bpo-close'>No</button></div>"
-                                       data-html="true" data-placement="top" data-original-title="<b>Delete</b>">
-                                        <i class="fa fa-trash-o"></i>
-                                        <span class="hidden-sm hidden-xs">Delete</span>
+                                    <a class="btn btn-danger" title="" data-toggle="popover"
+                                       data-content="<div style='width:150px;'><p>Are you sure?</p><a class='btn btn-danger' href='{{url('transfer/delete/'.$transfers->id)}}'>Yes I'm sure</a> <button class='btn bpo-close'>No</button></div>"
+                                       data-html="true" data-placement="top"
+                                       data-original-title="<b>Delete Purchase</b>">
+                                        <i class="fa fa-trash-o"></i> <span class="hidden-sm hidden-xs">Delete</span>
                                     </a>
                                 </div>
                             </div>
