@@ -115,6 +115,12 @@ Route::get('transfer/print/{id}', 'TransfersController@print');
 Route::get('/stock/fetchProductsListWarehouseWise/{id}', 'StockController@fetchProductsListWarehouseWise');
 Route::post('/stock/fetchProductsOneWarehouseWiseItem', 'StockController@fetchProductsOneWarehouseWiseItem');
 
+/*customers*/
+Route::get('customer/add', 'CustomerController@index');
+Route::post('customer/create', 'CustomerController@create');
+Route::get('/customer/manage', ['as' => 'customer.manage', 'uses' => 'CustomerController@cusList']);
+Route::get('/customer/fetchTransData', 'CustomerController@fetchTransData');
+
 
 Route::group(['middleware' => 'auth'], function () {
     //    Route::get('/link1', function ()    {

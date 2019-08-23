@@ -10,4 +10,5 @@ class Customer extends Model
 {
     use SoftDeletes;
     use Userstamps;
+    protected $table = 'customer';
 }
