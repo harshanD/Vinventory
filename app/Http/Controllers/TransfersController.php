@@ -158,7 +158,7 @@ class TransfersController extends Controller
                   </button>
                   <ul class=\"dropdown-menu\" role=\"menu\">
                     <li><a href=\"/transfer/edit/" . $value->id . "\">Edit Purchase</a></li>
-                    <li><a href=\"/transfer/view/" . $value->id . "\">Purchase details view</a></li>
+                    <li><a href=\"/transfer/view/" . $value->id . "\">Transfer details</a></li>
                     <li><a onclick=\"deletePo(" . $value->id . ")\">Delete</a></li>
                     <li class=\"divider\"></li>
                     <li><a href=\"#\">Separated link</a></li>
@@ -188,9 +188,9 @@ class TransfersController extends Controller
                 $value->tr_reference_code,
                 (Locations::find($value->from_location)->toArray())['name'],
                 (Locations::find($value->to_location)->toArray())['name'],
-                ($value->grand_total - $value->tot_tax),
-                ($value->tot_tax),
-                ($value->grand_total),
+                number_format(($value->grand_total - $value->tot_tax), 2),
+                number_format(($value->tot_tax), 2),
+                number_format(($value->grand_total), 2),
                 $status,
                 $buttons
             );
@@ -464,12 +464,10 @@ class TransfersController extends Controller
     public function view($id)
     {
 
-        $podata = Transfers::find($id);
+        $trdata = Transfers::find($id);
+        $stock = Stock::where('receive_code', '=',$trdata->tr_reference_code . '-A')->firstOrFail();
 
-        $locations = $podata->locations;
-        $supplier = $podata->suppliers;
-
-        return view('vendor.adminlte.transfers.view', ['locations' => $locations, 'suppliers' => $supplier, 'transfers' => $podata]);
+        return view('vendor.adminlte.transfers.view', ['transfers' => $trdata, 'stock' => $stock]);
     }
 
     public function delete(Request $request, $id)
