@@ -15,13 +15,30 @@
 @stop
 
 @section('content')
+    <style>
+        select[readonly].select2 + .select2-container {
+            pointer-events: none;
+            touch-action: none;
+
+        .select2-selection {
+            background: #eee;
+            box-shadow: none;
+        }
+
+        .select2-selection__arrow,
+        .select2-selection__clear {
+            display: none;
+        }
+
+        }
+    </style>
     <!-- Main content -->
     <section class="content">
 
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">Purchase order Create</h3>
+                <h3 class="box-title">Add Sale</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -32,7 +49,8 @@
                         <i class="fa fa-times"></i></button>
                 </div>
             </div>
-            <form role="form" id="pocreate" enctype="multipart/form-data" action="{{url('po/create')}}" method="post">
+            <form role="form" id="pocreate" enctype="multipart/form-data" action="{{url('sales/create')}}"
+                  method="post">
                 <div class="box-body">
                     @if(session()->has('message'))
                         <div class="alert alert-success alert-dismissible" role="alert">
@@ -73,29 +91,54 @@
                             <!-- /.col -->
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Status *</label>
+                                    <label>Reference No</label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
-                                            <i class="fa fa-hourglass-end"></i>
+                                            <i class="fa  fa-barcode"></i>
                                         </div>
-                                        <select class="form-control select2" name="status" id="status">
-                                            <option value="0">Select Status</option>
-                                            <option value="1">Received</option>
-                                            <option value="2">Ordered</option>
-                                            <option value="3">Pending</option>
+                                        <input type="text" class="form-control" name="referenceNo" id="referenceNo"
+                                               value="{{$lastRefCode}}">
+                                    </div>
+                                    <!-- /.input group -->
+                                    <p class="help-block" id="referenceNo_error"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>biller *</label>
 
-
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-location-arrow"></i>
+                                        </div>
+                                        <select class="form-control select2" name="biller" id="biller">
+                                            <option value="0">Select Biller</option>
+                                            @foreach($billers as $biller)
+                                                <option value="{{$biller->id}}">{{$biller->name}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <!-- /.input group -->
-                                    <p class="help-block" id="status_error"></p>
+                                    <p class="help-block" id="biller_error"></p>
                                 </div>
                             </div>
+
                             <!-- /.col -->
+
+
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                        <div class="box box-info">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Please select these before adding any product</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <!-- form start -->
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Location *</label>
+                                    <label>Warehouse *</label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
@@ -112,30 +155,8 @@
                                     <p class="help-block" id="location_error"></p>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Reference No</label>
 
-                                    <div class="input-group date">
-                                        <div class="input-group-addon">
-                                            <i class="fa  fa-barcode"></i>
-                                        </div>
-                                        <input type="text" class="form-control" name="referenceNo" id="referenceNo"
-                                               value="{{$lastRefCode}}">
-                                    </div>
-                                    <!-- /.input group -->
-                                    <p class="help-block" id="referenceNo_error"></p>
-                                </div>
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                        <!-- /.row -->
-                        <div class="box box-info">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Please select these before adding any product</h3>
-                            </div>
-                            <!-- /.box-header -->
-                            <!-- form start -->
+
                             <form class="form-horizontal">
 
                                 <label>Supplier *</label>
@@ -144,16 +165,16 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-secret"></i>
                                     </div>
-                                    <select class="form-control col-xs-4 select2" name="supplier" id="supplier">
-                                        <option value="0">Select Supplier</option>
-                                        @foreach($suppliers as $supplier)
-                                            <option value="{{$supplier->id}}">{{$supplier->name}}</option>
+                                    <select class="form-control col-xs-4 select2" name="customer" id="customer">
+                                        <option value="0">Select Customer</option>
+                                        @foreach($customers as $customer)
+                                            <option value="{{$customer->id}}">{{$customer->name}}</option>
                                         @endforeach
 
                                     </select>
 
                                 </div>
-                                <p class="help-block" id="supplier_error"></p>
+                                <p class="help-block" id="customer_error"></p>
                                 <!-- /.box-body -->
 
                             </form>
@@ -180,7 +201,8 @@
                             <thead>
                             <tr>
                                 <th>Product (Code - Name)</th>
-                                <th>Net Unit Cost</th>
+                                <th hidden>Serial No</th>
+                                <th>Net Unit Price</th>
                                 <th>Quantity</th>
                                 <th>Discount</th>
                                 <th>Product Tax</th>
@@ -196,16 +218,16 @@
                     </div>
                     <p class="help-block" id="items_error"></p>
                     {{--                    <p class="help-block" id="grand_tax_id"></p>--}}
-                    <div class="box-body">
-                        <div class="checkbox">
-                            <label data-toggle="collapse" data-target="#collapseOptions" class="collapsed"
-                                   aria-expanded="false">
-                                <input type="checkbox" checked class="flat-red"/>More Options
-                            </label>
-                        </div>
+                    {{--                    <div class="box-body">--}}
+                    {{--                        <div class="checkbox">--}}
+                    {{--                            <label data-toggle="collapse" data-target="#collapseOptions" class="collapsed"--}}
+                    {{--                                   aria-expanded="false">--}}
+                    {{--                                <input type="checkbox" checked class="flat-red"/>More Options--}}
+                    {{--                            </label>--}}
+                    {{--                        </div>--}}
 
-                        <!-- /.box -->
-                    </div>
+                    {{--                        <!-- /.box -->--}}
+                    {{--                    </div>--}}
                     <div class="box-body">
                         <div id="collapseOptions" class="collapse">
                             <div class="row">
@@ -233,7 +255,7 @@
                                 <!-- /.col -->
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Discount (5/5%)</label>
+                                        <label>Order Discount (5/5%)</label>
 
                                         <div class="input-group">
                                             <div class="input-group-addon">
@@ -246,16 +268,70 @@
                                         {{--                                        <p class="help-block" id="datepicker_error"></p>--}}
                                     </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Sale Status *</label>
+
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-hourglass-end"></i>
+                                            </div>
+                                            <select class="form-control select2" name="saleStatus" id="saleStatus">
+                                                <option value="0">Select Status</option>
+                                                <option value="1">Completed</option>
+                                                <option value="2">pending</option>
+                                            </select>
+                                        </div>
+                                        <!-- /.input group -->
+                                        <p class="help-block" id="saleStatus_error"></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>payment Status *</label>
+
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-hourglass-end"></i>
+                                            </div>
+                                            <select class="form-control select2" name="paymetStatus" id="paymetStatus">
+                                                <option value="0">Select Status</option>
+                                                <option value="1">Pending</option>
+                                                <option value="2">Due</option>
+                                                <option value="3">Partial</option>
+                                                <option value="4">Paid</option>
+                                            </select>
+                                        </div>
+                                        <!-- /.input group -->
+                                        <p class="help-block" id="paymetStatus_error"></p>
+                                    </div>
+                                </div>
                                 <!-- /.col -->
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Note</label>
+                                        <label>Sale Note</label>
 
                                         <div class="input-group">
                                             <div class="input-group-addon">
                                                 <i class="fa fa-sticky-note"></i>
                                             </div>
-                                            <textarea type="text" class="form-control" id="note" name="note"
+                                            <textarea type="text" class="form-control" id="saleNote" name="saleNote"
+                                                      placeholder="Sale Note"
+                                                      autocomplete="off"></textarea>
+                                        </div>
+                                        <!-- /.input group -->
+                                        {{--                                        <p class="help-block" id="datepicker_error"></p>--}}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Staff Note</label>
+
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-sticky-note"></i>
+                                            </div>
+                                            <textarea type="text" class="form-control" id="staffNote" name="staffNote"
                                                       placeholder="Note"
                                                       autocomplete="off"></textarea>
                                         </div>
@@ -263,6 +339,8 @@
                                         {{--                                        <p class="help-block" id="datepicker_error"></p>--}}
                                     </div>
                                 </div>
+
+
                                 <!-- /.col -->
                             </div>
                         </div>
@@ -430,14 +508,14 @@
                 $("#product").val('')
             });
 
-            $("#supplier").change(function () {
-                acurl = $('#supplier').val();
+            $("#location").change(function () {
+                acurl = $('#location').val();
 
 
                 var options = {
 
 
-                    url: "/products/fetchProductsList/" + acurl,
+                    url: "/stock/fetchProductsListWarehouseWise/" + acurl,
 
                     getValue: "name",
 
@@ -492,7 +570,7 @@
                         // window.location = data;
                         console.log(response)
                         if (response.success) {
-                            window.location.href = '/po/add';
+                            window.location.href = '/sales/add';
                         }
 
 
@@ -512,10 +590,18 @@
                         if (typeof request.responseJSON.errors.referenceNo !== 'undefined') {
                             $('#referenceNo_error').html(request.responseJSON.errors.referenceNo[0]);
                         }
-                        if (typeof request.responseJSON.errors.supplier !== 'undefined') {
-                            $('#supplier_error').html(request.responseJSON.errors.supplier[0]);
+                        if (typeof request.responseJSON.errors.biller !== 'undefined') {
+                            $('#biller_error').html(request.responseJSON.errors.biller[0]);
                         }
-
+                        if (typeof request.responseJSON.errors.customer !== 'undefined') {
+                            $('#customer_error').html(request.responseJSON.errors.customer[0]);
+                        }
+                        if (typeof request.responseJSON.errors.saleStatus !== 'undefined') {
+                            $('#saleStatus_error').html(request.responseJSON.errors.saleStatus[0]);
+                        }
+                        if (typeof request.responseJSON.errors.paymetStatus !== 'undefined') {
+                            $('#paymetStatus_error').html(request.responseJSON.errors.paymetStatus[0]);
+                        }
 
                     }
 
@@ -541,11 +627,12 @@
                 localStorage.setItem('item', JSON.stringify(index.id));
                 itemCount++;
 
-                var taxval = (toNumber(toNumber(index.cost_price * toNumber(index.tax)) / (100 + toNumber(index.tax)))).format(2);
-                var cost = (index.cost_price - taxval).format(2);
+                var taxval = (toNumber(toNumber(index.selling_price * toNumber(index.tax)) / (100 + toNumber(index.tax)))).format(2);
+                var cost = (index.selling_price - taxval).format(2);
 
                 var row = '<tr id="row_' + index.id + '" style="text-align: right">' +
                     "<td style=\"text-align: left\">" + index.name + "( " + index.item_code + " )" + "  <i  class=\"fa fa-edit\" onclick='itemDetails(" + index.id + ")' style='float: right;cursor: pointer'></i></td>" +
+                    "<td hidden style=\"text-align: center\"><input type='text'   style=\"text-align: center\"   name='serial[]' id='serial_" + index.id + "' value=''></td>" +
                     "<td id='costPrice_" + index.id + "'>" + cost + "</td>" +
                     "<td style=\"text-align: center\"><input type='text'   style=\"text-align: center\" class='qy' onkeyup='qtyChanging(" + index.id + ")' id='quantity_" + index.id + "' value='" + 1 + "'></td>" +
                     "<td class='disco' id='discount_" + index.id + "'>" + index.discount + "</td>" +
@@ -553,12 +640,13 @@
 
                     "<input type='hidden' name='discount[]' id='discount_h" + index.id + "' value='0'>" +
                     "<input type='hidden' name='quantity[]' id='quantity_h" + index.id + "' value='" + 0 + "'>" +
-                    "<input type='hidden' name='costPrice[]' id='costPrice_h" + index.id + "' value='" + index.cost_price + "'>" +
+                    "<input type='hidden' name='costPrice[]' id='costPrice_h" + index.id + "' value='" + index.selling_price + "'>" +
                     "<input type='hidden' name='item[]' id='item_h" + index.id + "' value='" + index.id + "''>" +
                     "<input type='hidden' name='unit[]' id='unit_h" + index.id + "' value='1'>" +
                     "<input type='hidden'  name='p_tax[]' id='p_tax_h" + index.id + "'  value='" + taxval + "'>" +
                     "<input type='hidden'  name='subtot[]' id='subtot_h" + index.id + "'>" +
                     "<input type='hidden'   name='tax_id[]' id='tax_id_h" + index.id + "' value='" + index.tax + "'>" +
+                    "<input type='hidden'   name='availableStock_id[]' id='availableStock_h" + index.id + "' value='" + index.sum + "'>" +
 
                     "</td>" +
                     "<td class='tax'  id='tax_" + index.id + "'>" + taxval + "</td>" +
@@ -573,13 +661,25 @@
         }
 
         function qtyChanging(id) {
-
+            itemsQtyVali(id)
             $('#tax_' + id).text((toNumber($('#p_tax_h' + id).val()) * $('#quantity_' + id).val()).format(2));
             var subTot = ((toNumber($('#costPrice_' + id).text()) * toNumber($('#quantity_' + id).val())) + toNumber(($('#tax_' + id).text())));
             $('#quantity_h' + id).val(toNumber($('#quantity_' + id).val()));
             $('#subtot_' + id).text(((!isNaN(subTot)) ? subTot : 0).format(2));
             $('#subtot_h' + id).val(toNumber((!isNaN(subTot)) ? subTot.format(2) : 0));
             lastRowDesign();
+        }
+
+        function itemsQtyVali(id) {
+            if (toNumber($('#quantity_' + id).val()) > toNumber($('#availableStock_h' + id).val()) || !$.isNumeric($('#quantity_' + id).val())) {
+                $('#quantity_' + id).css('background', 'red')
+                $('#quantity_' + id).val('')
+                setTimeout(function () {
+                    $('#quantity_' + id).css('background', 'white')
+                    $('#quantity_' + id).val('0').focus
+                }, 500);
+                return false;
+            }
         }
 
         function lastRowDesign() {

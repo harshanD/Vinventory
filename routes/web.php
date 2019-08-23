@@ -118,8 +118,32 @@ Route::post('/stock/fetchProductsOneWarehouseWiseItem', 'StockController@fetchPr
 /*customers*/
 Route::get('customer/add', 'CustomerController@index');
 Route::post('customer/create', 'CustomerController@create');
-Route::get('/customer/manage', ['as' => 'customer.manage', 'uses' => 'CustomerController@cusList']);
-Route::get('/customer/fetchTransData', 'CustomerController@fetchTransData');
+Route::get('customer/manage', ['as' => 'customer.manage', 'uses' => 'CustomerController@cusList']);
+Route::get('customer/fetchTransData', 'CustomerController@fetchTransData');
+Route::get('customer/edit/{id}', 'CustomerController@editView');
+Route::post('customer/edit/{id}', 'CustomerController@update');
+
+/*Biller*/
+Route::get('biller/add', 'BillerController@index');
+Route::post('biller/create', 'BillerController@create');
+Route::get('biller/manage', ['as' => 'biller.manage', 'uses' => 'BillerController@billerList']);
+Route::get('biller/fetchTransData', 'BillerController@fetchTransData');
+Route::get('biller/edit/{id}', 'BillerController@editView');
+Route::post('biller/edit/{id}', 'BillerController@update');
+
+/* Sales */
+Route::get('/sales/add', ['as' => 'sales.add', 'uses' => 'InvoiceController@index']);
+Route::get('sales/edit/{id}', 'InvoiceController@editView');
+Route::post('sales/create', 'InvoiceController@create');
+Route::get('sales/manage', ['as' => 'sales.manage', 'uses' => 'InvoiceController@poList']);
+Route::get('sales/fetchPOData', 'InvoiceController@fetchPOData');
+Route::post('sales/edit/{id}', 'InvoiceController@editPOData');
+Route::post('sales/receiveAll', 'InvoiceController@receiveAll');
+Route::post('sales/partiallyReceive', 'InvoiceController@partiallyReceive');
+Route::post('sales/fetchPOItemsDataById', 'InvoiceController@fetchPOItemsDataById');
+Route::get('sales/view/{id}', 'InvoiceController@view');
+Route::get('sales/delete/{id}', 'InvoiceController@delete');
+Route::get('sales/printpo/{id}', 'InvoiceController@printPO');
 
 
 Route::group(['middleware' => 'auth'], function () {

@@ -11,4 +11,10 @@ class Invoice extends Model
     //
     use SoftDeletes;
     use Userstamps;
+    protected $table = 'invoice';
+
+    function invoiceItems()
+    {
+        return $this->hasMany(InvoiceDetails::class, 'invoice_id', 'id');
+    }
 }

@@ -16,12 +16,16 @@ class CreateInvoiceDetailsTable extends Migration
         Schema::create('invoice_details', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('invoice_id')->unsigned();
-            $table->foreign ('invoice_id')->references('id')->on('invoice')->onDelete('cascade');
+            $table->foreign('invoice_id')->references('id')->on('invoice')->onDelete('cascade');
+            $table->string('serial_number');
             $table->integer('item_id')->unsigned();
-            $table->foreign ('item_id')->references('id')->on('products')->onDelete('cascade');
-            $table->double('qty');
+            $table->foreign('item_id')->references('id')->on('products')->onDelete('cascade');
+            $table->double('qty')->nullable();
             $table->double('cost_price');
-            $table->double('selling_price');
+            $table->double('tax_val')->nullable();
+            $table->double('tax_per')->nullable();
+            $table->double('discount')->nullable();
+            $table->double('sub_total');
             $table->timestamps();
         });
     }
