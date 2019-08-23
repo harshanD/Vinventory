@@ -101,7 +101,7 @@
                                  <?php echo DNS1D::getBarcodeSVG($po->referenceCode, "C39", 1, 50); ?>
                             </span>
                             <span style="float: right">
-                                     {!!  DNS2D::getBarcodeHTML(url  ()->current(), "QRCODE",2,2) !!}
+                                     {!!  DNS2D::getBarcodeHTML(url()->current(), "QRCODE",2,2) !!}
                             </span>
 
 
