@@ -21,7 +21,7 @@
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">Customer Create</h3>
+                <h3 class="box-title">Biller Edit</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -35,8 +35,10 @@
 
             <div class="box-body">
                 <div class="row">
-                    <form role="form" action="{{url('customer/create')}}" method="post" enctype="multipart/form-data">
+                    <form role="form" action="{{url('biller/edit/'.$biller->id)}}" method="post"
+                          enctype="multipart/form-data">
                         <div class="col-md-6">
+                            {{csrf_field()}}
                             @if(session()->has('message'))
                                 <div class="alert alert-success alert-dismissible" role="alert">
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
@@ -53,11 +55,14 @@
                                     </strong> {{ session()->get('error') }}
                                 </div>
                             @endif
+
                             <div class="box-body">
-                                {{csrf_field()}}
+
                                 <div class="form-group">
                                     <label for="product_name">Company *</label>
-                                    <input type="text" value="{{ old('company') }}" class="form-control"
+                                    <input type="text"
+                                           value="{{ (old('company')===null)?$biller->company:old('company')  }}"
+                                           class="form-control"
                                            id="company" name="company"
                                            placeholder="Enter product name" autocomplete="off"/>
                                     @error('company')
@@ -66,7 +71,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="product_name">Name *</label>
-                                    <input type="text" value="{{ old('name') }}" class="form-control"
+                                    <input type="text" value="{{ (old('name')===null)?$biller->name:old('name') }}"
+                                           class="form-control"
                                            id="name" name="name"
                                            placeholder="Enter product code" autocomplete="off"/>
                                     @error('name')
@@ -77,7 +83,8 @@
 
                                 <div class="form-group">
                                     <label for="product_name">Email Address *</label>
-                                    <input type="text" value="{{ old('email') }}" class="form-control"
+                                    <input type="text" value="{{ (old('email')===null)?$biller->email:old('email') }}"
+                                           class="form-control"
                                            id="email" name="email"
                                            placeholder="Enter secondary name" autocomplete="off"/>
                                     @error('email')
@@ -87,7 +94,8 @@
 
                                 <div class="form-group">
                                     <label for="product_name">Phone *</label>
-                                    <input type="text" value="{{ old('phone') }}" class="form-control" id="phone"
+                                    <input type="text" value="{{ (old('phone')===null)?$biller->phone:old('phone') }}"
+                                           class="form-control" id="phone"
                                            name="phone"
                                            placeholder="Enter Phone Number" autocomplete="off"/>
                                     @error('phone')
@@ -98,11 +106,21 @@
 
                                 <div class="form-group">
                                     <label for="price">Address *</label>
-                                    <input type="text" value="{{ old('address') }}" class="form-control" id="address"
+                                    <input type="text"
+                                           value="{{  (old('address')===null)?$biller->address:old('address') }}"
+                                           class="form-control" id="address"
                                            name="address"
                                            placeholder="Enter cost"
                                            autocomplete="off"/>
                                     @error('address')
+                                    <p class="help-block">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="price">Invoice Footer</label>
+                                    <textarea class="form-control" id="invoFooter"
+                                              name="invoFooter">{{  (old('invoFooter')===null)?$biller->invoice_footer:old('invoFooter') }}</textarea>
+                                    @error('invoFooter')
                                     <p class="help-block">{{ $message }}</p>
                                     @enderror
                                 </div>
@@ -130,11 +148,4 @@
         <!-- /.box -->
 
     </section>
-    <script>
-        $(function () {
-            //Initialize Select2 Elements
-            $('.select2').select2()
-        })
-    </script>
-
 @endsection
