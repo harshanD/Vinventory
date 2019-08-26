@@ -700,14 +700,20 @@
                         } else {
                             $('#availableStock_h' + id).val(0)
                         }
-
+                        qtyChangeDirect(id)
                     },
                     error: function (jqXhr, textStatus, errorMessage) {
                         $('p').append('Error' + errorMessage);
                     }
                 });
 
+            } else {
+                qtyChangeDirect(id)
             }
+
+        }
+
+        function qtyChangeDirect(id) {
             // alert($('#p_tax_h' + id).val() + '=' + ($('#tax_' + id).text() + '=' + $('#costPrice_' + id).text() + '=' + $('#availableStock_h' + id).val() + '=' + $('#quantity_' + id).val()));
             itemsQtyVali(id)
             $('#tax_' + id).text((toNumber($('#p_tax_h' + id).val()) * $('#quantity_' + id).val()).format(2));
