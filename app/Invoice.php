@@ -17,4 +17,19 @@ class Invoice extends Model
     {
         return $this->hasMany(InvoiceDetails::class, 'invoice_id', 'id');
     }
+
+    function location()
+    {
+        return $this->hasOne(Locations::class, 'id', 'location');
+    }
+
+    function billers()
+    {
+        return $this->hasOne(Biller::class, 'id', 'biller');
+    }
+
+    function customers()
+    {
+        return $this->hasOne(Customer::class, 'id', 'customer');
+    }
 }
