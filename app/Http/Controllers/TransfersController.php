@@ -123,9 +123,7 @@ class TransfersController extends Controller
 
         $trdata = Transfers::find($id);
         $stockData = Stock::with(['stockItems', 'stockItems.products'])->where('receive_code', $trdata->tr_reference_code . '-A')->get()->toArray();
-//   echo '<pre>';
-//        print_r($stockData[0]['stock_items']);
-//        echo '</pre>';
+
         return view('vendor.adminlte.transfers.edit', ['locations' => $locations, 'suppliers' => $supplier, 'tax' => $tax, 'transfers' => $trdata, 'transfer_items' => ($stockData[0]['stock_items'])]);
     }
 
@@ -159,9 +157,9 @@ class TransfersController extends Controller
                   <ul class=\"dropdown-menu\" role=\"menu\">
                     <li><a href=\"/transfer/edit/" . $value->id . "\">Edit Purchase</a></li>
                     <li><a href=\"/transfer/view/" . $value->id . "\">Transfer details</a></li>
-                    <li><a onclick=\"deletePo(" . $value->id . ")\">Delete</a></li>
+                     <li><a href=\"/transfer/print/" . $value->id . "\">Download as PDF</a></li>
                     <li class=\"divider\"></li>
-                    <li><a href=\"#\">Separated link</a></li>
+                     <li><a onclick=\"deletePo(" . $value->id . ")\">Delete Transfer</a></li>
                   </ul>
                 </div>";
 
@@ -199,47 +197,6 @@ class TransfersController extends Controller
         echo json_encode($result);
     }
 
-    public function fetchPODataById($id)
-    {
-        $data = (Object)Transfers::find($id)->toArray();
-
-        echo json_encode(array('name' => $data->name, 'code' => $data->code, 'value' => $data->value,
-            'type' => $data->type, 'status' => $data->status));
-
-    }
-
-    public function fetchPOItemsDataById(Request $request)
-    {
-
-        $data = Transfers::find($request->input('id'));
-
-        $items = array();
-        foreach ($data->poDetails as $key => $item) {
-            $items[$key] = array(
-                'name' => $item->product->name,
-                'id' => $item->id,
-                'item_id' => $item->item_id,
-                'cost_price' => $item->cost_price,
-                'qty' => $item->qty,
-                'received_qty' => $item->received_qty,
-                'tax_val' => $item->tax_val,
-                'tax_percentage' => $item->tax_percentage,
-                'discount' => $item->discount,
-                'sub_total' => $item->sub_total,
-            );
-        }
-
-        echo json_encode(array(
-            'supplier' => $data->supplier,
-            'location' => $data->location,
-            'referenceCode' => $data->referenceCode,
-            'discount' => $data->discount,
-            'grand_total' => $data->grand_total,
-            'items' => $items
-
-        ));
-
-    }
 
     public function editTransferData(Request $request, $id)
     {
@@ -465,7 +422,7 @@ class TransfersController extends Controller
     {
 
         $trdata = Transfers::find($id);
-        $stock = Stock::where('receive_code', '=',$trdata->tr_reference_code . '-A')->firstOrFail();
+        $stock = Stock::where('receive_code', '=', $trdata->tr_reference_code . '-A')->firstOrFail();
 
         return view('vendor.adminlte.transfers.view', ['transfers' => $trdata, 'stock' => $stock]);
     }
@@ -488,16 +445,12 @@ class TransfersController extends Controller
         }
     }
 
-    public function printPO($id)
+    public function print($id)
     {
-        $podata = Transfers::find($id);
-        $locations = $podata->locations;
-        $supplier = $podata->suppliers;
-//        return view('vendor.adminlte.transfers.printPo', ['locations' => $locations, 'suppliers' => $supplier, 'transfers' => $podata]);
+        $trdata = Transfers::find($id);
+        $stock = Stock::where('receive_code', '=', $trdata->tr_reference_code . '-A')->firstOrFail();
 
-
-//        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadView('vendor.adminlte.transfers.printPo', ['locations' => $locations, 'suppliers' => $supplier, 'transfers' => $podata]);
+        $pdf = PDF::loadView('vendor.adminlte.transfers.print', ['transfers' => $trdata, 'stock' => $stock]);
 //        $pdf->render();
 //        $pdf = PDF::loadView('vendor.adminlte.transfers.test');
 //        $pdf->save(storage_path().'printPo.pdf');
