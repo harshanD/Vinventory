@@ -55,10 +55,10 @@ class InvoiceController extends Controller
         $iv->location = $request->input('location');
         $iv->biller = $request->input('biller');
         $iv->customer = $request->input('customer');
-        $iv->tax_amount = self::numberFormatRemove(number_format($request->input('grand_tax'),2));
-        $iv->discount = self::numberFormatRemove(number_format($request->input('grand_discount'),2));
-        $iv->discount_val_or_per = ($request->input('wholeDiscount') == '') ? 0 : self::numberFormatRemove(number_format($request->input('wholeDiscount',2)));
-        $iv->invoice_grand_total = self::numberFormatRemove(number_format($request->input('grand_total'),2));
+        $iv->tax_amount = self::numberFormatRemove(number_format($request->input('grand_tax'), 2));
+        $iv->discount = self::numberFormatRemove(number_format($request->input('grand_discount'), 2));
+        $iv->discount_val_or_per = ($request->input('wholeDiscount') == '') ? 0 : self::numberFormatRemove(number_format($request->input('wholeDiscount', 2)));
+        $iv->invoice_grand_total = self::numberFormatRemove(number_format($request->input('grand_total'), 2));
         $iv->tax_per = $request->input('grand_tax_id');
         $iv->sales_status = $request->input('saleStatus');
         $iv->status = \Config::get('constants.status.Active');
@@ -93,19 +93,19 @@ class InvoiceController extends Controller
 
                 $invoItems->item_id = $item;
                 $invoItems->serial_number = '';
-                $invoItems->selling_price = self::numberFormatRemove(number_format($costPrice[$id],2));
+                $invoItems->selling_price = self::numberFormatRemove(number_format($costPrice[$id], 2));
                 $invoItems->qty = $quantity[$id];
                 $invoItems->tax_val = $p_tax[$id];
-                $invoItems->discount = self::numberFormatRemove(number_format($discount[$id],2));
+                $invoItems->discount = self::numberFormatRemove(number_format($discount[$id], 2));
                 $invoItems->tax_per = $tax_id[$id];
-                $invoItems->sub_total = self::numberFormatRemove(number_format($subtot[$id],2));
+                $invoItems->sub_total = self::numberFormatRemove(number_format($subtot[$id], 2));
 
                 $iv->invoiceItems()->save($invoItems);
 
                 // stick items reduce
                 $itemSubs = new StockItems();
                 $itemSubs->item_id = $item;
-                $itemSubs->cost_price = self::numberFormatRemove(number_format($costPrice[$id],2));
+                $itemSubs->cost_price = self::numberFormatRemove(number_format($costPrice[$id], 2));
                 $itemSubs->qty = $quantity[$id];
                 $itemSubs->tax_per = $tax_id[$id];
                 $itemSubs->method = 'S';
@@ -176,9 +176,9 @@ class InvoiceController extends Controller
                   <ul class=\"dropdown-menu\" role=\"menu\">
                     <li><a href=\"/sales/edit/" . $value->id . "\">Edit Sale</a></li>
                     <li><a href=\"/sales/view/" . $value->id . "\">Sale details view</a></li>
-                    <li><a onclick=\"deletePo(" . $value->id . ")\">Delete</a></li>
+                    <li><a href=\"/sales/delete/" . $value->id . "\">Sale details view</a></li>
                     <li class=\"divider\"></li>
-                    <li><a href=\"#\">Separated link</a></li>
+                     <li><a style='cursor: pointer' onclick=\"deleteSale(" . $value->id . ")\">Delete</a></li>
                   </ul>
                 </div><input type='hidden' id='recNo_" . $value->id . "' value='" . $code . "'>";
 
@@ -229,50 +229,10 @@ class InvoiceController extends Controller
         echo json_encode($result);
     }
 
-    public function fetchPODataById($id)
-    {
-        $data = (Object)Invoice::find($id)->toArray();
-
-        echo json_encode(array('name' => $data->name, 'code' => $data->code, 'value' => $data->value,
-            'type' => $data->type, 'status' => $data->status));
-
-    }
-
-    public function fetchPOItemsDataById(Request $request)
-    {
-
-        $data = Invoice::find($request->input('id'));
-
-        $items = array();
-        foreach ($data->poDetails as $key => $item) {
-            $items[$key] = array(
-                'name' => $item->product->name,
-                'id' => $item->id,
-                'item_id' => $item->item_id,
-                'selling_price' => $item->selling_price,
-                'qty' => $item->qty,
-                'received_qty' => $item->received_qty,
-                'tax_val' => $item->tax_val,
-                'tax_percentage' => $item->tax_percentage,
-                'discount' => $item->discount,
-                'sub_total' => $item->sub_total,
-            );
-        }
-
-        echo json_encode(array(
-            'supplier' => $data->supplier,
-            'location' => $data->location,
-            'referenceCode' => $data->referenceCode,
-            'discount' => $data->discount,
-            'grand_total' => $data->grand_total,
-            'items' => $items
-
-        ));
-
-    }
-
     public function editInvoData(Request $request, $id)
     {
+//        print_r($request->input());
+//        return '1111';
         $validator = Validator::make($request->all(), [
             'datepicker' => 'required|date',
             'saleStatus' => ['required', Rule::notIn(['0'])],
@@ -294,9 +254,9 @@ class InvoiceController extends Controller
         $iv->location = $request->input('location');
         $iv->biller = $request->input('biller');
         $iv->customer = $request->input('customer');
-        $iv->tax_amount = self::numberFormatRemove(number_format($request->input('grand_tax'),2));
-        $iv->discount = self::numberFormatRemove(number_format($request->input('grand_discount'),2));
-        $iv->discount_val_or_per = ($request->input('wholeDiscount') == '') ? 0 : self::numberFormatRemove(number_format($request->input('wholeDiscount'),2));
+        $iv->tax_amount = self::numberFormatRemove(number_format($request->input('grand_tax'), 2));
+        $iv->discount = self::numberFormatRemove(number_format($request->input('grand_discount'), 2));
+        $iv->discount_val_or_per = ($request->input('wholeDiscount') == '') ? 0 : self::numberFormatRemove(number_format($request->input('wholeDiscount'), 2));
         $iv->invoice_grand_total = $request->input('grand_total');
         $iv->tax_per = $request->input('grand_tax_id');
         $iv->sales_status = $request->input('saleStatus');
@@ -349,8 +309,8 @@ class InvoiceController extends Controller
                         'qty' => $quantity[$i],
                         'tax_val' => self::numberFormatRemove($p_tax[$i]),
                         'tax_per' => $tax_id[$i],
-                        'discount' => self::numberFormatRemove(number_format($discount[$i],2)),
-                        'sub_total' => self::numberFormatRemove(number_format($subtot[$i],2)),
+                        'discount' => self::numberFormatRemove(number_format($discount[$i], 2)),
+                        'sub_total' => self::numberFormatRemove(number_format($subtot[$i], 2)),
                     ]);
 
 //                echo  $stockSubstct->id.'--';
@@ -361,8 +321,8 @@ class InvoiceController extends Controller
                         'item_id' => $item
                     ],
                     [
-                        'qty' => self::numberFormatRemove(number_format($quantity[$i],2)),
-                        'cost_price' => self::numberFormatRemove(number_format($costPrice[$i],2)),
+                        'qty' => self::numberFormatRemove(number_format($quantity[$i], 2)),
+                        'cost_price' => self::numberFormatRemove(number_format($costPrice[$i], 2)),
                         'tax_per' => $tax_id[$i],
                         'method' => 'S',
                     ]
@@ -382,161 +342,38 @@ class InvoiceController extends Controller
         echo json_encode(array('success' => true));
     }
 
-    public function removePOData(Request $request)
-    {
-
-        $po = Invoice::find($request->input('id'));
-
-        if (!$po->delete()) {
-            $response['success'] = false;
-            $response['messages'] = 'Error in the database while removing the sales information';
-        } else {
-            $response['success'] = true;
-            $response['messages'] = 'Successfully Removed';
-        }
-        echo json_encode($response);
-    }
-
-    public function receiveAll(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'datepicker' => 'required|date',
-            'recNo' => 'required|unique:stock,receive_code|max:100',
-        ]);
-
-        $niceNames = array(
-            'recNo' => 'receive code',
-            'datepicker' => 'receive date',
-        );
-        $validator->setAttributeNames($niceNames);
-
-        $validator->validate();
-
-
-        $po = Invoice::find($request->input('poId'));
-        $po->status = 1;
-        $po->save();
-
-        $stock = new Stock();
-        $stock->po_reference_code = $po->referenceCode;
-        $stock->receive_code = $request->input('recNo');
-        $stock->location = $po->location;
-        $stock->receive_date = $request->input('datepicker');
-        $stock->remarks = $request->input('note');
-        $stock->save();
-
-        foreach ($po->poDetails as $poItem) {
-
-            $poitemOb = PoDetails::find($poItem->id);
-            $receQty = ($poItem->qty - $poitemOb->received_qty);
-            $poitemOb->received_qty = $receQty;
-            $poitemOb->save();
-
-//            products foe add as available stock qty
-            $products = Products::find($poitemOb->item_id);
-            $products->availability = $products->availability + $receQty;
-            $products->save();
-
-//            stock items for add reserving qty
-            $stockItems = new StockItems();
-            $stockItems->item_id = $poItem->id;
-            $stockItems->qty = $receQty;
-            $stockItems->selling_price = $poitemOb->selling_price;
-            $stockItems->tax_per = $poitemOb->tax_percentage;
-            $stock->stockItems()->save($stockItems);
-
-        }
-
-
-        if (!($stock)) {
-            $request->session()->flash('message', 'Error in the database while updating the Invoice');
-            $request->session()->flash('message-type', 'error');
-        } else {
-            $request->session()->flash('message', 'Successfully Received All' . "[ Ref NO:" . $stock->receive_code . " ]");
-            $request->session()->flash('message-type', 'success');
-        }
-        return redirect()->route('sales.manage');
-    }
-
-    public function partiallyReceive(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'datepicker' => 'required|date',
-            'recNo' => 'required|unique:stock,receive_code|max:100',
-        ]);
-
-        $niceNames = array(
-            'recNo' => 'receive code',
-            'datepicker' => 'receive date',
-        );
-        $validator->setAttributeNames($niceNames);
-
-        $validator->validate();
-
-        $po = Invoice::find($request->input('poId'));
-        $po->status = 1;
-        $po->save();
-
-        $stock = new Stock();
-        $stock->po_reference_code = $po->referenceCode;
-        $stock->receive_code = $request->input('recNo');
-        $stock->location = $po->location;
-        $stock->receive_date = $request->input('datepicker');
-        $stock->remarks = $request->input('note');
-        $stock->save();
-
-        $poItemsIds = $request->input('poItemsId');
-        $par_qty = $request->input('par_qty');
-
-        foreach ($poItemsIds as $key => $poItem) {
-
-            if ($par_qty[$key] > 0) {
-
-                $poitemOb = PoDetails::find($poItem);
-                $poitemOb->received_qty = $poitemOb->received_qty + $par_qty[$key];
-                $poitemOb->save();
-                //            products foe add as available stock qty
-                $products = Products::find($poitemOb->item_id);
-                $products->availability = $products->availability + $par_qty[$key];
-                $products->save();
-
-                $stockItems = new StockItems();
-                $stockItems->item_id = $poitemOb->item_id;
-                $stockItems->qty = $par_qty[$key];
-                $stockItems->selling_price = $poitemOb->selling_price;
-                $stockItems->tax_per = $poitemOb->tax_percentage;
-                $stock->stockItems()->save($stockItems);
-            }
-        }
-
-        if (!($stock)) {
-            $request->session()->flash('message', 'Error in the database while updating the Invoice');
-            $request->session()->flash('message-type', 'error');
-        } else {
-            $request->session()->flash('message', 'Successfully Partially Received ' . "[ Res NO:" . $stock->receive_code . " ]");
-            $request->session()->flash('message-type', 'success');
-        }
-
-        echo json_encode(array('success' => true));
-    }
-
     public function view($id)
     {
 
-        $podata = Invoice::find($id);
+        $ivdata = Invoice::find($id);
 
-        $locations = $podata->locations;
-        $supplier = $podata->suppliers;
+        $location = $ivdata->locations;
+        $biller = $ivdata->billers;
+        $customer = $ivdata->customers;
+        return view('vendor.adminlte.sales.view', ['location' => $location, 'customer' => $customer, 'biller' => $biller, 'sales' => $ivdata]);
+    }
 
-        return view('vendor.adminlte.sales.view', ['locations' => $locations, 'suppliers' => $supplier, 'sales' => $podata]);
+    public function print($id)
+    {
+        $ivdata = Invoice::find($id);
+
+        $location = $ivdata->locations;
+        $biller = $ivdata->billers;
+        $customer = $ivdata->customers;
+//return view('vendor.adminlte.sales.print', ['location' => $location, 'customer' => $customer, 'biller' => $biller, 'sales' => $ivdata]);
+        $pdf = PDF::loadView('vendor.adminlte.sales.print', ['location' => $location, 'customer' => $customer, 'biller' => $biller, 'sales' => $ivdata]);
+        return $pdf->download('print.pdf');
+
+
     }
 
     public function delete(Request $request, $id)
     {
 
-        $podata = Invoice::find($id);
+        $invData = Invoice::find($id);
+        Stock::where('receive_code', '=', $invData->invoice_code . '-S')->firstOrFail()->delete();
 
-        if (!$podata->delete()) {
+        if (!$invData->delete()) {
             $request->session()->flash('message', 'Error in the database while deleting the Invoice');
             $request->session()->flash('message-type', 'error');
             return redirect()->back();
@@ -547,22 +384,5 @@ class InvoiceController extends Controller
         }
     }
 
-    public function printPO($id)
-    {
-        $podata = Invoice::find($id);
-        $locations = $podata->locations;
-        $supplier = $podata->suppliers;
-//        return view('vendor.adminlte.sales.printPo', ['locations' => $locations, 'suppliers' => $supplier, 'sales' => $podata]);
 
-
-//        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadView('vendor.adminlte.sales.printPo', ['locations' => $locations, 'suppliers' => $supplier, 'sales' => $podata]);
-//        $pdf->render();
-//        $pdf = PDF::loadView('vendor.adminlte.sales.test');
-//        $pdf->save(storage_path().'printPo.pdf');
-//        return $pdf->stream('printPo.pdf');
-        return $pdf->download('printPo.pdf');
-//        exit(0);
-
-    }
 }
