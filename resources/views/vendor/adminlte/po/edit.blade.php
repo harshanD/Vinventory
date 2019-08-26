@@ -218,15 +218,23 @@
                                     <td id='discount_{{ $poItem->item_id }}'>{{number_format($poItem->discount,2)}}</td>
                                     <td hidden id='hidden_data_{{ $poItem->item_id }}'>
 
-                                        <input type='hidden' name='discount[]' id='discount_h{{ $poItem->item_id }}' value='{{($poItem->discount)}}'>
-                                        <input type='hidden' name='quantity[]' id='quantity_h{{ $poItem->item_id }}' value='{{ $poItem->qty }}'>
-                                        <input type='hidden' name='costPrice[]' id='costPrice_h{{ $poItem->item_id }}' value='{{ ($poItem->cost_price) }}'>
-                                        <input type='hidden' name='item[]' id='item_h{{ $poItem->item_id }}' value='{{ $poItem->item_id }}'>
+                                        <input type='hidden' name='discount[]' id='discount_h{{ $poItem->item_id }}'
+                                               value='{{($poItem->discount)}}'>
+                                        <input type='hidden' name='quantity[]' id='quantity_h{{ $poItem->item_id }}'
+                                               value='{{ $poItem->qty }}'>
+                                        <input type='hidden' name='costPrice[]' id='costPrice_h{{ $poItem->item_id }}'
+                                               value='{{ ($poItem->cost_price) }}'>
+                                        <input type='hidden' name='item[]' id='item_h{{ $poItem->item_id }}'
+                                               value='{{ $poItem->item_id }}'>
                                         <input type='hidden' name='unit[]' id='unit_h{{ $poItem->item_id }}'>
-                                        <input type='hidden' name='p_tax[]' id='p_tax_h{{ $poItem->item_id }}' value='{{ $poItem->tax_val }}'>
-                                        <input type='hidden' name='subtot[]' id='subtot_h{{ $poItem->item_id }}' value='{{ $poItem->sub_total }}'>
-                                        <input type='hidden' name='tax_id[]' id='tax_id_h{{ $poItem->item_id }}' value="{{ $poItem->tax_percentage }}">
-
+                                        <input type='hidden' name='p_tax[]' id='p_tax_h{{ $poItem->item_id }}'
+                                               value='{{ $poItem->tax_val }}'>
+                                        <input type='hidden' name='subtot[]' id='subtot_h{{ $poItem->item_id }}'
+                                               value='{{ $poItem->sub_total }}'>
+                                        <input type='hidden' name='tax_id[]' id='tax_id_h{{ $poItem->item_id }}'
+                                               value="{{ $poItem->tax_percentage }}">
+                                        <input type='hidden' name='pDisco[]' id='pDisco_h{{ $poItem->item_id }}'
+                                               value='{{ $poItem->discount/$poItem->qty }}'>
 
                                     </td>
                                     <td class='tax'
@@ -622,6 +630,7 @@
                     "<input type='hidden'  name='p_tax[]' id='p_tax_h" + index.id + "'  value='" + taxval + "'>" +
                     "<input type='hidden'  name='subtot[]' id='subtot_h" + index.id + "'>" +
                     "<input type='hidden'   name='tax_id[]' id='tax_id_h" + index.id + "' value='" + index.tax + "'>" +
+                    "<input type='hidden'   name='pDisco[]' id='pDisco_h" + index.id + "' value='" + 0 + "'>" +
 
                     "</td>" +
                     "<td class='tax' id='tax_" + index.id + "'>" + taxval + "</td>" +
@@ -631,7 +640,7 @@
                 row += '</tr>';
                 $('.lastRow').remove()
                 $('#poBody').append(row);
-                qtyChanging( index.id )
+                qtyChanging(index.id)
             }
         }
 
@@ -640,7 +649,8 @@
             $('#tax_' + id).text((toNumber($('#p_tax_h' + id).val()) * $('#quantity_' + id).val()).format(2));
             var subTot = ((toNumber($('#costPrice_' + id).text()) * toNumber($('#quantity_' + id).val())) + toNumber(($('#tax_' + id).text())));
             $('#quantity_h' + id).val(toNumber($('#quantity_' + id).val()));
-// alert($('#costPrice_' + id).text()+" == "+ $('#quantity_' + id).val()+" ==== "+$('#unit_' + id).val())
+            $('#discount_' + id).text(($('#pDisco_h' + id).val() * toNumber($('#quantity_' + id).val())));
+            $('#discount_h' + id).val(toNumber(($('#pDisco_h' + id).val() * toNumber($('#quantity_' + id).val()))));
             $('#subtot_' + id).text(((!isNaN(subTot)) ? subTot : 0).format(2));
             $('#subtot_h' + id).val(toNumber((!isNaN(subTot)) ? subTot.format(2) : 0));
 
@@ -732,7 +742,7 @@
                     // if (toNumber($('#quantity_' + id).val()) > 0) {
                     //         $('#pCost').val((toNumber(toNumber($('#costPrice_' + id).text()) + (toNumber($('#tax_' + id).text()) / toNumber($('#quantity_' + id).val())) + (toNumber($('#discount_' + id).text()) / toNumber($('#quantity_' + id).val())))).format(2));
                     // } else {
-                        $('#pCost').val(toNumber($('#costPrice_h' + id).val()))
+                    $('#pCost').val(toNumber($('#costPrice_h' + id).val()))
                     // }
 
 
@@ -802,6 +812,8 @@
             $('#costPrice_' + itemId).text($('#nucost').text());
             $('#costPrice_h' + itemId).val($('#pCost').val());
 
+
+            $('#pDisco_h' + itemId).val($('#pDisco').val());
             $('#discount_' + itemId).text(($('#pDisco').val() * $('#pQty').val()).format(2));
             $('#discount_h' + itemId).val(toNumber(($('#pDisco').val() * $('#pQty').val()).format(2)));
             qtyChanging(itemId)

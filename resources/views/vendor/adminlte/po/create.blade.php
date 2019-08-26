@@ -559,6 +559,7 @@
                     "<input type='hidden'  name='p_tax[]' id='p_tax_h" + index.id + "'  value='" + taxval + "'>" +
                     "<input type='hidden'  name='subtot[]' id='subtot_h" + index.id + "'>" +
                     "<input type='hidden'   name='tax_id[]' id='tax_id_h" + index.id + "' value='" + index.tax + "'>" +
+                    "<input type='hidden'   name='pDisco[]' id='pDisco_h" + index.id + "' value='" + 0 + "'>" +
 
                     "</td>" +
                     "<td class='tax'  id='tax_" + index.id + "'>" + taxval + "</td>" +
@@ -577,6 +578,8 @@
             $('#tax_' + id).text((toNumber($('#p_tax_h' + id).val()) * $('#quantity_' + id).val()).format(2));
             var subTot = ((toNumber($('#costPrice_' + id).text()) * toNumber($('#quantity_' + id).val())) + toNumber(($('#tax_' + id).text())));
             $('#quantity_h' + id).val(toNumber($('#quantity_' + id).val()));
+            $('#discount_' + id).text(($('#pDisco_h' + id).val() * toNumber($('#quantity_' + id).val())));
+            $('#discount_h' + id).val(toNumber(($('#pDisco_h' + id).val() * toNumber($('#quantity_' + id).val()))));
             $('#subtot_' + id).text(((!isNaN(subTot)) ? subTot : 0).format(2));
             $('#subtot_h' + id).val(toNumber((!isNaN(subTot)) ? subTot.format(2) : 0));
             lastRowDesign();
@@ -731,6 +734,8 @@
             $('#costPrice_' + itemId).text($('#nucost').text());
             $('#costPrice_h' + itemId).val($('#pCost').val());
 
+
+            $('#pDisco_h' + itemId).val($('#pDisco').val());
             $('#discount_' + itemId).text(($('#pDisco').val() * $('#pQty').val()).format(2));
             $('#discount_h' + itemId).val(toNumber(($('#pDisco').val() * $('#pQty').val()).format(2)));
             qtyChanging(itemId)
