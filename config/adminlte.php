@@ -243,7 +243,7 @@ return [
                     'icon' => 'user',
                     'url' => '/sales/add',
                 ], [
-                    'text' => 'List Billers',
+                    'text' => 'List Sales',
                     'icon' => 'user',
                     'url' => '/sales/manage',
                 ],

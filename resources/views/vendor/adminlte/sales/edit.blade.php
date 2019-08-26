@@ -38,7 +38,7 @@
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">Add Sale</h3>
+                <h3 class="box-title">Edit Transfer</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -49,8 +49,10 @@
                         <i class="fa fa-times"></i></button>
                 </div>
             </div>
-            <form role="form" id="pocreate" enctype="multipart/form-data" action="{{url('sales/create')}}"
+            <form role="form" id="invUpdate" enctype="multipart/form-data"
+                  action="{{url('sales/edit/'.$sales->id)}}"
                   method="post">
+
                 <div class="box-body">
                     @if(session()->has('message'))
                         <div class="alert alert-success alert-dismissible" role="alert">
@@ -81,7 +83,8 @@
                                             <i class="fa fa-calendar"></i>
                                         </div>
                                         <input type="text" placeholder="Select Date" name="datepicker"
-                                               value="{{date('Y-m-d')}}" class="form-control pull-right"
+                                               value="{{(old('datepicker')=='')?$sales->invoice_date:old('datepicker')}}"
+                                               class="form-control pull-right"
                                                id="datepicker">
                                     </div>
                                     <!-- /.input group -->
@@ -98,7 +101,7 @@
                                             <i class="fa  fa-barcode"></i>
                                         </div>
                                         <input type="text" class="form-control" name="referenceNo" id="referenceNo"
-                                               value="{{$lastRefCode}}">
+                                               value="{{(old('referenceNo')=='')?$sales->invoice_code:old('referenceNo')}}">
                                     </div>
                                     <!-- /.input group -->
                                     <p class="help-block" id="referenceNo_error"></p>
@@ -115,7 +118,7 @@
                                         <select class="form-control select2" name="biller" id="biller">
                                             <option value="0">Select Biller</option>
                                             @foreach($billers as $biller)
-                                                <option value="{{$biller->id}}">{{$biller->name}}</option>
+                                                <option value="{{$biller->id}}" {{ ($sales->biller == $biller->id? "selected":"")}}>{{$biller->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -147,7 +150,7 @@
                                         <select class="form-control select2" name="location" id="location">
                                             <option value="0">Select Location</option>
                                             @foreach($locations as $location)
-                                                <option value="{{$location->id}}">{{$location->name}}</option>
+                                                <option value="{{$location->id}}" {{ ($sales->location == $location->id? "selected":"")}}>{{$location->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -159,7 +162,7 @@
 
                             <form class="form-horizontal">
 
-                                <label>Customer *</label>
+                                <label>Supplier *</label>
 
                                 <div class="input-group date col-xs-4">
                                     <div class="input-group-addon">
@@ -168,7 +171,7 @@
                                     <select class="form-control col-xs-4 select2" name="customer" id="customer">
                                         <option value="0">Select Customer</option>
                                         @foreach($customers as $customer)
-                                            <option value="{{$customer->id}}">{{$customer->name}}</option>
+                                            <option value="{{$customer->id}}" {{ ($sales->customer == $customer->id? "selected":"")}}>{{$customer->name}}</option>
                                         @endforeach
 
                                     </select>
@@ -201,7 +204,6 @@
                             <thead>
                             <tr>
                                 <th>Product (Code - Name)</th>
-                                <th hidden>Serial No</th>
                                 <th>Net Unit Price</th>
                                 <th>Quantity</th>
                                 <th>Discount</th>
@@ -211,23 +213,65 @@
                             </tr>
                             </thead>
                             <tbody id="poBody">
+                            @foreach($sales->invoiceItems as $sItem)
+                                <?php
+                                $taxval = number_format(((($sItem['selling_price'] - ($sItem['discount'] / $sItem['qty'])) * $sItem['tax_per']) / (100 + $sItem['tax_per'])), 2);
+                                $cost = number_format(((($sItem['selling_price']) - $taxval)-($sItem['discount']/ $sItem['qty'])), 2);
+                                $discount = number_format($sItem['discount']);
+
+                                ?>
+                                <tr id="row_deletable_{{ $sItem['item_id'] }}" style="text-align: right">
+                                    <td style="text-align: left">{{ $sItem['products']['name'] }}
+                                        ( {{  $sItem['products']['item_code'] }} )<i
+                                                class="fa fa-edit" onclick='itemDetails({{ $sItem['item_id'] }})'
+                                                style='float: right;cursor: pointer'></i></td>
+                                    <td id='costPrice_{{ $sItem['item_id'] }}'>{{ $cost }}</td>
+                                    <td style="text-align: center"><input type='text' style="text-align: center"
+                                                                          class='qy'
+                                                                          onkeyup='qtyChanging({{ $sItem['item_id'] }})'
+                                                                          id='quantity_{{ $sItem['item_id'] }}'
+                                                                          value='{{ $sItem['qty'] }}'></td>
+                                    <td id='discount_{{ $sItem['item_id'] }}'>{{number_format($discount,2)}}</td>
+                                    <td hidden id='hidden_data_{{ $sItem['item_id'] }}'>
+
+                                        <input type='hidden' name='discount[]' id='discount_h{{ $sItem['item_id'] }}'
+                                               value='{{($discount)}}'>
+                                        <input type='hidden' name='quantity[]' id='quantity_h{{ $sItem['item_id'] }}'
+                                               value='{{ $sItem['qty'] }}'>
+                                        <input type='hidden' name='costPrice[]' id='costPrice_h{{ $sItem['item_id'] }}'
+                                               value='{{ ($sItem['selling_price']) }}'>
+                                        <input type='hidden' name='item[]' id='item_h{{ $sItem['item_id'] }}'
+                                               value='{{ $sItem['item_id'] }}'>
+                                        <input type='hidden' name='unit[]' id='unit_h{{ $sItem['item_id'] }}'>
+                                        <input type='hidden' name='p_tax[]' id='p_tax_h{{ $sItem['item_id'] }}'
+                                               value='{{ $taxval }}'>
+                                        <input type='hidden' name='subtot[]' id='subtot_h{{ $sItem['item_id'] }}'
+                                               value='{{ 0 }}'>
+                                        <input type='hidden' name='tax_id[]' id='tax_id_h{{ $sItem['item_id'] }}'
+                                               value="{{ $sItem['tax_per'] }}">
+                                        <input type='hidden' name='availableStock_id[]'
+                                               id='availableStock_h{{ $sItem['item_id'] }}' value=''>
+                                        <input type='hidden' name='pDisco[]' id='pDisco_h{{  $sItem['item_id'] }}'
+                                               value='{{  number_format($sItem['discount']/ $sItem['qty'],2)}}'>
+
+                                    </td>
+                                    <td class='tax'
+                                        id='tax_{{ $sItem['item_id'] }}'>{{ number_format($taxval*$sItem['qty'],2)}}</td>
+                                    <td class='subtot'
+                                        id='subtot_{{ $sItem['item_id'] }}'>{{ number_format(($sItem['selling_price']*$sItem['qty'])-($discount),2) }}</td>
+                                    <td style="text-align: center"><i class="glyphicon glyphicon-remove"
+                                                                      onclick="deleteThis({{ $sItem['item_id'] }})"
+                                                                      style="cursor: pointer"></i></td>
+                                </tr><input type="hidden" name="deletedItems[]"
+                                            id="deletedItems_h{{ $sItem['item_id'] }}" value="0">
+
+                            @endforeach
 
 
                             </tbody>
                         </table>
                     </div>
                     <p class="help-block" id="items_error"></p>
-                    {{--                    <p class="help-block" id="grand_tax_id"></p>--}}
-                    {{--                    <div class="box-body">--}}
-                    {{--                        <div class="checkbox">--}}
-                    {{--                            <label data-toggle="collapse" data-target="#collapseOptions" class="collapsed"--}}
-                    {{--                                   aria-expanded="false">--}}
-                    {{--                                <input type="checkbox" checked class="flat-red"/>More Options--}}
-                    {{--                            </label>--}}
-                    {{--                        </div>--}}
-
-                    {{--                        <!-- /.box -->--}}
-                    {{--                    </div>--}}
                     <div class="box-body">
                         <div id="collapseOptions" class="collapse">
                             <div class="row">
@@ -243,7 +287,7 @@
                                                     onchange="lastRowDesign()">
                                                 <option value="0">Select tax</option>
                                                 @foreach($tax as $ta)
-                                                    <option value="{{$ta->value}}">{{$ta->name ."-".$ta->code}}</option>
+                                                    <option value="{{$ta->value}}" {{ ($sales->tax_per == $ta->value? "selected":"")}}>{{$ta->name ."-".$ta->code}}</option>
                                                 @endforeach
 
                                             </select>
@@ -261,7 +305,8 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-circle"></i>
                                             </div>
-                                            <input type="text" class="form-control" name="wholeDiscount" value="0"
+                                            <input type="text" class="form-control" name="wholeDiscount"
+                                                   value="{{$sales->discount_val_or_per}}"
                                                    id="wholeDiscount" onkeyup="lastRowDesign()">
                                         </div>
                                         <!-- /.input group -->
@@ -277,8 +322,12 @@
                                                 <i class="fa fa-hourglass-end"></i>
                                             </div>
                                             <select class="form-control select2" name="saleStatus" id="saleStatus">
-                                                <option value="1">Pending</option>
-                                                <option value="2">Completed</option>
+                                                <option value="1" {{ ($sales->sales_status == 1? "selected":"")}}>
+                                                    Pending
+                                                </option>
+                                                <option value="2" {{ ($sales->sales_status == 2? "selected":"")}}>
+                                                    Completed
+                                                </option>
                                             </select>
                                         </div>
                                         <!-- /.input group -->
@@ -295,10 +344,18 @@
                                             </div>
                                             <select class="form-control select2" name="paymetStatus" id="paymetStatus">
                                                 <option value="0">Select Status</option>
-                                                <option value="1">Pending</option>
-                                                <option value="2">Due</option>
-                                                <option value="3">Partial</option>
-                                                <option value="4">Paid</option>
+                                                <option value="1" {{ ($sales->payment_status == 1? "selected":"")}}>
+                                                    Pending
+                                                </option>
+                                                <option value="2" {{ ($sales->payment_status == 2? "selected":"")}}>
+                                                    Due
+                                                </option>
+                                                <option value="3" {{ ($sales->payment_status == 3? "selected":"")}}>
+                                                    Partial
+                                                </option>
+                                                <option value="4" {{ ($sales->payment_status == 4? "selected":"")}}>
+                                                    Paid
+                                                </option>
                                             </select>
                                         </div>
                                         <!-- /.input group -->
@@ -316,7 +373,7 @@
                                             </div>
                                             <textarea type="text" class="form-control" id="saleNote" name="saleNote"
                                                       placeholder="Sale Note"
-                                                      autocomplete="off"></textarea>
+                                                      autocomplete="off">{{$sales->sale_note}}</textarea>
                                         </div>
                                         <!-- /.input group -->
                                         {{--                                        <p class="help-block" id="datepicker_error"></p>--}}
@@ -332,7 +389,7 @@
                                             </div>
                                             <textarea type="text" class="form-control" id="staffNote" name="staffNote"
                                                       placeholder="Note"
-                                                      autocomplete="off"></textarea>
+                                                      autocomplete="off">{{$sales->staff_note}}</textarea>
                                         </div>
                                         <!-- /.input group -->
                                         {{--                                        <p class="help-block" id="datepicker_error"></p>--}}
@@ -390,7 +447,8 @@
                                     <label for="inputEmail3" class="col-sm-3 control-label">Product Tax</label>
                                     <input type="hidden" id="modalItem">
                                     <div class="col-sm-6">
-                                        <select class="form-control select2" name="pTax" id="pTax" style="width: 100%;"
+                                        <select class="form-control select2" name="pTax" id="pTax"
+                                                style="width: 100%;"
                                                 onchange="itemQtyCostUnitChange()">
                                             <option value="0">No tax</option>
                                             @foreach($tax as $ta)
@@ -451,7 +509,7 @@
                                     </thead>
                                 </table>
                                 <br>
-                                <div class="panel panel-default">
+                                <div class="panel panel-default" hidden>
                                     <div class="panel-heading">Calculate Unit Cost</div>
                                     <div class="panel-body">
                                         <div class="form-group">
@@ -497,19 +555,13 @@
 
         var autoCompleteId = 'product';
         var acurl = '';
+        acurl = $('#location').val();
+
 
         $(document).ready(function () {
 
-            $("#product").keyup(function () {
-                $('#modal-danger').modal({
-                    show: 'true'
-                });
-                $("#product").val('')
-            });
-
             $("#location").change(function () {
                 acurl = $('#location').val();
-
 
                 var options = {
 
@@ -537,14 +589,56 @@
                     theme: "plate-dark"
                 };
 
-
                 if (typeof autoCompleteId !== 'undefined') {
                     $("#" + autoCompleteId).easyAutocomplete(options);
                 }
 
             });
 
-            $("#pocreate").unbind('submit').on('submit', function () {
+            var options = {
+
+
+                url: "/stock/fetchProductsListWarehouseWise/" + acurl,
+
+                getValue: "name",
+
+                list: {
+                    maxNumberOfElements: 8,
+                    match: {
+                        enabled: true
+                    },
+                    sort: {
+                        enabled: true
+                    },
+                    onChooseEvent: function () {
+                        var index = $("#" + autoCompleteId).getSelectedItemData();
+                        $('#product').val('');
+                        changeProduct(index)
+                    },
+                },
+
+                // theme: "square"
+                theme: "plate-dark"
+            };
+
+            if (typeof autoCompleteId !== 'undefined') {
+                $("#" + autoCompleteId).easyAutocomplete(options);
+            }
+
+
+            lastRowDesign()
+            // itemsLoad()
+
+
+            $("#product").keyup(function () {
+                // $('#modal-danger').modal({
+                //     show: 'true'
+                // });
+                // $("#product").val('')
+                checkValuesExistsInProducts()
+            });
+
+            $("#invUpdate").unbind('submit').on('submit', function () {
                 var form = $(this);
 
                 var qtySum = 0;
@@ -560,6 +654,7 @@
                     return false
                 }
 
+
                 $.ajax({
                     url: form.attr('action'),
                     type: form.attr('method'),
@@ -569,7 +664,7 @@
                         // window.location = data;
                         console.log(response)
                         if (response.success) {
-                            window.location.href = '/sales/add';
+                            window.location.href = '/sales/manage';
                         }
 
 
@@ -602,6 +697,7 @@
                             $('#paymetStatus_error').html(request.responseJSON.errors.paymetStatus[0]);
                         }
 
+
                     }
 
                 });
@@ -610,31 +706,30 @@
 
 
         });
-        //
-        // function checkValuesExistsInProducts() {
-        //     var containerList = $('#product').next('.easy-autocomplete-container').find('ul');
-        //     if ($(containerList).children('li').length <= 0) {
-        //         $(containerList).html('<li>No results found</li>').show();
-        //     }
-        // }
 
-        var itemCount = 0;
+        //
+        function checkValuesExistsInProducts() {
+            var containerList = $('#product').next('.easy-autocomplete-container').find('ul');
+            if ($(containerList).children('li').length <= 0) {
+                $(containerList).html('<li>No results found</li>').show();
+            }
+        }
+
 
         function changeProduct(index) {
             // localStorage.clear();
-            if (document.getElementById("row_" + index.id) === null) {
+            if (document.getElementById("quantity_" + index.id) === null) {
                 localStorage.setItem('item', JSON.stringify(index.id));
-                itemCount++;
+
 
                 var taxval = (toNumber(toNumber(index.selling_price * toNumber(index.tax)) / (100 + toNumber(index.tax)))).format(2);
                 var cost = (index.selling_price - taxval).format(2);
 
                 var row = '<tr id="row_' + index.id + '" style="text-align: right">' +
                     "<td style=\"text-align: left\">" + index.name + "( " + index.item_code + " )" + "  <i  class=\"fa fa-edit\" onclick='itemDetails(" + index.id + ")' style='float: right;cursor: pointer'></i></td>" +
-                    "<td hidden style=\"text-align: center\"><input type='text'   style=\"text-align: center\"   name='serial[]' id='serial_" + index.id + "' value=''></td>" +
                     "<td id='costPrice_" + index.id + "'>" + cost + "</td>" +
                     "<td style=\"text-align: center\"><input type='text'   style=\"text-align: center\" class='qy' onkeyup='qtyChanging(" + index.id + ")' id='quantity_" + index.id + "' value='" + 1 + "'></td>" +
-                    "<td class='disco' id='discount_" + index.id + "'>" + index.discount + "</td>" +
+                    "<td id='discount_" + index.id + "'>" + index.discount + "</td>" +
                     "<td hidden id='hidden_data_" + index.id + "'>" +
 
                     "<input type='hidden' name='discount[]' id='discount_h" + index.id + "' value='0'>" +
@@ -649,7 +744,7 @@
                     "<input type='hidden'   name='pDisco[]' id='pDisco_h" + index.id + "' value='" + 0 + "'>" +
 
                     "</td>" +
-                    "<td class='tax'  id='tax_" + index.id + "'>" + taxval + "</td>" +
+                    "<td class='tax' id='tax_" + index.id + "'>" + taxval + "</td>" +
                     "<td class='subtot' id='subtot_" + index.id + "'>" + 0 + "</td>" +
                     '<td style="text-align: center"><i class="glyphicon glyphicon-remove" onclick="removeThis(' + index.id + ')" style="cursor: pointer"></i></td>';
 
@@ -661,6 +756,37 @@
         }
 
         function qtyChanging(id) {
+            if ($('#availableStock_h' + id).val() == '') {
+
+                $.ajax('/stock/fetchProductsOneWarehouseWiseItem', {
+                    type: 'post',  // http method
+                    data: {
+                        wh: $('#location').val(),
+                        idItem: id,
+                        "_token": "{{ csrf_token() }}",
+                    },  // data to submit
+                    success: function (data, status, xhr) {
+                        var item = JSON.parse(data);
+                        // console.log(item[0].sum)
+                        if (item.length != 0) {
+                            $('#availableStock_h' + id).val(item[0].sum)
+                        } else {
+                            $('#availableStock_h' + id).val(0)
+                        }
+                        qtyChangeDirect(id)
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+                        $('p').append('Error' + errorMessage);
+                    }
+                });
+
+            } else {
+                qtyChangeDirect(id)
+            }
+
+        }
+
+        function qtyChangeDirect(id) {
             itemsQtyVali(id)
             $('#tax_' + id).text((toNumber($('#p_tax_h' + id).val()) * $('#quantity_' + id).val()).format(2));
             var subTot = ((toNumber($('#costPrice_' + id).text()) * toNumber($('#quantity_' + id).val())) + toNumber(($('#tax_' + id).text())));
@@ -669,6 +795,7 @@
             $('#discount_h' + id).val(toNumber(($('#pDisco_h' + id).val() * toNumber($('#quantity_' + id).val()))));
             $('#subtot_' + id).text(((!isNaN(subTot)) ? subTot : 0).format(2));
             $('#subtot_h' + id).val(toNumber((!isNaN(subTot)) ? subTot.format(2) : 0));
+
             lastRowDesign();
         }
 
@@ -706,8 +833,8 @@
 
             var lastRow = '<tr class="lastRow" style="font-weight: bold;text-align: right">' +
                 "<td colspan='3' style='text-align: left'>Total</td>" +
-                "<td id='sumDiscount'>" + disco.format(2) + "</td>" +
-                "<td id='sumTax'>" + txSum.format(2) + "</td>" +
+                "<td id='sumDiscount' >" + disco.format(2) + "</td>" +
+                "<td id='dd'>" + txSum.format(2) + "</td>" +
                 "<td id='sumTax' style='align:right'>" + sum.format(2) + "</td><td style='text-align: center'><i class=\"fa fa-trash\"></i></td></tr>";
 
             $('.lastRow').remove();
@@ -723,16 +850,14 @@
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + ($('#poTable tr').length - 2) + " (" + qtySum + ") " + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Total</td>" +
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + sum.format(2) + "</td>" +
-                "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Order Discount</td>" +
-                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + wdisco.format(2) + "</td>" +
-                "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Order Tax</td>" +
-                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + wtax.format(2) + "</td>" +
+                "<td style='text-align: left;background-color: #dfe4da;width: 13%' hidden>Order Tax</td>" +
+                "<td style='text-align: right;background-color: #c2c7bd;width: 7%' hidden>" + wtax.format(2) + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Grand Total</td>" +
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" +
                 "<input type='hidden' name='grand_total' id='grand_total' value='" + toNumber(gtot.format(2)) + "'>" +
                 "<input type='hidden' name='grand_tax_id' id='grand_tax_id' value='" + $('#wholeTax').val() + "'>" +
                 "<input type='hidden' name='grand_discount' id='grand_discount' value='" + toNumber(wdisco) + "'>" +
-                "<input type='hidden' name='grand_tax' id='grand_tax' value='" + toNumber(wtax) + "'>" + gtot.format(2) + "" +
+                "<input type='hidden' name='grand_tax' id='grand_tax' value='" + txSum + "'>" + gtot.format(2) + "" +
                 "</td><tr></table>";
 
 
@@ -741,6 +866,12 @@
 
         function removeThis(removeRow) {
             $('#row_' + removeRow).remove()
+            lastRowDesign()
+        }
+
+        function deleteThis(removeItem) {
+            $('#deletedItems_h' + removeItem).val(removeItem);
+            $('#row_deletable_' + removeItem).remove()
             lastRowDesign()
         }
 
