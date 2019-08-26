@@ -19,6 +19,9 @@ class CreateInvoiceTable extends Migration
             $table->integer('location')->unsigned();
             $table->foreign('location')->references('id')->on('locations')->onDelete('cascade');
             $table->integer('biller')->unsigned();
+            $table->foreign('biller')->references('id')->on('biller')->onDelete('cascade');
+            $table->integer('customer')->unsigned();
+            $table->foreign('customer')->references('id')->on('customer')->onDelete('cascade');
             $table->double('discount')->nullable();
             $table->double('discount_val_or_per')->nullable();
             $table->double('tax_amount')->nullable();
@@ -26,7 +29,7 @@ class CreateInvoiceTable extends Migration
             $table->double('invoice_grand_total');
             $table->date('invoice_date');
             $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
-            $table->tinyInteger('sales_status')->length(2)->comment('1=completed,0=pending')->default(0);
+            $table->tinyInteger('sales_status')->length(2)->comment('1=pending,2=completed')->default(1);
             $table->tinyInteger('payment_status')->length(2)->comment('1=pending,2=due,3=partial,4=paid')->default(1);
             $table->text('sale_note')->nullable();
             $table->text('staff_note')->nullable();

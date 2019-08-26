@@ -21,7 +21,7 @@ class CreateInvoiceDetailsTable extends Migration
             $table->integer('item_id')->unsigned();
             $table->foreign('item_id')->references('id')->on('products')->onDelete('cascade');
             $table->double('qty')->nullable();
-            $table->double('cost_price');
+            $table->double('selling_price');
             $table->double('tax_val')->nullable();
             $table->double('tax_per')->nullable();
             $table->double('discount')->nullable();

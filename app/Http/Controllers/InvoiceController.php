@@ -30,7 +30,7 @@ class InvoiceController extends Controller
         $data = (isset($lastRefCode->invoice_code)) ? $lastRefCode->invoice_code : 'IV-' . '000000';
 
         $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
-        return view('vendor.adminlte.sales.create', ['locations' => $locations,  'tax' => $tax, 'lastRefCode' => $code, 'billers' => $billers, 'customers' => $customers]);
+        return view('vendor.adminlte.sales.create', ['locations' => $locations, 'tax' => $tax, 'lastRefCode' => $code, 'billers' => $billers, 'customers' => $customers]);
     }
 
 
@@ -48,24 +48,34 @@ class InvoiceController extends Controller
 
         ]);
 
+// invoice data save
+        $iv = new Invoice();
+        $iv->invoice_code = $request->input('referenceNo');
+        $iv->invoice_date = $request->input('datepicker');
+        $iv->location = $request->input('location');
+        $iv->biller = $request->input('biller');
+        $iv->customer = $request->input('customer');
+        $iv->tax_amount = self::numberFormatRemove(number_format($request->input('grand_tax'),2));
+        $iv->discount = self::numberFormatRemove(number_format($request->input('grand_discount'),2));
+        $iv->discount_val_or_per = ($request->input('wholeDiscount') == '') ? 0 : self::numberFormatRemove(number_format($request->input('wholeDiscount',2)));
+        $iv->invoice_grand_total = self::numberFormatRemove(number_format($request->input('grand_total'),2));
+        $iv->tax_per = $request->input('grand_tax_id');
+        $iv->sales_status = $request->input('saleStatus');
+        $iv->status = \Config::get('constants.status.Active');
+        $iv->payment_status = $request->input('paymetStatus');
+        $iv->sale_note = $request->input('saleNote');
+        $iv->staff_note = $request->input('staffNote');
 
-        $po = new Invoice();
-        $po->invoice_code = $request->input('referenceNo');
-        $po->invoice_date = $request->input('datepicker');
-        $po->location = $request->input('location');
-        $po->biller = $request->input('biller');
-        $po->tax_amount = $request->input('grand_tax');
-        $po->discount = $request->input('grand_discount');
-        $po->discount_val_or_per = ($request->input('wholeDiscount') == '') ? 0 : $request->input('wholeDiscount');
-        $po->invoice_grand_total = $request->input('grand_total');
-        $po->tax_per = $request->input('grand_tax_id');
-        $po->sales_status = $request->input('saleStatus');
-        $po->status = \Config::get('constants.status.Active');
-        $po->payment_status = $request->input('paymetStatus');
-        $po->sale_note = $request->input('saleNote');
-        $po->staff_note = $request->input('staffNote');
+        $iv->save();
 
-        $po->save();
+        // stock reduce
+        $stockAdd = new Stock();
+        $stockAdd->po_reference_code = 'INVOICE-S';
+        $stockAdd->receive_code = $request->input('referenceNo') . '-S';
+        $stockAdd->location = $request->input('location');
+        $stockAdd->receive_date = $request->input('datepicker');
+        $stockAdd->remarks = '';
+        $stockAdd->save();
 
         $items = $request->input('item');
         $quantity = $request->input('quantity');
@@ -83,19 +93,28 @@ class InvoiceController extends Controller
 
                 $invoItems->item_id = $item;
                 $invoItems->serial_number = '';
-                $invoItems->cost_price = $costPrice[$id];
+                $invoItems->selling_price = self::numberFormatRemove(number_format($costPrice[$id],2));
                 $invoItems->qty = $quantity[$id];
                 $invoItems->tax_val = $p_tax[$id];
-                $invoItems->discount = $discount[$id];
+                $invoItems->discount = self::numberFormatRemove(number_format($discount[$id],2));
                 $invoItems->tax_per = $tax_id[$id];
-                $invoItems->sub_total = $subtot[$id];
+                $invoItems->sub_total = self::numberFormatRemove(number_format($subtot[$id],2));
 
-                $po->invoiceItems()->save($invoItems);
+                $iv->invoiceItems()->save($invoItems);
+
+                // stick items reduce
+                $itemSubs = new StockItems();
+                $itemSubs->item_id = $item;
+                $itemSubs->cost_price = self::numberFormatRemove(number_format($costPrice[$id],2));
+                $itemSubs->qty = $quantity[$id];
+                $itemSubs->tax_per = $tax_id[$id];
+                $itemSubs->method = 'S';
+                $stockAdd->stockItems()->save($itemSubs);
             }
 
         }
 
-        if (!$po) {
+        if (!$iv) {
             $request->session()->flash('message', 'Error in the database while creating the Invoice');
             $request->session()->flash('message-type', 'error');
         } else {
@@ -105,7 +124,7 @@ class InvoiceController extends Controller
         echo json_encode(array('success' => true));
     }
 
-    public function poList()
+    public function invoList()
     {
         return view('vendor.adminlte.sales.index');
     }
@@ -113,15 +132,16 @@ class InvoiceController extends Controller
     public function editView($id)
     {
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
-        $supplier = Supplier::where('status', \Config::get('constants.status.Active'))->get();
+        $billers = Biller::where('status', \Config::get('constants.status.Active'))->get();
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
+        $customers = Customer::where('status', \Config::get('constants.status.Active'))->get();
 
-        $podata = Invoice::find($id);
+        $invoData = Invoice::find($id);
 
-        return view('vendor.adminlte.sales.edit', ['locations' => $locations, 'suppliers' => $supplier, 'tax' => $tax, 'sales' => $podata]);
+        return view('vendor.adminlte.sales.edit', ['locations' => $locations, 'billers' => $billers, 'tax' => $tax, 'sales' => $invoData, 'customers' => $customers]);
     }
 
-    public function fetchPOData()
+    public function fetchSalesData()
     {
         $result = array('data' => array());
 
@@ -146,26 +166,6 @@ class InvoiceController extends Controller
             $data = (isset($lastStockRefCode->receive_code)) ? str_replace("TR-", "PR-", str_replace("-S", "", str_replace("-A", "", $lastStockRefCode->receive_code))) : 'PR-000000';
             $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
 
-            $statusOfReceiveAll = "";
-            $statusOfpartiallyReceiveAll = "";
-            $poQty = 0;
-            $recQty = 0;
-            foreach ($value->poDetails as $poitem) {
-                $poQty += $poitem->qty;
-                $recQty += $poitem->received_qty;
-            }
-            if ($recQty < $poQty) {
-                $statusOfReceiveAll = "<li><a style='cursor: pointer' onclick=\"receiveAll(" . $value->id . ")\">Receive All</a></li>";
-                $statusOfpartiallyReceiveAll = "<li><a style='cursor: pointer' onclick=\"partiallyReceive(" . $value->id . ")\">Partially Receive</a></li>";
-            }
-
-
-            $receivedIcon = '<i  class="fa fa-circle-thin"></i>';
-            if ($poQty == $recQty) {
-                $receivedIcon = '<i  class="fa fa-circle"></i>';
-            } else if ($recQty != 0 && $recQty < $poQty) {
-                $receivedIcon = '<i  class="fa fa-adjust"></i>';
-            }
 
             $buttons = "<div class=\"btn-group\">
                   <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
@@ -174,45 +174,54 @@ class InvoiceController extends Controller
                     <span class=\"sr-only\">Toggle Dropdown</span>
                   </button>
                   <ul class=\"dropdown-menu\" role=\"menu\">
-                    <li><a href=\"/sales/edit/" . $value->id . "\">Edit Purchase</a></li>
-                    " . $statusOfReceiveAll . "
-                    " . $statusOfpartiallyReceiveAll . "
-                    <li><a href=\"/sales/view/" . $value->id . "\">Purchase details view</a></li>
+                    <li><a href=\"/sales/edit/" . $value->id . "\">Edit Sale</a></li>
+                    <li><a href=\"/sales/view/" . $value->id . "\">Sale details view</a></li>
                     <li><a onclick=\"deletePo(" . $value->id . ")\">Delete</a></li>
                     <li class=\"divider\"></li>
                     <li><a href=\"#\">Separated link</a></li>
                   </ul>
                 </div><input type='hidden' id='recNo_" . $value->id . "' value='" . $code . "'>";
 
-            switch ($value->status):
+            switch ($value->sales_status):
                 case 1:
-                    $status = '<span class="label label-success">Received</span>';
+                    $SaleStatus = '<span class="label label-warning">pending</span>';
                     break;
                 case 2:
-                    $status = '<span class="label label-success">Ordered</span>';
-                    break;
-                case 3:
-                    $status = '<span class="label label-success">pending</span>';
-                    break;
-                case 4:
-                    $status = '<span class="label label-warning">canceled</span>';
+                    $SaleStatus = '<span class="label label-success">Completed</span>';
                     break;
                 default:
-                    $status = '<span class="label label-warning">Nothing</span>';
+                    $SaleStatus = '<span class="label label-danger">Nothing</span>';
+                    break;
+            endswitch;
+
+            switch ($value->payment_status):
+                case 1:
+                    $payStatus = '<span class="label label-warning">pending</span>';
+                    break;
+                case 2:
+                    $payStatus = '<span class="label label-success">Due</span>';
+                    break;
+                case 3:
+                    $payStatus = '<span class="label label-success">Partial</span>';
+                    break;
+                case 4:
+                    $payStatus = '<span class="label label-success">Paid</span>';
+                    break;
+                default:
+                    $payStatus = '<span class="label label-danger">Nothing</span>';
                     break;
             endswitch;
 
             $result['data'][$key] = array(
-                $value->due_date,
-                $value->referenceCode,
-                $value->suppliers->name,
-                $receivedIcon,
-                $value->grand_total,
+                $value->invoice_date,
+                $value->invoice_code,
+                $value->billers->name,
+                $value->customers->name,
+                $SaleStatus,
+                $value->invoice_grand_total,
                 100,
                 100,
-//                $value->paid,
-//                $value->balance,
-                $status,
+                $payStatus,
                 $buttons
             );
         } // /foreach
@@ -240,7 +249,7 @@ class InvoiceController extends Controller
                 'name' => $item->product->name,
                 'id' => $item->id,
                 'item_id' => $item->item_id,
-                'cost_price' => $item->cost_price,
+                'selling_price' => $item->selling_price,
                 'qty' => $item->qty,
                 'received_qty' => $item->received_qty,
                 'tax_val' => $item->tax_val,
@@ -262,31 +271,49 @@ class InvoiceController extends Controller
 
     }
 
-    public function editPOData(Request $request, $id)
+    public function editInvoData(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
             'datepicker' => 'required|date',
-            'status' => ['required', Rule::notIn(['0'])],
+            'saleStatus' => ['required', Rule::notIn(['0'])],
             'location' => ['required', Rule::notIn(['0'])],
-            'referenceNo' => 'required|unique:po_header,referenceCode,' . $id . '|max:100',
-            'supplier' => ['required', Rule::notIn(['0'])],
+            'referenceNo' => 'required|unique:invoice,invoice_code,' . $id . '|max:100',
+            'biller' => ['required', Rule::notIn(['0'])],
+            'customer' => ['required', Rule::notIn(['0'])],
+            'paymetStatus' => ['required', Rule::notIn(['0'])],
             'grand_tax_id' => 'required',
         ]);
 
+
         $validator->validate();
 
-        $po = Invoice::find($id);
-        $po->due_date = $request->input('datepicker');
-        $po->location = $request->input('location');
-        $po->referenceCode = $request->input('referenceNo');
-        $po->supplier = $request->input('supplier');
-        $po->tax = $request->input('grand_tax');
-        $po->discount = $request->input('grand_discount');
-        $po->discount_val_or_per = ($request->input('wholeDiscount') == '') ? 0 : $request->input('wholeDiscount');
-        $po->remark = $request->input('note');
-        $po->status = $request->input('status');
-        $po->grand_total = $request->input('grand_total');
-        $po->tax_percentage = $request->input('grand_tax_id');
+        $iv = Invoice::find($id);
+        $olderrefNo = $iv->invoice_code;
+        $iv->invoice_code = $request->input('referenceNo');
+        $iv->invoice_date = $request->input('datepicker');
+        $iv->location = $request->input('location');
+        $iv->biller = $request->input('biller');
+        $iv->customer = $request->input('customer');
+        $iv->tax_amount = self::numberFormatRemove(number_format($request->input('grand_tax'),2));
+        $iv->discount = self::numberFormatRemove(number_format($request->input('grand_discount'),2));
+        $iv->discount_val_or_per = ($request->input('wholeDiscount') == '') ? 0 : self::numberFormatRemove(number_format($request->input('wholeDiscount'),2));
+        $iv->invoice_grand_total = $request->input('grand_total');
+        $iv->tax_per = $request->input('grand_tax_id');
+        $iv->sales_status = $request->input('saleStatus');
+        $iv->status = \Config::get('constants.status.Active');
+        $iv->payment_status = $request->input('paymetStatus');
+        $iv->sale_note = $request->input('saleNote');
+        $iv->staff_note = $request->input('staffNote');
+
+        //  subtract from stock table
+        $stockSubstct = Stock::updateOrCreate([                         /* FROM */
+            'receive_code' => $olderrefNo . '-S'
+        ], [
+            'receive_code' => $request->input('referenceNo') . '-S',
+            'receive_date' => $request->input('datepicker'),
+            'remarks' => '',
+            'location' => $request->input('location'),
+        ]);
 
         $items = $request->input('item');
         $quantity = $request->input('quantity');
@@ -297,34 +324,55 @@ class InvoiceController extends Controller
         $subtot = $request->input('subtot');
         $discount = $request->input('discount');
 
-        $deletedItems = $request->input('deletedItems');
 
-        PoDetails::destroy($deletedItems);
+        $deletedItems = (isset($request->deletedItems)) ? $request->deletedItems : '';
+
+        if (is_array($deletedItems) && isset($deletedItems[0]) && array_sum($deletedItems)) {
+            $invoItemDel = Invoice::where('id', '=', $iv->id)->firstOrFail();
+            $invoItemDel->invoiceItems()->whereIn('item_id', $deletedItems)->delete();
+
+            $StockItemDel = Stock::where('id', '=', $request->input('referenceNo') . '-S')->firstOrFail();
+            $StockItemDel->stockItems()->whereIn('item_id', $deletedItems)->delete();
+        }
+
 
         foreach ($items as $i => $item) {
-//            print_r($tax_id);
-//            echo $id . '==' . $item. '==' .$costPrice[$i]. '==' . $quantity[$i]. '=='.$p_tax[$i] . '=='. $tax_id[$i]. '=='.$discount[$i]. '=='.$subtot[$i]. '///';
-            if ($subtot[$i] > 0) {
 
-                $poItem = PoDetails::updateOrCreate(
+            if ($subtot[$i] > 0) {
+                InvoiceDetails::updateOrCreate(
                     [
-                        'po_header' => $id,
+                        'invoice_id' => $id,
                         'item_id' => $item
                     ],
                     [
-                        'cost_price' => $costPrice[$i],
+                        'selling_price' => $costPrice[$i],
                         'qty' => $quantity[$i],
-                        'tax_val' => $p_tax[$i],
-                        'tax_percentage' => $tax_id[$i],
-                        'discount' => $discount[$i],
-                        'sub_total' => $subtot[$i],
+                        'tax_val' => self::numberFormatRemove($p_tax[$i]),
+                        'tax_per' => $tax_id[$i],
+                        'discount' => self::numberFormatRemove(number_format($discount[$i],2)),
+                        'sub_total' => self::numberFormatRemove(number_format($subtot[$i],2)),
                     ]);
+
+//                echo  $stockSubstct->id.'--';
+//                echo $tax_id[$id].'--';
+                StockItems::updateOrCreate(                             /* From */
+                    [
+                        'stock_id' => $stockSubstct->id,
+                        'item_id' => $item
+                    ],
+                    [
+                        'qty' => self::numberFormatRemove(number_format($quantity[$i],2)),
+                        'cost_price' => self::numberFormatRemove(number_format($costPrice[$i],2)),
+                        'tax_per' => $tax_id[$i],
+                        'method' => 'S',
+                    ]
+                );
 
             }
         }
 
 
-        if (!$po->save()) {
+        if (!$iv->save()) {
             $request->session()->flash('message', 'Error in the database while updating the Invoice');
             $request->session()->flash('message-type', 'error');
         } else {
@@ -393,7 +441,7 @@ class InvoiceController extends Controller
             $stockItems = new StockItems();
             $stockItems->item_id = $poItem->id;
             $stockItems->qty = $receQty;
-            $stockItems->cost_price = $poitemOb->cost_price;
+            $stockItems->selling_price = $poitemOb->selling_price;
             $stockItems->tax_per = $poitemOb->tax_percentage;
             $stock->stockItems()->save($stockItems);
 
@@ -455,7 +503,7 @@ class InvoiceController extends Controller
                 $stockItems = new StockItems();
                 $stockItems->item_id = $poitemOb->item_id;
                 $stockItems->qty = $par_qty[$key];
-                $stockItems->cost_price = $poitemOb->cost_price;
+                $stockItems->selling_price = $poitemOb->selling_price;
                 $stockItems->tax_per = $poitemOb->tax_percentage;
                 $stock->stockItems()->save($stockItems);
             }
