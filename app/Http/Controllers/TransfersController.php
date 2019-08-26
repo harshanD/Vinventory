@@ -159,7 +159,7 @@ class TransfersController extends Controller
                     <li><a href=\"/transfer/view/" . $value->id . "\">Transfer details</a></li>
                      <li><a href=\"/transfer/print/" . $value->id . "\">Download as PDF</a></li>
                     <li class=\"divider\"></li>
-                     <li><a onclick=\"deletePo(" . $value->id . ")\">Delete Transfer</a></li>
+                     <li><a style='cursor: pointer' onclick=\"deletePo(" . $value->id . ")\">Delete Transfer</a></li>
                   </ul>
                 </div>";
 
