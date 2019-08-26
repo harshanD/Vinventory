@@ -25,8 +25,8 @@
 
     <h1 align="center">{{config('adminlte.title', 'AdminLTE 2')}}</h1><br>
 
-    <div class="modal-content">
-        <div class="modal-body">
+    <div class="box">
+        <div class="box-header with-border">
 
             <div class="well well-sm">
                 <div class="row bold">

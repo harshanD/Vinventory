@@ -426,12 +426,12 @@
             }
         }
 
-        function deletePo(id) {
+        function deleteSale(id) {
             $('#deleteProductModal').modal({
                 hidden: 'true'
             });
 
-            $('#deleteBtn').attr("href", ('/po/delete/') + id);
+            $('#deleteBtn').attr("href", ('/sales/delete/') + id);
         }
 
     </script>

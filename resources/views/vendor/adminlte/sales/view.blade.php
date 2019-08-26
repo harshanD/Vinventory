@@ -30,125 +30,177 @@
                         <i class="fa fa-times"></i></button>
                 </div>
             </div>
+            <div class="col-lg-12">
 
+                <div class="well well-sm">
+                    <div class="col-xs-4 border-right">
+                        <div class="col-xs-2"><i class="fa fa-3x fa-user padding010 text-muted"></i></div>
+                        <div class="col-xs-10">
+                            <h2 class="">{{$customer->name}}</h2>
+                            {{$customer->address}}<br><br>{{$customer->phone}}<br>{{$customer->email}}
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="col-xs-4 border-right">
+                        <div class="col-xs-2"><i class="fa fa-3x fa-building padding010 text-muted"></i></div>
+                        <div class="col-xs-10">
+                            <h2 class="">{{$biller->name}}</h2>
+                            {{$biller->address}} <br>
+                            <p><br></p>{{$biller->phone}}<br>{{$biller->email}}</div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="col-xs-2"><i class="fa fa-3x fa-building-o padding010 text-muted"></i></div>
+                        <div class="col-xs-10">
+                            <h2 class="">{{$location->name}}</h2>
 
-            <div class="box">
-                <div class="modal-content">
-                    <div class="modal-body">
+                            <p>{{$location->address}}</p><br>{{$location->phone}}<br>{{$location->email}}</div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="clearfix"></div>
+                <div class="col-xs-7 pull-right">
+                    <div class="col-xs-12 text-right order_barcodes">
+                        <img src="data:image/png;base64,{{DNS1D::getBarcodePNG($sales->invoice_code, 'C93',3, 70)}}"
+                             alt="barcode"/>&nbsp;&nbsp;
+                        <img src="data:image/png;base64,{{DNS2D::getBarcodePNG(url()->current(), "QRCODE",2.5,2.5)}}"
+                             alt="barcode"/></div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="col-xs-2"><i class="fa fa-3x fa-file-text-o padding010 text-muted"></i></div>
+                    <div class="col-xs-10">
+                        <h2 class="">Reference: {{$sales->invoice_code}}</h2>
+                        <p style="font-weight:bold;">Date: {{date('Y-m-d H:i:s')}}</p>
+                        <p style="font-weight:bold;">Sale
+                            Status: {{\Config::get('constants.i_sale_status_value.'.$sales->sales_status) }}</p>
+                        <p style="font-weight:bold;">Payment Status
+                            : {{\Config::get('constants.i_payment_status_value.'.$sales->payment_status) }}</p>
+                        <p>Due Date: {{$sales->invoice_date}}</p>
+                        <p>&nbsp;</p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped print-table order-table">
+                        <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Description (Code)</th>
+                            <th>Quantity</th>
+                            <th hidden style="text-align:center; vertical-align:middle;">Serial No</th>
+                            <th style="padding-right:20px;">Unit Price</th>
+                            <th style="padding-right:20px; text-align:center; vertical-align:middle;">Tax</th>
+                            <th style="padding-right:20px; text-align:center; vertical-align:middle;">Discount</th>
+                            <th style="padding-right:20px;">Subtotal</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <?php $tot = 0;$incr = 0;$taxTot = 0;$disTot = 0; ?>
+                            @foreach($sales->invoiceItems as $item)
+                                <?php $tot += $item->sub_total;
+                                $taxTot += $item->tax_val;
+                                $disTot += $item->discount;
+                                ?>
+                                <td style="text-align:center; width:40px; vertical-align:middle;">{{++$incr}}</td>
+                                <td style="vertical-align:middle;">
+                                    {{$item->products->name}} [ {{$item->products->item_code}} ]
+                                </td>
+                                <td style="width: 100px; text-align:center; vertical-align:middle;"> {{$item->qty}} </td>
+                                <td hidden></td>
+                                <td style="text-align:right; width:120px; padding-right:10px;">
+                                    {{number_format($item->selling_price,2)}}
+                                </td>
+                                <td style="width: 120px; text-align:right; vertical-align:middle;">
+                                    {{--                                <small>(S)</small>--}}
+                                    {{number_format($item->tax_val,2)}}
+                                </td>
+                                <td style="width: 120px; text-align:right; vertical-align:middle;">
+                                    {{--                                <small>(S)</small>--}}
+                                    {{number_format($item->discount,2)}}
+                                </td>
+                                <td style="text-align:right; width:120px; padding-right:10px;">  {{number_format($item->sub_total,2)}}</td>
 
+                        </tr>
+                        @endforeach
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="4" style="text-align:right; padding-right:10px;">Total (Rs)
+                            </td>
+                            <td style="text-align:right;">{{number_format($taxTot,2)}}</td>
+                            <td style="text-align:right;">{{number_format($disTot,2)}}</td>
+                            <td style="text-align:right; padding-right:10px;">{{number_format($tot,2)}}</td>
+                        </tr>
+                        @if($sales->discount>0)
+                            <tr>
+                                <td colspan="6" style="text-align:right; font-weight:bold;">Order Discount (Rs)
+                                </td>
+                                <td style="text-align:right; padding-right:10px; font-weight:bold;">
+                                    ( {{($sales->discount_val_or_per)}} ) {{number_format($sales->discount,2)}}</td>
+                            </tr>
+                        @endif
+                        @if($sales->tax_amount>0)
+                            <tr>
+                                <td colspan="6" style="text-align:right; font-weight:bold;">Order tax (Rs)
+                                </td>
+                                <td style="text-align:right; padding-right:10px; font-weight:bold;">
+                                    ( {{($sales->tax_per .'%')}} ) {{number_format($sales->tax_amount,2)}}</td>
+                            </tr>
+                        @endif
+                        <tr>
+                            <td colspan="6" style="text-align:right; font-weight:bold;">Total Amount (Rs)
+                            </td>
+                            <td style="text-align:right; padding-right:10px; font-weight:bold;">{{number_format($sales->invoice_grand_total,2)}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="text-align:right; font-weight:bold;">Paid (Rs)
+                            </td>
+                            <td style="text-align:right; font-weight:bold;">{{0}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="text-align:right; font-weight:bold;">Balance (Rs)
+                            </td>
+                            <td style="text-align:right; font-weight:bold;">{{number_format($sales->invoice_grand_total,2)}}</td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6">
+                    </div>
+                    <div class="col-xs-6">
                         <div class="well well-sm">
-                            <div class="row bold">
-                                <div class="col-xs-4">Date: {{$transfers->created_at}}
-                                    <br>Reference: {{$transfers->tr_reference_code}}</div>
-                                <div class="col-xs-6 pull-right text-right order_barcodes">
-                                    <img src="data:image/png;base64,{{DNS1D::getBarcodePNG($transfers->referenceCode, 'C93',3, 70)}}"
-                                         alt="barcode"/>&nbsp;&nbsp;
-                                    <img src="data:image/png;base64,{{DNS2D::getBarcodePNG(url()->current(), "QRCODE",2.5,2.5)}}"
-                                         alt="barcode"/>
-
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6">
-                                To:<br>
-                                <h3 style="margin-top:10px;">{{$transfers->toLocation->name }}
-                                    ( {{$transfers->toLocation->code }} )</h3>
-                                <p></p>
-                                <p>{{$transfers->toLocation->address }}</p>
-                                <p></p>
-                                <p>{{$transfers->toLocation->telephone }}<br>{{$transfers->toLocation->email}}</p></div>
-                            <div class="col-xs-6">
-                                From:
-                                <h3 style="margin-top:10px;">{{$transfers->fromLocation->name }}
-                                    ( {{$transfers->fromLocation->code }} )</h3>
-                                <p></p>
-                                <p>{{$transfers->fromLocation->address }}</p>
-                                <p></p>
-                                <p>{{$transfers->fromLocation->telephone }}<br>{{$transfers->fromLocation->email}}</p>
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover table-striped order-table">
-                                <thead>
-                                <tr>
-                                    <th style="text-align:center; vertical-align:middle;">No.</th>
-                                    <th style="vertical-align:middle;">Product</th>
-                                    <th style="text-align:center; vertical-align:middle;">Quantity</th>
-                                    <th style="text-align:center; vertical-align:middle;">Unit Cost</th>
-                                    <th style="text-align:center; vertical-align:middle;">Tax</th>
-                                    <th style="text-align:center; vertical-align:middle;">Subtotal</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                @foreach($stock->stockItems as $key => $p)
-                                    <tr>
-                                        <td>{{$key+1}}</td>
-                                        <td>{{$p->products->name}}( {{$p->products->item_code }} )</td>
-                                        <td>{{$p->qty}}</td>
-                                        <td style="text-align: right">{{number_format(($p->cost_price-(($p->cost_price*$p->tax_per)/(100+$p->tax_per))),2)}}</td>
-                                        <td style="text-align: right">{{number_format((($p->cost_price*$p->tax_per)/(100+$p->tax_per)),2)}}</td>
-                                        <td style="text-align: right">{{number_format($p->cost_price*$p->qty,2)}}</td>
-                                    </tr>
-                                @endforeach
-
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="4" style="text-align:right;">Total (Rs)
-                                    </td>
-                                    <td style="text-align:right;">
-                                        {{number_format($transfers->tot_tax,2)}}
-                                    </td>
-                                    <td style="text-align:right;">
-                                        {{number_format($transfers->grand_total,2)}}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="5" style="text-align:right; font-weight:bold;">Total Amount (Rs)
-                                    </td>
-                                    <td style="text-align:right; font-weight:bold;">  {{number_format($transfers->grand_total,2)}}</td>
-                                </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-4 col-xs-offset-1 align-self-end" style="float: right">
-                                <div class="well well-sm">
-                                    <p>Created by : {{$transfers->creator->name}} </p>
-                                    <p>Date: {{date('Y-m-d H:i:s')}}</p>
-                                </div>
-                            </div>
-
-                        </div>
-                        <!-- this row will not appear when printing -->
-                        <div class="row no-print">
-                            <div class="col-xs-12">
-                                {{--                        <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i>--}}
-                                {{--                            Print</a>--}}
-                                <div style="float: right">
-                                    <a class="btn btn-success" href='{{url('transfer/print/'.$transfers->id)}}'>
-                                        <i class="fa fa-file-pdf-o"></i><span class="hidden-sm hidden-xs"> PDF</span>
-                                    </a>
-                                    <a class="btn btn-warning" href='{{url('transfer/edit/'.$transfers->id)}}'>
-                                        <i class="glyphicon glyphicon-edit"></i><span
-                                                class="hidden-sm hidden-xs"> Edit</span>
-                                    </a>
-                                    <a class="btn btn-danger" title="" data-toggle="popover"
-                                       data-content="<div style='width:150px;'><p>Are you sure?</p><a class='btn btn-danger' href='{{url('transfer/delete/'.$transfers->id)}}'>Yes I'm sure</a> <button class='btn bpo-close'>No</button></div>"
-                                       data-html="true" data-placement="top"
-                                       data-original-title="<b>Delete Purchase</b>">
-                                        <i class="fa fa-trash-o"></i> <span class="hidden-sm hidden-xs">Delete</span>
-                                    </a>
-                                </div>
-                            </div>
+                            <p>Created by: {{$sales->creator->name}} </p>
+                            <p>Date: {{date('Y-m-d H:i:s')}}</p>
                         </div>
                     </div>
                 </div>
-            </div><!-- /.modal -->
+
+            </div>
+            <div class="row no-print">
+                <div class="col-xs-12">
+                    <div style="float: right">
+                        <a class="btn btn-success" href='{{url('sales/print/'.$sales->id)}}'>
+                            <i class="fa fa-file-pdf-o"></i><span class="hidden-sm hidden-xs"> PDF</span>
+                        </a>
+                        <a class="btn btn-warning" href='{{url('sales/edit/'.$sales->id)}}'>
+                            <i class="glyphicon glyphicon-edit"></i><span
+                                    class="hidden-sm hidden-xs">Edit</span>
+                        </a>
+                        <a class="btn btn-danger" title="" data-toggle="popover"
+                           data-content="<div style='width:150px;'><p>Are you sure?</p><a class='btn btn-danger' href='{{url('sales/delete/'.$sales->id)}}'>Yes I'm sure</a> <button class='btn bpo-close'>No</button></div>"
+                           data-html="true" data-placement="top"
+                           data-original-title="<b>Delete Purchase</b>">
+                            <i class="fa fa-trash-o"></i> <span class="hidden-sm hidden-xs">Delete</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div><!-- /.modal -->
 
 
