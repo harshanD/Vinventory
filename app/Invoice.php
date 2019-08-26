@@ -18,7 +18,7 @@ class Invoice extends Model
         return $this->hasMany(InvoiceDetails::class, 'invoice_id', 'id');
     }
 
-    function location()
+    function locations()
     {
         return $this->hasOne(Locations::class, 'id', 'location');
     }
