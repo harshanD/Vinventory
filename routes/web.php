@@ -143,7 +143,7 @@ Route::post('sales/partiallyReceive', 'InvoiceController@partiallyReceive');
 Route::post('sales/fetchPOItemsDataById', 'InvoiceController@fetchPOItemsDataById');
 Route::get('sales/view/{id}', 'InvoiceController@view');
 Route::get('sales/delete/{id}', 'InvoiceController@delete');
-Route::get('sales/printpo/{id}', 'InvoiceController@printPO');
+Route::get('sales/print/{id}', 'InvoiceController@print');
 
 
 Route::group(['middleware' => 'auth'], function () {
