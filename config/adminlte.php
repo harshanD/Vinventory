@@ -248,6 +248,20 @@ return [
                     'url' => '/sales/manage',
                 ],
             ]
+        ], [
+            'text' => 'Returns',
+            'icon' => 'user',
+            'submenu' => [
+                [
+                    'text' => 'Add Returns',
+                    'icon' => 'user',
+                    'url' => '/returns/add',
+                ], [
+                    'text' => 'List Sales',
+                    'icon' => 'user',
+                    'url' => '/returns/manage',
+                ],
+            ]
         ],
         'ACCOUNT SETTINGS',
         [
