@@ -15,23 +15,31 @@ class CreateStockReturnTable extends Migration
     {
         Schema::create('stock_return', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('source_location')->unsigned();
-            $table->foreign('source_location')->references('id')->on('locations')->onDelete('cascade');
-            $table->integer('destination_location')->unsigned();
-            $table->foreign('destination_location')->references('id')->on('locations')->onDelete('cascade');
+            $table->string('return_reference_code')->unique();
+            $table->integer('location')->unsigned();
+            $table->foreign('location')->references('id')->on('locations')->onDelete('cascade');
             $table->date('date')->nullable();
             $table->integer('biller')->unsigned();
             $table->foreign('biller')->references('id')->on('biller')->onDelete('cascade');
-            $table->integer('customer_id')->unsigned();
-            $table->foreign('customer_id')->references('id')->on('customer')->onDelete('cascade');
+            $table->integer('customer')->unsigned();
+            $table->foreign('customer')->references('id')->on('customer')->onDelete('cascade');
+            $table->double('discount')->nullable();
+            $table->string('discount_val_or_per', 10)->nullable();
+            $table->string('tax_per', 10)->nullable();
+            $table->double('tax_amount')->nullable();
+            $table->double('grand_total');
             $table->integer('return_type')->comment('1=sr,2=mr')->default(1);
             $table->string('return_note')->nullable();
             $table->string('staff_note')->nullable();
             $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
             $table->softDeletes();
             $table->timestamps();
-            $table->userstamps();
-            $table->softUserstamps();
+            $table->integer('created_by')->unsigned()->nullable();
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('updated_by')->unsigned()->nullable();
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('deleted_by')->unsigned()->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

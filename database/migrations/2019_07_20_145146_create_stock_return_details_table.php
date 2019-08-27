@@ -16,12 +16,15 @@ class CreateStockReturnDetailsTable extends Migration
         Schema::create('stock_return_details', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('return_id')->unsigned();
-            $table->foreign ('return_id')->references('id')->on('stock_return')->onDelete('cascade');
-            $table->integer('product_id')->unsigned();
-            $table->foreign ('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->double('qty')->nullable();
-            $table->double('cost_price')->nullable();
-            $table->double('selling_price')->nullable();
+            $table->foreign('return_id')->references('id')->on('stock_return')->onDelete('cascade');
+            $table->integer('item_id')->unsigned();
+            $table->foreign('item_id')->references('id')->on('products')->onDelete('cascade');
+            $table->double('qty');
+            $table->double('selling_price');
+            $table->double('tax_val')->nullable();
+            $table->string('tax_per', 10)->nullable();
+            $table->double('discount')->nullable();
+            $table->double('sub_total');
             $table->timestamps();
         });
     }
