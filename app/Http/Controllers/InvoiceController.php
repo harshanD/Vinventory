@@ -287,7 +287,7 @@ class InvoiceController extends Controller
 
         $deletedItems = (isset($request->deletedItems)) ? $request->deletedItems : '';
 
-        if (is_array($deletedItems) && isset($deletedItems[0]) && array_sum($deletedItems)) {
+        if (is_array($deletedItems) && isset($deletedItems[0]) && array_sum($deletedItems)>0) {
             $invoItemDel = Invoice::where('id', '=', $iv->id)->firstOrFail();
             $invoItemDel->invoiceItems()->whereIn('item_id', $deletedItems)->delete();
 

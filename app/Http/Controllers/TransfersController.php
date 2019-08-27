@@ -255,7 +255,7 @@ class TransfersController extends Controller
         $deletedItems = (isset($request->deletedItems)) ? $request->deletedItems : '';
 
 
-        if (is_array($deletedItems) && isset($deletedItems[0])) {
+        if (is_array($deletedItems) && isset($deletedItems[0])&& array_sum($deletedItems)>0) {
             $stockDelete_A = Stock::where('receive_code', 'like', '%' . $olederRefCode . '-A%')->firstOrFail();
             $stockDelete_A->stockItems()->whereIn('item_id', $deletedItems)->delete();
 
