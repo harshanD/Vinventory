@@ -171,14 +171,28 @@
                     </table>
                 </div>
                 <div class="row">
-                    <div class="col-xs-6">
-                    </div>
+                    @if($sales->sale_note!='')
+                        <div class="col-xs-6">
+                            <div class="well well-sm">
+                                <p>Note: </p>
+                                <p>{{$sales->sale_note}} </p>
+                            </div>
+                        </div>
+                    @endif
                     <div class="col-xs-6">
                         <div class="well well-sm">
                             <p>Created by: {{$sales->creator->name}} </p>
                             <p>Date: {{date('Y-m-d H:i:s')}}</p>
                         </div>
                     </div>
+                    @if($sales->staff_note!='')
+                        <div class="col-xs-6">
+                            <div class="well well-sm">
+                                <p>Staff Note: </p>
+                                <p>{{$sales->staff_note}}</p>
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
             </div>

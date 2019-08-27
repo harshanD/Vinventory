@@ -103,9 +103,9 @@
                         <?php $tot = 0; $incr = 0;$taxTot = 0;$disTot = 0; ?>
                         @foreach($sales->invoiceItems as $item)
                             <?php $tot += $item->sub_total;
-                                $taxTot += $item->tax_val;
-                                $disTot += $item->discount;
-                                ?>
+                            $taxTot += $item->tax_val;
+                            $disTot += $item->discount;
+                            ?>
                             <td style="text-align:center; vertical-align:middle;">{{++$incr}}</td>
                             <td style="text-align:left">
                                 {{$item->products->name}} [ {{$item->products->item_code}} ]
@@ -175,6 +175,16 @@
 
         </div>
         <div class="page-break"></div>
+        <div class="row">
+            <div class="col-xs-12">
+                @if($sales->sale_note!='')
+                    <div class="well well-sm">
+                        <p>Note: </p>
+                        <p>{{$sales->sale_note}} </p>
+                    </div>
+                @endif
+            </div>
+        </div>
         <div class="row">
             <div class="col-xs-12">
                 <div class="col-xs-4 pull-left">
