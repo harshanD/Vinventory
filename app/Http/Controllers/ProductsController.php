@@ -25,7 +25,7 @@ class ProductsController extends Controller
         $suppliers = Supplier::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
         $taxes = Tax::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
 
-        return view('vendor.adminlte.products.create', ['brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers,'taxes'=>$taxes]);
+        return view('vendor.adminlte.products.create', ['brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers, 'taxes' => $taxes]);
     }
 
     public function create(Request $request)
@@ -138,7 +138,7 @@ class ProductsController extends Controller
         $product = Products::find($id);
 
 
-        return view('vendor.adminlte.products.edit', ['product' => $product, 'brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers,'taxes'=>$taxes]);
+        return view('vendor.adminlte.products.edit', ['product' => $product, 'brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers, 'taxes' => $taxes]);
     }
 
     public function fetchProductDataById(Request $request)
@@ -251,6 +251,33 @@ class ProductsController extends Controller
 
         $list = array();
         foreach ($products as $key => $product) {
+            $list[$key] = array(
+                'id' => $product->id,
+                'name' => $product->name,
+                'short_name' => $product->short_name,
+                'item_code' => $product->item_code,
+                'description' => $product->description,
+                'img_url' => $product->img_url,
+                'img_url' => $product->img_url,
+                'selling_price' => $product->selling_price,
+                'cost_price' => $product->cost_price,
+                'weight' => $product->weight,
+                'unit' => $product->unit,
+                'reorder_level' => $product->reorder_level,
+                'discount' => 0,
+                'reorder_activation' => $product->reorder_activation,
+                'tax' => (\Config::get('constants.taxActive.Active') == $product->tax_method) ? Tax::find($product->tax)->get()->toArray()[0]['value'] : 0,
+            );
+        }
+
+        echo json_encode($list);
+    }
+
+    public function itemList()
+    {
+        $data = (object)Products::where(['status' => \Config::get('constants.status.Active')])->get();
+        $list = array();
+        foreach ($data as $key => $product) {
             $list[$key] = array(
                 'id' => $product->id,
                 'name' => $product->name,
