@@ -11,7 +11,10 @@
 @section('title', 'AdminLTE')
 
 @section('content_header')
-    <h1>Dashboard</h1>
+    <ol class="breadcrumb">
+        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Add Customer</li>
+    </ol>
 @stop
 
 @section('content')
@@ -21,7 +24,7 @@
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">Customer Create</h3>
+                <h3 class="box-title">Customer Add</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"

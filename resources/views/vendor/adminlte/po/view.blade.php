@@ -11,7 +11,11 @@
 @section('title', 'AdminLTE')
 
 @section('content_header')
-    <h1>Dashboard</h1>
+    <ol class="breadcrumb">
+        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{{url('/po/manage')}}">PO Manage</a></li>
+        <li class="active">View PO</li>
+    </ol>
 @stop
 
 @section('content')
@@ -184,10 +188,10 @@
                             <button type="button" class="btn btn-success"><i class="fa fa-credit-card"></i>
                                 Add Payments
                             </button>
-                            <a class="btn btn-success"   href='{{url('po/printpo/'.$po->id)}}'>
+                            <a class="btn btn-success" href='{{url('po/printpo/'.$po->id)}}'>
                                 <i class="fa fa-file-pdf-o"></i><span class="hidden-sm hidden-xs"> PDF</span>
                             </a>
-                            <a class="btn btn-warning"  href='{{url('po/edit/'.$po->id)}}'>
+                            <a class="btn btn-warning" href='{{url('po/edit/'.$po->id)}}'>
                                 <i class="glyphicon glyphicon-edit"></i><span class="hidden-sm hidden-xs"> Edit</span>
                             </a>
                             <a class="btn btn-danger" title="" data-toggle="popover"

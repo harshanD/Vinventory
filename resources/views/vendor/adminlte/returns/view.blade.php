@@ -11,7 +11,11 @@
 @section('title', 'AdminLTE')
 
 @section('content_header')
-    <h1>Dashboard</h1>
+    <ol class="breadcrumb">
+        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{{url('returns/manage')}}">Manage Return</a></li>
+        <li class="active">View Returns</li>
+    </ol>
 @stop
 
 @section('content')

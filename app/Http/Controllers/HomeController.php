@@ -98,11 +98,12 @@ class HomeController extends Controller
             'role' => ['required', Rule::notIn(['0'])],
             'email' => 'required|email|unique:users,email,' . $userId,
             'fname' => 'required|min:4|max:100|regex:/^[\pL\s\-]+$/u',
-            'phone' => 'required|between:10,12',
+            'phone' => (!empty($request->input('phone'))) ? 'between:10,12' : '',
             'gender' => 'required',
         ]);
 
-
+//print_r($request->input());
+//return 'dd';
         if (($request->input('password')) != '' || ($request->input('new_password')) != '' || ($request->input('password_confirmation')) != '') {
             $this->validate($request, [
                 'password' => 'required',

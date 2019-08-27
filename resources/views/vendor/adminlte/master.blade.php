@@ -33,18 +33,14 @@
         .redErrorInput{
             background-color:red;
         }
+        .help-block {
+            color: red;
+        }
     </style>
     @if(config('adminlte.plugins.datatables'))
     <!-- DataTables with bootstrap 3 style -->
         <link rel="stylesheet" href="//cdn.datatables.net/v/bs/dt-1.10.18/datatables.min.css">
-        <style>
-            .help-block {
-                color: red;
-            }
-
-        </style>
         @endif
-
     @yield('adminlte_css')
 
     <!--[if lt IE 9]>
