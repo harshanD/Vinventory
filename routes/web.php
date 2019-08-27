@@ -138,12 +138,21 @@ Route::post('sales/create', 'InvoiceController@create');
 Route::get('sales/manage', ['as' => 'sales.manage', 'uses' => 'InvoiceController@invoList']);
 Route::get('sales/fetchSalesData', 'InvoiceController@fetchSalesData');
 Route::post('sales/edit/{id}', 'InvoiceController@editInvoData');
-Route::post('sales/receiveAll', 'InvoiceController@receiveAll');
-Route::post('sales/partiallyReceive', 'InvoiceController@partiallyReceive');
-Route::post('sales/fetchPOItemsDataById', 'InvoiceController@fetchPOItemsDataById');
 Route::get('sales/view/{id}', 'InvoiceController@view');
 Route::get('sales/delete/{id}', 'InvoiceController@delete');
 Route::get('sales/print/{id}', 'InvoiceController@print');
+
+/* Returns */
+Route::get('/returns/add', ['as' => 'sales.add', 'uses' => 'StockReturnController@index']);
+Route::get('/products/fetchProductsList', 'ProductsController@itemList');
+Route::get('returns/edit/{id}', 'StockReturnController@editView');
+Route::post('returns/create', 'StockReturnController@create');
+Route::get('returns/manage', ['as' => 'returns.manage', 'uses' => 'StockReturnController@retnList']);
+Route::get('returns/fetchReturnData', 'StockReturnController@fetchReturnData');
+Route::post('returns/edit/{id}', 'StockReturnController@editReturnData');
+Route::get('returns/view/{id}', 'StockReturnController@view');
+Route::get('returns/delete/{id}', 'StockReturnController@delete');
+Route::get('returns/print/{id}', 'StockReturnController@print');
 
 
 Route::group(['middleware' => 'auth'], function () {

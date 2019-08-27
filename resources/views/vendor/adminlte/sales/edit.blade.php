@@ -850,14 +850,16 @@
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + ($('#poTable tr').length - 2) + " (" + qtySum + ") " + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Total</td>" +
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + sum.format(2) + "</td>" +
-                "<td style='text-align: left;background-color: #dfe4da;width: 13%' hidden>Order Tax</td>" +
-                "<td style='text-align: right;background-color: #c2c7bd;width: 7%' hidden>" + wtax.format(2) + "</td>" +
+                "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Order Discount</td>" +
+                "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + wdisco.format(2) + "</td>" +
+                "<td style='text-align: left;background-color: #dfe4da;width: 13%' >Order Tax</td>" +
+                "<td style='text-align: right;background-color: #c2c7bd;width: 7%' >" + wtax.format(2) + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Grand Total</td>" +
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" +
                 "<input type='hidden' name='grand_total' id='grand_total' value='" + toNumber(gtot.format(2)) + "'>" +
                 "<input type='hidden' name='grand_tax_id' id='grand_tax_id' value='" + $('#wholeTax').val() + "'>" +
                 "<input type='hidden' name='grand_discount' id='grand_discount' value='" + toNumber(wdisco) + "'>" +
-                "<input type='hidden' name='grand_tax' id='grand_tax' value='" + txSum + "'>" + gtot.format(2) + "" +
+                "<input type='hidden' name='grand_tax' id='grand_tax' value='" + wtax + "'>" + gtot.format(2) + "" +
                 "</td><tr></table>";
 
 
