@@ -176,7 +176,7 @@ class InvoiceController extends Controller
                   <ul class=\"dropdown-menu\" role=\"menu\">
                     <li><a href=\"/sales/edit/" . $value->id . "\">Edit Sale</a></li>
                     <li><a href=\"/sales/view/" . $value->id . "\">Sale details view</a></li>
-                    <li><a href=\"/sales/delete/" . $value->id . "\">Sale details view</a></li>
+                    <li><a href=\"/sales/print/" . $value->id . "\">Download as PDF</a></li>
                     <li class=\"divider\"></li>
                      <li><a style='cursor: pointer' onclick=\"deleteSale(" . $value->id . ")\">Delete</a></li>
                   </ul>
