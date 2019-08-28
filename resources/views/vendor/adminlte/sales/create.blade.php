@@ -348,7 +348,7 @@
                         </div>
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary">Save</button>
-                            <a href="{{url('sales/manage')}}" class="btn btn-warning">Back</a>
+                            <a onclick="window.history.back()" class="btn btn-warning">Back</a>
                         </div>
                         <div id="footer" class="box-body"></div>
                     </div>

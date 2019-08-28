@@ -127,7 +127,7 @@
 
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
-                                <a href="" class="btn btn-warning">Back</a>
+                                <a onclick="window.history.back()" class="btn btn-warning">Back</a>
                             </div>
 
                         </div>
