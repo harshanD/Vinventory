@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMailable;
 
 class POController extends Controller
 {
@@ -169,9 +171,10 @@ class POController extends Controller
                     " . $statusOfReceiveAll . "
                     " . $statusOfpartiallyReceiveAll . "
                     <li><a href=\"/po/view/" . $value->id . "\">Purchase details view</a></li>
-                    <li><a onclick=\"deletePo(" . $value->id . ")\">Delete</a></li>
+                    <li><a href=\"/po/printpo/" . $value->id . "\">Download as PDF</a></li>
+                    <li><a href=\"/send/email/" . $value->id . "\">Send Mail</a></li>
                     <li class=\"divider\"></li>
-                    <li><a href=\"#\">Separated link</a></li>
+                   <li><a style='cursor: pointer' onclick=\"deletePo(" . $value->id . ")\">Delete</a></li>
                   </ul>
                 </div><input type='hidden' id='recNo_" . $value->id . "' value='" . $code . "'>";
 
@@ -493,19 +496,55 @@ class POController extends Controller
     public function printPO($id)
     {
         $podata = PO::find($id);
+
         $locations = $podata->locations;
         $supplier = $podata->suppliers;
 //        return view('vendor.adminlte.po.printPo', ['locations' => $locations, 'suppliers' => $supplier, 'po' => $podata]);
 
 
 //        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+//        return view('vendor.adminlte.po.printPo', ['locations' => $locations, 'suppliers' => $supplier, 'po' => $podata]);
         $pdf = PDF::loadView('vendor.adminlte.po.printPo', ['locations' => $locations, 'suppliers' => $supplier, 'po' => $podata]);
-//        $pdf->render();
-//        $pdf = PDF::loadView('vendor.adminlte.po.test');
-//        $pdf->save(storage_path().'printPo.pdf');
-//        return $pdf->stream('printPo.pdf');
         return $pdf->download('printPo.pdf');
 //        exit(0);
+    }
 
+    public function mailBody($id)
+    {
+        $podata = PO::find($id);
+        $supplier = $podata->suppliers;
+        $name = $supplier->name;
+        $type = 'Purchase order';
+        $reference_number = $podata->referenceCode;
+        $company = config('adminlte.title', 'AdminLTE 2');
+        return view('vendor.adminlte.po.mail', ['name' => $name, 'type' => $type, 'company' => $company, 'reference_number' => $reference_number]);
+    }
+
+    public function mail($id, Request $request)
+    {
+        $podata = PO::find($id);
+        $locations = $podata->locations;
+        $supplier = $podata->suppliers;
+        $pdf = PDF::loadView('vendor.adminlte.po.printPo', ['locations' => $locations, 'suppliers' => $supplier, 'po' => $podata]);
+
+        $name = $supplier->name;
+        $email = $supplier->email;
+        $UserCompany = $supplier->company;
+        $path = 'vendor.adminlte.po.mail';
+        $type = 'Purchase order';
+        $reference_number = $podata->referenceCode;
+
+        $attach = $pdf->output();
+        Mail::to($email)->send(new SendMailable($name, $reference_number, $type, $UserCompany, config('adminlte.title', 'AdminLTE 2'), $attach, $path));
+
+        if (count(Mail::failures()) > 0) {
+            $request->session()->flash('message', 'Email sent fail to ' . $name . ' (' . $email . ') ');
+            $request->session()->flash('message-type', 'error');
+            return redirect()->back();
+        } else {
+            $request->session()->flash('message', 'Email sent to ' . $name . ' (' . $email . ') ');
+            $request->session()->flash('message-type', 'success');
+            return redirect()->route('po.manage');
+        }
     }
 }

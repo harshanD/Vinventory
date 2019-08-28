@@ -7,6 +7,8 @@ use App\Customer;
 use App\InvoiceDetails;
 use App\Locations;
 use App\Invoice;
+use App\Mail\SendMailable;
+use App\PO;
 use App\PoDetails;
 use App\Products;
 use App\Stock;
@@ -15,6 +17,7 @@ use App\Supplier;
 use App\Tax;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -177,6 +180,7 @@ class InvoiceController extends Controller
                     <li><a href=\"/sales/edit/" . $value->id . "\">Edit Sale</a></li>
                     <li><a href=\"/sales/view/" . $value->id . "\">Sale details view</a></li>
                     <li><a href=\"/sales/print/" . $value->id . "\">Download as PDF</a></li>
+                    <li><a href=\"/send/sale/email/" . $value->id . "\">Email Sale</a></li>
                     <li class=\"divider\"></li>
                      <li><a style='cursor: pointer' onclick=\"deleteSale(" . $value->id . ")\">Delete</a></li>
                   </ul>
@@ -287,7 +291,7 @@ class InvoiceController extends Controller
 
         $deletedItems = (isset($request->deletedItems)) ? $request->deletedItems : '';
 
-        if (is_array($deletedItems) && isset($deletedItems[0]) && array_sum($deletedItems)>0) {
+        if (is_array($deletedItems) && isset($deletedItems[0]) && array_sum($deletedItems) > 0) {
             $invoItemDel = Invoice::where('id', '=', $iv->id)->firstOrFail();
             $invoItemDel->invoiceItems()->whereIn('item_id', $deletedItems)->delete();
 
@@ -384,5 +388,35 @@ class InvoiceController extends Controller
         }
     }
 
+    public function mail($id, Request $request)
+    {
+        $ivdata = Invoice::find($id);
+
+        $location = $ivdata->locations;
+        $biller = $ivdata->billers;
+        $customer = $ivdata->customers;
+
+        $pdf = PDF::loadView('vendor.adminlte.sales.print', ['location' => $location, 'customer' => $customer, 'biller' => $biller, 'sales' => $ivdata]);
+
+        $name = $customer->name;
+        $email = $customer->email;
+        $UserCompany = $customer->company;
+        $path = 'vendor.adminlte.sales.mail';
+        $type = 'Sale Details';
+        $reference_number = $ivdata->invoice_code;
+
+        $attach = $pdf->output();
+        Mail::to($email)->send(new SendMailable($name, $reference_number, $type, $UserCompany, config('adminlte.title', 'AdminLTE 2'), $attach, $path));
+
+        if (count(Mail::failures()) > 0) {
+            $request->session()->flash('message', 'Email sent fail to ' . $name . ' (' . $email . ') ');
+            $request->session()->flash('message-type', 'error');
+            return redirect()->back();
+        } else {
+            $request->session()->flash('message', 'Email sent to ' . $name . ' (' . $email . ') ');
+            $request->session()->flash('message-type', 'success');
+            return redirect()->route('sales.manage');
+        }
+    }
 
 }

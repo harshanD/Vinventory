@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Invoice;
 use App\Locations;
+use App\Mail\SendMailable;
 use App\Transfers;
 use App\PoDetails;
 use App\Stock;
@@ -11,6 +13,7 @@ use App\Supplier;
 use App\Tax;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -158,6 +161,7 @@ class TransfersController extends Controller
                     <li><a href=\"/transfer/edit/" . $value->id . "\">Edit Purchase</a></li>
                     <li><a href=\"/transfer/view/" . $value->id . "\">Transfer details</a></li>
                      <li><a href=\"/transfer/print/" . $value->id . "\">Download as PDF</a></li>
+                     <li><a href=\"/send/transfers/email/" . $value->id . "\">Email Transfer</a></li>
                     <li class=\"divider\"></li>
                      <li><a style='cursor: pointer' onclick=\"deletePo(" . $value->id . ")\">Delete Transfer</a></li>
                   </ul>
@@ -255,7 +259,7 @@ class TransfersController extends Controller
         $deletedItems = (isset($request->deletedItems)) ? $request->deletedItems : '';
 
 
-        if (is_array($deletedItems) && isset($deletedItems[0])&& array_sum($deletedItems)>0) {
+        if (is_array($deletedItems) && isset($deletedItems[0]) && array_sum($deletedItems) > 0) {
             $stockDelete_A = Stock::where('receive_code', 'like', '%' . $olederRefCode . '-A%')->firstOrFail();
             $stockDelete_A->stockItems()->whereIn('item_id', $deletedItems)->delete();
 
@@ -458,5 +462,33 @@ class TransfersController extends Controller
         return $pdf->download('printPo.pdf');
 //        exit(0);
 
+    }
+
+    public function mail($id, Request $request)
+    {
+        $trdata = Transfers::find($id);
+        $stock = Stock::where('receive_code', '=', $trdata->tr_reference_code . '-A')->firstOrFail();
+
+        $pdf = PDF::loadView('vendor.adminlte.transfers.print', ['transfers' => $trdata, 'stock' => $stock]);
+
+        $name = '';
+        $email = $trdata->toLocation->email;
+        $UserCompany = '';
+        $path = 'vendor.adminlte.transfers.mail';
+        $type = 'Transfer Details';
+        $reference_number = $trdata->tr_reference_code;
+
+        $attach = $pdf->output();
+        Mail::to($email)->send(new SendMailable($name, $reference_number, $type, $UserCompany, config('adminlte.title', 'AdminLTE 2'), $attach, $path));
+
+        if (count(Mail::failures()) > 0) {
+            $request->session()->flash('message', 'Email sent fail to ' . $name . ' (' . $email . ') ');
+            $request->session()->flash('message-type', 'error');
+            return redirect()->back();
+        } else {
+            $request->session()->flash('message', 'Email sent to ' . $name . ' (' . $email . ') ');
+            $request->session()->flash('message-type', 'success');
+            return redirect()->route('transfers.manage');
+        }
     }
 }
