@@ -155,6 +155,13 @@ Route::get('returns/delete/{id}', 'StockReturnController@delete');
 Route::get('returns/print/{id}', 'StockReturnController@print');
 
 
+/*Mailing*/
+Route::get('/send/email/{id}', 'POController@mail');
+Route::get('/send/sale/email/{id}', 'InvoiceController@mail');
+Route::get('/send/transfers/email/{id}', 'TransfersController@mail');
+
+
+
 Route::group(['middleware' => 'auth'], function () {
     //    Route::get('/link1', function ()    {
 //        // Uses Auth Middleware
