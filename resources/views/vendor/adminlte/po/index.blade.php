@@ -88,7 +88,7 @@
                 </table>
 
             </div>
-            <button type="button" onclick="alert()" class="btn btn-default" data-dismiss="modal">mail</button>
+
             <!-- /.box-body -->
         {{--<div class="box-footer">--}}
         {{--Footer--}}
