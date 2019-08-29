@@ -179,6 +179,20 @@ return [
                 ],
             ]
         ], [
+            'text' => 'Adjustment',
+            'icon' => 'user',
+            'submenu' => [
+                [
+                    'text' => 'Add Adjustment',
+                    'icon' => 'user',
+                    'url' => '/adjustment/add',
+                ], [
+                    'text' => 'Manage Adjustment',
+                    'icon' => 'user',
+                    'url' => '/adjustment/manage',
+                ],
+            ]
+        ], [
             'text' => 'Purchase Order',
             'icon' => 'user',
             'submenu' => [
