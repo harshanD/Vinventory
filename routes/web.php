@@ -160,6 +160,15 @@ Route::get('/send/email/{id}', 'POController@mail');
 Route::get('/send/sale/email/{id}', 'InvoiceController@mail');
 Route::get('/send/transfers/email/{id}', 'TransfersController@mail');
 
+/*Adjustment*/
+Route::get('/adjustment/add', ['as' => 'adjustment.add', 'uses' => 'AdjustmentController@index']);
+Route::post('adjustment/create', 'AdjustmentController@create');
+Route::get('adjustment/manage', ['as' => 'adjustment.manage', 'uses' => 'AdjustmentController@adjustList']);
+Route::get('adjustment/edit/{id}', 'AdjustmentController@editView');
+Route::get('adjustment/fetchAdjData', 'AdjustmentController@fetchAdjData');
+Route::post('adjustment/edit/{id}', 'AdjustmentController@editAdjData');
+Route::get('adjustment/view/{id}', 'AdjustmentController@view');
+Route::get('adjustment/delete/{id}', 'AdjustmentController@delete');
 
 
 Route::group(['middleware' => 'auth'], function () {
