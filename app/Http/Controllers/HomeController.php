@@ -61,7 +61,7 @@ class HomeController extends Controller
         if (!$validator->validate()) {
             return redirect()->back()->withInput();
         }
-        $avatar = "/img/avatar.png";
+        $avatar = "/avatars/avatar.png";
         if ($request->file('avatar') != null) {
             $path = $request->file('avatar')->store('avatars');
             $avatar = $path;
@@ -141,6 +141,7 @@ class HomeController extends Controller
         $user->email = $request->input('email');
         $user->phone = $request->input('phone');
         $user->gender = $request->input('gender');
+        $user->status = $request->input('active');
 
         $user->save();
 
@@ -212,6 +213,21 @@ class HomeController extends Controller
         } // /foreach
 
         echo json_encode($result);
+    }
+
+    public function deleteUser($id, Request $request)
+    {
+        User::find($id)->delete();
+
+        if (count(Mail::failures()) > 0) {
+            $request->session()->flash('message', 'User deletion failed');
+            $request->session()->flash('message-type', 'error');
+            return redirect()->back();
+        } else {
+            $request->session()->flash('message', 'User Deleted !');
+            $request->session()->flash('message-type', 'success');
+            return redirect()->route('users.manage');
+        }
     }
 
 }

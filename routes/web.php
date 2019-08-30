@@ -29,6 +29,7 @@ Route::get('/user/manage', ['as' => 'users.manage', 'uses' => 'HomeController@us
 Route::get('/user/fetchUsersData', 'HomeController@fetchUsersData');
 Route::get('/user/edit/{id}', 'HomeController@userEditView');
 Route::post('user/editSave', 'HomeController@editSave');
+Route::post('/user/delete/{id}', 'HomeController@deleteUser');
 
 /*Brands*/
 Route::get('/brands', 'BrandsController@index');
