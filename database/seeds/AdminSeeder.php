@@ -68,7 +68,7 @@ class AdminSeeder extends Seeder
   ('0', '5', '1', '1', 'A', '2019-08-18 06:53:48', '2019-08-18 06:53:48'), ('0', '6', '1', '6', 'A', '2019-08-18 06:54:35', '2019-08-18 06:54:35'),
    ('0', '7', '1', '10', 'A', '2019-08-18 07:03:35', '2019-08-18 07:03:35')");
 
-        DB::insert("INSERT INTO `tax_profiles` (`id`, `name`, `code`, `value`, `type`, `status`, `deleted_at`, `created_at`, `updated_at`, `created_by`, `updated_by`, `deleted_by`) VALUES ('0', 'No Vat', '0%', '0', 'Percentage', '0', NULL, '2019-08-20 17:57:51', '2019-08-28 11:21:10', NULL, NULL, NULL)");
+        DB::insert("INSERT INTO `tax_profiles` (`id`, `name`, `code`, `value`, `type`, `status`, `deleted_at`, `created_at`, `updated_at`, `created_by`, `updated_by`, `deleted_by`) VALUES ('0', 'No Tax', '0%', '0', 'Percentage', '0', NULL, '2019-08-20 17:57:51', '2019-08-28 11:21:10', NULL, NULL, NULL)");
         DB::insert("INSERT INTO `tax_profiles` (`id`, `name`, `code`, `value`, `type`, `status`, `deleted_at`, `created_at`, `updated_at`, `created_by`, `updated_by`, `deleted_by`) VALUES ('0', '20 % tax', '20 %', '20', 'Percentage', '0', NULL, '2019-08-28 11:22:35', '2019-08-28 11:22:35', NULL, NULL, NULL)");
     }
 }
