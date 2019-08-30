@@ -120,167 +120,171 @@ return [
             'icon' => 'home',
             'label_color' => 'success',
         ],
-        [
-            'text' => 'Brands',
-            'url' => '/brands',
-            'icon' => 'tags',
-            'label_color' => 'success',
-        ],
-        [
-            'text' => 'Categories',
-            'url' => '/categories',
-            'icon' => 'duplicate',
-            'label_color' => 'success',
-        ],
-        [
-            'text' => 'Locations',
-            'url' => '/locations',
-            'icon' => 'map-marker',
-            'label_color' => 'success',
-        ],
-        [
-            'text' => 'Supplier',
-            'url' => '/supplier',
-            'icon' => 'truck',
-            'label_color' => 'success',
-        ],
-        [
-            'text' => 'Pages',
-            'url' => 'admin/pages',
-            'icon' => 'file',
-            'label' => 4,
-            'label_color' => 'success',
-        ],
         'SUB NAVIGATION',
         [
             'text' => 'Products',
-            'icon' => 'gift',
+            'icon' => 'barcode',
             'submenu' => [
                 [
+                    'text' => 'Manage Product',
+                    'icon' => 'barcode',
+                    'url' => 'products',
+                ], [
                     'text' => 'Add Product',
+                    'icon' => 'plus-circle',
                     'url' => 'products/create',
                 ], [
-                    'text' => 'Manage Product',
-                    'url' => 'products',
-                ],
-            ]
-        ], [
-            'text' => 'User',
-            'icon' => 'user',
-            'submenu' => [
-                [
-                    'text' => 'Add Users',
-                    'icon' => 'user',
-                    'url' => '/user/register',
-                ], [
-                    'text' => 'Manage users',
-                    'icon' => 'user',
-                    'url' => '/user/manage',
-                ],
-            ]
-        ], [
-            'text' => 'Adjustment',
-            'icon' => 'user',
-            'submenu' => [
-                [
-                    'text' => 'Add Adjustment',
-                    'icon' => 'user',
-                    'url' => '/adjustment/add',
-                ], [
                     'text' => 'Manage Adjustment',
-                    'icon' => 'user',
+                    'icon' => 'filter',
                     'url' => '/adjustment/manage',
-                ],
-            ]
-        ], [
-            'text' => 'Purchase Order',
-            'icon' => 'user',
-            'submenu' => [
-                [
-                    'text' => 'Add PO',
-                    'icon' => 'user',
-                    'url' => '/po/add',
                 ], [
-                    'text' => 'PO manage',
-                    'icon' => 'user',
-                    'url' => '/po/manage',
-                ],
-            ]
-        ], [
-            'text' => 'Transfers',
-            'icon' => 'user',
-            'submenu' => [
-                [
-                    'text' => 'Add Transfer',
-                    'icon' => 'user',
-                    'url' => '/transfer/add',
-                ], [
-                    'text' => 'List Transfer',
-                    'icon' => 'user',
-                    'url' => '/transfer/manage',
-                ],
-            ]
-        ], [
-            'text' => 'Customers',
-            'icon' => 'user',
-            'submenu' => [
-                [
-                    'text' => 'Add customer',
-                    'icon' => 'user',
-                    'url' => '/customer/add',
-                ], [
-                    'text' => 'List customer',
-                    'icon' => 'user',
-                    'url' => '/customer/manage',
-                ],
-            ]
-        ], [
-            'text' => 'Billers',
-            'icon' => 'user',
-            'submenu' => [
-                [
-                    'text' => 'Add Biller',
-                    'icon' => 'user',
-                    'url' => '/biller/add',
-                ], [
-                    'text' => 'List Billers',
-                    'icon' => 'user',
-                    'url' => '/biller/manage',
+                    'text' => 'Quantity Adjustment',
+                    'icon' => 'filter',
+                    'url' => '/adjustment/add',
                 ],
             ]
         ], [
             'text' => 'Sales',
-            'icon' => 'user',
+            'icon' => 'heart',
             'submenu' => [
                 [
-                    'text' => 'Add Sale',
-                    'icon' => 'user',
-                    'url' => '/sales/add',
-                ], [
                     'text' => 'List Sales',
-                    'icon' => 'user',
+                    'icon' => 'heart',
                     'url' => '/sales/manage',
+                ], [
+                    'text' => 'Add Sale',
+                    'icon' => 'plus-circle',
+                    'url' => '/sales/add',
+                ],
+            ]
+        ], [
+            'text' => 'Purchase Order',
+            'icon' => 'star',
+            'submenu' => [
+                [
+                    'text' => 'List PO',
+                    'icon' => 'star',
+                    'url' => '/po/manage',
+                ], [
+                    'text' => 'Add PO',
+                    'icon' => 'plus-circle',
+                    'url' => '/po/add',
+                ],
+            ]
+        ], [
+            'text' => 'Transfers',
+            'icon' => 'star-o',
+            'submenu' => [
+                [
+                    'text' => 'List Transfer',
+                    'icon' => 'star-o',
+                    'url' => '/transfer/manage',
+                ], [
+                    'text' => 'Add Transfer',
+                    'icon' => 'plus-circle',
+                    'url' => '/transfer/add',
                 ],
             ]
         ], [
             'text' => 'Returns',
-            'icon' => 'user',
+            'icon' => 'random',
             'submenu' => [
                 [
-                    'text' => 'Add Returns',
-                    'icon' => 'user',
-                    'url' => '/returns/add',
-                ], [
                     'text' => 'List Sales',
-                    'icon' => 'user',
+                    'icon' => 'random',
                     'url' => '/returns/manage',
+                ], [
+                    'text' => 'Add Returns',
+                    'icon' => 'plus-circle',
+                    'url' => '/returns/add',
                 ],
             ]
+        ], [
+            'text' => 'People',
+            'icon' => 'users',
+            'submenu' => [
+                [
+                    'text' => 'List users',
+                    'icon' => 'users',
+                    'url' => '/user/manage',
+                ], [
+                    'text' => 'Add Users',
+                    'icon' => 'user-plus',
+                    'url' => '/user/register',
+                ], [
+                    'text' => 'List Billers',
+                    'icon' => 'users',
+                    'url' => '/biller/manage',
+                ], [
+                    'text' => 'Add Biller',
+                    'icon' => 'plus-circle',
+                    'url' => '/biller/add',
+                ], [
+                    'text' => 'List customer',
+                    'icon' => 'users',
+                    'url' => '/customer/manage',
+                ], [
+                    'text' => 'Add customer',
+                    'icon' => 'plus-circle',
+                    'url' => '/customer/add',
+                ], [
+                    'text' => 'List and Add Suppliers',
+                    'icon' => 'users',
+                    'url' => '/supplier',
+                ],
+            ]
+        ], [
+            'text' => 'Settings',
+            'icon' => 'gear',
+            'submenu' => [
+                [
+                    'text' => 'Tax Rates',
+                    'icon' => 'plus-circle',
+                    'url' => '/tax',
+                ], [
+                    'text' => 'Brands',
+                    'icon' => 'th-list',
+                    'url' => '/brands',
+                ], [
+                    'text' => 'Categories',
+                    'icon' => 'folder-open',
+                    'url' => '/categories',
+                ], [
+                    'text' => 'Warehouses',
+                    'icon' => 'building-o',
+                    'url' => '/locations',
+                ],
+//                [
+//                    'text' => 'Level One',
+//                    'url' => '#',
+//                    'submenu' => [
+//                        [
+//                            'text' => 'Level Two',
+//                            'url' => '#',
+//                        ],
+//                        [
+//                            'text' => 'Level Two',
+//                            'url' => '#',
+//                            'submenu' => [
+//                                [
+//                                    'text' => 'Level Three',
+//                                    'url' => '#',
+//                                ],
+//                                [
+//                                    'text' => 'Level Three',
+//                                    'url' => '#',
+//                                ],
+//                            ],
+//                        ],
+//                    ],
+//                ],
+
+            ],
         ],
         'ACCOUNT SETTINGS',
         [
             'text' => 'Profile',
-            'url' => 'admin/settings',
+            'url' => 'user/manage/',
             'icon' => 'user',
         ],
         [
@@ -288,56 +292,7 @@ return [
             'url' => 'admin/settings',
             'icon' => 'lock',
         ],
-        [
-            'text' => 'Settings',
-            'icon' => 'share',
-            'submenu' => [
-                [
-                    'text' => 'Tax Rates',
-                    'url' => 'tax/',
-                ],
-                [
-                    'text' => 'Level One',
-                    'url' => '#',
-                ], [
-                    'text' => 'Level One',
-                    'url' => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'Level Two',
-                            'url' => '#',
-                        ],
-                        [
-                            'text' => 'Level Two',
-                            'url' => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'Level Three',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'Level Three',
-                                    'url' => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ],
-        'LABELS',
-        [
-            'text' => 'Important',
-            'icon_color' => 'red',
-        ],
-        [
-            'text' => 'Warning',
-            'icon_color' => 'yellow',
-        ],
-        [
-            'text' => 'Information',
-            'icon_color' => 'aqua',
-        ],
+
     ],
 
     /*
