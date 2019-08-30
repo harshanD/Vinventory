@@ -34,7 +34,7 @@ class InvoiceController extends Controller
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
         $customers = Customer::where('status', \Config::get('constants.status.Active'))->get();
         $billers = Biller::where('status', \Config::get('constants.status.Active'))->get();
-        $lastRefCode = Invoice::all()->last();
+        $lastRefCode = Invoice::where('invoice_code', 'like', '%IV%')->get()->last();
         $data = (isset($lastRefCode->invoice_code)) ? $lastRefCode->invoice_code : 'IV-' . '000000';
 
         $code = preg_replace_callback("|(\d+)|", "self::replace", $data);

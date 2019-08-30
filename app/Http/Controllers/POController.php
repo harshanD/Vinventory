@@ -30,7 +30,7 @@ class POController extends Controller
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
         $supplier = Supplier::where('status', \Config::get('constants.status.Active'))->get();
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
-        $lastRefCode = PO::all()->last();
+        $lastRefCode = PO::where('referenceCode', 'like', '%PO%')->get()->last();
         $data = (isset($lastRefCode->referenceCode)) ? $lastRefCode->referenceCode : 'PO-000000';
 
         $code = preg_replace_callback("|(\d+)|", "self::replace", $data);

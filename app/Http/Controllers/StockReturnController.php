@@ -31,7 +31,7 @@ class StockReturnController extends Controller
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
         $customers = Customer::where('status', \Config::get('constants.status.Active'))->get();
         $billers = Biller::where('status', \Config::get('constants.status.Active'))->get();
-        $lastRefCode = StockReturn::all()->last();
+        $lastRefCode = StockReturn::where('return_reference_code', 'like', '%RETURNS%')->get()->last();
         $data = (isset($lastRefCode->return_reference_code)) ? $lastRefCode->return_reference_code : 'RETURNS-' . '000000';
 
         $code = preg_replace_callback("|(\d+)|", "self::replace", $data);

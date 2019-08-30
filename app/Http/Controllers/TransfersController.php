@@ -29,7 +29,7 @@ class TransfersController extends Controller
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
         $supplier = Supplier::where('status', \Config::get('constants.status.Active'))->get();
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
-        $lastRefCode = Transfers::all()->last();
+        $lastRefCode = Transfers::where('tr_reference_code', 'like', '%TR%')->get()->last();
         $data = (isset($lastRefCode->tr_reference_code)) ? $lastRefCode->tr_reference_code : 'TR-000000';
 
         $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
