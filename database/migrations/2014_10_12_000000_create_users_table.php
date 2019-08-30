@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('avatar')->default('/img/avatar.png');
+            $table->string('avatar')->default('/avatars/avatar.png');
             $table->string('phone')->nullable()->length(12);
             $table->tinyInteger('gender')->nullable()->length(2)->comment('1=male,2=female');
             $table->timestamp('email_verified_at')->nullable();
