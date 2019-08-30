@@ -103,7 +103,7 @@ class StockController extends Controller
                 'reorder_level' => $product->reorder_level,
                 'discount' => 0,
                 'reorder_activation' => $product->reorder_activation,
-                'tax' => (\Config::get('constants.taxActive.Active') == $product->tax_method) ? Tax::find($product->tax)->get()->toArray()[0]['value'] : 0,
+                'tax' => (\Config::get('constants.taxActive.Active') == $product->tax_method && $product->tax != 0) ? Tax::find($product->tax)->get()->toArray()[0]['value'] : 0,
                 'sum' => $AddedStockItem->qtySum - $substractQty,
             );
 
