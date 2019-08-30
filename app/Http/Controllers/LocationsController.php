@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Validator;
 
 class LocationsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth' => 'verified']);
+    }
+
     public function index(User $user)
     {
 //        Auth::user()->hasRole('Admin'); // individually check role has accessibility

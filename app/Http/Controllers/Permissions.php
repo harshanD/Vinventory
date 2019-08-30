@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 class Permissions extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware(['auth' => 'verified']);
+    }
+
     public static function getRolePermissions($permission = null)
     {
         if (Auth::check() && $permission != null) {

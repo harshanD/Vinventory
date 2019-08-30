@@ -19,6 +19,11 @@ use Illuminate\Validation\Rule;
 
 class TransfersController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth' => 'verified']);
+    }
+
     public function index()
     {
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();

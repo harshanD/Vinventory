@@ -12,6 +12,11 @@ use PhpParser\Node\Expr\Cast\Object_;
 
 class StockController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth' => 'verified']);
+    }
+
     public function fetchProductsListWarehouseWise($id)
     {
 //        echo $id;

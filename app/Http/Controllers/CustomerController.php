@@ -8,6 +8,11 @@ use Illuminate\Validation\Rule;
 
 class CustomerController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth' => 'verified']);
+    }
+
     public function index()
     {
         return view('vendor.adminlte.customer.create');

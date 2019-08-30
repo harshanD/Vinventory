@@ -12,6 +12,10 @@ use Illuminate\Validation\Rule;
 
 class AdjustmentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth' => 'verified']);
+    }
 
 
     public function index()

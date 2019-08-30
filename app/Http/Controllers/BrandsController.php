@@ -14,6 +14,11 @@ use PhpParser\Node\Expr\Cast\Object_;
 
 class BrandsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth' => 'verified']);
+    }
+
 
     public function index(User $user)
     {
