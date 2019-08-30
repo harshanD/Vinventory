@@ -75,7 +75,7 @@ class RegisterController extends Controller
         }
         $user = User::create($fields);
 
-        $user->roles()->attach(Role::where('name', 'Default')->first());
+        $user->roles()->attach(Role::where('name', 'Guest')->first());
         return $user;
     }
 }
