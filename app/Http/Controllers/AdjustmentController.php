@@ -21,7 +21,7 @@ class AdjustmentController extends Controller
     public function index()
     {
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
-        $lastRefCode = Adjustment::where('reference_code', 'like', '%ADJUST%')->get()->last();
+        $lastRefCode = Adjustment::where('reference_code', 'like', '%ADJUST%')->withTrashed()->get()->last();
         $data = (isset($lastRefCode->reference_code)) ? $lastRefCode->reference_code : 'ADJUST-000000';
 
         $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
