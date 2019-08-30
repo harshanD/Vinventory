@@ -142,6 +142,17 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="phone">Active</label>
+
+                            <select name="active" class="form-control select2">
+                                <option value="0" {{ ($user[0]->status==0)?'selected':'' }}>Active</option>
+                                <option value="1" {{ ($user[0]->status==1)?'selected':'' }}>Inactive</option>
+                            </select>
+                            @error('active')
+                            <p class="help-block">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="avatar">Avatar</label>
                             <br>
                             <br>
@@ -155,6 +166,11 @@
                                 <input name="avatar" type="file">
                             </div>
 
+                        </div>
+                        <div class="alert alert-info alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">×</span></button>
+                            Leave the password field empty if you don't want to change.
                         </div>
                         <div class="form-group">
                             <label for="password">Current Password</label>
