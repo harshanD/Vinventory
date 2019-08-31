@@ -129,14 +129,16 @@ class POController extends Controller
         foreach ($data as $key => $value) {
             // button
             $buttons = '';
+            $editbutton = '';
+            $deleteButton = '';
 
-//            if (Permissions::getRolePermissions('vi   ewPO')) {
-            $buttons .= '<button type="button" class="btn btn-default" onclick="editPO(' . $value->id . ')" data-toggle="modal" data-target="#editPOModal"><i class="fa fa-pencil"></i></button>';
-//            }
+            if (Permissions::getRolePermissions('updateOrder')) {
+                $editbutton .= "<li><a href=\"/po/edit/" . $value->id . "\">Edit Purchase</a></li>";
+            }
 
-//            if (Permissions::getRolePermissions('deletePO')) {
-            $buttons .= ' <button type="button" class="btn btn-default" onclick="removePO(' . $value->id . ')" data-toggle="modal" data-target="#removePOModal"><i class="fa fa-trash"></i></button>';
-//            }
+            if (Permissions::getRolePermissions('deleteOrder')) {
+                $deleteButton .= "<li><a style='cursor: pointer' onclick=\"deletePo(" . $value->id . ")\">Delete</a></li>";
+            }
 
             //incremental code
             $lastStockRefCode = Stock::all()->last();
@@ -171,14 +173,14 @@ class POController extends Controller
                     <span class=\"sr-only\">Toggle Dropdown</span>
                   </button>
                   <ul class=\"dropdown-menu\" role=\"menu\">
-                    <li><a href=\"/po/edit/" . $value->id . "\">Edit Purchase</a></li>
+                     " . $editbutton . "
                     " . $statusOfReceiveAll . "
                     " . $statusOfpartiallyReceiveAll . "
                     <li><a href=\"/po/view/" . $value->id . "\">Purchase details view</a></li>
                     <li><a href=\"/po/printpo/" . $value->id . "\">Download as PDF</a></li>
                     <li><a href=\"/send/email/" . $value->id . "\">Send Mail</a></li>
                     <li class=\"divider\"></li>
-                   <li><a style='cursor: pointer' onclick=\"deletePo(" . $value->id . ")\">Delete</a></li>
+                   " . $deleteButton . "
                   </ul>
                 </div><input type='hidden' id='recNo_" . $value->id . "' value='" . $code . "'>";
 
