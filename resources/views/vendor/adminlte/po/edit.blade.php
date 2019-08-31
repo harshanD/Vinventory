@@ -130,7 +130,7 @@
                                             <i class="fa  fa-barcode"></i>
                                         </div>
                                         <input type="text" class="form-control" name="referenceNo" id="referenceNo"
-                                               readonly
+                                               
                                                value="{{$po->referenceCode}}">
                                     </div>
                                     <!-- /.input group -->
