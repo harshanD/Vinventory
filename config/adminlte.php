@@ -114,7 +114,6 @@ return [
             'url' => '/home',
             'icon' => 'home',
             'label_color' => 'success',
-            'can' => 'createUser',
         ],
         'SUB NAVIGATION',
         [
@@ -281,7 +280,7 @@ return [
                     'can' => 'viewWarehouse',
                 ], [
                     'text' => 'Roles',
-                    'icon' => 'building-o',
+                    'icon' => 'files-o',
                     'url' => '/role',
                     'can' => 'viewRole',
                 ],
