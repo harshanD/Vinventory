@@ -26,12 +26,17 @@ class BrandsController extends Controller
 //        Auth::user()->hasAnyRole(['Admin', 'Employer']); // check for roles accessibility using array
 //        Auth::user()->authorizeRoles('Admin'); // if unauthorized then show error window
 //        var_dump(Permissions::getRolePermissions('createUser')); /*check User permission*/
-
+        if (!Permissions::getRolePermissions('viewBrand')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.brands.index');
     }
 
     public function create(Request $request)
     {
+        if (!Permissions::getRolePermissions('createBrand')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'brand' => 'required|unique:brands|max:191',
             'status' => 'required',
@@ -94,6 +99,9 @@ class BrandsController extends Controller
 
     public function editBrandData(Request $request, $id)
     {
+        if (!Permissions::getRolePermissions('updateBrand')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'edit_brand_name' => 'required|unique:brands,brand,'.$id.'|max:191',
             'edit_status' => 'required',
@@ -118,7 +126,9 @@ class BrandsController extends Controller
 
     public function removeBrandData(Request $request)
     {
-
+        if (!Permissions::getRolePermissions('deleteBrand')) {
+            abort(403, 'Unauthorized action.');
+        }
         $brand = Brands::find($request->input('brand_id'));
 
         if (!$brand->delete()) {

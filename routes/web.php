@@ -129,6 +129,7 @@ Route::post('customer/edit/{id}', 'CustomerController@update');
 Route::get('biller/add', 'BillerController@index');
 Route::post('biller/create', 'BillerController@create');
 Route::get('biller/manage', ['as' => 'biller.manage', 'uses' => 'BillerController@billerList']);
+Route::get('biller/delete/{id}', 'BillerController@deleteBiller');
 Route::get('biller/fetchTransData', 'BillerController@fetchTransData');
 Route::get('biller/edit/{id}', 'BillerController@editView');
 Route::post('biller/edit/{id}', 'BillerController@update');
