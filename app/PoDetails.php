@@ -17,7 +17,7 @@ class PoDetails extends Model
 
     function poHeader()
     {
-        return $this->hasOne(poDetails::class, 'po_header');
+        return $this->hasOne(PoDetails::class, 'po_header');
     }
 
     public function product()

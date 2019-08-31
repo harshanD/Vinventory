@@ -25,7 +25,7 @@
         }
     </style>
     <section class="content">
-        <div id="messages"></div>
+
         @if($errors->any())
             <div class="alert alert-danger">
                 @foreach($errors->all() as $error)
@@ -33,10 +33,13 @@
                 @endforeach
             </div>
         @endif
-        <button class="btn btn-primary" data-toggle="modal" data-target="#addSupplierModal">Add Supplier</button>
-        <br/> <br/>
-        <!-- Default box -->
+        @if(\App\Http\Controllers\Permissions::getRolePermissions('createSupplier'))
+            <button class="btn btn-primary" data-toggle="modal" data-target="#addSupplierModal">Add Supplier</button>
+            <br/> <br/>
+    @endif
+    <!-- Default box -->
         <div class="box">
+
             <div class="box-header with-border">
                 <h3 class="box-title">Manage Suppliers</h3>
 
@@ -50,7 +53,7 @@
                 </div>
             </div>
             <div class="box-body">
-
+                <div id="messages"></div>
                 <table id="manageTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
@@ -91,7 +94,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Add Supplier</h4>
                 </div>
                 <div id="create_model_messages"></div>
@@ -156,7 +159,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Edit Supplier</h4>
                 </div>
                 <div id="edit_model_messages"></div>
@@ -222,7 +225,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Remove Supplier</h4>
                 </div>
 

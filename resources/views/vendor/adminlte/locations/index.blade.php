@@ -26,7 +26,6 @@
         }
     </style>
     <section class="content">
-        <div id="messages"></div>
         @if($errors->any())
             <div class="alert alert-danger">
                 @foreach($errors->all() as $error)
@@ -53,7 +52,7 @@
                 </div>
             </div>
             <div class="box-body">
-
+                <div id="messages"></div>
                 <table id="manageTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>

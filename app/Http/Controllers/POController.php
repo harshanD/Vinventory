@@ -132,6 +132,7 @@ class POController extends Controller
 
     public function fetchPOData()
     {
+
         $result = array('data' => array());
 
 //        $data = PO::where('status', \Config::get('constants.status.Active'))->orderBy('po', 'asc')->get();
@@ -161,9 +162,12 @@ class POController extends Controller
             $statusOfpartiallyReceiveAll = "";
             $poQty = 0;
             $recQty = 0;
-            foreach ($value->poDetails as $poitem) {
-                $poQty += $poitem->qty;
-                $recQty += $poitem->received_qty;
+
+            if (isset($value->poDetails)) {
+                foreach ($value->poDetails as $poitem) {
+                    $poQty += $poitem->qty;
+                    $recQty += $poitem->received_qty;
+                }
             }
             if ($recQty < $poQty) {
                 $statusOfReceiveAll = "<li><a style='cursor: pointer' onclick=\"receiveAll(" . $value->id . ")\">Receive All</a></li>";

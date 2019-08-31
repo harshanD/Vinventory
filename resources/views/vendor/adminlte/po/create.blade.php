@@ -495,7 +495,7 @@
                         // window.location = data;
                         console.log(response)
                         if (response.success) {
-                            window.location.href = '/po/add';
+                            window.location.href = '/po/manage';
                         }
 
 

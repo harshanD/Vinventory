@@ -43,7 +43,7 @@ class ProductsController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $request->validate([
-            'product_name' => 'required|unique:products,name|max:100|regex:/(^[A-Za-z0-9 ]+$)+/',
+            'product_name' => 'required|unique:products,name|max:100',
             'product_code' => 'required|max:191',
             'sku' => 'required|max:191',
             'weight' => 'required',
@@ -192,7 +192,7 @@ class ProductsController extends Controller
     {
         $id = $request['id'];
         $validator = Validator::make($request->all(), [
-            'product_name' => 'required|unique:products,name,' . $id . '|max:100|regex:/(^[A-Za-z0-9 ]+$)+/',
+            'product_name' => 'required|unique:products,name,' . $id . '|max:100',
             'product_code' => 'required|max:191',
             'sku' => 'required|max:191',
             'weight' => 'required',

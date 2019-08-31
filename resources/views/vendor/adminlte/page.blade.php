@@ -68,7 +68,7 @@
                                                 ?>
                                                 <img src="{{$url}}"
                                                      class="user-image" alt="User Image">
-                                                <span class="hidden-xs">Alexander Pierce</span>
+                                                <span class="hidden-xs">{{  $name}}</span>
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <!-- User image -->
@@ -85,9 +85,10 @@
                                                 <!-- Menu Footer-->
                                                 <li class="user-footer">
                                                     @if(\App\Http\Controllers\Permissions::getRolePermissions('viewProfile'))
-                                                    <div class="pull-left">
-                                                        <a href="{{url('/user/profile')}}" class="btn btn-default btn-flat">Profile</a>
-                                                    </div>
+                                                        <div class="pull-left">
+                                                            <a href="{{url('/user/profile')}}"
+                                                               class="btn btn-default btn-flat">Profile</a>
+                                                        </div>
                                                     @endif
                                                     <div class="pull-right">
                                                         @if(config('adminlte.logout_method') == 'GET' || !config('adminlte.logout_method') && version_compare(\Illuminate\Foundation\Application::VERSION, '5.3.0', '<'))
@@ -95,41 +96,43 @@
                                                                 <i class="fa fa-fw fa-power-off"></i> {{ trans('adminlte::adminlte.log_out') }}
                                                             </a>
                                                         @else
-                                                            <a href="#"  class="btn btn-default btn-flat"
+                                                            <a href="#" class="btn btn-default btn-flat"
                                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                                                             >
                                                                 <i class="fa fa-fw fa-power-off"></i> {{ trans('adminlte::adminlte.log_out') }}
                                                             </a>
-                                                            <form id="logout-form" action="{{ url(config('adminlte.logout_url', 'auth/logout')) }}" method="POST" style="display: none;">
+                                                            <form id="logout-form"
+                                                                  action="{{ url(config('adminlte.logout_url', 'auth/logout')) }}"
+                                                                  method="POST" style="display: none;">
                                                                 @if(config('adminlte.logout_method'))
                                                                     {{ method_field(config('adminlte.logout_method')) }}
                                                                 @endif
                                                                 {{ csrf_field() }}
                                                             </form>
                                                         @endif
-{{--                                                        <a href="#" class="btn btn-default btn-flat">Sign out</a>--}}
+                                                        {{--                                                        <a href="#" class="btn btn-default btn-flat">Sign out</a>--}}
                                                     </div>
                                                 </li>
                                             </ul>
                                         </li>
                                         {{--                        <li>--}}
-{{--                                                                    @if(config('adminlte.logout_method') == 'GET' || !config('adminlte.logout_method') && version_compare(\Illuminate\Foundation\Application::VERSION, '5.3.0', '<'))--}}
-{{--                                                                        <a href="{{ url(config('adminlte.logout_url', 'auth/logout')) }}">--}}
-{{--                                                                            <i class="fa fa-fw fa-power-off"></i> {{ trans('adminlte::adminlte.log_out') }}--}}
-{{--                                                                        </a>--}}
-{{--                                                                    @else--}}
-{{--                                                                            <a href="#"--}}
-{{--                                                                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();"--}}
-{{--                                                                        >--}}
-{{--                                                                            <i class="fa fa-fw fa-power-off"></i> {{ trans('adminlte::adminlte.log_out') }}--}}
-{{--                                                                        </a>--}}
-{{--                                                                        <form id="logout-form" action="{{ url(config('adminlte.logout_url', 'auth/logout')) }}" method="POST" style="display: none;">--}}
-{{--                                                                            @if(config('adminlte.logout_method'))--}}
-{{--                                                                                {{ method_field(config('adminlte.logout_method')) }}--}}
-{{--                                                                            @endif--}}
-{{--                                                                            {{ csrf_field() }}--}}
-{{--                                                                        </form>--}}
-{{--                                                                    @endif--}}
+                                        {{--                                                                    @if(config('adminlte.logout_method') == 'GET' || !config('adminlte.logout_method') && version_compare(\Illuminate\Foundation\Application::VERSION, '5.3.0', '<'))--}}
+                                        {{--                                                                        <a href="{{ url(config('adminlte.logout_url', 'auth/logout')) }}">--}}
+                                        {{--                                                                            <i class="fa fa-fw fa-power-off"></i> {{ trans('adminlte::adminlte.log_out') }}--}}
+                                        {{--                                                                        </a>--}}
+                                        {{--                                                                    @else--}}
+                                        {{--                                                                            <a href="#"--}}
+                                        {{--                                                                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();"--}}
+                                        {{--                                                                        >--}}
+                                        {{--                                                                            <i class="fa fa-fw fa-power-off"></i> {{ trans('adminlte::adminlte.log_out') }}--}}
+                                        {{--                                                                        </a>--}}
+                                        {{--                                                                        <form id="logout-form" action="{{ url(config('adminlte.logout_url', 'auth/logout')) }}" method="POST" style="display: none;">--}}
+                                        {{--                                                                            @if(config('adminlte.logout_method'))--}}
+                                        {{--                                                                                {{ method_field(config('adminlte.logout_method')) }}--}}
+                                        {{--                                                                            @endif--}}
+                                        {{--                                                                            {{ csrf_field() }}--}}
+                                        {{--                                                                        </form>--}}
+                                        {{--                                                                    @endif--}}
                                         {{--                        </li>--}}
                                     </ul>
                                 </div>
