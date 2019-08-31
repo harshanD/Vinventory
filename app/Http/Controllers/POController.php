@@ -27,6 +27,9 @@ class POController extends Controller
 
     public function index()
     {
+        if (!Permissions::getRolePermissions('createOrder')) {
+            abort(403, 'Unauthorized action.');
+        }
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
         $supplier = Supplier::where('status', \Config::get('constants.status.Active'))->get();
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
@@ -40,6 +43,9 @@ class POController extends Controller
 
     public function create(Request $request)
     {
+        if (!Permissions::getRolePermissions('createOrder')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'datepicker' => 'required|date',
             'status' => ['required', Rule::notIn(['0'])],
@@ -104,11 +110,17 @@ class POController extends Controller
 
     public function poList()
     {
+        if (!Permissions::getRolePermissions('viewOrder')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.po.index');
     }
 
     public function editView($id)
     {
+        if (!Permissions::getRolePermissions('updateOrder')) {
+            abort(403, 'Unauthorized action.');
+        }
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
         $supplier = Supplier::where('status', \Config::get('constants.status.Active'))->get();
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
@@ -264,6 +276,9 @@ class POController extends Controller
 
     public function editPOData(Request $request, $id)
     {
+        if (!Permissions::getRolePermissions('updateOrder')) {
+            abort(403, 'Unauthorized action.');
+        }
         $validator = Validator::make($request->all(), [
             'datepicker' => 'required|date',
             'status' => ['required', Rule::notIn(['0'])],
@@ -336,7 +351,9 @@ class POController extends Controller
 
     public function removePOData(Request $request)
     {
-
+        if (!Permissions::getRolePermissions('deleteOrder')) {
+            abort(403, 'Unauthorized action.');
+        }
         $po = PO::find($request->input('id'));
 
         if (!$po->delete()) {
@@ -474,7 +491,9 @@ class POController extends Controller
 
     public function view($id)
     {
-
+        if (!Permissions::getRolePermissions('viewOrder')) {
+            abort(403, 'Unauthorized action.');
+        }
         $podata = PO::find($id);
 
         $locations = $podata->locations;
@@ -485,7 +504,9 @@ class POController extends Controller
 
     public function delete(Request $request, $id)
     {
-
+        if (!Permissions::getRolePermissions('deleteOrder')) {
+            abort(403, 'Unauthorized action.');
+        }
         $podata = PO::find($id);
 
         if (!$podata->delete()) {
