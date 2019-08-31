@@ -572,7 +572,7 @@
                         // window.location = data;
                         console.log(response)
                         if (response.success) {
-                            window.location.href = '/sales/add';
+                            window.location.href = '/sales/manage';
                         }
 
 
