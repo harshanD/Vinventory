@@ -152,15 +152,16 @@ class StockReturnController extends Controller
         foreach ($data as $key => $value) {
             // button
             $buttons = '';
+            $editbutton = '';
+            $deleteButton = '';
 
-//            if (Permissions::getRolePermissions('vi   ewPO')) {
-            $buttons .= '<button type="button" class="btn btn-default" onclick="editPO(' . $value->id . ')" data-toggle="modal" data-target="#editPOModal"><i class="fa fa-pencil"></i></button>';
-//            }
+            if (Permissions::getRolePermissions('updateReturns')) {
+                $editbutton .= "<li><a href=\"/returns/edit/" . $value->id . "\">Edit Return</a></li>";
+            }
 
-//            if (Permissions::getRolePermissions('deletePO')) {
-            $buttons .= ' <button type="button" class="btn btn-default" onclick="removePO(' . $value->id . ')" data-toggle="modal" data-target="#removePOModal"><i class="fa fa-trash"></i></button>';
-//            }
-
+            if (Permissions::getRolePermissions('deleteReturns')) {
+                $deleteButton .= "<li><a style='cursor: pointer' onclick=\"deleteRetrn(" . $value->id . ")\">Delete Return</a></li>";
+            }
 
             $buttons = "<div class=\"btn-group\">
                   <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
@@ -169,11 +170,11 @@ class StockReturnController extends Controller
                     <span class=\"sr-only\">Toggle Dropdown</span>
                   </button>
                   <ul class=\"dropdown-menu\" role=\"menu\">
-                    <li><a href=\"/returns/edit/" . $value->id . "\">Edit Return</a></li>
+                  " . $editbutton . "
                     <li><a href=\"/returns/view/" . $value->id . "\">View Return</a></li>
                     <li><a href=\"/returns/print/" . $value->id . "\">PDF Return</a></li>
                     <li class=\"divider\"></li>
-                     <li><a style='cursor: pointer' onclick=\"deleteRetrn(" . $value->id . ")\">Delete Return</a></li>
+                     " . $deleteButton . "
                   </ul>
                 </div>";
 
