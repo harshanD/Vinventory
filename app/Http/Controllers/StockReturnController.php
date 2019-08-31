@@ -27,6 +27,9 @@ class StockReturnController extends Controller
 
     public function index()
     {
+        if (!Permissions::getRolePermissions('createSupplier')) {
+            abort(403, 'Unauthorized action.');
+        }
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
         $customers = Customer::where('status', \Config::get('constants.status.Active'))->get();
@@ -41,6 +44,9 @@ class StockReturnController extends Controller
 
     public function create(Request $request)
     {
+        if (!Permissions::getRolePermissions('createSupplier')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'datepicker' => 'required|date',
             'referenceNo' => 'required|unique:stock_return,return_reference_code|max:100',
@@ -125,11 +131,17 @@ class StockReturnController extends Controller
 
     public function retnList()
     {
+        if (!Permissions::getRolePermissions('viewSupplier')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.returns.index');
     }
 
     public function editView($id)
     {
+        if (!Permissions::getRolePermissions('updateSupplier')) {
+            abort(403, 'Unauthorized action.');
+        }
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
         $billers = Biller::where('status', \Config::get('constants.status.Active'))->get();
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
@@ -212,7 +224,9 @@ class StockReturnController extends Controller
 
     public function editReturnData(Request $request, $id)
     {
-
+        if (!Permissions::getRolePermissions('updateSupplier')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'datepicker' => 'required|date',
             'referenceNo' => 'required|unique:stock_return,return_reference_code,' . $id . '|max:100',
@@ -320,7 +334,9 @@ class StockReturnController extends Controller
 
     public function delete(Request $request, $id)
     {
-
+        if (!Permissions::getRolePermissions('deleteSupplier')) {
+            abort(403, 'Unauthorized action.');
+        }
         $srdata = StockReturn::find($id);
         Stock::where('receive_code', '=', $srdata->return_reference_code . '-A')->firstOrFail()->delete();
 
@@ -337,7 +353,9 @@ class StockReturnController extends Controller
 
     public function view($id)
     {
-
+        if (!Permissions::getRolePermissions('viewSupplier')) {
+            abort(403, 'Unauthorized action.');
+        }
         $stdata = StockReturn::find($id);
 
         $location = $stdata->locations;
