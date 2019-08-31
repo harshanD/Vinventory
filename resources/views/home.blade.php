@@ -28,175 +28,200 @@
                 <div class="box-body">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
-                                <div class="square-service-block">
-                                    <a href="{{url('/user/manage')}}">
-                                        <button class="btn btn-default">
-                                            <div class="ssb-icon">
-                                                <div class="incon-box">
-                                                    <i class="fa fa-users" aria-hidden="true"></i>
+                            @if(\App\Http\Controllers\Permissions::getRolePermissions('viewUser'))
+                                <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
+                                    <div class="square-service-block">
+                                        <a href="{{url('/user/manage')}}">
+                                            <button class="btn btn-default">
+                                                <div class="ssb-icon">
+                                                    <div class="incon-box">
+                                                        <i class="fa fa-users" aria-hidden="true"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <h2 class="ssb-title">User</h2>
-                                        </button>
-                                    </a>
+                                                <h2 class="ssb-title">User</h2>
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            {{--col-lg-3 col-md-6 col-xm-2--}}
-                            <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
-                                <div class="square-service-block">
-                                    <a href="{{url('/location')}}">
-                                        <button href="#" class="btn btn-default">
-                                            <div class="ssb-icon">
-                                                <div class="incon-box">
-                                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            @endif
+                            @if(\App\Http\Controllers\Permissions::getRolePermissions('viewAdjustment'))
+                                <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
+                                    <div class="square-service-block">
+                                        <a href="{{url('/adjustment/manage')}}">
+                                            <button href="#" class="btn btn-default">
+                                                <div class="ssb-icon">
+                                                    <div class="incon-box">
+                                                        <i class="fa fa-filter " aria-hidden="true"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <h2 class="ssb-title">Warehouse</h2>
-                                        </button>
-                                    </a>
+                                                <h2 class="ssb-title">Adjustment</h2>
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
-                                <div class="square-service-block">
-                                    <a href="{{url('/products')}}">
-                                        <button href="#" class="btn btn-default">
-                                            <div class="ssb-icon">
-                                                <div class="incon-box">
-                                                    <i class="fa fa-cubes" aria-hidden="true"></i>
+                            @endif
+                            @if(\App\Http\Controllers\Permissions::getRolePermissions('viewProduct'))
+                                {{--col-lg-3 col-md-6 col-xm-2--}}
+
+                                <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
+                                    <div class="square-service-block">
+                                        <a href="{{url('/products')}}">
+                                            <button href="#" class="btn btn-default">
+                                                <div class="ssb-icon">
+                                                    <div class="incon-box">
+                                                        <i class="fa fa-cubes" aria-hidden="true"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <h2 class="ssb-title">Product</h2>
-                                        </button>
-                                    </a>
+                                                <h2 class="ssb-title">Product</h2>
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
-                                <div class="square-service-block">
-                                    <a href="#">
-                                        <button href="#" class="btn btn-default">
-                                            <div class="ssb-icon">
-                                                <div class="incon-box">
-                                                    <i class="fa fa-truck" aria-hidden="true"></i>
+                            @endif
+                            @if(\App\Http\Controllers\Permissions::getRolePermissions('viewWarehouse'))
+                                <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
+                                    <div class="square-service-block">
+                                        <a href="{{url('/locations')}}">
+                                            <button href="#" class="btn btn-default">
+                                                <div class="ssb-icon">
+                                                    <div class="incon-box">
+                                                        <i class="fa fa-building-o" aria-hidden="true"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <h2 class="ssb-title">Supplier</h2>
-                                        </button>
-                                    </a>
+                                                <h2 class="ssb-title">Warehouse</h2>
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
-                                <div class="square-service-block">
-                                    <a href="#">
-                                        <button href="#" class="btn btn-default">
-                                            <div class="ssb-icon">
-                                                <div class="incon-box">
-                                                    <i class="fa fa-credit-card" aria-hidden="true"></i>
+                            @endif
+                            @if(\App\Http\Controllers\Permissions::getRolePermissions('viewSale'))
+                                <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
+                                    <div class="square-service-block">
+                                        <a href="{{url('/sales/manage')}}">
+                                            <button href="#" class="btn btn-default">
+                                                <div class="ssb-icon">
+                                                    <div class="incon-box">
+                                                        <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <h2 class="ssb-title">PO</h2>
-                                        </button>
-                                    </a>
+                                                <h2 class="ssb-title">Sales</h2>
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
-                                <div class="square-service-block">
-                                    <a href="#">
-                                        <button href="#" class="btn btn-default">
-                                            <div class="ssb-icon">
-                                                <div class="incon-box">
-                                                    <i class="fa fa-arrow-circle-down" aria-hidden="true"></i>
+                            @endif
+                            @if(\App\Http\Controllers\Permissions::getRolePermissions('viewOrder'))
+                                <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
+                                    <div class="square-service-block">
+                                        <a href="{{url('/po/manage')}}">
+                                            <button href="#" class="btn btn-default">
+                                                <div class="ssb-icon">
+                                                    <div class="incon-box">
+                                                        <i class="fa fa-credit-card" aria-hidden="true"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <h2 class="ssb-title">GRN</h2>
-                                        </button>
-                                    </a>
+                                                <h2 class="ssb-title">PO</h2>
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
-                                <div class="square-service-block">
-                                    <a href="#">
-                                        <button href="#" class="btn btn-default">
-                                            <div class="ssb-icon">
-                                                <div class="incon-box">
-                                                    <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>
+                            @endif
+                            @if(\App\Http\Controllers\Permissions::getRolePermissions('viewTransfer'))
+                                <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
+                                    <div class="square-service-block">
+                                        <a href="{{url('/transfer/manage')}}">
+                                            <button href="#" class="btn btn-default">
+                                                <div class="ssb-icon">
+                                                    <div class="incon-box">
+                                                        <i class="fa fa-random" aria-hidden="true"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <h2 class="ssb-title">GTN</h2>
-                                        </button>
-                                    </a>
+                                                <h2 class="ssb-title">Transfers</h2>
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
-                                <div class="square-service-block">
-                                    <a href="#">
-                                        <button href="#" class="btn btn-default">
-                                            <div class="ssb-icon">
-                                                <div class="incon-box">
-                                                    <i class="fa fa-file-alt" aria-hidden="true"></i>
+                            @endif
+                            @if(\App\Http\Controllers\Permissions::getRolePermissions('viewReturns'))
+                                <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
+                                    <div class="square-service-block">
+                                        <a href="{{url('/returns/manage')}}">
+                                            <button href="#" class="btn btn-default">
+                                                <div class="ssb-icon">
+                                                    <div class="incon-box">
+                                                        <i class="fa fa-arrow-circle-down" aria-hidden="true"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <h2 class="ssb-title">MRN</h2>
-                                        </button>
-                                    </a>
+                                                <h2 class="ssb-title">Returns</h2>
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
-                                <div class="square-service-block">
-                                    <a href="#">
-                                        <button href="#" class="btn btn-default">
-                                            <div class="ssb-icon">
-                                                <div class="incon-box">
-                                                    <i class="fa fa-banknotes" aria-hidden="true"></i>
+                            @endif
+                            @if(\App\Http\Controllers\Permissions::getRolePermissions('viewBiller'))
+                                <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
+                                    <div class="square-service-block">
+                                        <a href="{{url('/biller/manage')}}">
+                                            <button href="#" class="btn btn-default">
+                                                <div class="ssb-icon">
+                                                    <div class="incon-box">
+                                                        <i class="fa fa-users" aria-hidden="true"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <h2 class="ssb-title">Invoice</h2>
-                                        </button>
-                                    </a>
+                                                <h2 class="ssb-title">Billers</h2>
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
-                                <div class="square-service-block">
-                                    <a href="#">
-                                        <button href="#" class="btn btn-default">
-                                            <div class="ssb-icon">
-                                                <div class="incon-box">
-                                                    <i class="glyphicon glyphicon-stats" aria-hidden="true"></i>
+                            @endif
+                            @if(\App\Http\Controllers\Permissions::getRolePermissions('viewCustomer'))
+                                <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
+                                    <div class="square-service-block">
+                                        <a href="{{url('/customer/manage')}}">
+                                            <button href="#" class="btn btn-default">
+                                                <div class="ssb-icon">
+                                                    <div class="incon-box">
+                                                        <i class="fa fa-align-center" aria-hidden="true"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <h2 class="ssb-title">Reports</h2>
-                                        </button>
-                                    </a>
+                                                <h2 class="ssb-title">Customers</h2>
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
-                                <div class="square-service-block">
-                                    <a href="#">
-                                        <button href="#" class="btn btn-default">
-                                            <div class="ssb-icon">
-                                                <div class="incon-box">
-                                                    <i class="fa fa-align-center" aria-hidden="true"></i>
+                            @endif
+                            @if(\App\Http\Controllers\Permissions::getRolePermissions('viewSupplier'))
+                                <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
+                                    <div class="square-service-block">
+                                        <a href="{{url('/supplier')}}">
+                                            <button href="#" class="btn btn-default">
+                                                <div class="ssb-icon">
+                                                    <div class="incon-box">
+                                                        <i class="fa fa-truck" aria-hidden="true"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <h2 class="ssb-title">Administration</h2>
-                                        </button>
-                                    </a>
+                                                <h2 class="ssb-title">Supplier</h2>
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
-                                <div class="square-service-block">
-                                    <a href="#">
-                                        <button href="#" class="btn btn-default">
-                                            <div class="ssb-icon">
-                                                <div class="incon-box">
-                                                    <i class="fa fa-cogs" aria-hidden="true"></i>
+                            @endif
+                            @if(\App\Http\Controllers\Permissions::getRolePermissions('viewCategory'))
+                                <div class="col-sm-4 col-lg-3 col-md-6 col-xm-2">
+                                    <div class="square-service-block">
+                                        <a href="{{url('/categories')}}">
+                                            <button href="#" class="btn btn-default">
+                                                <div class="ssb-icon">
+                                                    <div class="incon-box">
+                                                        <i class="fa fa-folder-open" aria-hidden="true"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <h2 class="ssb-title">Settings</h2>
-                                        </button>
-                                    </a>
+                                                <h2 class="ssb-title">Categories</h2>
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
