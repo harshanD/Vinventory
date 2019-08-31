@@ -203,19 +203,25 @@
             <div class="row no-print">
                 <div class="col-xs-12">
                     <div style="float: right">
+
                         <a class="btn btn-success" href='{{url('sales/print/'.$sales->id)}}'>
                             <i class="fa fa-file-pdf-o"></i><span class="hidden-sm hidden-xs"> PDF</span>
                         </a>
-                        <a class="btn btn-warning" href='{{url('sales/edit/'.$sales->id)}}'>
-                            <i class="glyphicon glyphicon-edit"></i><span
-                                    class="hidden-sm hidden-xs">Edit</span>
-                        </a>
-                        <a class="btn btn-danger" title="" data-toggle="popover"
-                           data-content="<div style='width:150px;'><p>Are you sure?</p><a class='btn btn-danger' href='{{url('sales/delete/'.$sales->id)}}'>Yes I'm sure</a> <button class='btn bpo-close'>No</button></div>"
-                           data-html="true" data-placement="top"
-                           data-original-title="<b>Delete Purchase</b>">
-                            <i class="fa fa-trash-o"></i> <span class="hidden-sm hidden-xs">Delete</span>
-                        </a>
+
+                        @if(\App\Http\Controllers\Permissions::getRolePermissions('updateAdjustment'))
+                            <a class="btn btn-warning" href='{{url('sales/edit/'.$sales->id)}}'>
+                                <i class="glyphicon glyphicon-edit"></i><span
+                                        class="hidden-sm hidden-xs">Edit</span>
+                            </a>
+                        @endif
+                        @if(\App\Http\Controllers\Permissions::getRolePermissions('deleteAdjustment'))
+                            <a class="btn btn-danger" title="" data-toggle="popover"
+                               data-content="<div style='width:150px;'><p>Are you sure?</p><a class='btn btn-danger' href='{{url('sales/delete/'.$sales->id)}}'>Yes I'm sure</a> <button class='btn bpo-close'>No</button></div>"
+                               data-html="true" data-placement="top"
+                               data-original-title="<b>Delete Purchase</b>">
+                                <i class="fa fa-trash-o"></i> <span class="hidden-sm hidden-xs">Delete</span>
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>
