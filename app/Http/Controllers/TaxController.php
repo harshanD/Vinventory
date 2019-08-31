@@ -20,12 +20,17 @@ class TaxController extends Controller
 //        Auth::user()->hasAnyRole(['Admin', 'Employer']); // check for roles accessibility using array
 //        Auth::user()->authorizeRoles('Admin'); // if unauthorized then show error window
 //        print_r(Permissions::getRolePermissions('createUser')); check User permission
-
+        if (!Permissions::getRolePermissions('viewTax')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.tax.index');
     }
 
     public function create(Request $request)
     {
+        if (!Permissions::getRolePermissions('createTax')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'tax' => 'required|unique:tax_profiles,name|max:100',
             'taxRate' => 'required|regex:/^\d+(\.\d{1,2})?$/',
@@ -93,6 +98,9 @@ class TaxController extends Controller
 
     public function editTaxData(Request $request, $id)
     {
+        if (!Permissions::getRolePermissions('updateTax')) {
+            abort(403, 'Unauthorized action.');
+        }
         $validator = Validator::make($request->all(), [
             'edit_tax' => 'required|unique:tax_profiles,name,' . $id . '|max:100',
             'edit_taxRate' => 'required|regex:/^\d+(\.\d{1,2})?$/',
@@ -127,7 +135,9 @@ class TaxController extends Controller
 
     public function removeTaxData(Request $request)
     {
-
+        if (!Permissions::getRolePermissions('deleteTax')) {
+            abort(403, 'Unauthorized action.');
+        }
         $tax = Tax::find($request->input('id'));
 
         if (!$tax->delete()) {
