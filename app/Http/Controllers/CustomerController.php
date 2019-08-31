@@ -87,14 +87,16 @@ class CustomerController extends Controller
         foreach ($data as $key => $value) {
             // button
             $buttons = '';
+            $editbutton = '';
+            $deleteButton = '';
 
-//            if (Permissions::getRolePermissions('vi   ewPO')) {
-            $buttons .= '<button type="button" class="btn btn-default" onclick="editPO(' . $value->id . ')" data-toggle="modal" data-target="#editPOModal"><i class="fa fa-pencil"></i></button>';
-//            }
+            if (Permissions::getRolePermissions('updateCustomer')) {
+                $editbutton .= "<li><a href=\"/customer/edit/" . $value->id . "\">Edit Customer</a></li>";
+            }
 
-//            if (Permissions::getRolePermissions('deletePO')) {
-            $buttons .= ' <button type="button" class="btn btn-default" onclick="removePO(' . $value->id . ')" data-toggle="modal" data-target="#removePOModal"><i class="fa fa-trash"></i></button>';
-//            }
+            if (Permissions::getRolePermissions('deleteCustomer')) {
+                $deleteButton .= "<li><a style='cursor: pointer' onclick=\"deletePo(" . $value->id . ")\">Delete Transfer</a></li>";
+            }
 
 
             $buttons = "<div class=\"btn-group\">
@@ -104,11 +106,9 @@ class CustomerController extends Controller
                     <span class=\"sr-only\">Toggle Dropdown</span>
                   </button>
                   <ul class=\"dropdown-menu\" role=\"menu\">
-                    <li><a href=\"/customer/edit/" . $value->id . "\">Edit Customer</a></li>
-                    <li><a href=\"/customer/view/" . $value->id . "\">View Customer</a></li>
-                     <li><a href=\"/customer/print/" . $value->id . "\">Download as PDF</a></li>
+                       " . $editbutton . "
                     <li class=\"divider\"></li>
-                     <li><a onclick=\"deletePo(" . $value->id . ")\">Delete Customer</a></li>
+                      " . $deleteButton . "
                   </ul>
                 </div>";
 
