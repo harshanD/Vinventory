@@ -24,8 +24,12 @@ class CreateStockTable extends Migration
             $table->tinyInteger('status')->length(2)->comment('1=inactive,0=active')->default(0);
             $table->softDeletes();
             $table->timestamps();
-            $table->userstamps();
-            $table->softUserstamps();
+            $table->integer('created_by')->unsigned()->nullable();
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('updated_by')->unsigned()->nullable();
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('deleted_by')->unsigned()->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

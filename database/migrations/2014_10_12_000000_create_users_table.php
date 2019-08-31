@@ -26,8 +26,12 @@ class CreateUsersTable extends Migration
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
-            $table->userstamps();
-            $table->softUserstamps();
+            $table->integer('created_by')->unsigned()->nullable();
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('updated_by')->unsigned()->nullable();
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('deleted_by')->unsigned()->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('cascade');
         });
 
     }
