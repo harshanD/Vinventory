@@ -26,6 +26,9 @@ class TransfersController extends Controller
 
     public function index()
     {
+        if (!Permissions::getRolePermissions('createTransfer')) {
+            abort(403, 'Unauthorized action.');
+        }
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
         $supplier = Supplier::where('status', \Config::get('constants.status.Active'))->get();
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
@@ -39,6 +42,9 @@ class TransfersController extends Controller
 
     public function create(Request $request)
     {
+        if (!Permissions::getRolePermissions('createTransfer')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'datepicker' => 'required|date',
             'status' => ['required', Rule::notIn(['0'])],
@@ -120,11 +126,17 @@ class TransfersController extends Controller
 
     public function transList()
     {
+        if (!Permissions::getRolePermissions('viewTransfer')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.transfers.index');
     }
 
     public function editView($id)
     {
+        if (!Permissions::getRolePermissions('updateTransfer')) {
+            abort(403, 'Unauthorized action.');
+        }
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
         $supplier = Supplier::where('status', \Config::get('constants.status.Active'))->get();
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
@@ -211,7 +223,9 @@ class TransfersController extends Controller
 
     public function editTransferData(Request $request, $id)
     {
-
+        if (!Permissions::getRolePermissions('updateTransfer')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'datepicker' => 'required|date',
             'status' => ['required', Rule::notIn(['0'])],
@@ -322,116 +336,11 @@ class TransfersController extends Controller
 
     }
 
-    public function removePOData(Request $request)
-    {
-
-        $po = Transfers::find($request->input('id'));
-
-        if (!$po->delete()) {
-            $response['success'] = false;
-            $response['messages'] = 'Error in the database while removing the transfers information';
-        } else {
-            $response['success'] = true;
-            $response['messages'] = 'Successfully Removed';
-        }
-        echo json_encode($response);
-    }
-
-    public function receiveAll(Request $request)
-    {
-
-        $po = Transfers::find($request->input('poId'));
-        $po->status = 1;
-        $po->save();
-
-        $stock = new Stock();
-        $stock->po_reference_code = $po->referenceCode;
-        $stock->receive_code = $request->input('recNo');
-        $stock->location = $po->location;
-        $stock->receive_date = $request->input('datepicker');
-        $stock->remarks = $request->input('note');
-        $stock->save();
-
-        foreach ($po->poDetails as $poItem) {
-
-            $poitemOb = PoDetails::find($poItem->id);
-            $receQty = ($poItem->qty - $poitemOb->received_qty);
-            $poitemOb->received_qty = $receQty;
-
-            $stockItems = new StockItems();
-            $stockItems->item_id = $poItem->id;
-            $stockItems->qty = $receQty;
-            $stock->stockItems()->save($stockItems);
-
-        }
-
-
-        if (!($poitemOb->save())) {
-            $request->session()->flash('message', 'Error in the database while updating the Transfers');
-            $request->session()->flash('message-type', 'error');
-        } else {
-            $request->session()->flash('message', 'Successfully Received All' . "[ Ref NO:" . $stock->receive_code . " ]");
-            $request->session()->flash('message-type', 'success');
-        }
-        return redirect()->route('transfers.manage');
-    }
-
-    public function partiallyReceive(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'datepicker' => 'required|date',
-            'recNo' => 'required|unique:stock,receive_code|max:100',
-        ]);
-
-        $niceNames = array(
-            'recNo' => 'receive code',
-            'datepicker' => 'receive date',
-        );
-        $validator->setAttributeNames($niceNames);
-
-        $validator->validate();
-
-        $po = Transfers::find($request->input('poId'));
-        $po->status = 1;
-        $po->save();
-
-        $stock = new Stock();
-        $stock->po_reference_code = $po->referenceCode;
-        $stock->receive_code = $request->input('recNo');
-        $stock->location = $po->location;
-        $stock->receive_date = $request->input('datepicker');
-        $stock->remarks = $request->input('note');
-        $stock->save();
-
-        $poItemsIds = $request->input('poItemsId');
-        $par_qty = $request->input('par_qty');
-
-        foreach ($poItemsIds as $key => $poItem) {
-
-            $poitemOb = PoDetails::find($poItem);
-            $poitemOb->received_qty = $poitemOb->received_qty + $par_qty[$key];
-
-            $stockItems = new StockItems();
-            $stockItems->item_id = $poitemOb->item_id;
-            $stockItems->qty = $par_qty[$key];
-            $stock->stockItems()->save($stockItems);
-
-        }
-
-        if (!($poitemOb->save())) {
-            $request->session()->flash('message', 'Error in the database while updating the Transfers');
-            $request->session()->flash('message-type', 'error');
-        } else {
-            $request->session()->flash('message', 'Successfully Partially Received ' . "[ Res NO:" . $stock->receive_code . " ]");
-            $request->session()->flash('message-type', 'success');
-        }
-
-        echo json_encode(array('success' => true));
-    }
-
     public function view($id)
     {
-
+        if (!Permissions::getRolePermissions('viewTransfer')) {
+            abort(403, 'Unauthorized action.');
+        }
         $trdata = Transfers::find($id);
         $stock = Stock::where('receive_code', '=', $trdata->tr_reference_code . '-A')->firstOrFail();
 
@@ -440,7 +349,9 @@ class TransfersController extends Controller
 
     public function delete(Request $request, $id)
     {
-
+        if (!Permissions::getRolePermissions('deleteTransfer')) {
+            abort(403, 'Unauthorized action.');
+        }
         $trdata = Transfers::find($id);
         Stock::where('receive_code', '=', $trdata->tr_reference_code . '-A')->firstOrFail()->delete();
         Stock::where('receive_code', '=', $trdata->tr_reference_code . '-S')->firstOrFail()->delete();
