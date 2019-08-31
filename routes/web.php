@@ -28,6 +28,7 @@ Route::post('user/create', 'HomeController@registerUser');
 Route::get('/user/manage', ['as' => 'users.manage', 'uses' => 'HomeController@userList']);
 Route::get('/user/fetchUsersData', 'HomeController@fetchUsersData');
 Route::get('/user/edit/{id}', 'HomeController@userEditView');
+Route::get('/user/profile', 'HomeController@profile');
 Route::post('user/editSave', 'HomeController@editSave');
 Route::post('/user/delete/{id}', 'HomeController@deleteUser');
 
@@ -171,6 +172,13 @@ Route::post('adjustment/edit/{id}', 'AdjustmentController@editAdjData');
 Route::get('adjustment/view/{id}', 'AdjustmentController@view');
 Route::get('adjustment/delete/{id}', 'AdjustmentController@delete');
 
+/*Roles*/
+Route::get('/role', 'RoleController@index');
+Route::get('/role/fetchRoleData', 'RoleController@fetchRoleData');
+Route::post('/role/fetchRoleDataById/{id}', 'RoleController@fetchRoleDataById');
+Route::post('/role/edit/{id}', 'RoleController@editRoleData');
+Route::post('/role/remove', 'RoleController@removeRoleData');
+Route::post('/role/create', 'RoleController@create');
 
 Route::group(['middleware' => 'auth'], function () {
     //    Route::get('/link1', function ()    {

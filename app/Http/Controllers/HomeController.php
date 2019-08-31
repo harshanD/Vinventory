@@ -163,7 +163,19 @@ class HomeController extends Controller
 
     public function userList()
     {
-        return view('vendor.adminlte.users.index');
+        if (Auth::user()->authorizeRoles(['Admin', 'Manager'])) {
+            return view('vendor.adminlte.users.index');
+        }
+
+    }
+
+    public function profile()
+    {
+        $data = Role::orderBy('name', 'asc')->get();
+        $user = User::with('roles')
+            ->where('users.id', Auth::id())
+            ->get();
+        return view('vendor.adminlte.users.edit', ['roles' => $data, 'user' => $user]);
     }
 
     public function userEditView($id)
