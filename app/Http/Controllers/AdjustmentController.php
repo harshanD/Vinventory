@@ -20,6 +20,9 @@ class AdjustmentController extends Controller
 
     public function index()
     {
+        if (!Permissions::getRolePermissions('viewAdjustment')) {
+            abort(403, 'Unauthorized action.');
+        }
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
         $lastRefCode = Adjustment::where('reference_code', 'like', '%ADJUST%')->withTrashed()->get()->last();
         $data = (isset($lastRefCode->reference_code)) ? $lastRefCode->reference_code : 'ADJUST-000000';
@@ -30,6 +33,9 @@ class AdjustmentController extends Controller
 
     public function create(Request $request)
     {
+        if (!Permissions::getRolePermissions('createAdjustment')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'datepicker' => 'required|date',
             'location' => ['required', Rule::notIn(['0'])],
@@ -126,6 +132,9 @@ class AdjustmentController extends Controller
 
     public function editView($id)
     {
+        if (!Permissions::getRolePermissions('updateAdjustment')) {
+            abort(403, 'Unauthorized action.');
+        }
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
 
 
@@ -291,6 +300,9 @@ class AdjustmentController extends Controller
 
     public function view($id)
     {
+        if (!Permissions::getRolePermissions('viewAdjustment')) {
+            abort(403, 'Unauthorized action.');
+        }
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
 
 
@@ -303,7 +315,9 @@ class AdjustmentController extends Controller
 
     public function delete(Request $request, $id)
     {
-
+        if (!Permissions::getRolePermissions('deleteAdjustment')) {
+            abort(403, 'Unauthorized action.');
+        }
         $adData = Adjustment::find($id);
         Stock::where('receive_code', 'like', $adData->reference_code . '%')->firstOrFail()->delete();
 
