@@ -121,6 +121,7 @@ Route::post('/stock/fetchProductsOneWarehouseWiseItem', 'StockController@fetchPr
 Route::get('customer/add', 'CustomerController@index');
 Route::post('customer/create', 'CustomerController@create');
 Route::get('customer/manage', ['as' => 'customer.manage', 'uses' => 'CustomerController@cusList']);
+Route::get('customer/delete/{id}', 'CustomerController@deleteCustomer');
 Route::get('customer/fetchTransData', 'CustomerController@fetchTransData');
 Route::get('customer/edit/{id}', 'CustomerController@editView');
 Route::post('customer/edit/{id}', 'CustomerController@update');

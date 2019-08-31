@@ -15,11 +15,17 @@ class CustomerController extends Controller
 
     public function index()
     {
+        if (!Permissions::getRolePermissions('createCustomer')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.customer.create');
     }
 
     public function create(Request $request)
     {
+        if (!Permissions::getRolePermissions('createCustomer')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'company' => 'required|max:100|regex:/(^[A-Za-z0-9 ]+$)+/',
             'name' => 'required|max:100|unique:customer,name|regex:/(^[A-Za-z0-9 ]+$)+/',
@@ -47,7 +53,9 @@ class CustomerController extends Controller
 
     public function update(Request $request, $id)
     {
-
+        if (!Permissions::getRolePermissions('updateCustomer')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'company' => 'required|max:100|regex:/(^[A-Za-z0-9 ]+$)+/',
             'name' => 'required|max:100|unique:customer,name,' . $id . '|regex:/(^[A-Za-z0-9 ]+$)+/',
@@ -95,7 +103,7 @@ class CustomerController extends Controller
             }
 
             if (Permissions::getRolePermissions('deleteCustomer')) {
-                $deleteButton .= "<li><a style='cursor: pointer' onclick=\"deletePo(" . $value->id . ")\">Delete Transfer</a></li>";
+                $deleteButton .= "<li><a style='cursor: pointer' onclick=\"deleteCustomer(" . $value->id . ")\">Delete Transfer</a></li>";
             }
 
 
@@ -139,14 +147,37 @@ class CustomerController extends Controller
 
     public function cusList()
     {
+        if (!Permissions::getRolePermissions('viewCustomer')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.customer.index');
     }
 
     public function editView($id)
     {
+        if (!Permissions::getRolePermissions('updateCustomer')) {
+            abort(403, 'Unauthorized action.');
+        }
         $cus = Customer::find($id)->get()->first();
 
         return view('vendor.adminlte.customer.edit', ['customer' => $cus]);
     }
 
+    public function deleteCustomer($id, Request $request)
+    {
+        if (!Permissions::getRolePermissions('deleteBiller')) {
+            abort(403, 'Unauthorized action.');
+        }
+        $cus = Customer::find($id);
+
+        if (!$cus->delete()) {
+            $request->session()->flash('message', 'Error in the database while deleting the Biller');
+            $request->session()->flash('message-type', 'error');
+            return redirect()->back();
+        } else {
+            $request->session()->flash('message', 'Successfully Deleted');
+            $request->session()->flash('message-type', 'success');
+            return redirect()->route('customer.manage');
+        }
+    }
 }

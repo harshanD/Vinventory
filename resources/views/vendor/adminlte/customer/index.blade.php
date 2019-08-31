@@ -226,7 +226,7 @@
         </div><!-- /.modal -->
 
         <!-- remove supplier modal -->
-        <div class="modal fade" tabindex="-1" role="dialog" id="deleteProductModal">
+        <div class="modal fade" tabindex="-1" role="dialog" id="deleteCustomerModal">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -388,8 +388,8 @@
             }
         }
 
-        function deletePo(id) {
-            $('#deleteProductModal').modal({
+        function deleteCustomer(id) {
+            $('#deleteCustomerModal').modal({
                 hidden: 'true'
             });
 
