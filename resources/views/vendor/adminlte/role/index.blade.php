@@ -32,9 +32,11 @@
                 @endforeach
             </div>
         @endif
-        <button class="btn btn-primary" data-toggle="modal" data-target="#addRoleModal">Add Role</button>
-        <br/> <br/>
-        <!-- Default box -->
+        @if(\App\Http\Controllers\Permissions::getRolePermissions('createRole'))
+            <button class="btn btn-primary" data-toggle="modal" data-target="#addRoleModal">Add Role</button>
+            <br/> <br/>
+    @endif
+    <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title">Manage Roles</h3>

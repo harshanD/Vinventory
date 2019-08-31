@@ -57,13 +57,13 @@ class RoleController extends Controller
             // button
             $buttons = '';
 
-//            if (Permissions::getRolePermissions('viewRole')) {
+            if (Permissions::getRolePermissions('viewRole')) {
             $buttons .= '<button type="button" class="btn btn-default" onclick="editRole(' . $value->id . ')" data-toggle="modal" data-target="#editRoleModal"><i class="fa fa-pencil"></i></button>';
-//            }
+            }
 
-//            if (Permissions::getRolePermissions('deleteRole')) {
+            if (Permissions::getRolePermissions('deleteRole')) {
             $buttons .= ' <button type="button" class="btn btn-default" onclick="removeRole(' . $value->id . ')" data-toggle="modal" data-target="#removeRoleModal"><i class="fa fa-trash"></i></button>';
-//            }
+            }
 
             $status = ($value->status == \Config::get('constants.status.Active')) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
 
