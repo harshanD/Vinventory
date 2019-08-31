@@ -59,13 +59,13 @@ class TaxController extends Controller
             // button
             $buttons = '';
 
-//            if (Permissions::getRolePermissions('viewTax')) {
-            $buttons .= '<button type="button" class="btn btn-default" onclick="editTax(' . $value->id . ')" data-toggle="modal" data-target="#editTaxModal"><i class="fa fa-pencil"></i></button>';
-//            }
+            if (Permissions::getRolePermissions('viewTax')) {
+                $buttons .= '<button type="button" class="btn btn-default" onclick="editTax(' . $value->id . ')" data-toggle="modal" data-target="#editTaxModal"><i class="fa fa-pencil"></i></button>';
+            }
 
-//            if (Permissions::getRolePermissions('deleteTax')) {
-            $buttons .= ' <button type="button" class="btn btn-default" onclick="removeTax(' . $value->id . ')" data-toggle="modal" data-target="#removeTaxModal"><i class="fa fa-trash"></i></button>';
-//            }
+            if (Permissions::getRolePermissions('deleteTax')) {
+                $buttons .= ' <button type="button" class="btn btn-default" onclick="removeTax(' . $value->id . ')" data-toggle="modal" data-target="#removeTaxModal"><i class="fa fa-trash"></i></button>';
+            }
 
             $status = ($value->status == \Config::get('constants.status.Active')) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
 
@@ -94,7 +94,7 @@ class TaxController extends Controller
     public function editTaxData(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'edit_tax' => 'required|unique:tax_profiles,name,'.$id.'|max:100',
+            'edit_tax' => 'required|unique:tax_profiles,name,' . $id . '|max:100',
             'edit_taxRate' => 'required|regex:/^\d+(\.\d{1,2})?$/',
         ]);
 

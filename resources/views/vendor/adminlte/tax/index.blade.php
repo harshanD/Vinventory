@@ -33,9 +33,11 @@
                 @endforeach
             </div>
         @endif
-        <button class="btn btn-primary" data-toggle="modal" data-target="#addTaxModal">Add Tax</button>
-        <br/> <br/>
-        <!-- Default box -->
+        @if(\App\Http\Controllers\Permissions::getRolePermissions('createTax'))
+            <button class="btn btn-primary" data-toggle="modal" data-target="#addTaxModal">Add Tax</button>
+            <br/> <br/>
+    @endif
+    <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title">Manage Tax</h3>
