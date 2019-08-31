@@ -20,12 +20,17 @@ class RoleController extends Controller
 //        Auth::user()->hasAnyRole(['Admin', 'Employer']); // check for roles accessibility using array
 //        Auth::user()->authorizeRoles('Admin'); // if unauthorized then show error window
 //        print_r(Permissions::getRolePermissions('createUser')); check User permission
-
+        if (!Permissions::getRolePermissions('viewRole')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.role.index');
     }
 
     public function create(Request $request)
     {
+        if (!Permissions::getRolePermissions('createRole')) {
+            abort(403, 'Unauthorized action.');
+        }
 //        print_r($request->all());
 //        return 'sdfs';
         $request->validate([
@@ -58,11 +63,11 @@ class RoleController extends Controller
             $buttons = '';
 
             if (Permissions::getRolePermissions('viewRole')) {
-            $buttons .= '<button type="button" class="btn btn-default" onclick="editRole(' . $value->id . ')" data-toggle="modal" data-target="#editRoleModal"><i class="fa fa-pencil"></i></button>';
+                $buttons .= '<button type="button" class="btn btn-default" onclick="editRole(' . $value->id . ')" data-toggle="modal" data-target="#editRoleModal"><i class="fa fa-pencil"></i></button>';
             }
 
             if (Permissions::getRolePermissions('deleteRole')) {
-            $buttons .= ' <button type="button" class="btn btn-default" onclick="removeRole(' . $value->id . ')" data-toggle="modal" data-target="#removeRoleModal"><i class="fa fa-trash"></i></button>';
+                $buttons .= ' <button type="button" class="btn btn-default" onclick="removeRole(' . $value->id . ')" data-toggle="modal" data-target="#removeRoleModal"><i class="fa fa-trash"></i></button>';
             }
 
             $status = ($value->status == \Config::get('constants.status.Active')) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
@@ -90,7 +95,9 @@ class RoleController extends Controller
 
     public function editRoleData(Request $request, $id)
     {
-
+        if (!Permissions::getRolePermissions('updateRole')) {
+            abort(403, 'Unauthorized action.');
+        }
         $validator = Validator::make($request->all(), [
             'edit_role' => 'required|unique:roles,name,' . $id . '|max:100',
         ]);
@@ -120,7 +127,9 @@ class RoleController extends Controller
 
     public function removeRoleData(Request $request)
     {
-
+        if (!Permissions::getRolePermissions('deleteRole')) {
+            abort(403, 'Unauthorized action.');
+        }
         $role = Role::find($request->input('role_id'));
 
         if (!$role->delete()) {
