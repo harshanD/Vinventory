@@ -14,11 +14,17 @@ class BillerController extends Controller
 
     public function index()
     {
+        if (!Permissions::getRolePermissions('viewBiller')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.biller.create');
     }
 
     public function create(Request $request)
     {
+        if (!Permissions::getRolePermissions('createBiller')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'company' => 'required|max:100|regex:/(^[A-Za-z0-9 ]+$)+/',
             'name' => 'required|max:100|unique:biller,name|regex:/(^[A-Za-z0-9 ]+$)+/',
@@ -47,7 +53,9 @@ class BillerController extends Controller
 
     public function update(Request $request, $id)
     {
-
+        if (!Permissions::getRolePermissions('updateBiller')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'company' => 'required|max:100|regex:/(^[A-Za-z0-9 ]+$)+/',
             'name' => 'required|max:100|unique:biller,name,' . $id . '|regex:/(^[A-Za-z0-9 ]+$)+/',
@@ -96,7 +104,7 @@ class BillerController extends Controller
             }
 
             if (Permissions::getRolePermissions('deleteBiller')) {
-                $deleteButton .= "<li><a onclick=\"deletePo(" . $value->id . ")\">Delete Biller</a></li>";
+                $deleteButton .= "<li><a style='cursor: pointer' onclick=\"deleteBiller(" . $value->id . ")\">Delete Biller</a></li>";
             }
 
 
@@ -140,13 +148,37 @@ class BillerController extends Controller
 
     public function billerList()
     {
+        if (!Permissions::getRolePermissions('viewBiller')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.biller.index');
     }
 
     public function editView($id)
     {
+        if (!Permissions::getRolePermissions('updateBiller')) {
+            abort(403, 'Unauthorized action.');
+        }
         $cus = Biller::find($id)->get()->first();
 
         return view('vendor.adminlte.biller.edit', ['biller' => $cus]);
+    }
+
+    public function deleteBiller($id, Request $request)
+    {
+        if (!Permissions::getRolePermissions('deleteBiller')) {
+            abort(403, 'Unauthorized action.');
+        }
+        $biller = Biller::find($id);
+
+        if (!$biller->delete()) {
+            $request->session()->flash('message', 'Error in the database while deleting the Biller');
+            $request->session()->flash('message-type', 'error');
+            return redirect()->back();
+        } else {
+            $request->session()->flash('message', 'Successfully Deleted');
+            $request->session()->flash('message-type', 'success');
+            return redirect()->route('biller.manage');
+        }
     }
 }
