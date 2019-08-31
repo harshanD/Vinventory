@@ -19,12 +19,17 @@ class CategoriesController extends Controller
 //        Auth::user()->hasAnyRole(['Admin', 'Employer']); // check for roles accessibility using array
 //        Auth::user()->authorizeRoles('Admin'); // if unauthorized then show error window
 //        print_r(Permissions::getRolePermissions('createUser')); check User permission
-
+        if (!Permissions::getRolePermissions('viewCategory')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.categories.index');
     }
 
     public function create(Request $request)
     {
+        if (!Permissions::getRolePermissions('createCategory')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'category' => 'required|unique:categories|max:191',
             'status' => 'required',
@@ -87,8 +92,11 @@ class CategoriesController extends Controller
 
     public function editCategoryData(Request $request, $id)
     {
+        if (!Permissions::getRolePermissions('updateCategory')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
-            'edit_category_name' => 'required|unique:categories,category,'.$id.'|max:191',
+            'edit_category_name' => 'required|unique:categories,category,' . $id . '|max:191',
             'edit_status' => 'required',
         ]);
 
@@ -111,7 +119,9 @@ class CategoriesController extends Controller
 
     public function removeCategoryData(Request $request)
     {
-
+        if (!Permissions::getRolePermissions('deleteCategory')) {
+            abort(403, 'Unauthorized action.');
+        }
         $category = Categories::find($request->input('category_id'));
 
         if (!$category->delete()) {
