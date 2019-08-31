@@ -34,9 +34,11 @@
                 @endforeach
             </div>
         @endif
-        <button class="btn btn-primary" data-toggle="modal" data-target="#addLocationModal">Add Warehouse</button>
-        <br/> <br/>
-        <!-- Default box -->
+        @if(\App\Http\Controllers\Permissions::getRolePermissions('createWarehouse'))
+            <button class="btn btn-primary" data-toggle="modal" data-target="#addLocationModal">Add Warehouse</button>
+            <br/> <br/>
+    @endif
+    <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title">Manage Warehouses</h3>

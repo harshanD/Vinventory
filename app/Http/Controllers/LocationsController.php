@@ -69,13 +69,13 @@ class LocationsController extends Controller
             // button
             $buttons = '';
 
-//            if (Permissions::getRolePermissions('viewLocation')) {
-            $buttons .= '<button type="button" class="btn btn-default" onclick="editLocation(' . $value->id . ')" data-toggle="modal" data-target="#editLocationModal"><i class="fa fa-pencil"></i></button>';
-//            }
+            if (Permissions::getRolePermissions('viewWarehouse')) {
+                $buttons .= '<button type="button" class="btn btn-default" onclick="editLocation(' . $value->id . ')" data-toggle="modal" data-target="#editLocationModal"><i class="fa fa-pencil"></i></button>';
+            }
 
-//            if (Permissions::getRolePermissions('deleteLocation')) {
-            $buttons .= ' <button type="button" class="btn btn-default" onclick="removeLocation(' . $value->id . ')" data-toggle="modal" data-target="#removeLocationModal"><i class="fa fa-trash"></i></button>';
-//            }
+            if (Permissions::getRolePermissions('deleteWarehouse')) {
+                $buttons .= ' <button type="button" class="btn btn-default" onclick="removeLocation(' . $value->id . ')" data-toggle="modal" data-target="#removeLocationModal"><i class="fa fa-trash"></i></button>';
+            }
 
             $status = ($value->status == \Config::get('constants.status.Active')) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
 
