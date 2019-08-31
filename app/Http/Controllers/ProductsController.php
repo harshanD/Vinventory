@@ -25,12 +25,16 @@ class ProductsController extends Controller
 //        Auth::user()->hasAnyRole(['Admin', 'Employer']); // check for roles accessibility using array
 //        Auth::user()->authorizeRoles('Admin'); // if unauthorized then show error window
 //        print_r(Permissions::getRolePermissions('createUser')); check User permission
-        $brands = Brands::where('status', \Config::get('constants.status.Active'))->orderBy('brand', 'asc')->get();
-        $categories = Categories::where('status', \Config::get('constants.status.Active'))->orderBy('category', 'asc')->get();
-        $suppliers = Supplier::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
-        $taxes = Tax::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
+        if (Permissions::getRolePermissions('createProduct')) {
+            $brands = Brands::where('status', \Config::get('constants.status.Active'))->orderBy('brand', 'asc')->get();
+            $categories = Categories::where('status', \Config::get('constants.status.Active'))->orderBy('category', 'asc')->get();
+            $suppliers = Supplier::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
+            $taxes = Tax::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
 
-        return view('vendor.adminlte.products.create', ['brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers, 'taxes' => $taxes]);
+            return view('vendor.adminlte.products.create', ['brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers, 'taxes' => $taxes]);
+        } else {
+            abort(403, 'Unauthorized action.');
+        }
     }
 
     public function create(Request $request)
@@ -89,7 +93,11 @@ class ProductsController extends Controller
 
     public function manageForList()
     {
-        return view('vendor.adminlte.products.index');
+        if (Permissions::getRolePermissions('viewProduct')) {
+            return view('vendor.adminlte.products.index');
+        } else {
+            abort(403, 'Unauthorized action.');
+        }
     }
 
     public function fetchProductsData()
@@ -136,14 +144,19 @@ class ProductsController extends Controller
 
     public function editView($id)
     {
-        $brands = Brands::where('status', \Config::get('constants.status.Active'))->orderBy('brand', 'asc')->get();
-        $categories = Categories::where('status', \Config::get('constants.status.Active'))->orderBy('category', 'asc')->get();
-        $suppliers = Supplier::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
-        $taxes = Tax::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
-        $product = Products::find($id);
+        if (Permissions::getRolePermissions('editProduct')) {
+            $brands = Brands::where('status', \Config::get('constants.status.Active'))->orderBy('brand', 'asc')->get();
+            $categories = Categories::where('status', \Config::get('constants.status.Active'))->orderBy('category', 'asc')->get();
+            $suppliers = Supplier::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
+            $taxes = Tax::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
+            $product = Products::find($id);
 
 
-        return view('vendor.adminlte.products.edit', ['product' => $product, 'brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers, 'taxes' => $taxes]);
+            return view('vendor.adminlte.products.edit', ['product' => $product, 'brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers, 'taxes' => $taxes]);
+
+        } else {
+            abort(403, 'Unauthorized action.');
+        }
     }
 
     public function fetchProductDataById(Request $request)
