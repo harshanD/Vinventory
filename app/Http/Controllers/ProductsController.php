@@ -102,13 +102,13 @@ class ProductsController extends Controller
             // button
             $buttons = '';
 
-//            if (Permissions::getRolePermissions('viewProduct')) {
-            $buttons .= '<a  href="' . url("/products/edit/" . $value->id) . '" class="btn btn-default"><i class="fa fa-pencil"></i></a>';
-//            }
+            if (Permissions::getRolePermissions('updateProduct')) {
+                $buttons .= '<a  href="' . url("/products/edit/" . $value->id) . '" class="btn btn-default"><i class="fa fa-pencil"></i></a>';
+            }
 
-//            if (Permissions::getRolePermissions('deleteProduct')) {
-            $buttons .= ' <button type="button" class="btn btn-default" onclick="removeProduct(' . $value->id . ')" data-toggle="modal" data-target="#removeProductModal"><i class="fa fa-trash"></i></button>';
-//            }
+            if (Permissions::getRolePermissions('deleteProduct')) {
+                $buttons .= ' <button type="button" class="btn btn-default" onclick="removeProduct(' . $value->id . ')" data-toggle="modal" data-target="#removeProductModal"><i class="fa fa-trash"></i></button>';
+            }
 
             $status = ($value->status == \Config::get('constants.status.Active')) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
 
