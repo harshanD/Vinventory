@@ -173,6 +173,9 @@ class HomeController extends Controller
 
     public function profile()
     {
+        if (!Permissions::getRolePermissions('viewProfile')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data = Role::orderBy('name', 'asc')->get();
         $user = User::with('roles')
             ->where('users.id', Auth::id())
@@ -182,6 +185,9 @@ class HomeController extends Controller
 
     public function userEditView($id)
     {
+        if (!Permissions::getRolePermissions('updateUser')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data = Role::orderBy('name', 'asc')->get();
         $user = User::with('roles')
             ->where('users.id', $id)
@@ -227,6 +233,9 @@ class HomeController extends Controller
 
     public function deleteUser($id, Request $request)
     {
+        if (!Permissions::getRolePermissions('deleteUser')) {
+            abort(403, 'Unauthorized action.');
+        }
         User::find($id)->delete();
 
         if (count(Mail::failures()) > 0) {
