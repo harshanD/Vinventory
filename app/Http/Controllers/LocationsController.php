@@ -20,12 +20,17 @@ class LocationsController extends Controller
 //        Auth::user()->hasAnyRole(['Admin', 'Employer']); // check for roles accessibility using array
 //        Auth::user()->authorizeRoles('Admin'); // if unauthorized then show error window
 //        print_r(Permissions::getRolePermissions('createUser')); check User permission
-
+        if (!Permissions::getRolePermissions('viewWarehouse')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.locations.index');
     }
 
     public function create(Request $request)
     {
+        if (!Permissions::getRolePermissions('createWarehouse')) {
+            abort(403, 'Unauthorized action.');
+        }
 //        print_r($request->all());
 //        return 'sdfs';
         $request->validate([
@@ -101,6 +106,9 @@ class LocationsController extends Controller
 
     public function editLocationData(Request $request, $id)
     {
+        if (!Permissions::getRolePermissions('updateWarehouse')) {
+            abort(403, 'Unauthorized action.');
+        }
         $validator = Validator::make($request->all(), [
             'edit_location' => 'required|unique:locations,name,' . $id . '|max:100',
             'edit_code' => 'required|unique:locations,code,' . $id . '|max:100',
@@ -143,7 +151,9 @@ class LocationsController extends Controller
 
     public function removeLocationData(Request $request)
     {
-
+        if (!Permissions::getRolePermissions('deleteWarehouse')) {
+            abort(403, 'Unauthorized action.');
+        }
         $location = Locations::find($request->input('location_id'));
 
         if (!$location->delete()) {
