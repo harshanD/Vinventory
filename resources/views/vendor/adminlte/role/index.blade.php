@@ -260,6 +260,21 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td>People</td>
+                                <td> -</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="viewPeople" class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td>Settings</td>
+                                <td> -</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="viewSettings" class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
                                 <td>Reports</td>
                                 <td> -</td>
                                 <td> -</td>
@@ -533,6 +548,22 @@
                                 <td><input type="checkbox" name="permission[]"
                                            value="deleteTax" id="deleteTax" class="minimal">
                                 </td>
+                            </tr>
+                            <tr>
+                                <td>People</td>
+                                <td> -</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="viewPeople" id="viewPeople"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td>Settings</td>
+                                <td> -</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="viewSettings" id="viewSettings"
+                                           class="minimal"></td>
+                                <td> -</td>
                             </tr>
                             <tr>
                                 <td>Reports</td>

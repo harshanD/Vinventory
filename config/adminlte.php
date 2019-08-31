@@ -110,149 +110,180 @@ return [
     'menu' => [
         'MAIN NAVIGATION',
         [
-            'text' => 'Blog',
-            'url' => 'admin/blog',
-            'can' => 'manage-blog',
-        ],
-        [
             'text' => 'Home',
             'url' => '/home',
             'icon' => 'home',
             'label_color' => 'success',
+            'can' => 'createUser',
         ],
         'SUB NAVIGATION',
         [
             'text' => 'Products',
             'icon' => 'barcode',
+            'can' => 'viewProduct',
             'submenu' => [
                 [
                     'text' => 'Manage Product',
                     'icon' => 'barcode',
                     'url' => 'products',
+                    'can' => 'viewProduct',
                 ], [
                     'text' => 'Add Product',
                     'icon' => 'plus-circle',
                     'url' => 'products/create',
+                    'can' => 'createProduct',
                 ], [
                     'text' => 'Manage Adjustment',
                     'icon' => 'filter',
                     'url' => '/adjustment/manage',
+                    'can' => 'viewAdjustment',
                 ], [
                     'text' => 'Quantity Adjustment',
                     'icon' => 'filter',
                     'url' => '/adjustment/add',
+                    'can' => 'createAdjustment',
                 ],
             ]
         ], [
             'text' => 'Sales',
             'icon' => 'heart',
+            'can' => 'viewSale',
             'submenu' => [
                 [
                     'text' => 'List Sales',
                     'icon' => 'heart',
                     'url' => '/sales/manage',
+                    'can' => 'viewSale',
                 ], [
                     'text' => 'Add Sale',
                     'icon' => 'plus-circle',
                     'url' => '/sales/add',
+                    'can' => 'createSale',
                 ],
             ]
         ], [
             'text' => 'Purchase Order',
             'icon' => 'star',
+            'can' => 'viewOrder',
             'submenu' => [
                 [
                     'text' => 'List PO',
                     'icon' => 'star',
                     'url' => '/po/manage',
+                    'can' => 'viewOrder',
                 ], [
                     'text' => 'Add PO',
                     'icon' => 'plus-circle',
                     'url' => '/po/add',
+                    'can' => 'createOrder',
                 ],
             ]
         ], [
             'text' => 'Transfers',
             'icon' => 'star-o',
+            'can' => 'viewTransfer',
             'submenu' => [
                 [
                     'text' => 'List Transfer',
                     'icon' => 'star-o',
                     'url' => '/transfer/manage',
+                    'can' => 'viewTransfer',
                 ], [
                     'text' => 'Add Transfer',
                     'icon' => 'plus-circle',
                     'url' => '/transfer/add',
+                    'can' => 'createTransfer',
                 ],
             ]
         ], [
             'text' => 'Returns',
             'icon' => 'random',
+            'can' => 'viewReturns',
             'submenu' => [
                 [
                     'text' => 'List Sales',
                     'icon' => 'random',
                     'url' => '/returns/manage',
+                    'can' => 'viewReturns',
                 ], [
                     'text' => 'Add Returns',
                     'icon' => 'plus-circle',
                     'url' => '/returns/add',
+                    'can' => 'createReturns',
                 ],
             ]
         ], [
             'text' => 'People',
             'icon' => 'users',
+            'can' => 'viewPeople',
             'submenu' => [
                 [
                     'text' => 'List users',
                     'icon' => 'users',
                     'url' => '/user/manage',
+                    'can' => 'viewUser',
                 ], [
                     'text' => 'Add Users',
                     'icon' => 'user-plus',
                     'url' => '/user/register',
+                    'can' => 'createUser',
                 ], [
                     'text' => 'List Billers',
                     'icon' => 'users',
                     'url' => '/biller/manage',
+                    'can' => 'viewBiller',
                 ], [
                     'text' => 'Add Biller',
                     'icon' => 'plus-circle',
                     'url' => '/biller/add',
+                    'can' => 'createBiller',
                 ], [
                     'text' => 'List customer',
                     'icon' => 'users',
                     'url' => '/customer/manage',
+                    'can' => 'viewCustomer',
                 ], [
                     'text' => 'Add customer',
                     'icon' => 'plus-circle',
                     'url' => '/customer/add',
+                    'can' => 'createCustomer',
                 ], [
                     'text' => 'List and Add Suppliers',
                     'icon' => 'users',
                     'url' => '/supplier',
+                    'can' => 'viewSupplier',
                 ],
             ]
         ], [
             'text' => 'Settings',
             'icon' => 'gear',
+            'can' => 'viewSettings',
             'submenu' => [
                 [
                     'text' => 'Tax Rates',
                     'icon' => 'plus-circle',
                     'url' => '/tax',
+                    'can' => 'viewTax',
                 ], [
                     'text' => 'Brands',
                     'icon' => 'th-list',
                     'url' => '/brands',
+                    'can' => 'viewBrand',
                 ], [
                     'text' => 'Categories',
                     'icon' => 'folder-open',
                     'url' => '/categories',
+                    'can' => 'viewCategory',
                 ], [
                     'text' => 'Warehouses',
                     'icon' => 'building-o',
                     'url' => '/locations',
+                    'can' => 'viewWarehouse',
+                ], [
+                    'text' => 'Roles',
+                    'icon' => 'building-o',
+                    'url' => '/role',
+                    'can' => 'viewRole',
                 ],
 //                [
 //                    'text' => 'Level One',
@@ -284,14 +315,15 @@ return [
         'ACCOUNT SETTINGS',
         [
             'text' => 'Profile',
-            'url' => 'user/manage/',
+            'url' => '/user/profile',
             'icon' => 'user',
+            'can' => 'viewProfile',
         ],
-        [
-            'text' => 'Change Password',
-            'url' => 'admin/settings',
-            'icon' => 'lock',
-        ],
+//        [
+//            'text' => 'Change Password',
+//            'url' => 'admin/settings',
+//            'icon' => 'lock',
+//        ],
 
     ],
 
@@ -312,7 +344,8 @@ return [
         JeroenNoten\LaravelAdminLte\Menu\Filters\ActiveFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\SubmenuFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\ClassesFilter::class,
-        JeroenNoten\LaravelAdminLte\Menu\Filters\GateFilter::class,
+//        JeroenNoten\LaravelAdminLte\Menu\Filters\GateFilter::class,
+        App\MenuFilter::class,
     ],
 
     /*
