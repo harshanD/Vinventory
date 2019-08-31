@@ -88,14 +88,16 @@ class BillerController extends Controller
         foreach ($data as $key => $value) {
             // button
             $buttons = '';
+            $editbutton = '';
+            $deleteButton = '';
 
-//            if (Permissions::getRolePermissions('vi   ewPO')) {
-            $buttons .= '<button type="button" class="btn btn-default" onclick="editPO(' . $value->id . ')" data-toggle="modal" data-target="#editPOModal"><i class="fa fa-pencil"></i></button>';
-//            }
+            if (Permissions::getRolePermissions('updateBiller')) {
+                $editbutton .= "<li><a href=\"/biller/edit/" . $value->id . "\">Edit Biller</a></li>";
+            }
 
-//            if (Permissions::getRolePermissions('deletePO')) {
-            $buttons .= ' <button type="button" class="btn btn-default" onclick="removePO(' . $value->id . ')" data-toggle="modal" data-target="#removePOModal"><i class="fa fa-trash"></i></button>';
-//            }
+            if (Permissions::getRolePermissions('deleteBiller')) {
+                $deleteButton .= "<li><a onclick=\"deletePo(" . $value->id . ")\">Delete Biller</a></li>";
+            }
 
 
             $buttons = "<div class=\"btn-group\">
@@ -105,11 +107,9 @@ class BillerController extends Controller
                     <span class=\"sr-only\">Toggle Dropdown</span>
                   </button>
                   <ul class=\"dropdown-menu\" role=\"menu\">
-                    <li><a href=\"/biller/edit/" . $value->id . "\">Edit Biller</a></li>
-                    <li><a href=\"/biller/view/" . $value->id . "\">View Biller</a></li>
-                     <li><a href=\"/biller/print/" . $value->id . "\">Download as PDF</a></li>
+                     " . $editbutton . "
                     <li class=\"divider\"></li>
-                     <li><a onclick=\"deletePo(" . $value->id . ")\">Delete Biller</a></li>
+                     " . $deleteButton . "
                   </ul>
                 </div>";
 
