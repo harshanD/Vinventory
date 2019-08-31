@@ -58,7 +58,7 @@
                     <tr>
                         <th>Date</th>
                         <th>Reference No</th>
-                        <th>Location</th>
+                        <th>Warehouse</th>
                         <th>Biller</th>
                         <th>Customer</th>
                         <th>Grand Total</th>

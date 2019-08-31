@@ -143,17 +143,19 @@
                         </div>
 
                         @if( $user[0]->name!='Admin')
-                            <div class="form-group">
-                                <label for="phone">Active</label>
+                            @if(Auth::user()->hasAnyRole(['Admin', 'Manager']))
+                                <div class="form-group">
+                                    <label for="phone">Active</label>
 
-                                <select name="active" class="form-control select2">
-                                    <option value="0" {{ ($user[0]->status==0)?'selected':'' }}>Active</option>
-                                    <option value="1" {{ ($user[0]->status==1)?'selected':'' }}>Inactive</option>
-                                </select>
-                                @error('active')
-                                <p class="help-block">{{ $message }}</p>
-                                @enderror
-                            </div>
+                                    <select name="active" class="form-control select2">
+                                        <option value="0" {{ ($user[0]->status==0)?'selected':'' }}>Active</option>
+                                        <option value="1" {{ ($user[0]->status==1)?'selected':'' }}>Inactive</option>
+                                    </select>
+                                    @error('active')
+                                    <p class="help-block">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            @endif
                         @endif
                         <div class="form-group">
                             <label for="avatar">Avatar</label>

@@ -50,7 +50,7 @@
                                                 <i class="fa fa-map-marker" aria-hidden="true"></i>
                                             </div>
                                         </div>
-                                        <h2 class="ssb-title">Location</h2>
+                                        <h2 class="ssb-title">Warehouse</h2>
                                     </button>
                                 </a>
                             </div>

@@ -61,7 +61,7 @@
             </li>
             <li>
                 <a href="{{url('/location')}}">
-                    <i class='glyphicon  glyphicon-map-marker'></i> <span>Locations</span>
+                    <i class='glyphicon  glyphicon-map-marker'></i> <span>Warehouses</span>
                 </a>
             </li>
             <li class="treeview">

@@ -592,7 +592,7 @@
                 }
 
                 if ($('#fromLocation').val() == $('#toLocation').val()) {
-                    $('#fromLocation_error').html('Cannot be same to Location and From location');
+                    $('#fromLocation_error').html('Cannot be same to Warehouse and From location');
                     return false
                 }
 

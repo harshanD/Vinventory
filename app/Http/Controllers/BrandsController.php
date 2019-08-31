@@ -25,7 +25,7 @@ class BrandsController extends Controller
 //        Auth::user()->hasRole('Admin'); // individually check role has accessibility
 //        Auth::user()->hasAnyRole(['Admin', 'Employer']); // check for roles accessibility using array
 //        Auth::user()->authorizeRoles('Admin'); // if unauthorized then show error window
-//        print_r(Permissions::getRolePermissions('createUser')); check User permission
+//        var_dump(Permissions::getRolePermissions('createUser')); /*check User permission*/
 
         return view('vendor.adminlte.brands.index');
     }

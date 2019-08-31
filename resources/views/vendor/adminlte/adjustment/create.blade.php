@@ -92,14 +92,14 @@
                             <!-- /.col -->
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Location *</label>
+                                    <label>Warehouse *</label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
                                             <i class="fa fa-location-arrow"></i>
                                         </div>
                                         <select class="form-control select2" name="location" id="location">
-                                            <option value="0">Select Location</option>
+                                            <option value="0">Select Warehouse</option>
                                             @foreach($locations as $location)
                                                 <option value="{{$location->id}}">{{$location->name}}</option>
                                             @endforeach

@@ -13,7 +13,7 @@
 @section('content_header')
     <ol class="breadcrumb">
         <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Manage Locations</li>
+        <li class="active">Manage Warehouses</li>
     </ol>
 @stop
 
@@ -34,12 +34,12 @@
                 @endforeach
             </div>
         @endif
-        <button class="btn btn-primary" data-toggle="modal" data-target="#addLocationModal">Add Location</button>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#addLocationModal">Add Warehouse</button>
         <br/> <br/>
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">Manage Locations</h3>
+                <h3 class="box-title">Manage Warehouses</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -56,7 +56,7 @@
                     <thead>
                     <tr>
                         <th>Code</th>
-                        <th>Location Name</th>
+                        <th>Warehouse Name</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -93,7 +93,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Location</h4>
+                    <h4 class="modal-title">Add Warehouse</h4>
                 </div>
                 <div id="create_model_messages"></div>
                 <form role="form" action="{{ url('locations/create') }}" method="post" id="createLocationForm">
@@ -106,9 +106,9 @@
                             <p class="help-block" id="error_code"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_location_name">Location Name *</label>
+                            <label for="edit_location_name">Warehouse Name *</label>
                             <input type="text" class="form-control" id="location" name="location"
-                                   placeholder="Enter Location name" autocomplete="off">
+                                   placeholder="Enter Warehouse name" autocomplete="off">
                             <p class="help-block" id="error_location"></p>
 
                         </div>
@@ -164,7 +164,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Edit Location</h4>
+                    <h4 class="modal-title">Edit Warehouse</h4>
                 </div>
                 <div id="edit_model_messages"></div>
                 <form role="form" action="{{ url('locations/edit') }}" method="post" id="updateLocationForm">
@@ -178,9 +178,9 @@
                             <p class="help-block" id="error_e_code"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_location_name">Location Name *</label>
+                            <label for="edit_location_name">Warehouse Name *</label>
                             <input type="text" class="form-control" id="edit_location" name="edit_location"
-                                   placeholder="Enter Location name" autocomplete="off">
+                                   placeholder="Enter Warehouse name" autocomplete="off">
                             <p class="help-block" id="error_e_location"></p>
                         </div>
                         <div class="form-group">
@@ -235,7 +235,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Remove Location</h4>
+                    <h4 class="modal-title">Remove Warehouse</h4>
                 </div>
 
                 <form role="form" action="{{ url('locations/remove') }}" method="post" id="removeLocationForm">

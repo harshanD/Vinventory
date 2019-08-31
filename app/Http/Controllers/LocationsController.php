@@ -111,7 +111,7 @@ class LocationsController extends Controller
         ]);
 
         $niceNames = array(
-            'edit_location' => 'Location',
+            'edit_location' => 'Warehouse',
             'edit_code' => 'Code',
             'edit_address' => 'Address',
             'edit_person' => 'Contact Person',

@@ -152,7 +152,7 @@
                                             <i class="fa fa-location-arrow"></i>
                                         </div>
                                         <select class="form-control select2" name="location" id="location">
-                                            <option value="0">Select Location</option>
+                                            <option value="0">Select Warehouse</option>
                                             @foreach($locations as $location)
                                                 <option value="{{$location->id}}" {{ ($sales->location == $location->id? "selected":"")}}>{{$location->name}}</option>
                                             @endforeach
