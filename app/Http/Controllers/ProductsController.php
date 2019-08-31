@@ -39,7 +39,9 @@ class ProductsController extends Controller
 
     public function create(Request $request)
     {
-
+        if (!Permissions::getRolePermissions('createProduct')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'product_name' => 'required|unique:products,name|max:100|regex:/(^[A-Za-z0-9 ]+$)+/',
             'product_code' => 'required|max:191',
