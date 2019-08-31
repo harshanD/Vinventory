@@ -150,7 +150,7 @@ class TransfersController extends Controller
             $deleteButton = '';
 
             if (Permissions::getRolePermissions('updateTransfer')) {
-                $editbutton .= "<li><a href=\"/transfer/edit/" . $value->id . "\">Edit Purchase</a></li>";
+                $editbutton .= "<li><a href=\"/transfer/edit/" . $value->id . "\">Edit Transfer</a></li>";
             }
 
             if (Permissions::getRolePermissions('deleteTransfer')) {
