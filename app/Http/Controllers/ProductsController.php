@@ -144,7 +144,7 @@ class ProductsController extends Controller
 
     public function editView($id)
     {
-        if (Permissions::getRolePermissions('editProduct')) {
+        if (Permissions::getRolePermissions('updateProduct')) {
             $brands = Brands::where('status', \Config::get('constants.status.Active'))->orderBy('brand', 'asc')->get();
             $categories = Categories::where('status', \Config::get('constants.status.Active'))->orderBy('category', 'asc')->get();
             $suppliers = Supplier::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
