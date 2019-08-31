@@ -163,8 +163,10 @@ class HomeController extends Controller
 
     public function userList()
     {
-        if (Auth::user()->authorizeRoles(['Admin', 'Manager'])) {
+        if (Permissions::getRolePermissions('viewUser')) {
             return view('vendor.adminlte.users.index');
+        } else {
+            abort(403, 'Unauthorized action.');
         }
 
     }
@@ -189,13 +191,9 @@ class HomeController extends Controller
 
     public function fetchUsersData()
     {
-        if (Permissions::getRolePermissions('viewUserList')) {
-            $users = User::with('roles')->get();
-        } else {
-            $users = User::with('roles')
-                ->where('users.id', Auth::id())
-                ->get();
-        }
+
+        $users = User::with('roles')->get();
+
 
         $result = array('data' => array());
 
