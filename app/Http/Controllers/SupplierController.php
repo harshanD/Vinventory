@@ -65,13 +65,13 @@ class SupplierController extends Controller
             // button
             $buttons = '';
 
-//            if (Permissions::getRolePermissions('viewSupplier')) {
-            $buttons .= '<button type="button" class="btn btn-default" onclick="editSupplier(' . $value->id . ')" data-toggle="modal" data-target="#editSupplierModal"><i class="fa fa-pencil"></i></button>';
-//            }
+            if (Permissions::getRolePermissions('updateSupplier')) {
+                $buttons .= '<button type="button" class="btn btn-default" onclick="editSupplier(' . $value->id . ')" data-toggle="modal" data-target="#editSupplierModal"><i class="fa fa-pencil"></i></button>';
+            }
 
-//            if (Permissions::getRolePermissions('deleteSupplier')) {
-            $buttons .= ' <button type="button" class="btn btn-default" onclick="removeSupplier(' . $value->id . ')" data-toggle="modal" data-target="#removeSupplierModal"><i class="fa fa-trash"></i></button>';
-//            }
+            if (Permissions::getRolePermissions('deleteSupplier')) {
+                $buttons .= ' <button type="button" class="btn btn-default" onclick="removeSupplier(' . $value->id . ')" data-toggle="modal" data-target="#removeSupplierModal"><i class="fa fa-trash"></i></button>';
+            }
 
             $status = ($value->status == \Config::get('constants.status.Active')) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
 
