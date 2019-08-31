@@ -148,15 +148,16 @@ class AdjustmentController extends Controller
             // button
             $buttons = '';
 
-//            if (Permissions::getRolePermissions('vi   ewPO')) {
+            if (Permissions::getRolePermissions('updateAdjustment')) {
+                $buttons .= '<a  class="btn btn-default" href="/adjustment/edit/' . $value->id . '"  ><i class="fa fa-pencil"></i></a>';
+            }
 
-            $buttons .= '<a  class="btn btn-default" href="/adjustment/edit/' . $value->id . '"  ><i class="fa fa-pencil"></i></a>';
-//            }
-
-//            if (Permissions::getRolePermissions('deletePO')) {
-            $buttons .= ' <button type="button" class="btn btn-default" onclick="deleteAdjust(' . $value->id . ')" data-toggle="modal" data-target="#removePOModal"><i class="fa fa-trash"></i></button>';
-            $buttons .= ' <a  class="btn btn-default"  href="/adjustment/view/' . $value->id . '" ><i class="glyphicon glyphicon-eye-open"></i></a>';
-//            }
+            if (Permissions::getRolePermissions('deleteAdjustment')) {
+                $buttons .= ' <button type="button" class="btn btn-default" onclick="deleteAdjust(' . $value->id . ')" data-toggle="modal" data-target="#removePOModal"><i class="fa fa-trash"></i></button>';
+            }
+            if (Permissions::getRolePermissions('viewAdjustment')) {
+                $buttons .= ' <a  class="btn btn-default"  href="/adjustment/view/' . $value->id . '" ><i class="glyphicon glyphicon-eye-open"></i></a>';
+            }
 
 
             $result['data'][$key] = array(
