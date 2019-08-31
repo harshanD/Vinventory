@@ -17,9 +17,12 @@ class Permissions extends Controller
     {
         if (Auth::check() && $permission != null) {
             $permissions = unserialize(\Auth::user()->roles()->get()->toArray()[0]['permissions']);
-            if (in_array($permission, $permissions)) {
-                return true;
+            if (isset($permissions) && is_array($permissions)) {
+                if (in_array($permission, $permissions)) {
+                    return true;
+                }
             }
+            return false;
         }
         return false;
     }
