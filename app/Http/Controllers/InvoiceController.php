@@ -30,6 +30,9 @@ class InvoiceController extends Controller
 
     public function index()
     {
+        if (!Permissions::getRolePermissions('createSale')) {
+            abort(403, 'Unauthorized action.');
+        }
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
         $customers = Customer::where('status', \Config::get('constants.status.Active'))->get();
@@ -44,6 +47,9 @@ class InvoiceController extends Controller
 
     public function create(Request $request)
     {
+        if (!Permissions::getRolePermissions('createSale')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'datepicker' => 'required|date',
             'referenceNo' => 'required|unique:invoice,invoice_code|max:100',
@@ -134,11 +140,17 @@ class InvoiceController extends Controller
 
     public function invoList()
     {
+        if (!Permissions::getRolePermissions('viewSale')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.sales.index');
     }
 
     public function editView($id)
     {
+        if (!Permissions::getRolePermissions('updateSale')) {
+            abort(403, 'Unauthorized action.');
+        }
         $locations = Locations::where('status', \Config::get('constants.status.Active'))->get();
         $billers = Biller::where('status', \Config::get('constants.status.Active'))->get();
         $tax = Tax::where('status', \Config::get('constants.status.Active'))->get();
@@ -355,7 +367,9 @@ class InvoiceController extends Controller
 
     public function view($id)
     {
-
+        if (!Permissions::getRolePermissions('viewSale')) {
+            abort(403, 'Unauthorized action.');
+        }
         $ivdata = Invoice::find($id);
 
         $location = $ivdata->locations;
@@ -366,6 +380,7 @@ class InvoiceController extends Controller
 
     public function print($id)
     {
+
         $ivdata = Invoice::find($id);
 
         $location = $ivdata->locations;
@@ -380,7 +395,9 @@ class InvoiceController extends Controller
 
     public function delete(Request $request, $id)
     {
-
+        if (!Permissions::getRolePermissions('deleteSale')) {
+            abort(403, 'Unauthorized action.');
+        }
         $invData = Invoice::find($id);
         Stock::where('receive_code', '=', $invData->invoice_code . '-S')->firstOrFail()->delete();
 
