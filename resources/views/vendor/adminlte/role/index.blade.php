@@ -290,14 +290,14 @@
                                 <td><input type="checkbox" name="permission[]" value="viewProfile" class="minimal"></td>
                                 <td> -</td>
                             </tr>
-                            <tr>
-                                <td>Setting</td>
-                                <td>-</td>
-                                <td><input type="checkbox" name="permission[]" value="updateSetting" class="minimal">
-                                </td>
-                                <td> -</td>
-                                <td> -</td>
-                            </tr>
+{{--                            <tr>--}}
+{{--                                <td>Setting</td>--}}
+{{--                                <td>-</td>--}}
+{{--                                <td><input type="checkbox" name="permission[]" value="updateSetting" class="minimal">--}}
+{{--                                </td>--}}
+{{--                                <td> -</td>--}}
+{{--                                <td> -</td>--}}
+{{--                            </tr>--}}
                             </tbody>
                         </table>
                         {{--                        </div>--}}
@@ -583,15 +583,15 @@
                                            class="minimal"></td>
                                 <td> -</td>
                             </tr>
-                            <tr>
-                                <td>Setting</td>
-                                <td>-</td>
-                                <td><input type="checkbox" name="permission[]" value="updateSetting" id="updateSetting"
-                                           class="minimal">
-                                </td>
-                                <td> -</td>
-                                <td> -</td>
-                            </tr>
+{{--                            <tr>--}}
+{{--                                <td>Setting</td>--}}
+{{--                                <td>-</td>--}}
+{{--                                <td><input type="checkbox" name="permission[]" value="updateSetting" id="updateSetting"--}}
+{{--                                           class="minimal">--}}
+{{--                                </td>--}}
+{{--                                <td> -</td>--}}
+{{--                                <td> -</td>--}}
+{{--                            </tr>--}}
                             </tbody>
                         </table>
 
