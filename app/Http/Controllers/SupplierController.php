@@ -20,12 +20,17 @@ class SupplierController extends Controller
 //        Auth::user()->hasAnyRole(['Admin', 'Employer']); // check for roles accessibility using array
 //        Auth::user()->authorizeRoles('Admin'); // if unauthorized then show error window
 //        print_r(Permissions::getRolePermissions('createUser')); check User permission
-
+        if (!Permissions::getRolePermissions('viewSupplier')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.supplier.index');
     }
 
     public function create(Request $request)
     {
+        if (!Permissions::getRolePermissions('createSupplier')) {
+            abort(403, 'Unauthorized action.');
+        }
 //        print_r($request->all());
 //        return 'sdfs';
         $request->validate([
@@ -97,6 +102,9 @@ class SupplierController extends Controller
 
     public function editSupplierData(Request $request, $id)
     {
+        if (!Permissions::getRolePermissions('updateSupplier')) {
+            abort(403, 'Unauthorized action.');
+        }
         $validator = Validator::make($request->all(), [
             'edit_supplier' => 'required|unique:supplier,name,' . $id . '|max:100',
             'edit_company' => 'required|max:100',
@@ -136,7 +144,9 @@ class SupplierController extends Controller
 
     public function removeSupplierData(Request $request)
     {
-
+        if (!Permissions::getRolePermissions('deleteSupplier')) {
+            abort(403, 'Unauthorized action.');
+        }
         $supplier = Supplier::find($request->input('supplier_id'));
 
         if (!$supplier->delete()) {
