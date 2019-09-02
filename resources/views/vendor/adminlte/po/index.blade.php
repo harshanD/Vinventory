@@ -113,7 +113,8 @@
                             {{csrf_field()}}
                             <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
-                                <label for="edit_location_name">Purchase Receive<span class="mandatory"> *</span></label>
+                                <label for="edit_location_name">Purchase Receive<span
+                                            class="mandatory"> *</span></label>
                                 <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_recNo_a"></p>
@@ -187,7 +188,8 @@
                             {{csrf_field()}}
                             <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
-                                <label for="edit_location_name">Purchase Receive<span class="mandatory"> *</span></label>
+                                <label for="edit_location_name">Purchase Receive<span
+                                            class="mandatory"> *</span></label>
                                 <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_recNo"></p>
@@ -259,60 +261,60 @@
         </div><!-- /.modal -->
 
 
-{{--        --}}{{--email--}}
-{{--        <div class="modal fade" tabindex="-1" role="dialog" id="emailModal">--}}
-{{--            <div class="modal-dialog" role="document">--}}
-{{--                <div class="modal-content">--}}
-{{--                    <div class="modal-header">--}}
-{{--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span--}}
-{{--                                    aria-hidden="true">&times;</span></button>--}}
-{{--                        <h4 class="modal-title">Partially Receive</h4>--}}
-{{--                    </div>--}}
+        {{--        --}}{{--email--}}
+        {{--        <div class="modal fade" tabindex="-1" role="dialog" id="emailModal">--}}
+        {{--            <div class="modal-dialog" role="document">--}}
+        {{--                <div class="modal-content">--}}
+        {{--                    <div class="modal-header">--}}
+        {{--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span--}}
+        {{--                                    aria-hidden="true">&times;</span></button>--}}
+        {{--                        <h4 class="modal-title">Partially Receive</h4>--}}
+        {{--                    </div>--}}
 
-{{--                    <form role="form" id="emailForm" enctype="multipart/form-data"--}}
-{{--                          action="{{ url('po/email') }}" method="post"--}}
-{{--                    >--}}
-{{--                        <div class="modal-body">--}}
-{{--                            {{csrf_field()}}--}}
-{{--                            <input type="hidden" name="poId" class="poId">--}}
-{{--                            <div class="form-group">--}}
-{{--                                <label for="edit_location_name">To<span class="mandatory"> *</span></label>--}}
-{{--                                <input type="text" class="form-control recNo" name="to" id="to"--}}
-{{--                                       placeholder="email" autocomplete="off">--}}
-{{--                                <p class="help-block" id="error_to"></p>--}}
-{{--                            </div>--}}
-{{--                            <div class="form-group">--}}
-{{--                                <label for="edit_location_name">Subject<span class="mandatory"> *</span></label>--}}
-{{--                                <input type="text" placeholder="Select Date" name="subject"--}}
+        {{--                    <form role="form" id="emailForm" enctype="multipart/form-data"--}}
+        {{--                          action="{{ url('po/email') }}" method="post"--}}
+        {{--                    >--}}
+        {{--                        <div class="modal-body">--}}
+        {{--                            {{csrf_field()}}--}}
+        {{--                            <input type="hidden" name="poId" class="poId">--}}
+        {{--                            <div class="form-group">--}}
+        {{--                                <label for="edit_location_name">To<span class="mandatory"> *</span></label>--}}
+        {{--                                <input type="text" class="form-control recNo" name="to" id="to"--}}
+        {{--                                       placeholder="email" autocomplete="off">--}}
+        {{--                                <p class="help-block" id="error_to"></p>--}}
+        {{--                            </div>--}}
+        {{--                            <div class="form-group">--}}
+        {{--                                <label for="edit_location_name">Subject<span class="mandatory"> *</span></label>--}}
+        {{--                                <input type="text" placeholder="Select Date" name="subject"--}}
 
-{{--                                       class="form-control pull-right" id="subject">--}}
-{{--                                <p class="help-block" id="error_datepicker"></p>--}}
-{{--                            </div>--}}
-
-
-{{--                            <p class="help-block" id="items_error"></p>--}}
-{{--                            <div class="form-group">--}}
-{{--                                <div class="box-body pad">--}}
-{{--                                    <label for="note">Message</label>--}}
-{{--                                    <textarea class="textarea" id="message" value="" name="message"--}}
-{{--                                              placeholder=""--}}
-{{--                                              style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        <div class="modal-footer">--}}
-{{--                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}}
-{{--                            <button type="submit" class="btn btn-primary">Save changes</button>--}}
-{{--                        </div>--}}
-{{--                    </form>--}}
+        {{--                                       class="form-control pull-right" id="subject">--}}
+        {{--                                <p class="help-block" id="error_datepicker"></p>--}}
+        {{--                            </div>--}}
 
 
-{{--                </div><!-- /.modal-content -->--}}
-{{--            </div><!-- /.modal-dialog -->--}}
-{{--        </div><!-- /.modal -->--}}
+        {{--                            <p class="help-block" id="items_error"></p>--}}
+        {{--                            <div class="form-group">--}}
+        {{--                                <div class="box-body pad">--}}
+        {{--                                    <label for="note">Message</label>--}}
+        {{--                                    <textarea class="textarea" id="message" value="" name="message"--}}
+        {{--                                              placeholder=""--}}
+        {{--                                              style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>--}}
+        {{--                                </div>--}}
+        {{--                            </div>--}}
+        {{--                        </div>--}}
+        {{--                        <div class="modal-footer">--}}
+        {{--                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}}
+        {{--                            <button type="submit" class="btn btn-primary">Save changes</button>--}}
+        {{--                        </div>--}}
+        {{--                    </form>--}}
+
+
+        {{--                </div><!-- /.modal-content -->--}}
+        {{--            </div><!-- /.modal-dialog -->--}}
+        {{--        </div><!-- /.modal -->--}}
 
     </section>
-    <script src="{{asset('/custom')}}/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" ></script>
+    <script src="{{asset('/custom')}}/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
     <script type="text/javascript">
         $('.textarea').wysihtml5()
         var manageTable;
@@ -322,8 +324,24 @@
             // table.fnPageChange("first", 1);
             // initialize the datatable
             manageTable = $('#poTable').DataTable({
-                'ajax': '/po/fetchPOData',
-                'order': []
+                // ajax: '/po/fetchPOData',
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{!! route("fetchPOData") !!}",
+                    type: 'get',
+                },
+                columns: [
+                    {data: 'date'},
+                    {data: 'referenceCode'},
+                    {data: 'supplierName'},
+                    {data: 'received_icon'},
+                    {data: 'grand_total'},
+                    {data: 'paid'},
+                    {data: 'balance'},
+                    {data: 'status'},
+                    {data: 'action', name: 'actions', orderable: false, searchable: false}
+                ]
             });
 
 

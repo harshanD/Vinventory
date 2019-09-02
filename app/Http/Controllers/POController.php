@@ -16,6 +16,7 @@ use Illuminate\Validation\Rule;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendMailable;
+use Yajra\DataTables\DataTables;
 
 class POController extends Controller
 {
@@ -132,57 +133,117 @@ class POController extends Controller
 
     public function fetchPOData()
     {
+        $query = PO::select(['id', 'supplier', 'referenceCode', 'due_date as date', 'grand_total', 'status']);
+        return Datatables::of($query)
+            ->addColumn('supplierName', function ($query) {
+                return str_limit($query->suppliers->name, 20);
+            })->addColumn('sale_status', function ($query) {
+                switch ($query->sales_status):
+                    case 1:
+                        $SaleStatus = '<span class="label label-warning">pending</span>';
+                        break;
+                    case 2:
+                        $SaleStatus = '<span class="label label-success">Completed</span>';
+                        break;
+                    default:
+                        $SaleStatus = '<span class="label label-danger">Nothing</span>';
+                        break;
+                endswitch;
+                return $SaleStatus;
+            })->addColumn('payment_status', function ($query) {
+                switch ($query->payment_status):
+                    case 1:
+                        $payStatus = '<span class="label label-warning">pending</span>';
+                        break;
+                    case 2:
+                        $payStatus = '<span class="label label-success">Due</span>';
+                        break;
+                    case 3:
+                        $payStatus = '<span class="label label-success">Partial</span>';
+                        break;
+                    case 4:
+                        $payStatus = '<span class="label label-success">Paid</span>';
+                        break;
+                    default:
+                        $payStatus = '<span class="label label-danger">Nothing</span>';
+                        break;
+                endswitch;
+                return $payStatus;
+            })->addColumn('paid', function () {
+                return 200;
+            })->addColumn('balance', function () {
+                return 400;
+            })->addColumn('status', function ($query) {
+                switch ($query->status):
+                    case 1:
+                        $status = '<span class="label label-success">Received</span>';
+                        break;
+                    case 2:
+                        $status = '<span class="label label-success">Ordered</span>';
+                        break;
+                    case 3:
+                        $status = '<span class="label label-success">pending</span>';
+                        break;
+                    case 4:
+                        $status = '<span class="label label-warning">canceled</span>';
+                        break;
+                    default:
+                        $status = '<span class="label label-warning">Nothing</span>';
+                        break;
+                endswitch;
+                return $status;
+            })->addColumn('received_icon', function ($query) {
 
-        $result = array('data' => array());
-
-//        $data = PO::where('status', \Config::get('constants.status.Active'))->orderBy('po', 'asc')->get();
-//        $data = PO::orderBy('due_date', 'desc')->get();
-        $data = PO::get();
-
-        foreach ($data as $key => $value) {
-            // button
-            $buttons = '';
-            $editbutton = '';
-            $deleteButton = '';
-
-            if (Permissions::getRolePermissions('updateOrder')) {
-                $editbutton .= "<li><a href=\"/po/edit/" . $value->id . "\">Edit Purchase</a></li>";
-            }
-
-            if (Permissions::getRolePermissions('deleteOrder')) {
-                $deleteButton .= "<li><a style='cursor: pointer' onclick=\"deletePo(" . $value->id . ")\">Delete</a></li>";
-            }
-
-            //incremental code
-            $lastStockRefCode = Stock::all()->last();
-            $data = (isset($lastStockRefCode->receive_code)) ? str_replace("TR-", "PR-", str_replace("-S", "", str_replace("-A", "", $lastStockRefCode->receive_code))) : 'PR-000000';
-            $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
-
-            $statusOfReceiveAll = "";
-            $statusOfpartiallyReceiveAll = "";
-            $poQty = 0;
-            $recQty = 0;
-
-            if (isset($value->poDetails)) {
-                foreach ($value->poDetails as $poitem) {
-                    $poQty += $poitem->qty;
-                    $recQty += $poitem->received_qty;
+                $poQty = 0;
+                $recQty = 0;
+                if (isset($query->poDetails)) {
+                    foreach ($query->poDetails as $poitem) {
+                        $poQty += $poitem->qty;
+                        $recQty += $poitem->received_qty;
+                    }
                 }
-            }
-            if ($recQty < $poQty) {
-                $statusOfReceiveAll = "<li><a style='cursor: pointer' onclick=\"receiveAll(" . $value->id . ")\">Receive All</a></li>";
-                $statusOfpartiallyReceiveAll = "<li><a style='cursor: pointer' onclick=\"partiallyReceive(" . $value->id . ")\">Partially Receive</a></li>";
-            }
+                $receivedIcon = '<i  class="fa fa-circle-thin"></i>';
+                if ($poQty == $recQty) {
+                    $receivedIcon = '<i  class="fa fa-circle"></i>';
+                } else if ($recQty != 0 && $recQty < $poQty) {
+                    $receivedIcon = '<i  class="fa fa-adjust"></i>';
+                }
+                return $receivedIcon;
+            })->addColumn('action', function ($query) {
+                $editbutton = '';
+                $deleteButton = '';
+
+                if (Permissions::getRolePermissions('updateOrder')) {
+                    $editbutton .= "<li><a href=\"/po/edit/" . $query->id . "\">Edit Purchase</a></li>";
+                }
+
+                if (Permissions::getRolePermissions('deleteOrder')) {
+                    $deleteButton .= "<li><a style='cursor: pointer' onclick=\"deletePo(" . $query->id . ")\">Delete</a></li>";
+                }
+
+                //incremental code
+                $lastStockRefCode = Stock::all()->last();
+                $data = (isset($lastStockRefCode->receive_code)) ? str_replace("TR-", "PR-", str_replace("-S", "", str_replace("-A", "", $lastStockRefCode->receive_code))) : 'PR-000000';
+                $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
+
+                $statusOfReceiveAll = "";
+                $statusOfpartiallyReceiveAll = "";
+                $poQty = 0;
+                $recQty = 0;
+
+                if (isset($query->poDetails)) {
+                    foreach ($query->poDetails as $poitem) {
+                        $poQty += $poitem->qty;
+                        $recQty += $poitem->received_qty;
+                    }
+                }
+                if ($recQty < $poQty) {
+                    $statusOfReceiveAll = "<li><a style='cursor: pointer' onclick=\"receiveAll(" . $query->id . ")\">Receive All</a></li>";
+                    $statusOfpartiallyReceiveAll = "<li><a style='cursor: pointer' onclick=\"partiallyReceive(" . $query->id . ")\">Partially Receive</a></li>";
+                }
 
 
-            $receivedIcon = '<i  class="fa fa-circle-thin"></i>';
-            if ($poQty == $recQty) {
-                $receivedIcon = '<i  class="fa fa-circle"></i>';
-            } else if ($recQty != 0 && $recQty < $poQty) {
-                $receivedIcon = '<i  class="fa fa-adjust"></i>';
-            }
-
-            $buttons = "<div class=\"btn-group\">
+                return $buttons = "<div class=\"btn-group\">
                   <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
                   <button type=\"button\" class=\"btn btn-default btn-flat dropdown-toggle\" data-toggle=\"dropdown\">
                     <span class=\"caret\"></span>
@@ -192,48 +253,19 @@ class POController extends Controller
                      " . $editbutton . "
                     " . $statusOfReceiveAll . "
                     " . $statusOfpartiallyReceiveAll . "
-                    <li><a href=\"/po/view/" . $value->id . "\">Purchase details view</a></li>
-                    <li><a href=\"/po/printpo/" . $value->id . "\">Download as PDF</a></li>
-                    <li><a href=\"/send/email/" . $value->id . "\">Send Mail</a></li>
+                    <li><a href=\"/po/view/" . $query->id . "\">Purchase details view</a></li>
+                    <li><a href=\"/po/printpo/" . $query->id . "\">Download as PDF</a></li>
+                    <li><a href=\"/send/email/" . $query->id . "\">Send Mail</a></li>
                     <li class=\"divider\"></li>
                    " . $deleteButton . "
                   </ul>
-                </div><input type='hidden' id='recNo_" . $value->id . "' value='" . $code . "'>";
+                </div><input type='hidden' id='recNo_" . $query->id . "' value='" . $code . "'>";
 
-            switch ($value->status):
-                case 1:
-                    $status = '<span class="label label-success">Received</span>';
-                    break;
-                case 2:
-                    $status = '<span class="label label-success">Ordered</span>';
-                    break;
-                case 3:
-                    $status = '<span class="label label-success">pending</span>';
-                    break;
-                case 4:
-                    $status = '<span class="label label-warning">canceled</span>';
-                    break;
-                default:
-                    $status = '<span class="label label-warning">Nothing</span>';
-                    break;
-            endswitch;
+            })
+            ->removeColumn('billers')->removeColumn('customers')
+//            ->editColumn('biller', '{!! str_limit($biller, 3) !!}')
+            ->make(true);
 
-            $result['data'][$key] = array(
-                $value->due_date,
-                $value->referenceCode,
-                $value->suppliers->name,
-                $receivedIcon,
-                $value->grand_total,
-                100,
-                100,
-//                $value->paid,
-//                $value->balance,
-                $status,
-                $buttons
-            );
-        } // /foreach
-
-        echo json_encode($result);
     }
 
     public function fetchPODataById($id)

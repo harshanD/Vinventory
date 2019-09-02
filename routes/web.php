@@ -84,7 +84,7 @@ Route::get('/po/add', ['as' => 'po.add', 'uses' => 'POController@index']);
 Route::get('po/edit/{id}', 'POController@editView');
 Route::post('po/create', 'POController@create');
 Route::get('po/manage', ['as' => 'po.manage', 'uses' => 'POController@poList']);
-Route::get('po/fetchPOData', 'POController@fetchPOData');
+Route::get('po/fetchPOData', ['as' => 'fetchPOData', 'uses' => 'POController@fetchPOData']);
 Route::post('po/edit/{id}', 'POController@editPOData');
 Route::post('po/receiveAll', 'POController@receiveAll');
 Route::post('po/partiallyReceive', 'POController@partiallyReceive');
