@@ -150,25 +150,6 @@ class POController extends Controller
                         break;
                 endswitch;
                 return $SaleStatus;
-            })->addColumn('payment_status', function ($query) {
-                switch ($query->payment_status):
-                    case 1:
-                        $payStatus = '<span class="label label-warning">pending</span>';
-                        break;
-                    case 2:
-                        $payStatus = '<span class="label label-success">Due</span>';
-                        break;
-                    case 3:
-                        $payStatus = '<span class="label label-success">Partial</span>';
-                        break;
-                    case 4:
-                        $payStatus = '<span class="label label-success">Paid</span>';
-                        break;
-                    default:
-                        $payStatus = '<span class="label label-danger">Nothing</span>';
-                        break;
-                endswitch;
-                return $payStatus;
             })->addColumn('paid', function () {
                 return 200;
             })->addColumn('balance', function () {
@@ -262,7 +243,6 @@ class POController extends Controller
                 </div><input type='hidden' id='recNo_" . $query->id . "' value='" . $code . "'>";
 
             })
-            ->removeColumn('billers')->removeColumn('customers')
 //            ->editColumn('biller', '{!! str_limit($biller, 3) !!}')
             ->make(true);
 

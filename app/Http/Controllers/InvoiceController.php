@@ -167,9 +167,7 @@ class InvoiceController extends Controller
     public function fetchSalesData()
     {
 
-
-        $query = Invoice::with('billers')->with('customers')->select(['id', 'payment_status', 'sales_status', 'invoice_date', 'invoice_code', 'biller', 'customer', 'invoice_grand_total as grand_total']);
-
+        $query = Invoice::select(['id', 'payment_status', 'sales_status', 'invoice_date', 'invoice_code', 'biller', 'customer', 'invoice_grand_total as grand_total']);
 
         return Datatables::of($query)
             ->addColumn('biller', function ($query) {
