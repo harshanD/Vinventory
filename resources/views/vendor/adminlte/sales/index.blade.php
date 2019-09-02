@@ -69,22 +69,7 @@
 
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <a href="" class="btn btn-default"><i class="fa fa-edit"></i></a>
-                            <a href="" class="btn btn-default"><i class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
 
-                    </tbody>
                 </table>
 
             </div>
@@ -112,13 +97,14 @@
                             {{csrf_field()}}
                             <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
-                                <label for="edit_location_name">Purchase Receive *</label>
+                                <label for="edit_location_name">Purchase Receive<span
+                                            class="mandatory"> *</span></label>
                                 <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_recNo_a"></p>
                             </div>
                             <div class="form-group">
-                                <label for="edit_location_name">Receive Date *</label>
+                                <label for="edit_location_name">Receive Date<span class="mandatory"> *</span></label>
                                 <input type="text" placeholder="Select Date" name="datepicker"
                                        value="{{date('Y-m-d')}}"
                                        class="form-control pull-right" id="datepicker">
@@ -186,13 +172,14 @@
                             {{csrf_field()}}
                             <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
-                                <label for="edit_location_name">Purchase Receive *</label>
+                                <label for="edit_location_name">Purchase Receive<span
+                                            class="mandatory"> *</span></label>
                                 <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_recNo"></p>
                             </div>
                             <div class="form-group">
-                                <label for="edit_location_name">Receive Date *</label>
+                                <label for="edit_location_name">Receive Date<span class="mandatory"> *</span></label>
                                 <input type="text" placeholder="Select Date" name="datepicker"
                                        value="{{date('Y-m-d')}}"
                                        class="form-control pull-right" id="datepicker1">
@@ -270,7 +257,20 @@
             // initialize the datatable
             manageTable = $('#invoiceTable').DataTable({
                 'ajax': '/sales/fetchSalesData',
-                'order': []
+                "processing": true,
+                "serverSide": true,
+                "columns": [
+                    {data: 'invoice_date'},
+                    {data: 'invoice_code'},
+                    {data: 'biller'},
+                    {data: 'customer'},
+                    {data: 'sale_status', name: 'sale_status'},
+                    {data: 'grand_total'},
+                    {data: 'paid'},
+                    {data: 'balance'},
+                    {data: 'payment_status'},
+                    {data: 'action', name: 'actions', orderable: false, searchable: false}
+                ]
             });
 
 

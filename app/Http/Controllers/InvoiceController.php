@@ -17,9 +17,12 @@ use App\Supplier;
 use App\Tax;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Yajra\DataTables\Contracts\DataTable;
+use Yajra\DataTables\DataTables;
 
 class InvoiceController extends Controller
 {
@@ -163,33 +166,72 @@ class InvoiceController extends Controller
 
     public function fetchSalesData()
     {
-        $result = array('data' => array());
-
-//        $data = Invoice::where('status', \Config::get('constants.status.Active'))->orderBy('sales', 'asc')->get();
-//        $data = Invoice::orderBy('due_date', 'desc')->get();
-        $data = Invoice::get();
-
-        foreach ($data as $key => $value) {
-            // button
-            $buttons = '';
-            $editbutton = '';
-            $deleteButton = '';
-
-            if (Permissions::getRolePermissions('updateSale')) {
-                $editbutton .= "<li><a href=\"/sales/edit/" . $value->id . "\">Edit Sale</a></li>";
-            }
-
-            if (Permissions::getRolePermissions('deleteSale')) {
-                $deleteButton .= "<li><a style='cursor: pointer' onclick=\"deleteSale(" . $value->id . ")\">Delete</a></li>";
-            }
-
-            //incremental code
-            $lastStockRefCode = Stock::all()->last();
-            $data = (isset($lastStockRefCode->receive_code)) ? str_replace("TR-", "PR-", str_replace("-S", "", str_replace("-A", "", $lastStockRefCode->receive_code))) : 'PR-000000';
-            $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
 
 
-            $buttons = "<div class=\"btn-group\">
+        $query = Invoice::with('billers')->with('customers')->select(['id', 'payment_status', 'sales_status', 'invoice_date', 'invoice_code', 'biller', 'customer', 'invoice_grand_total as grand_total']);
+
+
+        return Datatables::of($query)
+            ->addColumn('biller', function ($query) {
+                return str_limit($query->billers->name, 20);
+            })->addColumn('customer', function ($query) {
+                return str_limit($query->customers->name, 20);
+            })->addColumn('sale_status', function ($query) {
+                switch ($query->sales_status):
+                    case 1:
+                        $SaleStatus = '<span class="label label-warning">pending</span>';
+                        break;
+                    case 2:
+                        $SaleStatus = '<span class="label label-success">Completed</span>';
+                        break;
+                    default:
+                        $SaleStatus = '<span class="label label-danger">Nothing</span>';
+                        break;
+                endswitch;
+                return $SaleStatus;
+            })->addColumn('payment_status', function ($query) {
+                switch ($query->payment_status):
+                    case 1:
+                        $payStatus = '<span class="label label-warning">pending</span>';
+                        break;
+                    case 2:
+                        $payStatus = '<span class="label label-success">Due</span>';
+                        break;
+                    case 3:
+                        $payStatus = '<span class="label label-success">Partial</span>';
+                        break;
+                    case 4:
+                        $payStatus = '<span class="label label-success">Paid</span>';
+                        break;
+                    default:
+                        $payStatus = '<span class="label label-danger">Nothing</span>';
+                        break;
+                endswitch;
+                return $payStatus;
+            })->addColumn('paid', function () {
+                return 200;
+            })->addColumn('balance', function () {
+                return 400;
+            })->addColumn('action', function ($query) {
+                $buttons = '';
+                $editbutton = '';
+                $deleteButton = '';
+
+
+                if (Permissions::getRolePermissions('updateSale')) {
+                    $editbutton .= "<li><a href=\"/sales/edit/" . $query->id . "\">Edit Sale</a></li>";
+                }
+                if (Permissions::getRolePermissions('deleteSale')) {
+                    $deleteButton .= "<li><a style='cursor: pointer' onclick=\"deleteSale(" . $query->id . ")\">Delete</a></li>";
+                }
+
+                //incremental code
+                $lastStockRefCode = Stock::all()->last();
+                $data = (isset($lastStockRefCode->receive_code)) ? str_replace("TR-", "PR-", str_replace("-S", "", str_replace("-A", "", $lastStockRefCode->receive_code))) : 'PR-000000';
+                $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
+
+
+                return "<div class=\"btn-group\">
                   <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
                   <button type=\"button\" class=\"btn btn-default btn-flat dropdown-toggle\" data-toggle=\"dropdown\">
                     <span class=\"caret\"></span>
@@ -197,60 +239,21 @@ class InvoiceController extends Controller
                   </button>
                   <ul class=\"dropdown-menu\" role=\"menu\">
                       " . $editbutton . "
-                    <li><a href=\"/sales/view/" . $value->id . "\">Sale details view</a></li>
-                    <li><a href=\"/sales/print/" . $value->id . "\">Download as PDF</a></li>
-                    <li><a href=\"/send/sale/email/" . $value->id . "\">Email Sale</a></li>
+                    <li><a href=\"/sales/view/" . $query->id . "\">Sale details view</a></li>
+                    <li><a href=\"/sales/print/" . $query->id . "\">Download as PDF</a></li>
+                    <li><a href=\"/send/sale/email/" . $query->id . "\">Email Sale</a></li>
                     <li class=\"divider\"></li>
                      " . $deleteButton . "
                   </ul>
-                </div><input type='hidden' id='recNo_" . $value->id . "' value='" . $code . "'>";
+                </div><input type='hidden' id='recNo_" . $query->id . "' value='" . $code . ">";
 
-            switch ($value->sales_status):
-                case 1:
-                    $SaleStatus = '<span class="label label-warning">pending</span>';
-                    break;
-                case 2:
-                    $SaleStatus = '<span class="label label-success">Completed</span>';
-                    break;
-                default:
-                    $SaleStatus = '<span class="label label-danger">Nothing</span>';
-                    break;
-            endswitch;
 
-            switch ($value->payment_status):
-                case 1:
-                    $payStatus = '<span class="label label-warning">pending</span>';
-                    break;
-                case 2:
-                    $payStatus = '<span class="label label-success">Due</span>';
-                    break;
-                case 3:
-                    $payStatus = '<span class="label label-success">Partial</span>';
-                    break;
-                case 4:
-                    $payStatus = '<span class="label label-success">Paid</span>';
-                    break;
-                default:
-                    $payStatus = '<span class="label label-danger">Nothing</span>';
-                    break;
-            endswitch;
-
-            $result['data'][$key] = array(
-                $value->invoice_date,
-                $value->invoice_code,
-                $value->billers->name,
-                $value->customers->name,
-                $SaleStatus,
-                $value->invoice_grand_total,
-                100,
-                100,
-                $payStatus,
-                $buttons
-            );
-        } // /foreach
-
-        echo json_encode($result);
+            })
+            ->removeColumn('billers')->removeColumn('customers')
+//            ->editColumn('biller', '{!! str_limit($biller, 3) !!}')
+            ->make(true);
     }
+
 
     public function editInvoData(Request $request, $id)
     {
