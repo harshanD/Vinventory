@@ -182,6 +182,10 @@ Route::post('/role/edit/{id}', 'RoleController@editRoleData');
 Route::post('/role/remove', 'RoleController@removeRoleData');
 Route::post('/role/create', 'RoleController@create');
 
+
+
+//Route::get('/saskasjbdgjas/{id}', 'StockController@itemQtySunNoteDeletedWareHouses');
+
 Route::group(['middleware' => 'auth'], function () {
     //    Route::get('/link1', function ()    {
 //        // Uses Auth Middleware

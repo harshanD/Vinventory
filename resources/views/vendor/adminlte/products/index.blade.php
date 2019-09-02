@@ -54,7 +54,7 @@
                     </div>
                 @endif
 
-                <table id="userTable" class="table table-bordered table-striped">
+                <table id="productsTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
                         <th>Image</th>
@@ -137,9 +137,24 @@
             // table = $("table.table").dataTable();
             // table.fnPageChange("first", 1);
             // initialize the datatable
-            manageTable = $('#userTable').DataTable({
+            manageTable = $('#productsTable').DataTable({
                 'ajax': '/products/fetchProductsData',
-                'order': []
+                "processing": true,
+                "serverSide": true,
+                "columns": [
+                    {data: 'image', name: 'actions', orderable: false, searchable: false},
+                    {data: 'item_code'},
+                    {data: 'name'},
+                    {data: 'brand'},
+                    {data: 'category'},
+                    {data: 'cost_price'},
+                    {data: 'selling_price'},
+                    {data: 'qty'},
+                    {data: 'unitName'},
+                    {data: 'reorder_level'},
+                    {data: 'status'},
+                    {data: 'action', name: 'actions', orderable: false, searchable: false}
+                ]
             });
         })
 

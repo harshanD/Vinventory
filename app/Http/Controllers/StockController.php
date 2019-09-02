@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Locations;
 use App\Products;
 use App\Stock;
 use App\StockItems;
@@ -159,7 +160,6 @@ class StockController extends Controller
                 'item_code' => $product->item_code,
                 'description' => $product->description,
                 'img_url' => $product->img_url,
-                'img_url' => $product->img_url,
                 'selling_price' => $product->selling_price,
                 'cost_price' => $product->cost_price,
                 'weight' => $product->weight,
@@ -176,5 +176,47 @@ class StockController extends Controller
 
 
         echo json_encode($list);
+    }
+
+    public function itemQtySumNoteDeletedWareHouses($id)
+    {
+
+
+        $qtyAddedSum = DB::table('stock')
+            ->select('stock.location', 'stock_items.item_id', DB::raw('sum(qty) as qtySum'))
+            ->join('stock_items', 'stock.id', '=', 'stock_items.stock_id')
+            ->join('locations', 'locations.id', '=', 'stock.location')
+            ->where('stock_items.method', '=', 'A')
+            ->where('stock_items.item_id', '=', $id)
+            ->WhereNull('stock.deleted_at')
+            ->WhereNull('locations.deleted_at')
+            ->groupBy('item_id')
+            ->get();
+
+        $addedQty = 0;
+        if (count($qtyAddedSum) > 0) {
+            $addedQty = ($qtyAddedSum[0]->qtySum);
+        }
+
+
+        $qtySubstractedSum = DB::table('stock')
+            ->select('stock.location', 'stock_items.item_id', DB::raw('sum(qty) as qtySum'))
+            ->join('stock_items', 'stock.id', '=', 'stock_items.stock_id')
+            ->join('locations', 'locations.id', '=', 'stock.location')
+            ->where('stock_items.method', '=', 'S')
+            ->where('stock_items.item_id', '=', $id)
+            ->WhereNull('stock.deleted_at')
+            ->WhereNull('locations.deleted_at')
+            ->groupBy('item_id')
+            ->get();
+
+        $substractQty = 0;
+        if (count($qtySubstractedSum) > 0) {
+            $substractQty = ($qtySubstractedSum[0]->qtySum);
+        }
+
+        return ($addedQty >= $substractQty) ? number_format($addedQty - $substractQty, 2) : 'error';
+
+
     }
 }
