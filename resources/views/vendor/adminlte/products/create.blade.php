@@ -44,7 +44,7 @@
                             <div class="box-body">
                                 {{csrf_field()}}
                                 <div class="form-group">
-                                    <label for="product_name">Product Name *</label>
+                                    <label for="product_name">Product Name<span class="mandatory"> *</span></label>
                                     <input type="text" value="{{ old('product_name') }}" class="form-control"
                                            id="product_name" name="product_name"
                                            placeholder="Enter product name" autocomplete="off"/>
@@ -53,7 +53,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="product_name">Product Code *</label>
+                                    <label for="product_name">Product Code<span class="mandatory"> *</span></label>
                                     <input type="text" value="{{ old('product_code') }}" class="form-control"
                                            id="product_code" name="product_code"
                                            placeholder="Enter product code" autocomplete="off"/>
@@ -63,7 +63,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="sku">SKU *</label>
+                                    <label for="sku">SKU<span class="mandatory"> *</span></label>
                                     <input type="text" value="{{ old('sku') }}" class="form-control" id="sku" name="sku"
                                            placeholder="Enter sku"
                                            autocomplete="off"/>
@@ -83,7 +83,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="product_name">Weight *</label>
+                                    <label for="product_name">Weight<span class="mandatory"> *</span></label>
                                     <input type="text" value="{{ old('weight') }}" class="form-control" id="weight"
                                            name="weight"
                                            placeholder="Enter Weight" autocomplete="off"/>
@@ -92,7 +92,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="product_name">Brand *</label>
+                                    <label for="product_name">Brand<span class="mandatory"> *</span></label>
                                     <select class="form-control" name="brand" id="brand">
                                         @if(old("brand") == 0)
                                             <option selected="selected" value="0">Select Brand</option>
@@ -106,7 +106,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="product_name">Category *</label>
+                                    <label for="product_name">Category<span class="mandatory"> *</span></label>
                                     <select class="form-control" name="category" id="category">
                                         @if(old("category") == 0)
                                             <option selected="selected" value="0">Select Category</option>
@@ -120,7 +120,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="product_name">Product Unit *</label>
+                                    <label for="product_name">Product Unit<span class="mandatory"> *</span></label>
                                     <select class="form-control" name="unit" id="unit">
                                         @if(old("unit") == 0)
                                             <option selected="selected" value="0">Select Unit</option>
@@ -134,7 +134,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="price">Product Price *</label>
+                                    <label for="price">Product Price<span class="mandatory"> *</span></label>
                                     <input type="text" value="{{ old('price') }}" class="form-control" id="price"
                                            name="price"
                                            placeholder="Enter price"
@@ -144,7 +144,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="price">Product Cost *</label>
+                                    <label for="price">Product Cost<span class="mandatory"> *</span></label>
                                     <input type="text" value="{{ old('cost') }}" class="form-control" id="cost"
                                            name="cost"
                                            placeholder="Enter cost"
@@ -229,7 +229,7 @@
                         <div class="col-md-6">
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label>Supplier/s *<?php print_r(old("supplier"))?></label>
+                                    <label>Supplier/s<span class="mandatory"> *</span><?php print_r(old("supplier"))?></label>
                                     <select class="form-control select2" multiple="multiple" name="supplier[]"
                                             id="supplier"
                                             data-placeholder="Select a State"

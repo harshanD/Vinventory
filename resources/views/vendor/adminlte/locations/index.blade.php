@@ -101,38 +101,38 @@
                     {{ @csrf_field() }}
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="edit_location_name">Code *</label>
+                            <label for="edit_location_name">Code<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="code" name="code"
                                    placeholder="Enter Code" autocomplete="off">
                             <p class="help-block" id="error_code"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_location_name">Warehouse Name *</label>
+                            <label for="edit_location_name">Warehouse Name<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="location" name="location"
                                    placeholder="Enter Warehouse name" autocomplete="off">
                             <p class="help-block" id="error_location"></p>
 
                         </div>
                         <div class="form-group">
-                            <label for="edit_location_name">Contact Person *</label>
+                            <label for="edit_location_name">Contact Person<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="person" name="person"
                                    placeholder="Enter Contact Person" autocomplete="off">
                             <p class="help-block" id="error_person"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_location_name">Phone *</label>
+                            <label for="edit_location_name">Phone<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="phone" name="phone"
                                    placeholder="Enter Phone" autocomplete="off">
                             <p class="help-block" id="error_phone"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_location_name">Email *</label>
+                            <label for="edit_location_name">Email<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="email" name="email"
                                    placeholder="Enter Phone" autocomplete="off">
                             <p class="help-block" id="error_email"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_location_name">Address *</label>
+                            <label for="edit_location_name">Address<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="address" name="address"
                                    placeholder="Enter Address" autocomplete="off">
                             <p class="help-block" id="error_address"></p>
@@ -173,37 +173,37 @@
                     <div class="modal-body">
 
                         <div class="form-group">
-                            <label for="edit_location_name">Code *</label>
+                            <label for="edit_location_name">Code<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="edit_code" name="edit_code"
                                    placeholder="Enter Code" autocomplete="off">
                             <p class="help-block" id="error_e_code"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_location_name">Warehouse Name *</label>
+                            <label for="edit_location_name">Warehouse Name<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="edit_location" name="edit_location"
                                    placeholder="Enter Warehouse name" autocomplete="off">
                             <p class="help-block" id="error_e_location"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_location_name">Contact Person *</label>
+                            <label for="edit_location_name">Contact Person<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="edit_person" name="edit_person"
                                    placeholder="Enter Contact Person" autocomplete="off">
                             <p class="help-block" id="error_e_person"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_location_name">Phone *</label>
+                            <label for="edit_location_name">Phone<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="edit_phone" name="edit_phone"
                                    placeholder="Enter Phone" autocomplete="off">
                             <p class="help-block" id="error_e_phone"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_location_name">Email *</label>
+                            <label for="edit_location_name">Email<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="edit_email" name="edit_email"
                                    placeholder="Enter Phone" autocomplete="off">
                             <p class="help-block" id="error_e_email"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_location_name">Address *</label>
+                            <label for="edit_location_name">Address<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="edit_address" name="edit_address"
                                    placeholder="Enter Address" autocomplete="off">
                             <p class="help-block" id="error_e_address"></p>

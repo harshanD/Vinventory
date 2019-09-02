@@ -102,32 +102,32 @@
                     {{ @csrf_field() }}
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="edit_supplier_name">Company *</label>
+                            <label for="edit_supplier_name">Company<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="company" name="company"
                                    placeholder="Enter Company" autocomplete="off">
                             <p class="help-block" id="error_company"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_supplier_name">Supplier Name *</label>
+                            <label for="edit_supplier_name">Supplier Name<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="supplier" name="supplier"
                                    placeholder="Enter Supplier name" autocomplete="off">
                             <p class="help-block" id="error_supplier"></p>
 
                         </div>
                         <div class="form-group">
-                            <label for="edit_supplier_name">Phone *</label>
+                            <label for="edit_supplier_name">Phone<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="phone" name="phone"
                                    placeholder="Enter Phone" autocomplete="off">
                             <p class="help-block" id="error_phone"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_supplier_name">Email *</label>
+                            <label for="edit_supplier_name">Email<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="email" name="email"
                                    placeholder="Enter Email" autocomplete="off">
                             <p class="help-block" id="error_email"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_supplier_name">Address *</label>
+                            <label for="edit_supplier_name">Address<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="address" name="address"
                                    placeholder="Enter Address" autocomplete="off">
                             <p class="help-block" id="error_address"></p>
@@ -168,32 +168,32 @@
                     <div class="modal-body">
 
                         <div class="form-group">
-                            <label for="edit_supplier_name">Company *</label>
+                            <label for="edit_supplier_name">Company<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="edit_company" name="edit_company"
                                    placeholder="Enter Company" autocomplete="off">
                             <p class="help-block" id="error_e_company"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_supplier_name">Supplier Name *</label>
+                            <label for="edit_supplier_name">Supplier Name<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="edit_supplier" name="edit_supplier"
                                    placeholder="Enter Supplier name" autocomplete="off">
                             <p class="help-block" id="error_e_supplier"></p>
                         </div>
 
                         <div class="form-group">
-                            <label for="edit_supplier_name">Phone *</label>
+                            <label for="edit_supplier_name">Phone<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="edit_phone" name="edit_phone"
                                    placeholder="Enter Phone" autocomplete="off">
                             <p class="help-block" id="error_e_phone"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_supplier_name">Email *</label>
+                            <label for="edit_supplier_name">Email<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="edit_email" name="edit_email"
                                    placeholder="Enter Email" autocomplete="off">
                             <p class="help-block" id="error_e_email"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_supplier_name">Address *</label>
+                            <label for="edit_supplier_name">Address<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="edit_address" name="edit_address"
                                    placeholder="Enter Address" autocomplete="off">
                             <p class="help-block" id="error_e_address"></p>

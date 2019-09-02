@@ -36,6 +36,9 @@
         .help-block {
             color: red;
         }
+        .mandatory {
+            color: red;
+        }
     </style>
     @if(config('adminlte.plugins.datatables'))
     <!-- DataTables with bootstrap 3 style -->

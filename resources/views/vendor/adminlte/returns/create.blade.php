@@ -77,7 +77,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Date *</label>
+                                    <label>Date<span class="mandatory"> *</span></label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
@@ -94,7 +94,7 @@
                             <!-- /.col -->
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Reference No *</label>
+                                    <label>Reference No<span class="mandatory"> *</span></label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
@@ -109,7 +109,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>biller *</label>
+                                    <label>biller<span class="mandatory"> *</span></label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
@@ -128,7 +128,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Warehouse *</label>
+                                    <label>Warehouse<span class="mandatory"> *</span></label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
@@ -147,7 +147,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Customer *</label>
+                                    <label>Customer<span class="mandatory"> *</span></label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">

@@ -100,7 +100,7 @@
                                    placeholder="Enter Code" autocomplete="off">
                         </div>
                         <div class="form-group">
-                            <label for="edit_brand_name">Brand Name *</label>
+                            <label for="edit_brand_name">Brand Name<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="brand" name="brand"
                                    placeholder="Enter Brand name" autocomplete="off">
                         </div>
@@ -149,7 +149,7 @@
                                    placeholder="Enter Code" autocomplete="off">
                         </div>
                         <div class="form-group">
-                            <label for="edit_brand_name">Brand Name *</label>
+                            <label for="edit_brand_name">Brand Name<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="edit_brand_name" name="edit_brand_name"
                                    placeholder="Enter Brand name" autocomplete="off">
                         </div>

@@ -80,7 +80,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Date *</label>
+                                    <label>Date<span class="mandatory"> *</span></label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
@@ -98,7 +98,7 @@
                             <!-- /.col -->
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Reference No</label>
+                                    <label>Reference No<span class="mandatory"> *</span></label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
@@ -113,7 +113,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>biller *</label>
+                                    <label>biller<span class="mandatory"> *</span></label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
@@ -145,7 +145,7 @@
                             <!-- form start -->
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Warehouse *</label>
+                                    <label>Warehouse<span class="mandatory"> *</span></label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
@@ -166,7 +166,7 @@
 
                             <form class="form-horizontal">
 
-                                <label>Supplier *</label>
+                                <label>Supplier<span class="mandatory"> *</span></label>
 
                                 <div class="input-group date col-xs-4">
                                     <div class="input-group-addon">
@@ -319,7 +319,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Sale Status *</label>
+                                        <label>Sale Status<span class="mandatory"> *</span></label>
 
                                         <div class="input-group date">
                                             <div class="input-group-addon">
@@ -340,7 +340,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>payment Status *</label>
+                                        <label>payment Status<span class="mandatory"> *</span></label>
 
                                         <div class="input-group date">
                                             <div class="input-group-addon">

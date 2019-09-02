@@ -98,7 +98,7 @@
                     {{ @csrf_field() }}
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="edit_supplier_name">Role Name *</label>
+                            <label for="edit_supplier_name">Role Name<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="role_name" name="role_name"
                                    placeholder="Enter Company" autocomplete="off">
                             <p class="help-block" id="error_role_name"></p>
@@ -337,7 +337,7 @@
                     <div class="modal-body">
 
                         <div class="form-group">
-                            <label for="edit_supplier_name">Role Name *</label>
+                            <label for="edit_supplier_name">Role Name<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="edit_role" name="edit_role"
                                    placeholder="Enter Company" autocomplete="off">
                             <p class="help-block" id="error_e_role"></p>

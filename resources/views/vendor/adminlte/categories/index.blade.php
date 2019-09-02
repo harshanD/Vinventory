@@ -101,7 +101,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="edit_category_name">Category Name *</label>
+                            <label for="edit_category_name">Category Name<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="category" name="category"
                                    placeholder="Enter Category name" autocomplete="off">
                         </div>

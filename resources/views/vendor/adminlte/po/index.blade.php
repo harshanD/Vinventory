@@ -113,13 +113,13 @@
                             {{csrf_field()}}
                             <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
-                                <label for="edit_location_name">Purchase Receive *</label>
+                                <label for="edit_location_name">Purchase Receive<span class="mandatory"> *</span></label>
                                 <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_recNo_a"></p>
                             </div>
                             <div class="form-group">
-                                <label for="edit_location_name">Receive Date *</label>
+                                <label for="edit_location_name">Receive Date<span class="mandatory"> *</span></label>
                                 <input type="text" placeholder="Select Date" name="datepicker"
                                        value="{{date('Y-m-d')}}"
                                        class="form-control pull-right" id="datepicker">
@@ -187,13 +187,13 @@
                             {{csrf_field()}}
                             <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
-                                <label for="edit_location_name">Purchase Receive *</label>
+                                <label for="edit_location_name">Purchase Receive<span class="mandatory"> *</span></label>
                                 <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_recNo"></p>
                             </div>
                             <div class="form-group">
-                                <label for="edit_location_name">Receive Date *</label>
+                                <label for="edit_location_name">Receive Date<span class="mandatory"> *</span></label>
                                 <input type="text" placeholder="Select Date" name="datepicker"
                                        value="{{date('Y-m-d')}}"
                                        class="form-control pull-right" id="datepicker1">
@@ -276,13 +276,13 @@
 {{--                            {{csrf_field()}}--}}
 {{--                            <input type="hidden" name="poId" class="poId">--}}
 {{--                            <div class="form-group">--}}
-{{--                                <label for="edit_location_name">To *</label>--}}
+{{--                                <label for="edit_location_name">To<span class="mandatory"> *</span></label>--}}
 {{--                                <input type="text" class="form-control recNo" name="to" id="to"--}}
 {{--                                       placeholder="email" autocomplete="off">--}}
 {{--                                <p class="help-block" id="error_to"></p>--}}
 {{--                            </div>--}}
 {{--                            <div class="form-group">--}}
-{{--                                <label for="edit_location_name">Subject *</label>--}}
+{{--                                <label for="edit_location_name">Subject<span class="mandatory"> *</span></label>--}}
 {{--                                <input type="text" placeholder="Select Date" name="subject"--}}
 
 {{--                                       class="form-control pull-right" id="subject">--}}

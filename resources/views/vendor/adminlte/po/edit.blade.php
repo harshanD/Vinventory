@@ -61,7 +61,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Date *</label>
+                                    <label>Date<span class="mandatory"> *</span></label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
@@ -78,7 +78,7 @@
                             <!-- /.col -->
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Status *</label>
+                                    <label>Status<span class="mandatory"> *</span></label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
@@ -104,7 +104,7 @@
                             <!-- /.col -->
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Warehouse *</label>
+                                    <label>Warehouse<span class="mandatory"> *</span></label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
@@ -123,7 +123,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Reference No</label>
+                                    <label>Reference No<span class="mandatory"> *</span></label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
@@ -148,7 +148,7 @@
                             <!-- form start -->
                             <form class="form-horizontal">
 
-                                <label>Supplier *</label>
+                                <label>Supplier<span class="mandatory"> *</span></label>
 
                                 <div class="input-group date col-xs-4">
                                     <div class="input-group-addon">

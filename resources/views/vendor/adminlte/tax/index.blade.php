@@ -105,7 +105,7 @@
                     {{ @csrf_field() }}
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="edit_tax_name">Name *</label>
+                            <label for="edit_tax_name">Name<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="tax" name="tax"
                                    placeholder="Enter Tax name" autocomplete="off">
                             <p class="help-block" id="error_tax"></p>
@@ -117,13 +117,13 @@
                             <p class="help-block" id="error_code"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_tax_name">Tax Rate *</label>
+                            <label for="edit_tax_name">Tax Rate<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="taxRate" name="taxRate"
                                    placeholder="Enter Rate" autocomplete="off">
                             <p class="help-block" id="error_taxRate"></p>
                         </div>
                         <div class="form-group">
-                            <label for="active">Type *</label>
+                            <label for="active">Type<span class="mandatory"> *</span></label>
                             <select class="form-control" id="type" name="type">
                                 <option value="Percentage">Percentage</option>
                                 <option value="Fixed">Fixed</option>
@@ -164,7 +164,7 @@
                     {{ @csrf_field() }}
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="edit_tax_name">Name *</label>
+                            <label for="edit_tax_name">Name<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="edit_tax" name="edit_tax"
                                    placeholder="Enter Tax name" autocomplete="off">
                             <p class="help-block" id="edit_e_tax"></p>
@@ -177,13 +177,13 @@
                             <p class="help-block" id="edit_e_code"></p>
                         </div>
                         <div class="form-group">
-                            <label for="edit_tax_name">Tax Rate *</label>
+                            <label for="edit_tax_name">Tax Rate<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" id="edit_taxRate" name="edit_taxRate"
                                    placeholder="Enter Tax Rate" autocomplete="off">
                             <p class="help-block" id="edit_e_taxRate"></p>
                         </div>
                         <div class="form-group">
-                            <label for="active">Type *</label>
+                            <label for="active">Type<span class="mandatory"> *</span></label>
                             <select class="form-control" id="edit_type" name="edit_type">
                                 <option value="Percentage">Percentage</option>
                                 <option value="Fixed">Fixed</option>

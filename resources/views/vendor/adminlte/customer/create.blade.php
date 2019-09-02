@@ -59,7 +59,7 @@
                             <div class="box-body">
                                 {{csrf_field()}}
                                 <div class="form-group">
-                                    <label for="product_name">Company *</label>
+                                    <label for="product_name">Company<span class="mandatory"> *</span></label>
                                     <input type="text" value="{{ old('company') }}" class="form-control"
                                            id="company" name="company"
                                            placeholder="Enter product name" autocomplete="off"/>
@@ -68,7 +68,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="product_name">Name *</label>
+                                    <label for="product_name">Name<span class="mandatory"> *</span></label>
                                     <input type="text" value="{{ old('name') }}" class="form-control"
                                            id="name" name="name"
                                            placeholder="Enter product code" autocomplete="off"/>
@@ -79,7 +79,7 @@
 
 
                                 <div class="form-group">
-                                    <label for="product_name">Email Address *</label>
+                                    <label for="product_name">Email Address<span class="mandatory"> *</span></label>
                                     <input type="text" value="{{ old('email') }}" class="form-control"
                                            id="email" name="email"
                                            placeholder="Enter secondary name" autocomplete="off"/>
@@ -89,7 +89,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="product_name">Phone *</label>
+                                    <label for="product_name">Phone<span class="mandatory"> *</span></label>
                                     <input type="text" value="{{ old('phone') }}" class="form-control" id="phone"
                                            name="phone"
                                            placeholder="Enter Phone Number" autocomplete="off"/>
@@ -100,7 +100,7 @@
 
 
                                 <div class="form-group">
-                                    <label for="price">Address *</label>
+                                    <label for="price">Address<span class="mandatory"> *</span></label>
                                     <input type="text" value="{{ old('address') }}" class="form-control" id="address"
                                            name="address"
                                            placeholder="Enter cost"
