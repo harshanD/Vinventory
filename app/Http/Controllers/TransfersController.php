@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Yajra\DataTables\DataTables;
 
 class TransfersController extends Controller
 {
@@ -151,26 +152,48 @@ class TransfersController extends Controller
     {
         $result = array('data' => array());
 
-//        $data = Transfers::where('status', \Config::get('constants.status.Active'))->orderBy('transfers', 'asc')->get();
-//        $data = Transfers::orderBy('due_date', 'desc')->get();
-        $data = Transfers::get();
+        $query = Transfers::select(['id', 'tr_reference_code', 'tr_date as date', 'to_location', 'from_location', 'tot_tax', 'grand_total', 'status']);
 
-        foreach ($data as $key => $value) {
-            // button
-            $buttons = '';
-            $editbutton = '';
-            $deleteButton = '';
+        return Datatables::of($query)
+            ->addColumn('toLocation', function ($query) {
+                return str_limit($query->toLocation->name, 20);
+            })->addColumn('fromLocation', function ($query) {
+                return str_limit($query->fromLocation->name, 20);
+            })->addColumn('total', function ($query) {
+                return number_format($query->tot_tax + $query->grand_total, 2);
+            })->addColumn('status', function ($query) {
+                switch ($query->status):
+                    case 1:
+                        $status = '<span class="label label-success">Completed</span>';
+                        break;
+                    case 2:
+                        $status = '<span class="label label-success">Pending</span>';
+                        break;
+                    case 3:
+                        $status = '<span class="label label-success">Send</span>';
+                        break;
+                    case 4:
+                        $status = '<span class="label label-warning">Canceled</span>';
+                        break;
+                    default:
+                        $status = '<span class="label label-warning">Nothing</span>';
+                        break;
+                endswitch;
+                return $status;
+            })->addColumn('action', function ($query) {
+                $editbutton = '';
+                $deleteButton = '';
 
-            if (Permissions::getRolePermissions('updateTransfer')) {
-                $editbutton .= "<li><a href=\"/transfer/edit/" . $value->id . "\">Edit Transfer</a></li>";
-            }
+                if (Permissions::getRolePermissions('updateTransfer')) {
+                    $editbutton .= "<li><a href=\"/transfer/edit/" . $query->id . "\">Edit Transfer</a></li>";
+                }
 
-            if (Permissions::getRolePermissions('deleteTransfer')) {
-                $deleteButton .= "<li><a style='cursor: pointer' onclick=\"deletePo(" . $value->id . ")\">Delete Transfer</a></li>";
-            }
+                if (Permissions::getRolePermissions('deleteTransfer')) {
+                    $deleteButton .= "<li><a style='cursor: pointer' onclick=\"deletePo(" . $query->id . ")\">Delete Transfer</a></li>";
+                }
 
 
-            $buttons = "<div class=\"btn-group\">
+                return $buttons = "<div class=\"btn-group\">
                   <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
                   <button type=\"button\" class=\"btn btn-default btn-flat dropdown-toggle\" data-toggle=\"dropdown\">
                     <span class=\"caret\"></span>
@@ -178,46 +201,18 @@ class TransfersController extends Controller
                   </button>
                   <ul class=\"dropdown-menu\" role=\"menu\">
                     " . $editbutton . "
-                    <li><a href=\"/transfer/view/" . $value->id . "\">Transfer details</a></li>
-                     <li><a href=\"/transfer/print/" . $value->id . "\">Download as PDF</a></li>
-                     <li><a href=\"/send/transfers/email/" . $value->id . "\">Email Transfer</a></li>
+                    <li><a href=\"/transfer/view/" . $query->id . "\">Transfer details</a></li>
+                     <li><a href=\"/transfer/print/" . $query->id . "\">Download as PDF</a></li>
+                     <li><a href=\"/send/transfers/email/" . $query->id . "\">Email Transfer</a></li>
                     <li class=\"divider\"></li>
                      " . $deleteButton . "
                   </ul>
                 </div>";
 
-            switch ($value->status):
-                case 1:
-                    $status = '<span class="label label-success">Completed</span>';
-                    break;
-                case 2:
-                    $status = '<span class="label label-success">Pending</span>';
-                    break;
-                case 3:
-                    $status = '<span class="label label-success">Send</span>';
-                    break;
-                case 4:
-                    $status = '<span class="label label-warning">Canceled</span>';
-                    break;
-                default:
-                    $status = '<span class="label label-warning">Nothing</span>';
-                    break;
-            endswitch;
 
-            $result['data'][$key] = array(
-                $value->tr_date,
-                $value->tr_reference_code,
-                (Locations::find($value->from_location)->toArray())['name'],
-                (Locations::find($value->to_location)->toArray())['name'],
-                number_format(($value->grand_total - $value->tot_tax), 2),
-                number_format(($value->tot_tax), 2),
-                number_format(($value->grand_total), 2),
-                $status,
-                $buttons
-            );
-        } // /foreach
-
-        echo json_encode($result);
+            })
+//            ->editColumn('biller', '{!! str_limit($biller, 3) !!}')
+            ->make(true);
     }
 
 

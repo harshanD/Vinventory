@@ -109,7 +109,8 @@
                             {{csrf_field()}}
                             <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
-                                <label for="edit_location_name">Purchase Receive<span class="mandatory"> *</span></label>
+                                <label for="edit_location_name">Purchase Receive<span
+                                            class="mandatory"> *</span></label>
                                 <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_e_email"></p>
@@ -183,7 +184,8 @@
                             {{csrf_field()}}
                             <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
-                                <label for="edit_location_name">Purchase Receive<span class="mandatory"> *</span></label>
+                                <label for="edit_location_name">Purchase Receive<span
+                                            class="mandatory"> *</span></label>
                                 <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_recNo"></p>
@@ -267,7 +269,19 @@
             // initialize the datatable
             manageTable = $('#poTable').DataTable({
                 'ajax': '/transfer/fetchTransData',
-                'order': []
+                "processing": true,
+                "serverSide": true,
+                "columns": [
+                    {data: 'date'},
+                    {data: 'tr_reference_code'},
+                    {data: 'fromLocation'},
+                    {data: 'toLocation'},
+                    {data: 'total'},
+                    {data: 'tot_tax'},
+                    {data: 'grand_total'},
+                    {data: 'status'},
+                    {data: 'action', name: 'actions', orderable: false, searchable: false}
+                ]
             });
 
 
@@ -397,7 +411,7 @@
                 hidden: 'true'
             });
 
-            $('#deleteBtn').attr("href", ('/transfer/delete/') +id);
+            $('#deleteBtn').attr("href", ('/transfer/delete/') + id);
         }
 
     </script>
