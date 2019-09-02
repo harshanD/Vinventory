@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Categories;
+use App\Invoice;
 use App\Products;
 use App\Brands;
+use App\Stock;
 use App\Supplier;
 use App\Tax;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Yajra\DataTables\DataTables;
 
 class ProductsController extends Controller
 {
@@ -102,46 +105,40 @@ class ProductsController extends Controller
         }
     }
 
+
     public function fetchProductsData()
     {
-        $result = array('data' => array());
+        $query = Products::select(['id', 'item_code', 'img_url', 'name', 'category', 'unit', 'reorder_level', 'brand', 'selling_price', 'cost_price', 'status']);
 
-        $data = Products::get();
+        return Datatables::of($query)
+            ->addColumn('category', function ($query) {
+                return str_limit($query->categories->category, 20);
+            })->addColumn('brand', function ($query) {
+                return str_limit($query->brands->brand, 20);
+            })->addColumn('status', function ($query) {
+                return ($query->status == \Config::get('constants.status.Active')) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
+            })->addColumn('qty', function ($query) {
+                $stockController = new StockController();
+                return $stockController->itemQtySumNoteDeletedWareHouses($query->id);
+            })->addColumn('unitName', function ($query) {
+                return \Config::get('constants.unit_put.' . $query->unit);
+            })->addColumn('image', function ($query) {
+                return '<img src="' . asset(\Storage::url($query->img_url)) . '" style="width:50px;height:50px" class="rounded-circle z-depth-1-half avatar-pic" alt="placeholder avatar">';
+            })->addColumn('action', function ($query) {
+                $buttons = '';
 
-        foreach ($data as $key => $value) {
-            // button
-            $buttons = '';
+                if (Permissions::getRolePermissions('updateProduct')) {
+                    $buttons .= '<a  href="' . url("/products/edit/" . $query->id) . '" class="btn btn-default"><i class="fa fa-pencil"></i></a>';
+                }
 
-            if (Permissions::getRolePermissions('updateProduct')) {
-                $buttons .= '<a  href="' . url("/products/edit/" . $value->id) . '" class="btn btn-default"><i class="fa fa-pencil"></i></a>';
-            }
-
-            if (Permissions::getRolePermissions('deleteProduct')) {
-                $buttons .= ' <button type="button" class="btn btn-default" onclick="removeProduct(' . $value->id . ')" data-toggle="modal" data-target="#removeProductModal"><i class="fa fa-trash"></i></button>';
-            }
-
-            $status = ($value->status == \Config::get('constants.status.Active')) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
-
-
-            $image = '<img src="' . asset(\Storage::url($value->img_url)) . '" style="width:50px;height:50px" class="rounded-circle z-depth-1-half avatar-pic" alt="placeholder avatar">';
-
-            $result['data'][$key] = array(
-                $image,
-                $value->item_code,
-                $value->name,
-                $value->brands->brand,
-                $value->categories->category,
-                $value->cost_price,
-                $value->selling_price,
-                $value->availability,
-                \Config::get('constants.unit_put.' . $value->unit),
-                $value->reorder_level,
-                $status,
-                $buttons
-            );
-        } // /foreach
-
-        echo json_encode($result);
+                if (Permissions::getRolePermissions('deleteProduct')) {
+                    $buttons .= '<button type="button" class="btn btn-default" onclick="removeProduct(' . $query->id . ')" data-toggle="modal" data-target="#removeProductModal"><i class="fa fa-trash"></i></button>';
+                }
+                return $buttons;
+            })
+            ->removeColumn('billers')->removeColumn('customers')
+//            ->editColumn('biller', '{!! str_limit($biller, 3) !!}')
+            ->make(true);
     }
 
     public function editView($id)
