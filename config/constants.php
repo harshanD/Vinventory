@@ -39,6 +39,12 @@ return [
         '2' => 'Duo',
         '3' => 'Partial',
         '4' => 'Paid',
+    ],
+    'i_payment_status_name' => [
+        'Pending' => '1',
+        'Duo' => '2',
+        'Partial' => '3',
+        'Paid' => '4',
     ]
 
 ];
