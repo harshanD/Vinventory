@@ -349,13 +349,35 @@
                     {data: 'date'},
                     {data: 'referenceCode'},
                     {data: 'supplierName'},
-                    {data: 'received_icon'},
+                    {data: 'received_icon', orderable: false, searchable: false},
                     {data: 'grand_total'},
                     {data: 'paid'},
                     {data: 'balance'},
-                    {data: 'status'},
+                    {data: 'status', orderable: false, searchable: false},
                     {data: 'action', name: 'actions', orderable: false, searchable: false}
-                ]
+                ],
+                columnDefs: [
+                    {
+                        "targets": 0, // your case first column
+                        "className": "text-center",
+                    }, {
+                        "targets": 3, // your case first column
+                        "className": "text-center",
+                    },
+                    {
+                        "targets": 4,
+                        "className": "text-right",
+                    }, {
+                        "targets": 5,
+                        "className": "text-right",
+                    }, {
+                        "targets": 6,
+                        "className": "text-right",
+                    }, {
+                        "targets": 7,
+                        "className": "text-center",
+                    },
+                ],
             });
 
 

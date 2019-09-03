@@ -276,13 +276,35 @@
                     {data: 'invoice_code'},
                     {data: 'biller'},
                     {data: 'customer'},
-                    {data: 'sale_status', name: 'sale_status'},
+                    {data: 'sale_status', name: 'sale_status', orderable: false, searchable: false},
                     {data: 'grand_total'},
                     {data: 'paid'},
                     {data: 'balance'},
-                    {data: 'payment_status'},
+                    {data: 'payment_status', orderable: false, searchable: false},
                     {data: 'action', name: 'actions', orderable: false, searchable: false}
-                ]
+                ],
+                columnDefs: [
+                    {
+                        "targets": 0, // your case first column
+                        "className": "text-center",
+                    }, {
+                        "targets": 4, // your case first column
+                        "className": "text-center",
+                    },
+                     {
+                        "targets": 5,
+                        "className": "text-right",
+                    }, {
+                        "targets": 6,
+                        "className": "text-right",
+                    }, {
+                        "targets": 7,
+                        "className": "text-right",
+                    },{
+                        "targets": 8,
+                        "className": "text-center",
+                    },
+                ],
             });
 
 
