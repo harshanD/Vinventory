@@ -64,7 +64,7 @@
                         <th>Grand Total</th>
                         <th>Paid</th>
                         <th>Balance</th>
-                        <th>PO Status</th>
+                        <th>Payment Status</th>
                         <th>Actions</th>
 
                     </tr>
@@ -259,6 +259,19 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
+
+        <!-- remove supplier modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="paymentsAddModal">
+
+        </div><!-- /.modal -->
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="paymentsEditModal">
+
+        </div><!-- /.modal -->
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="paymentsShow">
+
+        </div>
 
 
         {{--        --}}{{--email--}}
@@ -513,6 +526,57 @@
                 hidden: 'true'
             });
         }
+
+        function showPayments(id, type) {
+            $.ajax({
+                url: '/payments/paymentsShow',
+                type: 'POST',
+                data: {
+                    'id': id,
+                    'type': type,
+                    '_token': '{{@csrf_token()}}',
+
+                }, // /converting the form data into array and sending it to server
+                dataType: 'json',
+                success: function (response) {
+                    $('#paymentsShow').html(response.html);
+                    $('#paymentsShow').modal({
+                        hidden: 'true'
+                    });
+
+                },
+                error: function (request, status, errorThrown) {
+                }
+            });
+        }
+
+        function addPayments(id, type) {
+            $.ajax({
+                url: '/payments/paymentAddShow',
+                type: 'POST',
+                data: {
+                    '_token': '{{@csrf_token()}}',
+                    'id': id,
+                    'type': type,
+
+                }, // /converting the form data into array and sending it to server
+                dataType: 'json',
+                success: function (response) {
+                    $('#paymentsAddModal').html(response.html);
+                    $('#paymentsAddModal').modal({
+                        hidden: 'true'
+                    });
+
+
+                },
+                error: function (request, status, errorThrown) {
+
+                }
+
+            });
+
+        }
+
 
     </script>
 @endsection

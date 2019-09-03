@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Locations;
+use App\Payments;
 use App\Products;
 use App\Supplier;
 use App\Tax;
@@ -133,7 +134,7 @@ class POController extends Controller
 
     public function fetchPOData()
     {
-        $query = PO::select(['id', 'supplier', 'referenceCode', 'due_date as date', 'grand_total', 'status']);
+        $query = PO::select(['id', 'supplier', 'referenceCode', 'due_date as date', 'payment_status', 'grand_total', 'status']);
         return Datatables::of($query)
             ->addColumn('supplierName', function ($query) {
                 return str_limit($query->suppliers->name, 20);
@@ -150,23 +151,29 @@ class POController extends Controller
                         break;
                 endswitch;
                 return $SaleStatus;
-            })->addColumn('paid', function () {
-                return 200;
-            })->addColumn('balance', function () {
-                return 400;
+            })->addColumn('grand_total', function ($query) {
+                return number_format($query->grand_total, 2);
+            })->addColumn('paid', function ($query) {
+                $payments = new PaymentsController();
+                $pending = $payments->refCodeByGetOutstanding($query->referenceCode);
+                return number_format($pending, 2);
+            })->addColumn('balance', function ($query) {
+                $payments = new PaymentsController();
+                $pending = $payments->refCodeByGetOutstanding($query->referenceCode);
+                return number_format($query->grand_total - $pending, 2);
             })->addColumn('status', function ($query) {
-                switch ($query->status):
-                    case 1:
-                        $status = '<span class="label label-success">Received</span>';
+                switch ($query->payment_status):
+                    case \Config::get('constants.i_payment_status_name.Partial'):
+                        $status = '<span class="label label-success">Partial</span>';
                         break;
-                    case 2:
-                        $status = '<span class="label label-success">Ordered</span>';
+                    case \Config::get('constants.i_payment_status_name.Duo'):
+                        $status = '<span class="label label-success">Duo</span>';
                         break;
-                    case 3:
-                        $status = '<span class="label label-success">pending</span>';
+                    case \Config::get('constants.i_payment_status_name.Paid'):
+                        $status = '<span class="label label-success">Paid</span>';
                         break;
-                    case 4:
-                        $status = '<span class="label label-warning">canceled</span>';
+                    case \Config::get('constants.i_payment_status_name.Pending'):
+                        $status = '<span class="label label-warning">Pending</span>';
                         break;
                     default:
                         $status = '<span class="label label-warning">Nothing</span>';
@@ -203,9 +210,11 @@ class POController extends Controller
                 }
 
                 //incremental code
-                $lastStockRefCode = Stock::all()->last();
-                $data = (isset($lastStockRefCode->receive_code)) ? str_replace("TR-", "PR-", str_replace("-S", "", str_replace("-A", "", $lastStockRefCode->receive_code))) : 'PR-000000';
+                $lastStockRefCode = Stock::where('receive_code', 'like', '%R-%')->withTrashed()->get()->last();
+//                $data = (isset($lastStockRefCode->receive_code)) ? str_replace("TR-", "PR-", str_replace("-S", "", str_replace("-A", "", $lastStockRefCode->receive_code))) : 'R-000000';
+                $data = (isset($lastStockRefCode->receive_code)) ? $lastStockRefCode->receive_code : 'R-000000';
                 $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
+
 
                 $statusOfReceiveAll = "";
                 $statusOfpartiallyReceiveAll = "";
@@ -223,6 +232,11 @@ class POController extends Controller
                     $statusOfpartiallyReceiveAll = "<li><a style='cursor: pointer' onclick=\"partiallyReceive(" . $query->id . ")\">Partially Receive</a></li>";
                 }
 
+                /*payments check as full pad or duo*/
+                $addPaymentLink = "";
+                if ($query->payment_status == \Config::get('constants.i_payment_status_name.Partial') || $query->payment_status == \Config::get('constants.i_payment_status_name.Pending')) {
+                    $addPaymentLink = "<li><a style='cursor: pointer' onclick=\"addPayments(" . $query->id . ",'PO')\">Add Payments</a></li>";
+                }
 
                 return $buttons = "<div class=\"btn-group\">
                   <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
@@ -235,12 +249,15 @@ class POController extends Controller
                     " . $statusOfReceiveAll . "
                     " . $statusOfpartiallyReceiveAll . "
                     <li><a href=\"/po/view/" . $query->id . "\">Purchase details view</a></li>
+                    <li><a style='cursor: pointer' onclick=\"showPayments(" . $query->id . ",'PO')\">View Payments</a></li>
+                    " . $addPaymentLink . "
                     <li><a href=\"/po/printpo/" . $query->id . "\">Download as PDF</a></li>
                     <li><a href=\"/send/email/" . $query->id . "\">Send Mail</a></li>
                     <li class=\"divider\"></li>
                    " . $deleteButton . "
                   </ul>
-                </div><input type='hidden' id='recNo_" . $query->id . "' value='" . $code . "'>";
+                <input type='hidden' id='recNo_" . $query->id . "' value='" . $code . "'>
+                </div>";
 
             })
 //            ->editColumn('biller', '{!! str_limit($biller, 3) !!}')
