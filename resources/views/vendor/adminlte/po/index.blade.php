@@ -260,18 +260,19 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
 
-        <!-- remove supplier modal -->
+        <!--Payments module views -->
         <div class="modal fade" tabindex="-1" role="dialog" id="paymentsAddModal">
 
-        </div><!-- /.modal -->
+        </div>
 
         <div class="modal fade" tabindex="-1" role="dialog" id="paymentsEditModal">
 
-        </div><!-- /.modal -->
+        </div>
 
         <div class="modal fade" tabindex="-1" role="dialog" id="paymentsShow">
 
         </div>
+        <!--Payments module views end -->
 
 
         {{--        --}}{{--email--}}
@@ -543,7 +544,6 @@
                     $('#paymentsShow').modal({
                         hidden: 'true'
                     });
-
                 },
                 error: function (request, status, errorThrown) {
                 }
@@ -566,15 +566,10 @@
                     $('#paymentsAddModal').modal({
                         hidden: 'true'
                     });
-
-
                 },
                 error: function (request, status, errorThrown) {
-
                 }
-
             });
-
         }
 
 

@@ -206,10 +206,14 @@ class InvoiceController extends Controller
                         break;
                 endswitch;
                 return $payStatus;
-            })->addColumn('paid', function () {
-                return 200;
-            })->addColumn('balance', function () {
-                return 400;
+            })->addColumn('paid', function ($query) {
+                $payments = new PaymentsController();
+                $pending = $payments->refCodeByGetOutstanding($query->invoice_code);
+                return number_format($pending, 2);
+            })->addColumn('balance', function ($query) {
+                $payments = new PaymentsController($query);
+                $pending = $payments->refCodeByGetOutstanding($query->invoice_code);
+                return number_format($query->grand_total - $pending, 2);
             })->addColumn('action', function ($query) {
                 $buttons = '';
                 $editbutton = '';
@@ -228,6 +232,12 @@ class InvoiceController extends Controller
                 $data = (isset($lastStockRefCode->receive_code)) ? str_replace("TR-", "PR-", str_replace("-S", "", str_replace("-A", "", $lastStockRefCode->receive_code))) : 'PR-000000';
                 $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
 
+                /*payments check as full pad or duo*/
+                $addPaymentLink = "";
+                if ($query->payment_status == \Config::get('constants.i_payment_status_name.Partial') || $query->payment_status == \Config::get('constants.i_payment_status_name.Pending')) {
+                    $addPaymentLink = "<li><a style='cursor: pointer' onclick=\"addPayments(" . $query->id . ",'IV')\">Add Payments</a></li>";
+                }
+
 
                 return "<div class=\"btn-group\">
                   <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
@@ -238,6 +248,8 @@ class InvoiceController extends Controller
                   <ul class=\"dropdown-menu\" role=\"menu\">
                       " . $editbutton . "
                     <li><a href=\"/sales/view/" . $query->id . "\">Sale details view</a></li>
+                    <li><a style='cursor: pointer' onclick=\"showPayments(" . $query->id . ",'IV')\">View Payments</a></li>
+                    " . $addPaymentLink . "
                     <li><a href=\"/sales/print/" . $query->id . "\">Download as PDF</a></li>
                     <li><a href=\"/send/sale/email/" . $query->id . "\">Email Sale</a></li>
                     <li class=\"divider\"></li>
