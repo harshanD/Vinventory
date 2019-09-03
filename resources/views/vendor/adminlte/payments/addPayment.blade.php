@@ -125,7 +125,12 @@
                     // window.location = data;
                     // console.log(response)
                     // if (response.success) {
-                    window.location.href = '/po/manage';
+                    if ($('#type').val() == 'PO') {
+                        window.location.href = '/po/manage';
+                    } else if ($('#type').val() == 'IV') {
+                        window.location.href = '/sales/manage';
+                    }
+
                     // }
 
 
