@@ -182,9 +182,15 @@ Route::post('/role/edit/{id}', 'RoleController@editRoleData');
 Route::post('/role/remove', 'RoleController@removeRoleData');
 Route::post('/role/create', 'RoleController@create');
 
+/*payments*/
+Route::post('payments/add', 'PaymentsController@addPayment');
+Route::post('payments/edit', 'PaymentsController@editPayment');
+Route::post('payments/paymentsShow', 'PaymentsController@paymentsShow');
+Route::post('payments/paymentEditShow', 'PaymentsController@paymentEditShow');
+Route::post('payments/paymentAddShow', 'PaymentsController@paymentAddShow');
+Route::get('payment/delete/{id}', 'PaymentsController@delete');
 
-
-//Route::get('/saskasjbdgjas/{id}', 'StockController@itemQtySunNoteDeletedWareHouses');
+//Route::get('/saskasjbdgjas/{id}', 'PaymentsController@refCodeByGetOutstanding');
 
 Route::group(['middleware' => 'auth'], function () {
     //    Route::get('/link1', function ()    {
