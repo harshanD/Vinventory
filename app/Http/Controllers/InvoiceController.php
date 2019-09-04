@@ -239,7 +239,7 @@ class InvoiceController extends Controller
 
                 /*payments check as full pad or duo*/
                 $addPaymentLink = "";
-                if ($query->payment_status == \Config::get('constants.i_payment_status_name.Partial') || $query->payment_status == \Config::get('constants.i_payment_status_name.Pending')|| $query->payment_status == \Config::get('constants.i_payment_status_name.Duo')) {
+                if ($query->payment_status == \Config::get('constants.i_payment_status_name.Partial') || $query->payment_status == \Config::get('constants.i_payment_status_name.Pending') || $query->payment_status == \Config::get('constants.i_payment_status_name.Duo')) {
                     $addPaymentLink = "<li><a style='cursor: pointer' onclick=\"addPayments(" . $query->id . ",'IV')\">Add Payments</a></li>";
                 }
 

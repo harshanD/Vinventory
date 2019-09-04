@@ -188,7 +188,7 @@ Route::post('payments/edit', 'PaymentsController@editPayment');
 Route::post('payments/paymentsShow', 'PaymentsController@paymentsShow');
 Route::post('payments/paymentEditShow', 'PaymentsController@paymentEditShow');
 Route::post('payments/paymentAddShow', 'PaymentsController@paymentAddShow');
-Route::get('payment/delete/{id}', 'PaymentsController@delete');
+Route::post('payment/delete', 'PaymentsController@delete');
 
 //Route::get('/saskasjbdgjas/{id}', 'PaymentsController@refCodeByGetOutstanding');
 

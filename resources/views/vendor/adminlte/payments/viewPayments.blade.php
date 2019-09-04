@@ -38,9 +38,11 @@
                                 </td>
                             </tr>
                         @endforeach
-                        @else
-                        <tr><td colspan="5" style="text-align: center">No Payments</td></tr>
-                        @endif
+                    @else
+                        <tr>
+                            <td colspan="5" style="text-align: center">No Payments</td>
+                        </tr>
+                    @endif
                     </tbody>
                 </table>
 
@@ -57,6 +59,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
+                <input type="hidden" id="deleteId">
                 <h4 class="modal-title">Delete Confirm</h4>
             </div>
 
@@ -65,7 +68,7 @@
                     <p>Do you really want to remove?</p>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-primary" href="" role="button" id="paymentDeleteBtn">Delete</a>
+                    <a class="btn btn-primary" onclick="surelyDelete()" role="button" id="paymentDeleteBtn">Delete</a>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
@@ -102,12 +105,37 @@
         });
     }
 
-    function deletePayment(id, type) {
+    function deletePayment(id) {
+        $('#deleteId').val(id)
         $('#paymentsDelete').modal({
             hidden: 'true'
         });
 
-        $('#paymentDeleteBtn').attr("href", ('/payment/delete/') + id);
+        {{--$('#paymentDeleteBtn').attr("href", ('/payment/delete/') + id + '/' + '{{$type}}');--}}
+    }
+
+    function surelyDelete() {
+        $.ajax({
+            url: '/payment/delete',
+            type: 'post',
+            data: {
+                'type': '{{$type}}',
+                'id': $('#deleteId').val(),
+                'parent_reference_code': '{{$parent_reference_code}}',
+                '_token': '{{@csrf_token()}}'
+            }, // /converting the form data into array and sending it to server
+            dataType: 'json',
+            success: function (response) {
+                if ('{{$type}}' == 'PO') {
+                    window.location.href = '/po/manage';
+                } else if ('{{$type}}' == 'IV') {
+                    window.location.href = '/sales/manage';
+                }
+            },
+            error: function (request, status, errorThrown) {
+            }
+
+        });
     }
 </script>
 

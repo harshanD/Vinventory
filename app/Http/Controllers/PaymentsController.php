@@ -139,7 +139,7 @@ class PaymentsController extends Controller
 
 
         $payments = Payments::where('parent_reference_code', $parentCode)->get();
-        $view = view('vendor.adminlte.payments.viewPayments', ['payments' => $payments, 'headerCode' => $type, 'type' => $request['type']])->render();
+        $view = view('vendor.adminlte.payments.viewPayments', ['payments' => $payments, 'parent_reference_code' => $parentCode, 'headerCode' => $type, 'type' => $request['type']])->render();
         return response()->json(['html' => $view]);
     }
 
@@ -182,18 +182,35 @@ class PaymentsController extends Controller
         return response()->json(['html' => $view]);
     }
 
-    public function delete($id, Request $request)
+    public function delete(Request $request)
     {
-        $payment = Payments::find($id);
+        $payment = Payments::find($request['id']);
+        $payment->delete();
+        if ($request['type'] == 'PO') {
+            $getSum = PO::where('referenceCode', $request['parent_reference_code'])->firstOrFail();
+            $grand_total = $getSum->grand_total;
+        } elseif ($request['type'] == 'IV') {
+            $getSum = Invoice::where('invoice_code', $request['parent_reference_code'])->firstOrFail();
+            $grand_total = $getSum->invoice_grand_total;
+        }
 
-        if (!$payment->delete()) {
-            $request->session()->flash('message', 'Error in the database while deleting the payment');
+        $totalPaid = $this->refCodeByGetOutstanding($request['parent_reference_code']);
+
+        if ($grand_total < $totalPaid) {
+            $getSum->payment_status = \Config::get('constants.i_payment_status_name.Over Paid');
+        } elseif ($grand_total > $totalPaid) {
+            $getSum->payment_status = \Config::get('constants.i_payment_status_name.Partial');
+        } elseif ($grand_total == $totalPaid) {
+            $getSum->payment_status = \Config::get('constants.i_payment_status_name.Paid');
+        }
+
+        if (!$getSum->save()) {
+            $request->session()->flash('message', 'Error in the database while deleting the Payment');
             $request->session()->flash('message-type', 'error');
-            return redirect()->back();
         } else {
             $request->session()->flash('message', 'Payment Deleted');
             $request->session()->flash('message-type', 'success');
-            return redirect()->route('po.manage');
         }
+        echo json_encode(array('success' => true));
     }
 }
