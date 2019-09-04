@@ -200,7 +200,7 @@ return [
             'can' => 'viewReturns',
             'submenu' => [
                 [
-                    'text' => 'List Sales',
+                    'text' => 'List Returns',
                     'icon' => 'random',
                     'url' => '/returns/manage',
                     'can' => 'viewReturns',
