@@ -167,13 +167,15 @@ class InvoiceController extends Controller
     public function fetchSalesData()
     {
 
-        $query = Invoice::select(['id', 'payment_status', 'sales_status', 'invoice_date', 'invoice_code', 'biller', 'customer', 'invoice_grand_total as grand_total']);
+        $query = Invoice::select(['id', 'payment_status', 'sales_status', 'invoice_date', 'invoice_code', 'biller', 'customer', 'invoice_grand_total']);
 
         return Datatables::of($query)
             ->addColumn('biller', function ($query) {
                 return str_limit($query->billers->name, 20);
             })->addColumn('customer', function ($query) {
                 return str_limit($query->customers->name, 20);
+            })->addColumn('grand_total', function ($query) {
+                return number_format($query->invoice_grand_total, 2);
             })->addColumn('sale_status', function ($query) {
                 switch ($query->sales_status):
                     case 1:
@@ -216,7 +218,7 @@ class InvoiceController extends Controller
             })->addColumn('balance', function ($query) {
                 $payments = new PaymentsController($query);
                 $pending = $payments->refCodeByGetOutstanding($query->invoice_code);
-                return number_format($query->grand_total - $pending, 2);
+                return number_format($query->invoice_grand_total - $pending, 2);
             })->addColumn('action', function ($query) {
                 $buttons = '';
                 $editbutton = '';
