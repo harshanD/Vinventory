@@ -4,13 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Wildside\Userstamps\Userstamps;
 
 class Stock extends Model
 {
     protected $table = 'stock';
 //    protected $primaryKey = 'receive_code'; // or null
     use SoftDeletes;
-    protected $fillable = ['receive_code', 'receive_date', 'remarks','location'];
+    use Userstamps;
+    protected $fillable = ['receive_code', 'receive_date', 'remarks', 'location'];
 
     function stockItems()
     {

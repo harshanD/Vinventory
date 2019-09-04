@@ -6,18 +6,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Wildside\Userstamps\Userstamps;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
+    use Userstamps;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','phone','avatar'
+        'name', 'email', 'password', 'phone', 'avatar'
     ];
 
     /**
