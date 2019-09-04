@@ -52,38 +52,39 @@
                         </strong> {{ session()->get('error') }}
                     </div>
                 @endif
+                <div class="table-responsive">
+                    <table id="poTable" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Reference No</th>
+                            <th>Warehouse (From)</th>
+                            <th>Warehouse (To)</th>
+                            <th>Total</th>
+                            <th>Tax</th>
+                            <th>Grand total</th>
+                            <th>Status</th>
+                            <th>Actions</th>
 
-                <table id="poTable" class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Reference No</th>
-                        <th>Warehouse (From)</th>
-                        <th>Warehouse (To)</th>
-                        <th>Total</th>
-                        <th>Tax</th>
-                        <th>Grand total</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
+                            </td>
+                        </tr>
 
-                        </td>
-                    </tr>
+                        </tbody>
+                    </table>
 
-                    </tbody>
-                </table>
-
+                </div>
             </div>
             <!-- /.box-body -->
         {{--<div class="box-footer">--}}

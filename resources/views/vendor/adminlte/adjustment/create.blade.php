@@ -131,21 +131,23 @@
                     </div>
 
                     <div class="box-body">
-                        <table id="poTable" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>Product (Code - Name)</th>
-                                <th>Type</th>
-                                <th>Quantity</th>
-                                <th hidden>Serial Number</th>
-                                <th style="text-align:center"><i class="fa fa-trash"></i></th>
-                            </tr>
-                            </thead>
-                            <tbody id="poBody">
+                        <div class="table-responsive">
+                            <table id="poTable" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Product (Code - Name)</th>
+                                    <th>Type</th>
+                                    <th>Quantity</th>
+                                    <th hidden>Serial Number</th>
+                                    <th style="text-align:center"><i class="fa fa-trash"></i></th>
+                                </tr>
+                                </thead>
+                                <tbody id="poBody">
 
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <p class="help-block" id="items_error"></p>
                     {{--                    <p class="help-block" id="grand_tax_id"></p>--}}
@@ -305,16 +307,18 @@
 
                             </div>
                             <div class="box-body">
-                                <table class="table table-bordered table-striped">
-                                    <thead>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
 
-                                    <th style="width: 25%">Net Unit Cost (Rs)</th>
-                                    <th style="width: 25%" id="nucost"></th>
-                                    <th style="width: 25%">Product Tax</th>
-                                    <th style="width: 25%" id="ptx"></th>
+                                        <th style="width: 25%">Net Unit Cost (Rs)</th>
+                                        <th style="width: 25%" id="nucost"></th>
+                                        <th style="width: 25%">Product Tax</th>
+                                        <th style="width: 25%" id="ptx"></th>
 
-                                    </thead>
-                                </table>
+                                        </thead>
+                                    </table>
+                                </div>
                                 <br>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Calculate Unit Cost (Rs)</div>

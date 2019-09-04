@@ -227,24 +227,26 @@
                     </div>
 
                     <div class="box-body">
-                        <table id="poTable" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>Product (Code - Name)</th>
-                                <th hidden>Serial No</th>
-                                <th>Net Unit Price</th>
-                                <th>Quantity</th>
-                                <th>Discount</th>
-                                <th>Product Tax</th>
-                                <th>Subtotal</th>
-                                <th style="text-align:center"><i class="fa fa-trash"></i></th>
-                            </tr>
-                            </thead>
-                            <tbody id="poBody">
+                        <div class="table-responsive">
+                            <table id="poTable" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Product (Code - Name)</th>
+                                    <th hidden>Serial No</th>
+                                    <th>Net Unit Price</th>
+                                    <th>Quantity</th>
+                                    <th>Discount</th>
+                                    <th>Product Tax</th>
+                                    <th>Subtotal</th>
+                                    <th style="text-align:center"><i class="fa fa-trash"></i></th>
+                                </tr>
+                                </thead>
+                                <tbody id="poBody">
 
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <p class="help-block" id="items_error"></p>
                     {{--                    <p class="help-block" id="grand_tax_id"></p>--}}
@@ -400,16 +402,18 @@
 
                             </div>
                             <div class="box-body">
-                                <table class="table table-bordered table-striped">
-                                    <thead>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
 
-                                    <th style="width: 25%">Net Unit Price</th>
-                                    <th style="width: 25%" id="nucost"></th>
-                                    <th style="width: 25%">Product Tax</th>
-                                    <th style="width: 25%" id="ptx"></th>
+                                        <th style="width: 25%">Net Unit Price</th>
+                                        <th style="width: 25%" id="nucost"></th>
+                                        <th style="width: 25%">Product Tax</th>
+                                        <th style="width: 25%" id="ptx"></th>
 
-                                    </thead>
-                                </table>
+                                        </thead>
+                                    </table>
+                                </div>
                                 <br>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Calculate Unit Price</div>
@@ -667,7 +671,7 @@
             var gtot = (sum - wdisco) + wtax;
             // var gtot = taxdeductSum - wdisco;
 
-            var footerRow = "<table class=\"table table-bordered\" ><tr style=\"font-weight: bold;text-align: right;color: #0d6aad\">" +
+            var footerRow = "<div class='table-responsive'><table class=\"table table-bordered\" ><tr style=\"font-weight: bold;text-align: right;color: #0d6aad\">" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Items</td>" +
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + ($('#poTable tr').length - 2) + " (" + qtySum + ") " + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Total</td>" +
@@ -682,7 +686,7 @@
                 "<input type='hidden' name='grand_tax_id' id='grand_tax_id' value='" + $('#wholeTax').val() + "'>" +
                 "<input type='hidden' name='grand_discount' id='grand_discount' value='" + toNumber(wdisco) + "'>" +
                 "<input type='hidden' name='grand_tax' id='grand_tax' value='" + toNumber(wtax) + "'>" + gtot.format(2) + "" +
-                "</td><tr></table>";
+                "</td><tr></table></div>";
 
 
             $('#footer').html(footerRow);

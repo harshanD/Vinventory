@@ -193,68 +193,71 @@
                     //                        echo '</pre>';
                     ?>
                     <div class="box-body">
-                        <table id="poTable" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>Product (Code - Name)</th>
-                                <th>Net Unit Cost (Rs)</th>
-                                <th>Quantity</th>
-                                <th>Discount</th>
-                                <th>Product Tax</th>
-                                <th>Subtotal</th>
-                                <th style="text-align:center"><i class="fa fa-trash"></i></th>
-                            </tr>
-                            </thead>
-                            <tbody id="poBody">
-                            @foreach($po->poDetails as $poItem)
-
-                                <tr id="row_deletable_{{ $poItem->id }}" style="text-align: right">
-                                    <td style="text-align: left">{{ $poItem->product->name }}
-                                        ( {{ $poItem->product->item_code }} )<i
-                                                class="fa fa-edit" onclick='itemDetails({{ $poItem->item_id }})'
-                                                style='float: right;cursor: pointer'></i></td>
-                                    <td id='costPrice_{{ $poItem->item_id }}'>{{ $poItem->cost_price }}</td>
-                                    <td style="text-align: center"><input type='text' style="text-align: center"
-                                                                          class='qy'
-                                                                          onkeyup='qtyChanging({{ $poItem->item_id }})'
-                                                                          id='quantity_{{ $poItem->item_id }}'
-                                                                          value='{{ $poItem->qty }}'></td>
-                                    <td id='discount_{{ $poItem->item_id }}'>{{number_format($poItem->discount,2)}}</td>
-                                    <td hidden id='hidden_data_{{ $poItem->item_id }}'>
-
-                                        <input type='hidden' name='discount[]' id='discount_h{{ $poItem->item_id }}'
-                                               value='{{($poItem->discount)}}'>
-                                        <input type='hidden' name='quantity[]' id='quantity_h{{ $poItem->item_id }}'
-                                               value='{{ $poItem->qty }}'>
-                                        <input type='hidden' name='costPrice[]' id='costPrice_h{{ $poItem->item_id }}'
-                                               value='{{ ($poItem->cost_price) }}'>
-                                        <input type='hidden' name='item[]' id='item_h{{ $poItem->item_id }}'
-                                               value='{{ $poItem->item_id }}'>
-                                        <input type='hidden' name='unit[]' id='unit_h{{ $poItem->item_id }}'>
-                                        <input type='hidden' name='p_tax[]' id='p_tax_h{{ $poItem->item_id }}'
-                                               value='{{ $poItem->tax_val }}'>
-                                        <input type='hidden' name='subtot[]' id='subtot_h{{ $poItem->item_id }}'
-                                               value='{{ $poItem->sub_total }}'>
-                                        <input type='hidden' name='tax_id[]' id='tax_id_h{{ $poItem->item_id }}'
-                                               value="{{ $poItem->tax_percentage }}">
-                                        <input type='hidden' name='pDisco[]' id='pDisco_h{{ $poItem->item_id }}'
-                                               value='{{ $poItem->discount/$poItem->qty }}'>
-
-                                    </td>
-                                    <td class='tax'
-                                        id='tax_{{ $poItem->item_id }}'>{{ number_format($poItem->tax_val,2)}}</td>
-                                    <td class='subtot'
-                                        id='subtot_{{ $poItem->item_id }}'>{{ number_format($poItem->sub_total,2) }}</td>
-                                    <td style="text-align: center"><i class="glyphicon glyphicon-remove"
-                                                                      onclick="deleteThis({{ $poItem->id }})"
-                                                                      style="cursor: pointer"></i></td>
+                        <div class="table-responsive">
+                            <table id="poTable" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Product (Code - Name)</th>
+                                    <th>Net Unit Cost (Rs)</th>
+                                    <th>Quantity</th>
+                                    <th>Discount</th>
+                                    <th>Product Tax</th>
+                                    <th>Subtotal</th>
+                                    <th style="text-align:center"><i class="fa fa-trash"></i></th>
                                 </tr>
+                                </thead>
+                                <tbody id="poBody">
+                                @foreach($po->poDetails as $poItem)
 
-                            @endforeach
+                                    <tr id="row_deletable_{{ $poItem->id }}" style="text-align: right">
+                                        <td style="text-align: left">{{ $poItem->product->name }}
+                                            ( {{ $poItem->product->item_code }} )<i
+                                                    class="fa fa-edit" onclick='itemDetails({{ $poItem->item_id }})'
+                                                    style='float: right;cursor: pointer'></i></td>
+                                        <td id='costPrice_{{ $poItem->item_id }}'>{{ $poItem->cost_price }}</td>
+                                        <td style="text-align: center"><input type='text' style="text-align: center"
+                                                                              class='qy'
+                                                                              onkeyup='qtyChanging({{ $poItem->item_id }})'
+                                                                              id='quantity_{{ $poItem->item_id }}'
+                                                                              value='{{ $poItem->qty }}'></td>
+                                        <td id='discount_{{ $poItem->item_id }}'>{{number_format($poItem->discount,2)}}</td>
+                                        <td hidden id='hidden_data_{{ $poItem->item_id }}'>
+
+                                            <input type='hidden' name='discount[]' id='discount_h{{ $poItem->item_id }}'
+                                                   value='{{($poItem->discount)}}'>
+                                            <input type='hidden' name='quantity[]' id='quantity_h{{ $poItem->item_id }}'
+                                                   value='{{ $poItem->qty }}'>
+                                            <input type='hidden' name='costPrice[]'
+                                                   id='costPrice_h{{ $poItem->item_id }}'
+                                                   value='{{ ($poItem->cost_price) }}'>
+                                            <input type='hidden' name='item[]' id='item_h{{ $poItem->item_id }}'
+                                                   value='{{ $poItem->item_id }}'>
+                                            <input type='hidden' name='unit[]' id='unit_h{{ $poItem->item_id }}'>
+                                            <input type='hidden' name='p_tax[]' id='p_tax_h{{ $poItem->item_id }}'
+                                                   value='{{ $poItem->tax_val }}'>
+                                            <input type='hidden' name='subtot[]' id='subtot_h{{ $poItem->item_id }}'
+                                                   value='{{ $poItem->sub_total }}'>
+                                            <input type='hidden' name='tax_id[]' id='tax_id_h{{ $poItem->item_id }}'
+                                                   value="{{ $poItem->tax_percentage }}">
+                                            <input type='hidden' name='pDisco[]' id='pDisco_h{{ $poItem->item_id }}'
+                                                   value='{{ $poItem->discount/$poItem->qty }}'>
+
+                                        </td>
+                                        <td class='tax'
+                                            id='tax_{{ $poItem->item_id }}'>{{ number_format($poItem->tax_val,2)}}</td>
+                                        <td class='subtot'
+                                            id='subtot_{{ $poItem->item_id }}'>{{ number_format($poItem->sub_total,2) }}</td>
+                                        <td style="text-align: center"><i class="glyphicon glyphicon-remove"
+                                                                          onclick="deleteThis({{ $poItem->id }})"
+                                                                          style="cursor: pointer"></i></td>
+                                    </tr>
+
+                                @endforeach
 
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <p class="help-block" id="items_error"></p>
                     <div class="box-body">
@@ -425,6 +428,7 @@
 
                             </div>
                             <div class="box-body">
+                                <div class="table-responsive">
                                 <table class="table table-bordered table-striped">
                                     <thead>
 
@@ -435,6 +439,7 @@
 
                                     </thead>
                                 </table>
+                                </div>
                                 <br>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Calculate Unit Cost (Rs)</div>
@@ -695,7 +700,7 @@
             var gtot = (sum - wdisco) + wtax;
             // var gtot = taxdeductSum - wdisco;
 
-            var footerRow = "<table class=\"table table-bordered\" ><tr style=\"font-weight: bold;text-align: right;color: #0d6aad\">" +
+            var footerRow = "<div class='table-responsive'><table class=\"table table-bordered\" ><tr style=\"font-weight: bold;text-align: right;color: #0d6aad\">" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Items</td>" +
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + ($('#poTable tr').length - 2) + " (" + qtySum + ") " + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Total</td>" +
@@ -710,7 +715,7 @@
                 "<input type='hidden' name='grand_tax_id' id='grand_tax_id' value='" + $('#wholeTax').val() + "'>" +
                 "<input type='hidden' name='grand_discount' id='grand_discount' value='" + toNumber(wdisco) + "'>" +
                 "<input type='hidden' name='grand_tax' id='grand_tax' value='" + toNumber(wtax) + "'>" + gtot.format(2) + "" +
-                "</td><tr></table>";
+                "</td><tr></table></div>";
 
 
             $('#footer').html(footerRow);

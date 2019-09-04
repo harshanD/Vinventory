@@ -498,7 +498,7 @@
             var gtot = (sum - wdisco) + wtax;
             // var gtot = taxdeductSum - wdisco;
 
-            var footerRow = "<table class=\"table table-bordered\" ><tr style=\"font-weight: bold;text-align: right;color: #0d6aad\">" +
+            var footerRow = "<div class='table-responsive'><table class=\"table table-bordered\" ><tr style=\"font-weight: bold;text-align: right;color: #0d6aad\">" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Items</td>" +
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + ($('#poTable tr').length - 2) + " (" + qtySum + ") " + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Total</td>" +
@@ -513,7 +513,7 @@
                 "<input type='hidden' name='grand_tax_id' id='grand_tax_id' value='" + $('#wholeTax').val() + "'>" +
                 "<input type='hidden' name='grand_discount' id='grand_discount' value='" + toNumber(wdisco) + "'>" +
                 "<input type='hidden' name='grand_tax' id='grand_tax' value='" + toNumber(wtax) + "'>" + gtot.format(2) + "" +
-                "</td><tr></table>";
+                "</td><tr></table></div>";
 
 
             $('#footer').html(footerRow);

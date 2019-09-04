@@ -204,76 +204,81 @@
                     </div>
 
                     <div class="box-body">
-                        <table id="poTable" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>Product (Code - Name)</th>
-                                <th>Net Unit Price</th>
-                                <th>Quantity</th>
-                                <th>Discount</th>
-                                <th>Product Tax</th>
-                                <th>Subtotal</th>
-                                <th style="text-align:center"><i class="fa fa-trash"></i></th>
-                            </tr>
-                            </thead>
-                            <tbody id="poBody">
-                            @foreach($sales->invoiceItems as $sItem)
-                                <?php
-                                $taxval = number_format(((($sItem['selling_price'] - ($sItem['discount'] / $sItem['qty'])) * $sItem['tax_per']) / (100 + $sItem['tax_per'])), 2);
-                                $cost = number_format(((($sItem['selling_price']) - $taxval)-($sItem['discount']/ $sItem['qty'])), 2);
-                                $discount = number_format($sItem['discount']);
+                        <div class="table-responsive">
+                            <table id="poTable" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Product (Code - Name)</th>
+                                    <th>Net Unit Price</th>
+                                    <th>Quantity</th>
+                                    <th>Discount</th>
+                                    <th>Product Tax</th>
+                                    <th>Subtotal</th>
+                                    <th style="text-align:center"><i class="fa fa-trash"></i></th>
+                                </tr>
+                                </thead>
+                                <tbody id="poBody">
+                                @foreach($sales->invoiceItems as $sItem)
+                                    <?php
+                                    $taxval = number_format(((($sItem['selling_price'] - ($sItem['discount'] / $sItem['qty'])) * $sItem['tax_per']) / (100 + $sItem['tax_per'])), 2);
+                                    $cost = number_format(((($sItem['selling_price']) - $taxval) - ($sItem['discount'] / $sItem['qty'])), 2);
+                                    $discount = number_format($sItem['discount']);
 
-                                ?>
-                                <tr id="row_deletable_{{ $sItem['item_id'] }}" style="text-align: right">
-                                    <td style="text-align: left">{{ $sItem['products']['name'] }}
-                                        ( {{  $sItem['products']['item_code'] }} )<i
-                                                class="fa fa-edit" onclick='itemDetails({{ $sItem['item_id'] }})'
-                                                style='float: right;cursor: pointer'></i></td>
-                                    <td id='costPrice_{{ $sItem['item_id'] }}'>{{ $cost }}</td>
-                                    <td style="text-align: center"><input type='text' style="text-align: center"
-                                                                          class='qy'
-                                                                          onkeyup='qtyChanging({{ $sItem['item_id'] }})'
-                                                                          id='quantity_{{ $sItem['item_id'] }}'
-                                                                          value='{{ $sItem['qty'] }}'></td>
-                                    <td id='discount_{{ $sItem['item_id'] }}'>{{number_format($discount,2)}}</td>
-                                    <td hidden id='hidden_data_{{ $sItem['item_id'] }}'>
+                                    ?>
+                                    <tr id="row_deletable_{{ $sItem['item_id'] }}" style="text-align: right">
+                                        <td style="text-align: left">{{ $sItem['products']['name'] }}
+                                            ( {{  $sItem['products']['item_code'] }} )<i
+                                                    class="fa fa-edit" onclick='itemDetails({{ $sItem['item_id'] }})'
+                                                    style='float: right;cursor: pointer'></i></td>
+                                        <td id='costPrice_{{ $sItem['item_id'] }}'>{{ $cost }}</td>
+                                        <td style="text-align: center"><input type='text' style="text-align: center"
+                                                                              class='qy'
+                                                                              onkeyup='qtyChanging({{ $sItem['item_id'] }})'
+                                                                              id='quantity_{{ $sItem['item_id'] }}'
+                                                                              value='{{ $sItem['qty'] }}'></td>
+                                        <td id='discount_{{ $sItem['item_id'] }}'>{{number_format($discount,2)}}</td>
+                                        <td hidden id='hidden_data_{{ $sItem['item_id'] }}'>
 
-                                        <input type='hidden' name='discount[]' id='discount_h{{ $sItem['item_id'] }}'
-                                               value='{{($discount)}}'>
-                                        <input type='hidden' name='quantity[]' id='quantity_h{{ $sItem['item_id'] }}'
-                                               value='{{ $sItem['qty'] }}'>
-                                        <input type='hidden' name='costPrice[]' id='costPrice_h{{ $sItem['item_id'] }}'
-                                               value='{{ ($sItem['selling_price']) }}'>
-                                        <input type='hidden' name='item[]' id='item_h{{ $sItem['item_id'] }}'
-                                               value='{{ $sItem['item_id'] }}'>
-                                        <input type='hidden' name='unit[]' id='unit_h{{ $sItem['item_id'] }}'>
-                                        <input type='hidden' name='p_tax[]' id='p_tax_h{{ $sItem['item_id'] }}'
-                                               value='{{ $taxval }}'>
-                                        <input type='hidden' name='subtot[]' id='subtot_h{{ $sItem['item_id'] }}'
-                                               value='{{ 0 }}'>
-                                        <input type='hidden' name='tax_id[]' id='tax_id_h{{ $sItem['item_id'] }}'
-                                               value="{{ $sItem['tax_per'] }}">
-                                        <input type='hidden' name='availableStock_id[]'
-                                               id='availableStock_h{{ $sItem['item_id'] }}' value=''>
-                                        <input type='hidden' name='pDisco[]' id='pDisco_h{{  $sItem['item_id'] }}'
-                                               value='{{  number_format($sItem['discount']/ $sItem['qty'],2)}}'>
+                                            <input type='hidden' name='discount[]'
+                                                   id='discount_h{{ $sItem['item_id'] }}'
+                                                   value='{{($discount)}}'>
+                                            <input type='hidden' name='quantity[]'
+                                                   id='quantity_h{{ $sItem['item_id'] }}'
+                                                   value='{{ $sItem['qty'] }}'>
+                                            <input type='hidden' name='costPrice[]'
+                                                   id='costPrice_h{{ $sItem['item_id'] }}'
+                                                   value='{{ ($sItem['selling_price']) }}'>
+                                            <input type='hidden' name='item[]' id='item_h{{ $sItem['item_id'] }}'
+                                                   value='{{ $sItem['item_id'] }}'>
+                                            <input type='hidden' name='unit[]' id='unit_h{{ $sItem['item_id'] }}'>
+                                            <input type='hidden' name='p_tax[]' id='p_tax_h{{ $sItem['item_id'] }}'
+                                                   value='{{ $taxval }}'>
+                                            <input type='hidden' name='subtot[]' id='subtot_h{{ $sItem['item_id'] }}'
+                                                   value='{{ 0 }}'>
+                                            <input type='hidden' name='tax_id[]' id='tax_id_h{{ $sItem['item_id'] }}'
+                                                   value="{{ $sItem['tax_per'] }}">
+                                            <input type='hidden' name='availableStock_id[]'
+                                                   id='availableStock_h{{ $sItem['item_id'] }}' value=''>
+                                            <input type='hidden' name='pDisco[]' id='pDisco_h{{  $sItem['item_id'] }}'
+                                                   value='{{  number_format($sItem['discount']/ $sItem['qty'],2)}}'>
 
-                                    </td>
-                                    <td class='tax'
-                                        id='tax_{{ $sItem['item_id'] }}'>{{ number_format($taxval*$sItem['qty'],2)}}</td>
-                                    <td class='subtot'
-                                        id='subtot_{{ $sItem['item_id'] }}'>{{ number_format(($sItem['selling_price']*$sItem['qty'])-($discount),2) }}</td>
-                                    <td style="text-align: center"><i class="glyphicon glyphicon-remove"
-                                                                      onclick="deleteThis({{ $sItem['item_id'] }})"
-                                                                      style="cursor: pointer"></i></td>
-                                </tr><input type="hidden" name="deletedItems[]"
-                                            id="deletedItems_h{{ $sItem['item_id'] }}" value="0">
+                                        </td>
+                                        <td class='tax'
+                                            id='tax_{{ $sItem['item_id'] }}'>{{ number_format($taxval*$sItem['qty'],2)}}</td>
+                                        <td class='subtot'
+                                            id='subtot_{{ $sItem['item_id'] }}'>{{ number_format(($sItem['selling_price']*$sItem['qty'])-($discount),2) }}</td>
+                                        <td style="text-align: center"><i class="glyphicon glyphicon-remove"
+                                                                          onclick="deleteThis({{ $sItem['item_id'] }})"
+                                                                          style="cursor: pointer"></i></td>
+                                    </tr><input type="hidden" name="deletedItems[]"
+                                                id="deletedItems_h{{ $sItem['item_id'] }}" value="0">
 
-                            @endforeach
+                                @endforeach
 
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <p class="help-block" id="items_error"></p>
                     <div class="box-body">
@@ -502,6 +507,7 @@
 
                             </div>
                             <div class="box-body">
+                                <div class="table-responsive">
                                 <table class="table table-bordered table-striped">
                                     <thead>
 
@@ -512,6 +518,7 @@
 
                                     </thead>
                                 </table>
+                                </div>
                                 <br>
                                 <div class="panel panel-default" hidden>
                                     <div class="panel-heading">Calculate Unit Cost (Rs)</div>
@@ -849,7 +856,7 @@
             var gtot = (sum - wdisco) + wtax;
             // var gtot = taxdeductSum - wdisco;
 
-            var footerRow = "<table class=\"table table-bordered\" ><tr style=\"font-weight: bold;text-align: right;color: #0d6aad\">" +
+            var footerRow = "<div class='table-responsive'><table class=\"table table-bordered\" ><tr style=\"font-weight: bold;text-align: right;color: #0d6aad\">" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Items</td>" +
                 "<td style='text-align: right;background-color: #c2c7bd;width: 7%'>" + ($('#poTable tr').length - 2) + " (" + qtySum + ") " + "</td>" +
                 "<td style='text-align: left;background-color: #dfe4da;width: 13%'>Total</td>" +
@@ -864,7 +871,7 @@
                 "<input type='hidden' name='grand_tax_id' id='grand_tax_id' value='" + $('#wholeTax').val() + "'>" +
                 "<input type='hidden' name='grand_discount' id='grand_discount' value='" + toNumber(wdisco) + "'>" +
                 "<input type='hidden' name='grand_tax' id='grand_tax' value='" + wtax + "'>" + gtot.format(2) + "" +
-                "</td><tr></table>";
+                "</td><tr></table></div>";
 
 
             $('#footer').html(footerRow);

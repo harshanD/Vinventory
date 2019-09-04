@@ -54,29 +54,31 @@
             </div>
             <div class="box-body">
                 <div id="messages"></div>
-                <table id="manageTable" class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>Company</th>
-                        <th>Supplier Name</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <a href="" class="btn btn-default"><i class="fa fa-edit"></i></a>
-                            <a href="" class="btn btn-default"><i class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
+                <div class="table-responsive">
+                    <table id="manageTable" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Supplier Name</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <a href="" class="btn btn-default"><i class="fa fa-edit"></i></a>
+                                <a href="" class="btn btn-default"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
 
+                </div>
             </div>
             <!-- /.box-body -->
         {{--<div class="box-footer">--}}

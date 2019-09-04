@@ -53,6 +53,7 @@
             </div>
             <div class="box-body">
                 <div id="messages"></div>
+                <div class="table-responsive">
                 <table id="manageTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
@@ -80,6 +81,7 @@
                     </tbody>
                 </table>
 
+            </div>
             </div>
             <!-- /.box-body -->
         {{--<div class="box-footer">--}}

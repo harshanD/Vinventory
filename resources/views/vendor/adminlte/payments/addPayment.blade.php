@@ -51,6 +51,7 @@
                                             <label for="amount_1">Amount *</label> <input name="amount"
                                                                                           type="text"
                                                                                           id="amount"
+                                                                                          value="{{$pendingAmount}}"
                                                                                           class="pa form-control kb-pad amount"
                                                                                           data-bv-field="amount-paid">
                                             <i class="form-control-feedback" data-bv-icon-for="amount-paid"
