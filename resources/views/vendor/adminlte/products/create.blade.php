@@ -83,7 +83,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="product_name">Weight<span class="mandatory"> *</span></label>
+                                    <label for="product_name">Weight (Kg)<span class="mandatory"> *</span></label>
                                     <input type="text" value="{{ old('weight') }}" class="form-control" id="weight"
                                            name="weight"
                                            placeholder="Enter Weight" autocomplete="off"/>
@@ -144,7 +144,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="price">Product Cost<span class="mandatory"> *</span></label>
+                                    <label for="price">Product Cost (Rs)<span class="mandatory"> *</span></label>
                                     <input type="text" value="{{ old('cost') }}" class="form-control" id="cost"
                                            name="cost"
                                            placeholder="Enter cost"

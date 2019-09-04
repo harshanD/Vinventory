@@ -294,7 +294,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputPassword3" class="col-sm-3 control-label">Unit Cost</label>
+                                    <label for="inputPassword3" class="col-sm-3 control-label">Unit Cost (Rs)</label>
 
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control" id="pCost" name="pCost"
@@ -308,7 +308,7 @@
                                 <table class="table table-bordered table-striped">
                                     <thead>
 
-                                    <th style="width: 25%">Net Unit Cost</th>
+                                    <th style="width: 25%">Net Unit Cost (Rs)</th>
                                     <th style="width: 25%" id="nucost"></th>
                                     <th style="width: 25%">Product Tax</th>
                                     <th style="width: 25%" id="ptx"></th>
@@ -317,7 +317,7 @@
                                 </table>
                                 <br>
                                 <div class="panel panel-default">
-                                    <div class="panel-heading">Calculate Unit Cost</div>
+                                    <div class="panel-heading">Calculate Unit Cost (Rs)</div>
                                     <div class="panel-body">
                                         <div class="form-group">
                                             <label for="pcost" class="col-sm-4 control-label">Subtotal</label>

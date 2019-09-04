@@ -389,7 +389,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputPassword3" class="col-sm-3 control-label">Unit Cost</label>
+                                    <label for="inputPassword3" class="col-sm-3 control-label">Unit Cost (Rs)</label>
 
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control" id="pCost" name="pCost"

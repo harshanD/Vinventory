@@ -52,36 +52,37 @@
                         </strong> {{ session()->get('error') }}
                     </div>
                 @endif
+                <div class="table-responsive">
+                    <table id="invoiceTable" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Reference No</th>
+                            <th>Warehouse</th>
+                            <th>Biller</th>
+                            <th>Customer</th>
+                            <th>Grand Total</th>
+                            <th>Actions</th>
 
-                <table id="invoiceTable" class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Reference No</th>
-                        <th>Warehouse</th>
-                        <th>Biller</th>
-                        <th>Customer</th>
-                        <th>Grand Total</th>
-                        <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <a href="" class="btn btn-default"><i class="fa fa-edit"></i></a>
+                                <a href="" class="btn btn-default"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <a href="" class="btn btn-default"><i class="fa fa-edit"></i></a>
-                            <a href="" class="btn btn-default"><i class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
+                        </tbody>
+                    </table>
 
-                    </tbody>
-                </table>
-
+                </div>
             </div>
             <!-- /.box-body -->
         {{--<div class="box-footer">--}}
@@ -107,7 +108,8 @@
                             {{csrf_field()}}
                             <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
-                                <label for="edit_location_name">Purchase Receive<span class="mandatory"> *</span></label>
+                                <label for="edit_location_name">Purchase Receive<span
+                                            class="mandatory"> *</span></label>
                                 <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_recNo_a"></p>
@@ -181,7 +183,8 @@
                             {{csrf_field()}}
                             <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
-                                <label for="edit_location_name">Purchase Receive<span class="mandatory"> *</span></label>
+                                <label for="edit_location_name">Purchase Receive<span
+                                            class="mandatory"> *</span></label>
                                 <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_recNo"></p>
@@ -265,7 +268,24 @@
             // initialize the datatable
             manageTable = $('#invoiceTable').DataTable({
                 'ajax': '/returns/fetchReturnData',
-                'order': []
+                'order': [],
+                columnDefs: [
+                    {
+                        "targets": [5], // your case first column
+                        "className": "text-right",
+                    }, {
+                        "targets": [6, 0], // your case first column
+                        "className": "text-center",
+                    }
+                ],
+                "columns": [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    {"orderable": false},
+                ],
             });
 
 

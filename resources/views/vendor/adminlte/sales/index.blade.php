@@ -52,26 +52,27 @@
                         </strong> {{ session()->get('error') }}
                     </div>
                 @endif
+                <div class="table-responsive">
+                    <table id="invoiceTable" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Reference No</th>
+                            <th>Biller</th>
+                            <th>Customer</th>
+                            <th>Sale status</th>
+                            <th>Grand Total</th>
+                            <th>Paid</th>
+                            <th>Balance</th>
+                            <th>Payment Status</th>
+                            <th>Actions</th>
 
-                <table id="invoiceTable" class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Reference No</th>
-                        <th>Biller</th>
-                        <th>Customer</th>
-                        <th>Sale status</th>
-                        <th>Grand Total</th>
-                        <th>Paid</th>
-                        <th>Balance</th>
-                        <th>Payment Status</th>
-                        <th>Actions</th>
+                        </tr>
+                        </thead>
 
-                    </tr>
-                    </thead>
+                    </table>
 
-                </table>
-
+                </div>
             </div>
             <!-- /.box-body -->
         {{--<div class="box-footer">--}}
@@ -285,25 +286,12 @@
                 ],
                 columnDefs: [
                     {
-                        "targets": 0, // your case first column
-                        "className": "text-center",
-                    }, {
-                        "targets": 4, // your case first column
-                        "className": "text-center",
-                    },
-                     {
-                        "targets": 5,
+                        "targets": [5, 6, 7], // your case first column
                         "className": "text-right",
                     }, {
-                        "targets": 6,
-                        "className": "text-right",
-                    }, {
-                        "targets": 7,
-                        "className": "text-right",
-                    },{
-                        "targets": 8,
+                        "targets": [0, 4, 8, 9], // your case first column
                         "className": "text-center",
-                    },
+                    }
                 ],
             });
 

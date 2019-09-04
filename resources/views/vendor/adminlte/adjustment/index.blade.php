@@ -53,34 +53,35 @@
                         </strong> {{ session()->get('error') }}
                     </div>
                 @endif
+                <div class="table-responsive">
+                    <table id="poTable" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Reference No</th>
+                            <th>Warehouse</th>
+                            <th>Created By</th>
+                            <th>Note</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
 
-                <table id="poTable" class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Reference No</th>
-                        <th>Warehouse</th>
-                        <th>Created By</th>
-                        <th>Note</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <a href="" class="btn btn-default"><i class="fa fa-edit"></i></a>
+                                <a href="" class="btn btn-default"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
 
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <a href="" class="btn btn-default"><i class="fa fa-edit"></i></a>
-                            <a href="" class="btn btn-default"><i class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
+                        </tbody>
+                    </table>
 
-                    </tbody>
-                </table>
-
+                </div>
             </div>
 
             <!-- /.box-body -->
@@ -107,7 +108,8 @@
                             {{csrf_field()}}
                             <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
-                                <label for="edit_location_name">Purchase Receive<span class="mandatory"> *</span></label>
+                                <label for="edit_location_name">Purchase Receive<span
+                                            class="mandatory"> *</span></label>
                                 <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_recNo_a"></p>
@@ -181,7 +183,8 @@
                             {{csrf_field()}}
                             <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
-                                <label for="edit_location_name">Purchase Receive<span class="mandatory"> *</span></label>
+                                <label for="edit_location_name">Purchase Receive<span
+                                            class="mandatory"> *</span></label>
                                 <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_recNo"></p>
@@ -318,8 +321,20 @@
             manageTable = $('#poTable').DataTable({
                 'ajax': '/adjustment/fetchAdjData',
                 'order': [],
-                "processing": true,
-                "serverSide": true,
+                "columns": [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    {"orderable": false},
+                ],
+                columnDefs: [
+                    {
+                        "targets": [0, 5], // your case first column
+                        "className": "text-center",
+                    }
+                ],
             });
 
 

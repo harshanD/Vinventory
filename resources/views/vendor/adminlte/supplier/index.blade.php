@@ -94,7 +94,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                                aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Add Supplier</h4>
                 </div>
                 <div id="create_model_messages"></div>
@@ -159,7 +159,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                                aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Edit Supplier</h4>
                 </div>
                 <div id="edit_model_messages"></div>
@@ -225,7 +225,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                                aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Remove Supplier</h4>
                 </div>
 
@@ -251,7 +251,18 @@
             // initialize the datatable
             manageTable = $('#manageTable').DataTable({
                 'ajax': '/supplier/fetchSupplierData',
-                'order': []
+                "columns": [
+                    null,
+                    null,
+                    {"orderable": false},
+                    {"orderable": false},
+                ],
+                columnDefs: [
+                    {
+                        "targets": [2, 3], // your case first column
+                        "className": "text-center",
+                    },
+                ],
             });
 
             // submit the create from

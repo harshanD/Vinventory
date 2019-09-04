@@ -53,46 +53,47 @@
                         </strong> {{ session()->get('error') }}
                     </div>
                 @endif
+                <div class="table-responsive">
+                    <table id="productsTable" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Brand</th>
+                            <th>Category</th>
+                            <th>Cost(Rs)</th>
+                            <th>Price(Rs)</th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                            <th>Alert Quantity</th>
+                            <th>status</th>
 
-                <table id="productsTable" class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Code</th>
-                        <th>Name</th>
-                        <th>Brand</th>
-                        <th>Category</th>
-                        <th>Cost</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Unit</th>
-                        <th>Alert Quantity</th>
-                        <th>status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <a href="" class="btn btn-default"><i class="fa fa-edit"></i></a>
+                                <a href="" class="btn btn-default"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
 
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <a href="" class="btn btn-default"><i class="fa fa-edit"></i></a>
-                            <a href="" class="btn btn-default"><i class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
+                        </tbody>
+                    </table>
 
-                    </tbody>
-                </table>
-
+                </div>
             </div>
             <!-- /.box-body -->
         {{--<div class="box-footer">--}}
@@ -152,9 +153,20 @@
                     {data: 'qty'},
                     {data: 'unitName'},
                     {data: 'reorder_level'},
-                    {data: 'status'},
+                    {data: 'status', orderable: false, searchable: false},
                     {data: 'action', name: 'actions', orderable: false, searchable: false}
-                ]
+                ],
+                columnDefs: [
+                    {
+                        "targets": [5, 6, 7],
+                        "className": "text-right",
+                    },
+                    {
+                        "targets": [0, 8, 9, 10, 11],
+                        "className": "text-center",
+                    },
+
+                ],
             });
         })
 

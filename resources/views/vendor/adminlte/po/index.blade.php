@@ -53,40 +53,41 @@
                         </strong> {{ session()->get('error') }}
                     </div>
                 @endif
+                <div class="table-responsive">
+                    <table id="poTable" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Reference No</th>
+                            <th>Supplier</th>
+                            <th>Reserved status</th>
+                            <th>Grand Total</th>
+                            <th>Paid</th>
+                            <th>Balance</th>
+                            <th>Payment Status</th>
+                            <th>Actions</th>
 
-                <table id="poTable" class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Reference No</th>
-                        <th>Supplier</th>
-                        <th>Reserved status</th>
-                        <th>Grand Total</th>
-                        <th>Paid</th>
-                        <th>Balance</th>
-                        <th>Payment Status</th>
-                        <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <a href="" class="btn btn-default"><i class="fa fa-edit"></i></a>
+                                <a href="" class="btn btn-default"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <a href="" class="btn btn-default"><i class="fa fa-edit"></i></a>
-                            <a href="" class="btn btn-default"><i class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
+                        </tbody>
+                    </table>
 
-                    </tbody>
-                </table>
-
+                </div>
             </div>
 
             <!-- /.box-body -->
@@ -358,25 +359,12 @@
                 ],
                 columnDefs: [
                     {
-                        "targets": 0, // your case first column
-                        "className": "text-center",
-                    }, {
-                        "targets": 3, // your case first column
-                        "className": "text-center",
-                    },
-                    {
-                        "targets": 4,
+                        "targets": [4, 5, 6], // your case first column
                         "className": "text-right",
                     }, {
-                        "targets": 5,
-                        "className": "text-right",
-                    }, {
-                        "targets": 6,
-                        "className": "text-right",
-                    }, {
-                        "targets": 7,
+                        "targets": [0, 3, 7, 8], // your case first column
                         "className": "text-center",
-                    },
+                    }
                 ],
             });
 

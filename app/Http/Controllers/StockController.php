@@ -215,7 +215,7 @@ class StockController extends Controller
             $substractQty = ($qtySubstractedSum[0]->qtySum);
         }
 
-        return ($addedQty >= $substractQty) ? number_format($addedQty - $substractQty, 2) : 'error';
+        return ($addedQty >= $substractQty) ? number_format($addedQty - $substractQty, 0) : 'error';
 
 
     }

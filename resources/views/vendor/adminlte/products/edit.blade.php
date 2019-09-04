@@ -92,7 +92,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="product_name">Weight<span class="mandatory"> *</span></label>
+                                    <label for="product_name">Weight (Kg)<span class="mandatory"> *</span></label>
                                     <input type="text"
                                            value="<?= (old('weight') != '') ? old('weight') : $product->weight;?>"
                                            class="form-control" id="weight"
@@ -173,7 +173,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="price">Product Cost<span class="mandatory"> *</span></label>
+                                    <label for="price">Product Cost (Rs)<span class="mandatory"> *</span></label>
                                     <input type="text"
                                            value="<?= (old('cost') != '') ? old('cost') : $product->cost_price;?>"
                                            class="form-control" id="cost"

@@ -52,34 +52,35 @@
                         </strong> {{ session()->get('error') }}
                     </div>
                 @endif
+                <div class="table-responsive">
+                    <table id="poTable" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>name</th>
+                            <th>Email Adrress</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Actions</th>
 
-                <table id="poTable" class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>Company</th>
-                        <th>name</th>
-                        <th>Email Adrress</th>
-                        <th>Phone</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                            <td>
 
-                        <td>
+                            </td>
+                        </tr>
 
-                        </td>
-                    </tr>
+                        </tbody>
+                    </table>
 
-                    </tbody>
-                </table>
-
+                </div>
             </div>
             <!-- /.box-body -->
         {{--<div class="box-footer">--}}
@@ -105,7 +106,8 @@
                             {{csrf_field()}}
                             <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
-                                <label for="edit_location_name">Purchase Receive<span class="mandatory"> *</span></label>
+                                <label for="edit_location_name">Purchase Receive<span
+                                            class="mandatory"> *</span></label>
                                 <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_e_email"></p>
@@ -179,7 +181,8 @@
                             {{csrf_field()}}
                             <input type="hidden" name="poId" class="poId">
                             <div class="form-group">
-                                <label for="edit_location_name">Purchase Receive<span class="mandatory"> *</span></label>
+                                <label for="edit_location_name">Purchase Receive<span
+                                            class="mandatory"> *</span></label>
                                 <input type="text" class="form-control recNo" name="recNo"
                                        placeholder="Purchase Receive Code" autocomplete="off">
                                 <p class="help-block" id="error_recNo"></p>
@@ -263,7 +266,23 @@
             // initialize the datatable
             manageTable = $('#poTable').DataTable({
                 'ajax': '/customer/fetchTransData',
-                'order': []
+                columnDefs: [
+                    {
+                        "targets": 0, // your case first column
+                        "className": "text-left",
+                    }, {
+                        "targets": [3, 4, 5], // your case first column
+                        "className": "text-center",
+                    }
+                ],
+                "columns": [
+                    null,
+                    null,
+                    null,
+                    null,
+                    {"orderable": false},
+                    {"orderable": false},
+                ],
             });
 
 

@@ -115,6 +115,10 @@ class ProductsController extends Controller
                 return str_limit($query->categories->category, 20);
             })->addColumn('brand', function ($query) {
                 return str_limit($query->brands->brand, 20);
+            })->addColumn('selling_price', function ($query) {
+                return number_format($query->selling_price, 2);
+            })->addColumn('cost_price', function ($query) {
+                return number_format($query->cost_price, 2);
             })->addColumn('status', function ($query) {
                 return ($query->status == \Config::get('constants.status.Active')) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
             })->addColumn('qty', function ($query) {

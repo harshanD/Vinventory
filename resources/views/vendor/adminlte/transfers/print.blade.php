@@ -69,7 +69,7 @@
                         <th style="text-align:center; vertical-align:middle;">No.</th>
                         <th style="vertical-align:middle;">Product</th>
                         <th style="text-align:center; vertical-align:middle;">Quantity</th>
-                        <th style="text-align:center; vertical-align:middle;">Unit Cost</th>
+                        <th style="text-align:center; vertical-align:middle;">Unit Cost (Rs)</th>
                         <th style="text-align:center; vertical-align:middle;">Tax</th>
                         <th style="text-align:center; vertical-align:middle;">Subtotal</th>
                     </tr>

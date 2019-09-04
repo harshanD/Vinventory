@@ -242,7 +242,20 @@
             // initialize the datatable
             manageTable = $('#manageTable').DataTable({
                 'ajax': '/tax/fetchTaxData',
-                'order': []
+                "columns": [
+                    null,
+                    null,
+                    null,
+                    null,
+                    {"orderable": false},
+                    {"orderable": false},
+                ],
+                columnDefs: [
+                    {
+                        "targets": [4, 5,2], // your case first column
+                        "className": "text-center",
+                    },
+                ],
             });
 
             // submit the create from

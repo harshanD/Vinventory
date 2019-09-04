@@ -126,7 +126,20 @@
             // initialize the datatable
             manageTable = $('#userTable').DataTable({
                 'ajax': '/user/fetchUsersData',
-                'order': []
+                "columns": [
+                    null,
+                    null,
+                    { "orderable": false },
+                    null,
+                    null,
+                    { "orderable": false },
+                ],
+                columnDefs: [
+                 {
+                        "targets": [2, 3, 5], // your case first column
+                        "className": "text-center",
+                    }
+                ],
             });
         })
 

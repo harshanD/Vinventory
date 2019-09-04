@@ -429,7 +429,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputPassword3" class="col-sm-3 control-label">Unit Cost</label>
+                                    <label for="inputPassword3" class="col-sm-3 control-label">Unit Cost (Rs)</label>
 
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control" id="pCost" name="pCost"
@@ -452,7 +452,7 @@
                                 </table>
                                 <br>
                                 <div class="panel panel-default" hidden>
-                                    <div class="panel-heading">Calculate Unit Cost</div>
+                                    <div class="panel-heading">Calculate Unit Cost (Rs)</div>
                                     <div class="panel-body">
                                         <div class="form-group">
                                             <label for="pcost" class="col-sm-4 control-label">Subtotal</label>

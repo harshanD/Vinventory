@@ -279,9 +279,18 @@
                     {data: 'total'},
                     {data: 'tot_tax'},
                     {data: 'grand_total'},
-                    {data: 'status'},
+                    {data: 'status', orderable: false, searchable: false},
                     {data: 'action', name: 'actions', orderable: false, searchable: false}
-                ]
+                ],
+                columnDefs: [
+                    {
+                        "targets": [4, 5, 6], // your case first column
+                        "className": "text-right",
+                    }, {
+                        "targets": [0, 7, 8], // your case first column
+                        "className": "text-center",
+                    }
+                ],
             });
 
 
