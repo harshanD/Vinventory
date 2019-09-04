@@ -185,7 +185,7 @@
                                                 <option value='S'>Subtraction</option>
                                             </select></td>
                                         <td style="text-align: center"><input type='text' style="text-align: center"
-                                                                              class='qy'
+                                                                              class='qy number'
                                                                               name="quantity[]"
                                                                               id='quantity_{{ $addsItem->item_id }}'
                                                                               value='{{ $addsItem->qty }}'></td>
@@ -214,7 +214,7 @@
                                                 <option value='S' selected>Subtraction</option>
                                             </select></td>
                                         <td style="text-align: center"><input type='text' style="text-align: center"
-                                                                              class='qy'
+                                                                              class='qy number'
                                                                               name="quantity[]"
                                                                               value='{{ $subsItem->qty }}'></td>
                                         <td hidden id='hidden_data_{{ $subsItem->item_id }}'>
@@ -439,7 +439,7 @@
                 var row = '<tr id="row_' + index.id + '" style="text-align: right">' +
                     "<td style=\"text-align: left\">" + index.name + "( " + index.item_code + " )" + "  </td>" +
                     "<td id='costPrice_" + index.id + "'><select  class=\"form-control select2\" name='type[]' ><option value='A'>Addition</option><option value='S'>Subtraction</option></select></td>" +
-                    "<td style=\"text-align: center\"><input type='text'   style=\"text-align: center\" class='qy' name='quantity[]' onkeyup='qtyChanging(" + index.id + ")' id='quantity_" + index.id + "' value='" + 1 + "'>" +
+                    "<td style=\"text-align: center\"><input type='text'   style=\"text-align: center\" class='qy number' name='quantity[]' onkeyup='qtyChanging(" + index.id + ")' id='quantity_" + index.id + "' value='" + 1 + "'>" +
                     "<input type='hidden' name='item[]' id='item_h" + index.id + "' value='" + index.id + "''>" +
                     "</td>" +
                     '<td style="text-align: center"><i class="glyphicon glyphicon-remove" onclick="removeThis(' + index.id + ')" style="cursor: pointer"></i></td>';
@@ -452,7 +452,7 @@
         }
 
         function qtyChanging(id) {
-
+            qtyValidating('quantity_'+id);
             $('#tax_' + id).text((toNumber($('#p_tax_h' + id).val()) * $('#quantity_' + id).val()).format(2));
             var subTot = ((toNumber($('#costPrice_' + id).text()) * toNumber($('#quantity_' + id).val())) + toNumber(($('#tax_' + id).text())));
             $('#quantity_h' + id).val(toNumber($('#quantity_' + id).val()));

@@ -554,7 +554,7 @@
                 var row = '<tr id="row_' + index.id + '" style="text-align: right">' +
                     "<td style=\"text-align: left\">" + index.name + "( " + index.item_code + " )" + "  <i  class=\"fa fa-edit\" onclick='itemDetails(" + index.id + ")' style='float: right;cursor: pointer'></i></td>" +
                     "<td id='costPrice_" + index.id + "'>" + cost + "</td>" +
-                    "<td style=\"text-align: center\"><input type='text'   style=\"text-align: center\" class='qy' onkeyup='qtyChanging(" + index.id + ")' id='quantity_" + index.id + "' value='" + 1 + "'></td>" +
+                    "<td style=\"text-align: center\"><input type='text'   style=\"text-align: center\" class='qy number' onkeyup='qtyChanging(" + index.id + ")' id='quantity_" + index.id + "' value='" + 1 + "'></td>" +
                     "<td class='disco' id='discount_" + index.id + "'>" + index.discount + "</td>" +
                     "<td hidden id='hidden_data_" + index.id + "'>" +
 
@@ -581,7 +581,7 @@
         }
 
         function qtyChanging(id) {
-
+            qtyValidating('quantity_'+id);
             $('#tax_' + id).text((toNumber($('#p_tax_h' + id).val()) * $('#quantity_' + id).val()).format(2));
             var subTot = ((toNumber($('#costPrice_' + id).text()) * toNumber($('#quantity_' + id).val())) + toNumber(($('#tax_' + id).text())));
             $('#quantity_h' + id).val(toNumber($('#quantity_' + id).val()));

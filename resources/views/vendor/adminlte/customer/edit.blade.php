@@ -114,7 +114,7 @@
                                            value="{{  (old('address')===null)?$customer->address:old('address') }}"
                                            class="form-control" id="address"
                                            name="address"
-                                           placeholder="Enter cost"
+                                           placeholder="Enter address"
                                            autocomplete="off"/>
                                     @error('address')
                                     <p class="help-block">{{ $message }}</p>

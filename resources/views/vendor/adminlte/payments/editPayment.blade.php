@@ -54,7 +54,7 @@
                                                                                           type="text"
                                                                                           value="{{$payment->value}}"
                                                                                           id="amount"
-                                                                                          class="pa form-control kb-pad amount"
+                                                                                          class="pa form-control kb-pad amount number"
                                                                                           data-bv-field="amount-paid">
                                             <i class="form-control-feedback" data-bv-icon-for="amount-paid"
                                                style="display: none;"></i>

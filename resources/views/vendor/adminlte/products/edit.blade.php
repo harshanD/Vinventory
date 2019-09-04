@@ -95,7 +95,7 @@
                                     <label for="product_name">Weight (Kg)<span class="mandatory"> *</span></label>
                                     <input type="text"
                                            value="<?= (old('weight') != '') ? old('weight') : $product->weight;?>"
-                                           class="form-control" id="weight"
+                                           class="form-control number" id="weight"
                                            name="weight"
                                            placeholder="Enter Weight" autocomplete="off"/>
                                     @error('weight')
@@ -164,7 +164,7 @@
                                     <label for="price">Product Price<span class="mandatory"> *</span></label>
                                     <input type="text"
                                            value="<?= (old('price') != '') ? old('price') : $product->selling_price;?>"
-                                           class="form-control" id="price"
+                                           class="form-control number" id="price"
                                            name="price"
                                            placeholder="Enter price"
                                            autocomplete="off"/>
@@ -176,7 +176,7 @@
                                     <label for="price">Product Cost (Rs)<span class="mandatory"> *</span></label>
                                     <input type="text"
                                            value="<?= (old('cost') != '') ? old('cost') : $product->cost_price;?>"
-                                           class="form-control" id="cost"
+                                           class="form-control number" id="cost"
                                            name="cost"
                                            placeholder="Enter cost"
                                            autocomplete="off"/>
@@ -224,7 +224,7 @@
                                             </span>
                                         <input type="text"
                                                value="<?= (old('reorder_level') != '') ? old('reorder_level') : $product->reorder_level;?>"
-                                               class="form-control"
+                                               class="form-control reorder_level reorder_level reorder_level number"
                                                name="reorder_level"
                                                placeholder="Reorder level"
                                                id="reorder_level">

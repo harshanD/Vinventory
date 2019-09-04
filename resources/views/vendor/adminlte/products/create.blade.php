@@ -84,7 +84,7 @@
 
                                 <div class="form-group">
                                     <label for="product_name">Weight (Kg)<span class="mandatory"> *</span></label>
-                                    <input type="text" value="{{ old('weight') }}" class="form-control" id="weight"
+                                    <input type="text" value="{{ old('weight') }}" class="form-control number" id="weight"
                                            name="weight"
                                            placeholder="Enter Weight" autocomplete="off"/>
                                     @error('weight')
@@ -135,7 +135,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="price">Product Price<span class="mandatory"> *</span></label>
-                                    <input type="text" value="{{ old('price') }}" class="form-control" id="price"
+                                    <input type="text" value="{{ old('price') }}" class="form-control number" id="price"
                                            name="price"
                                            placeholder="Enter price"
                                            autocomplete="off"/>
@@ -145,7 +145,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="price">Product Cost (Rs)<span class="mandatory"> *</span></label>
-                                    <input type="text" value="{{ old('cost') }}" class="form-control" id="cost"
+                                    <input type="text" value="{{ old('cost') }}" class="form-control number" id="cost"
                                            name="cost"
                                            placeholder="Enter cost"
                                            autocomplete="off"/>
@@ -189,7 +189,7 @@
                                                      {{ (old("reorder_activate") == 'on'? "checked":"") }} name="reorder_activate"
                                                      id="reorder_activate">
                                             </span>
-                                        <input type="text" value="{{ old('reorder_level') }}" class="form-control"
+                                        <input type="text" value="{{ old('reorder_level') }}" class="form-control number"
                                                name="reorder_level"
                                                placeholder="Reorder level"
                                                id="reorder_level">
