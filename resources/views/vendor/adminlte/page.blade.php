@@ -62,7 +62,8 @@
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"
                                                aria-expanded="true">
                                                 <?php
-                                                $url = asset(Storage::url(\Illuminate\Support\Facades\Auth::user()->avatar));
+                                                $url = asset('storage/' . \Illuminate\Support\Facades\Auth::user()->avatar);
+//                                                $url = asset(Storage::url(\Illuminate\Support\Facades\Auth::user()->avatar));
                                                 $name = \Illuminate\Support\Facades\Auth::user()->name;
                                                 $role = \Illuminate\Support\Facades\Auth::user()->Roles[0]->name;
                                                 ?>

@@ -240,7 +240,7 @@
                                     <br>
                                     <br>
 
-                                    <img src="{{asset(\Storage::url($product->img_url))}}"
+                                    <img src="{{asset('storage/'.$product->img_url)}}"
                                          class="rounded-circle z-depth-1-half avatar-pic"
                                          alt="placeholder default" style="width: 200px;height: 200px">
 

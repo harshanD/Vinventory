@@ -162,7 +162,8 @@
                             <br>
                             <br>
                             <?php
-                            $url = asset(Storage::url($user[0]->avatar));
+                            $url = asset('storage/' . $user[0]->avatar);
+                            //                            echo $url = asset(Storage::url($user[0]->avatar));
                             ?>
                             <img src="{{ ($url) }}" class="rounded-circle z-depth-1-half avatar-pic"
                                  alt="placeholder avatar">

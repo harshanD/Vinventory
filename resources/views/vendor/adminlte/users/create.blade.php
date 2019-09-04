@@ -118,6 +118,9 @@
                         </div>
                         <div class="form-group">
                             <label for="avatar">Avatar</label>
+                            <?php
+                            echo asset('img/avatar.png')
+                            ?>
                             <br>
                             <br>
                             <img  src="{{ asset('img/avatar.png') }}"  class="rounded-circle z-depth-1-half avatar-pic" alt="placeholder avatar">
