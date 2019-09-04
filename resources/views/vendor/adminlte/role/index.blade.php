@@ -13,6 +13,7 @@
 @section('content_header')
     <ol class="breadcrumb">
         <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Manage Roles</li>
     </ol>
 @stop
 
@@ -741,13 +742,14 @@
                     $('.minimal').prop("checked", false);
 
                     $("#edit_role").val(response.name);
-                    for (var i = 0; i < (response.permission).length; i++) {
-                        $("#" + response.permission[i]).prop("checked", true);
-                        // $("#" + response.permission[i]).val(response.permission[i]);
+
+                    if (response.permission != null) {
+                        for (var i = 0; i < (response.permission).length; i++) {
+                            $("#" + response.permission[i]).prop("checked", true);
+                            // $("#" + response.permission[i]).val(response.permission[i]);
+                        }
                     }
-
-                    $("#edit_status").select(response.status);
-
+                    $("#edit_status").val(response.status).change();
 
                     // submit the edit from
                     $("#updateRoleForm").unbind('submit').bind('submit', function () {

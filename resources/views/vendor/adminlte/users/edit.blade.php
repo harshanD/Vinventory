@@ -64,7 +64,7 @@
                         {{csrf_field()}}
                         <div class="form-group"><input type="hidden" name="userid" id="userid"
                                                        value="{{$user[0]->id}}">
-                            <label for="groups">Role</label>
+                            <label for="groups">Role<span class="mandatory"> *</span></label>
                             <select class="form-control select2" id="role" name="role">
                                 @if(old("role") == 0)
                                     <option selected="selected" value="0">Select Role</option>
@@ -84,7 +84,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Email</label>
+                            <label for="email">Email<span class="mandatory"> *</span></label>
                             <input type="email" class="form-control"
                                    value="<?= (old('email') != '') ? old('email') : $user[0]->email;?>" id="email"
                                    name="email"
@@ -96,7 +96,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="fname">Full name</label>
+                            <label for="fname">Full name<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control"
                                    value="<?= (old('fname') != '') ? old('fname') : $user[0]->name;?>" id="fname"
                                    name="fname"
@@ -108,7 +108,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="phone">Phone</label>
+                            <label for="phone">Phone<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control"
                                    value="<?= (old('phone') != '') ? old('phone') : $user[0]->phone;?>" id="phone"
                                    name="phone"
@@ -120,7 +120,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="gender">Gender</label>
+                            <label for="gender">Gender<span class="mandatory"> *</span></label>
                             <div class="radio">
                                 <label>
                                     <input type="radio"

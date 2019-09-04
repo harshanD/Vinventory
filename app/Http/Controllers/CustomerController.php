@@ -40,6 +40,7 @@ class CustomerController extends Controller
         $customer->email = $request->input('email');
         $customer->phone = $request->input('phone');
         $customer->address = $request->input('address');
+        $customer->status = $request->input('status');
 
         if (!($customer->save())) {
             $request->session()->flash('message', 'Error in the database while creating the Customer');
@@ -72,6 +73,7 @@ class CustomerController extends Controller
         $customer->email = $request->input('email');
         $customer->phone = $request->input('phone');
         $customer->address = $request->input('address');
+        $customer->status = $request->input('status');
 
 
         if (!($customer->save())) {
@@ -125,7 +127,7 @@ class CustomerController extends Controller
                     $status = '<span class="label label-success">Active</span>';
                     break;
                 case 1:
-                    $status = '<span class="label label-success">Inactive</span>';
+                    $status = '<span class="label label-warning">Inactive</span>';
                     break;
                 default:
                     $status = '<span class="label label-warning">Nothing</span>';

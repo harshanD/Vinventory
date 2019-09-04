@@ -13,6 +13,7 @@
 @section('content_header')
     <ol class="breadcrumb">
         <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Manage Suppliers</li>
     </ol>
 @stop
 
@@ -135,7 +136,7 @@
                             <p class="help-block" id="error_address"></p>
                         </div>
                         <div class="form-group">
-                            <label for="active">Status</label>
+                            <label for="price">Status</label>
                             <select class="form-control" id="status" name="status">
                                 <option value="0">Active</option>
                                 <option value="1">Inactive</option>

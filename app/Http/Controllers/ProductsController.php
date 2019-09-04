@@ -49,7 +49,7 @@ class ProductsController extends Controller
             'product_name' => 'required|unique:products,name|max:100',
             'product_code' => 'required|max:191',
             'sku' => 'required|max:191',
-            'weight' => 'required',
+            'weight' => 'required|numeric',
             'brand' => ['required', Rule::notIn(['0'])],
             'category' => ['required', Rule::notIn(['0'])],
             'unit' => ['required', Rule::notIn(['0'])],
@@ -58,6 +58,7 @@ class ProductsController extends Controller
             'reorder_level' => ($request['reorder_level'] != '') ? 'required|regex:/^\d+(\.\d{1,2})?$/' : '',
             'description' => ($request['description'] != '') ? 'required' : '',
             'supplier' => 'required',
+            'status' => 'required',
             'secondary_name' => ($request['secondary_name'] != '') ? 'required|unique:products,short_name' : '',
         ]);
 
@@ -77,6 +78,7 @@ class ProductsController extends Controller
         $product->reorder_activation = ($request->input('reorder_activate') != '') ? 0 : '1';
         $product->tax = $request->input('tax');
         $product->tax_method = $request->input('tax_activation');
+        $product->status = $request->input('status');
         $product->availability = 0;
 
         $path = "products/default.jpg";
@@ -127,7 +129,7 @@ class ProductsController extends Controller
             })->addColumn('unitName', function ($query) {
                 return \Config::get('constants.unit_put.' . $query->unit);
             })->addColumn('image', function ($query) {
-                return '<img src="' . asset('storage/'.$query->img_url) . '" style="width:50px;height:50px" class="rounded-circle z-depth-1-half avatar-pic" alt="placeholder avatar">';
+                return '<img src="' . asset('storage/' . $query->img_url) . '" style="width:50px;height:50px" class="rounded-circle z-depth-1-half avatar-pic" alt="placeholder avatar">';
             })->addColumn('action', function ($query) {
                 $buttons = '';
 
@@ -205,6 +207,7 @@ class ProductsController extends Controller
             'reorder_level' => ($request['reorder_level'] != '') ? 'required|regex:/^\d+(\.\d{1,2})?$/' : '',
             'description' => ($request['description'] != '') ? 'required' : '',
             'supplier' => 'required',
+            'status' => 'required',
             'secondary_name' => ($request['secondary_name'] != '') ? 'required|unique:products,short_name,' . $id . '' : '',
         ]);
 
@@ -232,6 +235,7 @@ class ProductsController extends Controller
         $product->reorder_activation = ($request->input('reorder_activate') != '') ? 0 : '1';
         $product->tax = $request->input('tax');
         $product->tax_method = $request->input('tax_activation');
+        $product->status = $request->input('status');
         $product->availability = 0;
 
         if ($request->file('product_image') != null) {

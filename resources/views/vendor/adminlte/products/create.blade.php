@@ -84,7 +84,8 @@
 
                                 <div class="form-group">
                                     <label for="product_name">Weight (Kg)<span class="mandatory"> *</span></label>
-                                    <input type="text" value="{{ old('weight') }}" class="form-control number" id="weight"
+                                    <input type="text" value="{{ old('weight') }}" class="form-control number"
+                                           id="weight"
                                            name="weight"
                                            placeholder="Enter Weight" autocomplete="off"/>
                                     @error('weight')
@@ -93,7 +94,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="product_name">Brand<span class="mandatory"> *</span></label>
-                                    <select class="form-control" name="brand" id="brand">
+                                    <select class="form-control select2" name="brand" id="brand">
                                         @if(old("brand") == 0)
                                             <option selected="selected" value="0">Select Brand</option>
                                         @endif
@@ -107,7 +108,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="product_name">Category<span class="mandatory"> *</span></label>
-                                    <select class="form-control" name="category" id="category">
+                                    <select class="form-control select2" name="category" id="category">
                                         @if(old("category") == 0)
                                             <option selected="selected" value="0">Select Category</option>
                                         @endif
@@ -121,7 +122,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="product_name">Product Unit<span class="mandatory"> *</span></label>
-                                    <select class="form-control" name="unit" id="unit">
+                                    <select class="form-control select2" name="unit" id="unit">
                                         @if(old("unit") == 0)
                                             <option selected="selected" value="0">Select Unit</option>
                                         @endif
@@ -155,7 +156,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="price">Product Tax</label>
-                                    <select class="form-control" name="tax" id="tax">
+                                    <select class="form-control select2" name="tax" id="tax">
                                         @if(old("tax") == 0)
                                             <option selected="selected" value="0">No Tax</option>
                                         @endif
@@ -166,7 +167,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="price">Tax Method</label>
-                                    <select class="form-control" name="tax_activation" id="tax_activation">
+                                    <select class="form-control select2" name="tax_activation" id="tax_activation">
                                         <option value="1" {{ (old("tax_activation") == 1? "selected":"") }}>Exclusive
                                         </option>
                                         <option value="2" {{ (old("tax_activation") == 2? "selected":"") }}>Inclusive
@@ -189,7 +190,8 @@
                                                      {{ (old("reorder_activate") == 'on'? "checked":"") }} name="reorder_activate"
                                                      id="reorder_activate">
                                             </span>
-                                        <input type="text" value="{{ old('reorder_level') }}" class="form-control number"
+                                        <input type="text" value="{{ old('reorder_level') }}"
+                                               class="form-control number"
                                                name="reorder_level"
                                                placeholder="Reorder level"
                                                id="reorder_level">
@@ -198,7 +200,15 @@
                                     <p class="help-block">{{ $message }}</p>
                                     @enderror
                                 </div>
-
+                                <div class="form-group">
+                                    <label for="price">Status</label>
+                                    <select class="form-control select2" name="status" id="status">
+                                        <option value="0" {{ (old("0") == 0? "selected":"") }}>Active
+                                        </option>
+                                        <option value="1" {{ (old("1") == 1? "selected":"") }}>Inactive
+                                        </option>
+                                    </select>
+                                </div>
 
                                 <div class="form-group">
                                     <label for="product_image">Image</label>
@@ -213,7 +223,6 @@
                                     <div class="btn btn-mdb-color btn-rounded float-center">
                                         <input name="product_image" id="product_image" type="file">
                                     </div>
-
                                 </div>
 
 
@@ -229,7 +238,8 @@
                         <div class="col-md-6">
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label>Supplier/s<span class="mandatory"> *</span><?php print_r(old("supplier"))?></label>
+                                    <label>Supplier/s<span class="mandatory"> *</span><?php print_r(old("supplier"))?>
+                                    </label>
                                     <select class="form-control select2" multiple="multiple" name="supplier[]"
                                             id="supplier"
                                             data-placeholder="Select a State"

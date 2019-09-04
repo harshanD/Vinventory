@@ -40,6 +40,7 @@ class BillerController extends Controller
         $customer->phone = $request->input('phone');
         $customer->address = $request->input('address');
         $customer->invoice_footer = $request->input('invoFooter');
+        $customer->status = $request->input('status');
 
         if (!($customer->save())) {
             $request->session()->flash('message', 'Error in the database while creating the Biller');
@@ -73,6 +74,7 @@ class BillerController extends Controller
         $customer->phone = $request->input('phone');
         $customer->address = $request->input('address');
         $customer->invoice_footer = $request->input('invoFooter');
+        $customer->status = $request->input('status');
 
 
         if (!($customer->save())) {
@@ -126,7 +128,7 @@ class BillerController extends Controller
                     $status = '<span class="label label-success">Active</span>';
                     break;
                 case 1:
-                    $status = '<span class="label label-success">Inactive</span>';
+                    $status = '<span class="label label-warning">Inactive</span>';
                     break;
                 default:
                     $status = '<span class="label label-warning">Nothing</span>';

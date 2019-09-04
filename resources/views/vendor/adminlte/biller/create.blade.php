@@ -119,6 +119,16 @@
                                     @enderror
                                 </div>
 
+                                <div class="form-group">
+                                    <label for="price">Status</label>
+                                    <select class="form-control select2" name="status" id="status">
+                                        <option value="0" {{ (old("0") == 0? "selected":"") }}>Active
+                                        </option>
+                                        <option value="1" {{ (old("1") == 1? "selected":"") }}>Inactive
+                                        </option>
+                                    </select>
+                                </div>
+
 
                             </div>
                             <!-- /.box-body -->

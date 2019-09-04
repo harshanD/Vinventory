@@ -56,7 +56,7 @@
                     <div class="box-body">
                         {{csrf_field()}}
                         <div class="form-group">
-                            <label for="groups">Role</label>
+                            <label for="groups">Role<span class="mandatory"> *</span></label>
                             <select class="form-control select2" id="role" name="role">
                                 @if(old("role") == 0)
                                     <option selected="selected" value="0">Select Role</option>
@@ -71,7 +71,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Email</label>
+                            <label for="email">Email<span class="mandatory"> *</span></label>
                             <input type="email" class="form-control" value="{{ old('email') }}" id="email" name="email"
                                    placeholder="Email"
                                    autocomplete="off">
@@ -81,7 +81,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="fname">Full name</label>
+                            <label for="fname">Full name<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" value="{{ old('fname') }}" id="fname" name="fname"
                                    placeholder="First name"
                                    autocomplete="off">
@@ -91,7 +91,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="phone">Phone</label>
+                            <label for="phone">Phone<span class="mandatory"> *</span></label>
                             <input type="text" class="form-control" value="{{ old('phone') }}" id="phone" name="phone"
                                    placeholder="Phone"
                                    autocomplete="off">
@@ -101,7 +101,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="gender">Gender</label>
+                            <label for="gender">Gender<span class="mandatory"> *</span></label>
                             <div class="radio">
                                 <label>
                                     <input type="radio"  @if(old('gender') ==  1) checked="checked" @endif name="gender" id="male" value="1">
@@ -119,7 +119,7 @@
                         <div class="form-group">
                             <label for="avatar">Avatar</label>
                             <?php
-                            echo asset('img/avatar.png')
+//                            echo asset('img/avatar.png')
                             ?>
                             <br>
                             <br>

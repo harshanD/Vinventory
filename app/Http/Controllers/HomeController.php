@@ -34,7 +34,7 @@ class HomeController extends Controller
 
     public function registerUserView()
     {
-        $data = Role::orderBy('name', 'asc')->get();
+        $data = Role::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
         return view('vendor.adminlte.users.create', ['roles' => $data]);
     }
 
@@ -188,7 +188,7 @@ class HomeController extends Controller
         if (!Permissions::getRolePermissions('updateUser')) {
             abort(403, 'Unauthorized action.');
         }
-        $data = Role::orderBy('name', 'asc')->get();
+        $data = Role::where('status', \Config::get('constants.status.Active'))->orderBy('name', 'asc')->get();
         $user = User::with('roles')
             ->where('users.id', $id)
             ->get();

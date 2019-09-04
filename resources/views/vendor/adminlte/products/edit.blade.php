@@ -250,7 +250,15 @@
 
                                 </div>
 
-
+                                <div class="form-group">
+                                    <label for="price">Status</label>
+                                    <select class="form-control select2" name="status" id="status">
+                                        <option value="0" {{ (old("status")== 0||$product->status == 0? "selected":"") }}>Active
+                                        </option>
+                                        <option value="1" {{ (old("status")== 1||$product->status == 1? "selected":"") }}>Inactive
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
                             <!-- /.box-body -->
 
