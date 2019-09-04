@@ -164,16 +164,19 @@ class POController extends Controller
             })->addColumn('status', function ($query) {
                 switch ($query->payment_status):
                     case \Config::get('constants.i_payment_status_name.Partial'):
-                        $status = '<span class="label label-success">Partial</span>';
+                        $status = '<span class="label label-warning">Partial</span>';
                         break;
                     case \Config::get('constants.i_payment_status_name.Duo'):
-                        $status = '<span class="label label-success">Duo</span>';
+                        $status = '<span class="label label-warning">Duo</span>';
                         break;
                     case \Config::get('constants.i_payment_status_name.Paid'):
                         $status = '<span class="label label-success">Paid</span>';
                         break;
                     case \Config::get('constants.i_payment_status_name.Pending'):
                         $status = '<span class="label label-warning">Pending</span>';
+                        break;
+                    case \Config::get('constants.i_payment_status_name.Over Paid'):
+                        $status = '<span class="label label-danger">Over Paid</span>';
                         break;
                     default:
                         $status = '<span class="label label-warning">Nothing</span>';
@@ -234,7 +237,7 @@ class POController extends Controller
 
                 /*payments check as full pad or duo*/
                 $addPaymentLink = "";
-                if ($query->payment_status == \Config::get('constants.i_payment_status_name.Partial') || $query->payment_status == \Config::get('constants.i_payment_status_name.Pending')) {
+                if ($query->payment_status == \Config::get('constants.i_payment_status_name.Partial') || $query->payment_status == \Config::get('constants.i_payment_status_name.Pending') || $query->payment_status == \Config::get('constants.i_payment_status_name.Duo')) {
                     $addPaymentLink = "<li><a style='cursor: pointer' onclick=\"addPayments(" . $query->id . ",'PO')\">Add Payments</a></li>";
                 }
 

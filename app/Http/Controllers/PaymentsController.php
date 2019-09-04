@@ -44,7 +44,7 @@ class PaymentsController extends Controller
 
 
         if ($grand_total < $totalPaid) {
-            $getSum->payment_status = \Config::get('constants.i_payment_status_name.Duo');
+            $getSum->payment_status = \Config::get('constants.i_payment_status_name.Over Paid');
         } elseif ($grand_total > $totalPaid) {
             $getSum->payment_status = \Config::get('constants.i_payment_status_name.Partial');
         } elseif ($grand_total == $totalPaid) {
@@ -96,7 +96,7 @@ class PaymentsController extends Controller
         }
 
         if ($grand_total < $totalPaid) {
-            $getSum->payment_status = \Config::get('constants.i_payment_status_name.Duo');
+            $getSum->payment_status = \Config::get('constants.i_payment_status_name.Over Paid');
         } elseif ($grand_total > $totalPaid) {
             $getSum->payment_status = \Config::get('constants.i_payment_status_name.Partial');
         } elseif ($grand_total == $totalPaid) {

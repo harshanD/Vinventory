@@ -193,13 +193,16 @@ class InvoiceController extends Controller
                         $payStatus = '<span class="label label-warning">pending</span>';
                         break;
                     case 2:
-                        $payStatus = '<span class="label label-success">Due</span>';
+                        $payStatus = '<span class="label label-warning">Due</span>';
                         break;
                     case 3:
-                        $payStatus = '<span class="label label-success">Partial</span>';
+                        $payStatus = '<span class="label label-warning">Partial</span>';
                         break;
                     case 4:
                         $payStatus = '<span class="label label-success">Paid</span>';
+                        break;
+                    case 5:
+                        $payStatus = '<span class="label label-danger">Over Paid</span>';
                         break;
                     default:
                         $payStatus = '<span class="label label-danger">Nothing</span>';
@@ -234,7 +237,7 @@ class InvoiceController extends Controller
 
                 /*payments check as full pad or duo*/
                 $addPaymentLink = "";
-                if ($query->payment_status == \Config::get('constants.i_payment_status_name.Partial') || $query->payment_status == \Config::get('constants.i_payment_status_name.Pending')) {
+                if ($query->payment_status == \Config::get('constants.i_payment_status_name.Partial') || $query->payment_status == \Config::get('constants.i_payment_status_name.Pending')|| $query->payment_status == \Config::get('constants.i_payment_status_name.Duo')) {
                     $addPaymentLink = "<li><a style='cursor: pointer' onclick=\"addPayments(" . $query->id . ",'IV')\">Add Payments</a></li>";
                 }
 
