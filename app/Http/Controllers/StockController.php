@@ -89,26 +89,30 @@ class StockController extends Controller
             }
 
             $product = (object)Products::find($AddedStockItem->item_id)->toArray();
-            $list[$key++] = array(
-                'id' => $AddedStockItem->item_id,
-                'name' => $product->name,
-                'short_name' => $product->short_name,
-                'item_code' => $product->item_code,
-                'description' => $product->description,
-                'img_url' => $product->img_url,
-                'img_url' => $product->img_url,
-                'selling_price' => $product->selling_price,
-                'cost_price' => $product->cost_price,
-                'weight' => $product->weight,
-                'unit' => $product->unit,
-                'reorder_level' => $product->reorder_level,
-                'discount' => 0,
-                'reorder_activation' => $product->reorder_activation,
-                'tax' => (\Config::get('constants.taxActive.Active') == $product->tax_method && $product->tax != 0) ? Tax::find($product->tax)->get()->toArray()[0]['value'] : 0,
-                'sum' => $AddedStockItem->qtySum - $substractQty,
-            );
+
+            if ($product->status == \Config::get('constants.status.Active')) {
+
+                $list[$key++] = array(
+                    'id' => $AddedStockItem->item_id,
+                    'name' => $product->name,
+                    'short_name' => $product->short_name,
+                    'item_code' => $product->item_code,
+                    'description' => $product->description,
+                    'img_url' => $product->img_url,
+                    'img_url' => $product->img_url,
+                    'selling_price' => $product->selling_price,
+                    'cost_price' => $product->cost_price,
+                    'weight' => $product->weight,
+                    'unit' => $product->unit,
+                    'reorder_level' => $product->reorder_level,
+                    'discount' => 0,
+                    'reorder_activation' => $product->reorder_activation,
+                    'tax' => (\Config::get('constants.taxActive.Active') == $product->tax_method && $product->tax != 0) ? Tax::find($product->tax)->get()->toArray()[0]['value'] : 0,
+                    'sum' => $AddedStockItem->qtySum - $substractQty,
+                );
 
 
+            }
         }
 
 
@@ -153,25 +157,29 @@ class StockController extends Controller
             }
 
             $product = (object)Products::find($AddedStockItem->item_id)->toArray();
-            $list[$key++] = array(
-                'id' => $AddedStockItem->item_id,
-                'name' => $product->name,
-                'short_name' => $product->short_name,
-                'item_code' => $product->item_code,
-                'description' => $product->description,
-                'img_url' => $product->img_url,
-                'selling_price' => $product->selling_price,
-                'cost_price' => $product->cost_price,
-                'weight' => $product->weight,
-                'unit' => $product->unit,
-                'reorder_level' => $product->reorder_level,
-                'discount' => 0,
-                'reorder_activation' => $product->reorder_activation,
-                'tax' => (\Config::get('constants.taxActive.Active') == $product->tax_method && $product->tax != 0) ? Tax::find($product->tax)->get()->toArray()[0]['value'] : 0,
-                'sum' => $AddedStockItem->qtySum - $substractQty,
-            );
+
+            if ($product->status == \Config::get('constants.status.Active')) {
+
+                $list[$key++] = array(
+                    'id' => $AddedStockItem->item_id,
+                    'name' => $product->name,
+                    'short_name' => $product->short_name,
+                    'item_code' => $product->item_code,
+                    'description' => $product->description,
+                    'img_url' => $product->img_url,
+                    'selling_price' => $product->selling_price,
+                    'cost_price' => $product->cost_price,
+                    'weight' => $product->weight,
+                    'unit' => $product->unit,
+                    'reorder_level' => $product->reorder_level,
+                    'discount' => 0,
+                    'reorder_activation' => $product->reorder_activation,
+                    'tax' => (\Config::get('constants.taxActive.Active') == $product->tax_method && $product->tax != 0) ? Tax::find($product->tax)->get()->toArray()[0]['value'] : 0,
+                    'sum' => $AddedStockItem->qtySum - $substractQty,
+                );
 
 
+            }
         }
 
 
