@@ -20,8 +20,6 @@
 @section('content')
     <!-- Main content -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-
-    {{--    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>--}}
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
     <script src="{{ asset('custom/canvas/html2canvas.min.js') }}"></script>
@@ -47,13 +45,17 @@
                                 aria-expanded="true">
                             <i class="fa fa-wrench"></i></button>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="{{ url('/reports/warehouse_stock') }}"><i class="fa fa-building-o"></i>All WareHouse</a></li>
-                            <li class="divider"></li>
+                            <li><a href="{{ url('/reports/warehouse_stock') }}"><i class="fa fa-building-o"></i>All
+                                    WareHouse</a></li>
                             @foreach($warehouseList as $ware)
-                                <li><a href="{{ url('/reports/warehouse_stock/'.$ware->id) }}"><i class="fa fa-building"></i>{{ $ware->name }}</a>
+                                <li><a href="{{ url('/reports/warehouse_stock/'.$ware->id) }}"><i
+                                                class="fa fa-building"></i>{{ $ware->name }}</a>
                                 </li>
                             @endforeach
-{{--                            <li class="divider"></li>--}}
+                            <li class="divider"></li>
+                            <li><a style="cursor: pointer" onclick="getImage()"><i class="fa fa-building-o"></i>Save As
+                                    Image</a></li>
+                            {{--                            <li class="divider"></li>--}}
 
                         </ul>
                     </div>
@@ -97,26 +99,8 @@
 
     <script>
 
-        function getImage() {
-
-
-            html2canvas(document.querySelector("#capture")).then(canvas => {
-                $('#copyDiv').append(canvas)
-                $('.image-link').viewbox();
-                $('#copyDiv').viewbox({
-                    setTitle: true,
-                    margin: 20,
-                    resizeDuration: 300,
-                    openDuration: 200,
-                    closeDuration: 200,
-                    closeButton: true,
-                    navButtons: true,
-                    closeOnSideClick: true,
-                    nextOnContentClick: true
-                });
-            });
-
-        }
+        var imageDivId = 'capture';
+        var imageSaveName = 'Warehouse_Stock_chart_({{$warehouse}})_';
 
 
         /*       new Morris.Line({

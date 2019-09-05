@@ -18,7 +18,7 @@
 @stop
 
 @section('content')
-
+    <script src="{{ asset('custom/canvas/html2canvas.min.js') }}"></script>
     <section class="content">
         <!-- Default box -->
 
@@ -35,13 +35,16 @@
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="{{ url('/reports/quantity_alerts') }}"><i class="fa fa-building-o"></i>All
                                     WareHouse</a></li>
-                            <li class="divider"></li>
                             @foreach($warehouseList as $ware)
                                 <li><a href="{{ url('/reports/quantity_alerts/'.$ware->id) }}"><i
                                                 class="fa fa-building"></i>{{ $ware->name }}</a>
                                 </li>
                             @endforeach
-                            {{--                            <li class="divider"></li>--}}
+                            <li class="divider"></li>
+                            <li><a style="cursor: pointer" onclick="getImage()"><i class="fa fa-file-image-o"></i>Save As
+                                    Image</a></li>
+                            <li><a style="cursor: pointer" onclick="getXls()"><i class="fa fa-file-excel-o"></i>Save As
+                                    xls</a></li>
 
                         </ul>
                     </div>
@@ -60,7 +63,7 @@
                         <table id="manageTable" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Image</th>
+                                <th class="noExl">Image</th>
                                 <th>Product Code</th>
                                 <th>Product Name</th>
                                 <th>Quantity</th>
@@ -74,7 +77,7 @@
                             ?>
                             @foreach($data as $a)
                                 <tr>
-                                    <td>{!!  $a['image']!!}</td>
+                                    <td class="noExl">{!!  $a['image']!!}</td>
                                     <td>{{$a['code']}}</td>
                                     <td>{{$a['name']}}</td>
                                     <td>{{$a['qty']}}</td>
@@ -96,6 +99,23 @@
     </section>
 
     <script>
+
+        var imageDivId = 'capture';
+        var imageSaveName = 'Product_Quantity_Alerts_({{$warehouse}})_';
+
+        function getXls() {
+            $("#manageTable").table2excel({
+                exclude: ".noExl",
+                name: "Worksheet Name",
+                filename: imageSaveName,
+                fileext: ".xls",
+                exclude_img: false,
+                exclude_links: true,
+                exclude_inputs: true
+            });
+        }
+
+
         var manageTable;
 
         $(document).ready(function () {
@@ -109,7 +129,7 @@
                 ],
                 columnDefs: [
                     {
-                        "targets": [0,3, 4], // your case first column
+                        "targets": [0, 3, 4], // your case first column
                         "className": "text-center",
                     },
                 ],

@@ -63,6 +63,8 @@
         <script src="{{ asset('custom/viewBox/js/jquery.viewbox.min.js') }}"></script>
         {{--easyautocomplete--}}
         <script src="{{ asset('custom/easyautocomplete/js/jquery.easy-autocomplete.min.js') }}"></script>
+        {{--Export-Html-Table-To-Excel--}}{{--https://www.jqueryscript.net/table/Export-Html-Table-To-Excel-Spreadsheet-using-jQuery-table2excel.html--}}
+        <script src="{{ asset('custom/html2excel/js/jquery.table2excel.min.js') }}"></script>
 
     {{--icheck--}}
     {{--<script src="{{ asset('custom/icheck/js/icheck.min.js') }}"></script>--}}
@@ -140,6 +142,37 @@
     //     checkboxClass: 'icheckbox_flat-green',
     //     radioClass   : 'iradio_flat-green'
     // })
+    function getImage() {
+        html2canvas(document.querySelector('#' + imageDivId)).then(function (canvas) {
+            saveAs(canvas.toDataURL(), imageSaveName + '{{date('Y-m-d H:i:s')}}.png');
+        });
+
+        function saveAs(uri, filename) {
+
+            var link = document.createElement('a');
+
+            if (typeof link.download === 'string') {
+
+                link.href = uri;
+                link.download = filename;
+
+                //Firefox requires the link to be in the body
+                document.body.appendChild(link);
+
+                //simulate click
+                link.click();
+
+                //remove the link when done
+                document.body.removeChild(link);
+
+            } else {
+
+                window.open(uri);
+
+            }
+        }
+    }
+
     $('.collapse').collapse();
 
 
