@@ -61,7 +61,7 @@ class InvoiceController extends Controller
             'saleStatus' => ['required', Rule::notIn(['0'])],
             'location' => ['required', Rule::notIn(['0'])],
             'paymetStatus' => ['required', Rule::notIn(['0'])],
-            'grand_tax_id' => 'required',
+//            'grand_tax_id' => 'required',
 
         ]);
 
