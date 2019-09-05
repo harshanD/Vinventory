@@ -129,7 +129,7 @@ class ProductsController extends Controller
             })->addColumn('unitName', function ($query) {
                 return \Config::get('constants.unit_put.' . $query->unit);
             })->addColumn('image', function ($query) {
-                return '<img src="' . asset('storage/' . $query->img_url) . '" style="width:50px;height:50px" class="rounded-circle z-depth-1-half avatar-pic" alt="placeholder avatar">';
+                return '<a href="' . asset('storage/' . $query->img_url) . '"  class="image-link"><img src="' . asset('storage/' . $query->img_url) . '" style="width:50px;height:50px"  alt="placeholder avatar"></a>';
             })->addColumn('action', function ($query) {
                 $buttons = '';
 
@@ -276,7 +276,7 @@ class ProductsController extends Controller
 
         $list = array();
         foreach ($products as $key => $product) {
-            if ($product->status==\Config::get('constants.status.Active')) {
+            if ($product->status == \Config::get('constants.status.Active')) {
                 $list[$key] = array(
                     'id' => $product->id,
                     'name' => $product->name,

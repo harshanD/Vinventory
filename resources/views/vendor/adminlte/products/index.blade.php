@@ -168,7 +168,10 @@
 
                 ],
             });
+
         })
+
+
 
         function removeProduct(id) {
             // submit the remove from

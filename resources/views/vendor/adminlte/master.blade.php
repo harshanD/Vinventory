@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/vendor/Ionicons/css/ionicons.min.css') }}">
     {{--easyautocomplete--}}
     <link rel="stylesheet" href="{{ asset('custom/easyautocomplete/css/easy-autocomplete.min.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('custom/viewBox/css/viewbox.css') }}">
     {{-- Date picker    --}}
     <link rel="stylesheet" href="{{ asset('css/bootstrap-datepicker.min.css') }}">
 
@@ -30,12 +30,14 @@
 <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/AdminLTE.min.css') }}">
     <style>
-        .redErrorInput{
-            background-color:red;
+        .redErrorInput {
+            background-color: red;
         }
+
         .help-block {
             color: red;
         }
+
         .mandatory {
             color: red;
         }
@@ -58,14 +60,15 @@
         <script src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
 
         <script src="{{ asset('js/numeric.js') }}"></script>
-
+        <script src="{{ asset('custom/viewBox/js/jquery.viewbox.min.js') }}"></script>
         {{--easyautocomplete--}}
         <script src="{{ asset('custom/easyautocomplete/js/jquery.easy-autocomplete.min.js') }}"></script>
 
     {{--icheck--}}
     {{--<script src="{{ asset('custom/icheck/js/icheck.min.js') }}"></script>--}}
     <!-- Google Font -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition @yield('body_class')">
 
@@ -104,11 +107,24 @@
         format: 'yyyy-mm-dd'
     })
     $(function () {
-         //Initialize Select2 Elements
+        //Initialize Select2 Elements
         $('.select2').select2()
 
 
     })
+    $(function () {
+        $('.image-link').viewbox({
+            setTitle: true,
+            margin: 20,
+            resizeDuration: 300,
+            openDuration: 200,
+            closeDuration: 200,
+            closeButton: true,
+            navButtons: false,
+            closeOnSideClick: true,
+            nextOnContentClick: true
+        });
+    });
     // //iCheck for checkbox and radio inputs
     // $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
     //     checkboxClass: 'icheckbox_minimal-blue',

@@ -190,6 +190,14 @@ Route::post('payments/paymentEditShow', 'PaymentsController@paymentEditShow');
 Route::post('payments/paymentAddShow', 'PaymentsController@paymentAddShow');
 Route::post('payment/delete', 'PaymentsController@delete');
 
+/*reports*/
+/*warehouse wise stock*/
+Route::get('reports/warehouse_stock', 'ReportsController@warehouseStock');
+Route::get('reports/warehouse_stock/{id}', 'ReportsController@warehouseStock');
+/*quantity alerts*/
+Route::get('reports/quantity_alerts', 'ReportsController@quantityAlerts');
+Route::get('reports/quantity_alerts/{id}', 'ReportsController@quantityAlerts');
+
 //Route::get('/saskasjbdgjas/{id}', 'PaymentsController@refCodeByGetOutstanding');
 
 Route::group(['middleware' => 'auth'], function () {

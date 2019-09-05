@@ -124,6 +124,7 @@ class StockController extends Controller
         $locationId = $request->input('wh');
         $itemId = $request->input('idItem');
 
+
         /*   table inner joined queries   */
         //added stock count
         $qtyAddedSum = DB::table('stock')
@@ -182,8 +183,11 @@ class StockController extends Controller
             }
         }
 
-
-        echo json_encode($list);
+        if (isset($request['requirement']) && $request['requirement'] == 'array') {
+            return $list;
+        } else {
+            echo json_encode($list);
+        }
     }
 
     public function itemQtySumNoteDeletedWareHouses($id)

@@ -310,6 +310,23 @@ return [
 //                ],
 
             ],
+        ], [
+            'text' => 'Reports',
+            'icon' => 'gear',
+            'can' => 'viewSettings',
+            'submenu' => [
+                [
+                    'text' => 'Warehouse Stock Chart',
+                    'icon' => 'plus-circle',
+                    'url' => '/reports/warehouse_stock',
+                    'can' => 'viewTax',
+                ],  [
+                    'text' => 'Product Quality Alerts ',
+                    'icon' => 'plus-circle',
+                    'url' => '/reports/quantity_alerts',
+                    'can' => 'viewTax',
+                ],
+            ],
         ],
         'ACCOUNT SETTINGS',
         [
