@@ -182,11 +182,9 @@
                         {{--                        <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i>--}}
                         {{--                            Print</a>--}}
                         <div style="float: right">
-                            <button type="button" class="btn btn-success"><i class="fa fa-credit-card"></i>
+                            <button type="button" onclick="showPayments({{$po->id}},'PO')" class="btn btn-success"><i
+                                        class="fa fa-credit-card"></i>
                                 View Payments
-                            </button>
-                            <button type="button" class="btn btn-success"><i class="fa fa-credit-card"></i>
-                                Add Payments
                             </button>
                             <a class="btn btn-success" href='{{url('po/printpo/'.$po->id)}}'>
                                 <i class="fa fa-file-pdf-o"></i><span class="hidden-sm hidden-xs"> PDF</span>
@@ -216,7 +214,13 @@
 
 
         <!-- remove location modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="paymentsEditModal">
 
+        </div>
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="paymentsShow">
+
+        </div>
 
     </section>
 
@@ -225,5 +229,28 @@
         $(document).ready(function () {
             $('[data-toggle="popover"]').popover();
         })
+
+        function showPayments(id, type) {
+            $.ajax({
+                url: '/payments/paymentsShow',
+                type: 'POST',
+                data: {
+                    'id': id,
+                    'type': type,
+                    '_token': '{{@csrf_token()}}',
+
+                }, // /converting the form data into array and sending it to server
+                dataType: 'json',
+                success: function (response) {
+                    $('#paymentsShow').html(response.html);
+                    $('#paymentsShow').modal({
+                        hidden: 'true'
+                    });
+                },
+                error: function (request, status, errorThrown) {
+                }
+            });
+        }
+
     </script>
 @endsection
