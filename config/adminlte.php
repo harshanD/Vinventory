@@ -320,13 +320,18 @@ return [
                     'icon' => 'plus-circle',
                     'url' => '/reports/warehouse_stock',
                     'can' => 'viewTax',
-                ],  [
+                ], [
                     'text' => 'Product Quality Alerts ',
                     'icon' => 'plus-circle',
                     'url' => '/reports/quantity_alerts',
                     'can' => 'viewTax',
                 ], [
                     'text' => 'Products Report',
+                    'icon' => 'plus-circle',
+                    'url' => '/reports/products',
+                    'can' => 'viewTax',
+                ], [
+                    'text' => 'Adjustments',
                     'icon' => 'plus-circle',
                     'url' => '/reports/products',
                     'can' => 'viewTax',

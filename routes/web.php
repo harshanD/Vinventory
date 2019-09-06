@@ -200,7 +200,9 @@ Route::get('reports/quantity_alerts/{id}', 'ReportsController@quantityAlerts');
 /*products report*/
 Route::get('reports/products', 'ReportsController@productsView');
 Route::post('reports/fetchProductsData', 'ReportsController@fetchProductsData');
-
+/*adjustment report*/
+Route::get('reports/adjustment', 'ReportsController@adjustmentView');
+Route::post('reports/adjustmentData', 'ReportsController@adjustmentData');
 
 //Route::get('/saskasjbdgjas/{id}', 'PaymentsController@refCodeByGetOutstanding');
 

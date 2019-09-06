@@ -76,7 +76,9 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <br>&nbsp;
-                                <button class="btn btn-primary" id="search" data-toggle="modal" data-target="#addSupplierModal">Submit</button>
+                                <button class="btn btn-primary" id="search" data-toggle="modal"
+                                        data-target="#addSupplierModal">Submit
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -84,11 +86,11 @@
                         <table id="manageTable" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Product Code</th>
-                                <th>Product Name</th>
-                                <th>Purchased</th>
-                                <th>Sold</th>
-                                <th>Profit and/or Loss</th>
+                                <th>Date</th>
+                                <th>Reference No</th>
+                                <th>Warehouse</th>
+                                <th>Created By</th>
+                                <th>Note</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -110,7 +112,7 @@
     <script>
 
         var imageDivId = 'capture';
-        var imageSaveName = 'Products_()_';
+        var imageSaveName = 'adjustment_()_';
 
         function getXls() {
             $("#manageTable").table2excel({
@@ -131,15 +133,15 @@
             manageTable = $('#manageTable').DataTable({
                 "processing": true,
                 "columns": [
-                    {data: 'item_code'},
-                    {data: 'name'},
-                    {data: 'purchased'},
-                    {data: 'sold'},
-                    {data: 'profitLess'},
+                    {data: 'date'},
+                    {data: 'reference_code'},
+                    {data: 'location'},
+                    {data: 'created_by'},
+                    {data: 'note'},
                 ],
                 ajax: {
                     "type": 'POST',
-                    "url": '/reports/fetchProductsData',
+                    "url": '/reports/adjustmentData',
                     "data": {
                         '_token': '{{@csrf_token()}}',
                         'from': '' + $('#datepicker').val() + '',
@@ -159,7 +161,7 @@
                 $('#manageTable').DataTable({
                     ajax: {
                         "type": 'POST',
-                        url: "/reports/fetchProductsData",
+                        url: "/reports/adjustmentData",
                         data: {
                             '_token': '{{@csrf_token()}}',
                             'from': '' + $('#datepicker').val() + '',
@@ -167,13 +169,13 @@
                         }
                     },
                     "bDestroy": true,
-                    "processing": true,
+                    // "processing": true,
                     "columns": [
-                        {data: 'item_code'},
-                        {data: 'name'},
-                        {data: 'purchased'},
-                        {data: 'sold'},
-                        {data: 'profitLess'},
+                        {data: 'date'},
+                        {data: 'reference_code'},
+                        {data: 'location'},
+                        {data: 'created_by'},
+                        {data: 'note'},
                     ],
                     columnDefs: [
                         {
@@ -186,6 +188,9 @@
             });
 
         })
+
+
+
     </script>
 
 

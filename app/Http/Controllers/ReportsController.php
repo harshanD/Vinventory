@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Adjustment;
 use App\Locations;
 use App\PO;
 use App\Products;
@@ -167,11 +168,41 @@ class ReportsController extends Controller
             );
 
         }
-        echo json_encode($list);
+        echo json_encode((isset($list['data']) ? $list : array('data' => array())));
     }
 
+    public function adjustmentView()
+    {
+        return view('vendor.adminlte.reports.adjustmentReport.index');
+    }
 
-    public function fetchProductsData2(Request $request)
+    public function adjustmentData(Request $request)
+    {
+
+
+        if ($request['from'] != '' && $request['to'] != '') {
+            $dates = array('from' => $request['from'], 'to' => $request['to']);
+            $adjustments = Adjustment::whereBetween('created_at', $dates)->get();
+        } else {
+            $adjustments = Adjustment::all();
+        }
+
+        $list = array();
+        foreach ($adjustments as $key => $adj) {
+
+            $list['data'][$key] = array(
+                'date' => $adj->date,
+                'reference_code' => $adj->reference_code,
+                'location' => $adj->locations->name,
+                'created_by' => $adj->creator->name,
+                'note' => ($adj->note == '') ? '' : $adj->note,
+            );
+
+        }
+        echo json_encode((isset($list['data']) ? $list : array('data' => array())));
+    }
+
+    public function fetchProductsData2DatatableExample(Request $request)
     {
         $users = Products::select([
             'item_code',
