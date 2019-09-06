@@ -53,7 +53,7 @@
                                 </li>
                             @endforeach
                             <li class="divider"></li>
-                            <li><a style="cursor: pointer" onclick="getImage()"><i class="fa fa-building-o"></i>Save As
+                            <li><a style="cursor: pointer" onclick="getImage()"><i class="fa fa-file-image-o"></i>Save As
                                     Image</a></li>
                             {{--                            <li class="divider"></li>--}}
 

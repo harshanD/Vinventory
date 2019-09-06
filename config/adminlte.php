@@ -325,6 +325,11 @@ return [
                     'icon' => 'plus-circle',
                     'url' => '/reports/quantity_alerts',
                     'can' => 'viewTax',
+                ], [
+                    'text' => 'Products Report',
+                    'icon' => 'plus-circle',
+                    'url' => '/reports/products',
+                    'can' => 'viewTax',
                 ],
             ],
         ],

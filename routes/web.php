@@ -197,6 +197,10 @@ Route::get('reports/warehouse_stock/{id}', 'ReportsController@warehouseStock');
 /*quantity alerts*/
 Route::get('reports/quantity_alerts', 'ReportsController@quantityAlerts');
 Route::get('reports/quantity_alerts/{id}', 'ReportsController@quantityAlerts');
+/*products report*/
+Route::get('reports/products', 'ReportsController@productsView');
+Route::post('reports/fetchProductsData', 'ReportsController@fetchProductsData');
+
 
 //Route::get('/saskasjbdgjas/{id}', 'PaymentsController@refCodeByGetOutstanding');
 
