@@ -29,6 +29,9 @@
 
                 <div class="box-tools pull-right">
                     <div class="btn-group">
+                        <button class="btn btn-box-tool" type="button" data-toggle="collapse"
+                                data-target="#multiCollapseExample1" aria-expanded="false"
+                                aria-controls="multiCollapseExample1"><i class="fa fa-fw fa-filter"></i></button>
                         <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"
                                 aria-expanded="true">
                             <i class="fa fa-wrench"></i></button>
@@ -54,7 +57,7 @@
 
             <div id="capture">
                 <div class="box-body">
-                    <div class="row">
+                    <div  class="row collapse multi-collapse" id="multiCollapseExample1">
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label for="suggest_product">From Date</label> <input type="text" name="from"
@@ -108,7 +111,9 @@
     </section>
 
     <script>
-
+        $('#multiCollapseExample1').collapse({
+            toggle: false
+        })
         var imageDivId = 'capture';
         var imageSaveName = 'Products_()_';
 

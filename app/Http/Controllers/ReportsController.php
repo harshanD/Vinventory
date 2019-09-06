@@ -173,23 +173,36 @@ class ReportsController extends Controller
 
     public function adjustmentView()
     {
-        return view('vendor.adminlte.reports.adjustmentReport.index');
+        $adjustments = Adjustment::groupBy('created_by')->get();
+        $locations = Locations::all();
+
+        return view('vendor.adminlte.reports.adjustmentReport.index', ['adjustUsers' => $adjustments, 'warehouses' => $locations]);
     }
 
     public function adjustmentData(Request $request)
     {
+        $dates = array('from' => $request['from'], 'to' => $request['to']);
 
-
-        if ($request['from'] != '' && $request['to'] != '') {
-            $dates = array('from' => $request['from'], 'to' => $request['to']);
+        if (($request['from'] != '' && $request['to'] != '') && $request['warehouse'] == '0' && $request['createUser'] == '0') {
             $adjustments = Adjustment::whereBetween('created_at', $dates)->get();
+        } elseif (($request['from'] != '' && $request['to'] != '') && $request['warehouse'] != '0' && $request['createUser'] == '0') {
+            $adjustments = Adjustment::whereBetween('created_at', $dates)->where('location', $request['warehouse'])->get();
+        } elseif (($request['from'] != '' && $request['to'] != '') && $request['warehouse'] != '0' && $request['createUser'] != '0') {
+            $adjustments = Adjustment::whereBetween('created_at', $dates)->where('location', $request['warehouse'])->where('created_by', $request['createUser'])->get();
+        } elseif (($request['from'] != '' && $request['to'] != '') && $request['warehouse'] == '0' && $request['createUser'] != '0') {
+            $adjustments = Adjustment::whereBetween('created_at', $dates)->where('created_by', $request['createUser'])->get();
+        } elseif (!($request['from'] != '' && $request['to'] != '') && $request['warehouse'] == '0' && $request['createUser'] != '0') {
+            $adjustments = Adjustment::where('created_by', $request['createUser'])->get();
+        } elseif (!($request['from'] != '' && $request['to'] != '') && $request['warehouse'] != '0' && $request['createUser'] == '0') {
+            $adjustments = Adjustment::where('location', $request['warehouse'])->get();
+        } elseif (!($request['from'] != '' && $request['to'] != '') && $request['warehouse'] != '0' && $request['createUser'] != '0') {
+            $adjustments = Adjustment::where('created_by', $request['createUser'])->where('location', $request['warehouse'])->get();
         } else {
             $adjustments = Adjustment::all();
         }
 
         $list = array();
         foreach ($adjustments as $key => $adj) {
-
             $list['data'][$key] = array(
                 'date' => $adj->date,
                 'reference_code' => $adj->reference_code,
@@ -197,7 +210,6 @@ class ReportsController extends Controller
                 'created_by' => $adj->creator->name,
                 'note' => ($adj->note == '') ? '' : $adj->note,
             );
-
         }
         echo json_encode((isset($list['data']) ? $list : array('data' => array())));
     }

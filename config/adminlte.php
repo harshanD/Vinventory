@@ -333,7 +333,7 @@ return [
                 ], [
                     'text' => 'Adjustments',
                     'icon' => 'plus-circle',
-                    'url' => '/reports/products',
+                    'url' => '/reports/adjustment',
                     'can' => 'viewTax',
                 ],
             ],

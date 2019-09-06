@@ -28,6 +28,10 @@
                 <h3 class="box-title">Product Report</h3>
 
                 <div class="box-tools pull-right">
+
+                    <button class="btn btn-box-tool" type="button" data-toggle="collapse"
+                            data-target="#multiCollapseExample1" aria-expanded="false"
+                            aria-controls="multiCollapseExample1"><i class="fa fa-fw fa-filter"></i></button>
                     <div class="btn-group">
                         <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"
                                 aria-expanded="true">
@@ -51,10 +55,9 @@
                 </div>
             </div>
 
-
             <div id="capture">
                 <div class="box-body">
-                    <div class="row">
+                    <div class="row collapse multi-collapse" id="multiCollapseExample1">
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label for="suggest_product">From Date</label> <input type="text" name="from"
@@ -74,6 +77,29 @@
                             </div>
                         </div>
                         <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="suggest_product">Created By</label>
+                                <select class="form-control select2" id="createUser">
+                                    <option value="0">Select User</option>
+                                    @foreach($adjustUsers as $user)
+                                        <option value="{{$user->creator->id}}">{{$user->creator->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="suggest_product">Warehouse</label>
+                                <select class="form-control select2" id="warehouse">
+                                    <option value="0">Select Warehouse</option>
+                                    @foreach($warehouses as $ware)
+                                        <option value="{{$ware->id}}">{{$ware->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4" style="float: right">
                             <div class="form-group">
                                 <br>&nbsp;
                                 <button class="btn btn-primary" id="search" data-toggle="modal"
@@ -110,15 +136,17 @@
     </section>
 
     <script>
-
+        // $('#multiCollapseExample1').collapse({
+        //     toggle: false
+        // })
         var imageDivId = 'capture';
-        var imageSaveName = 'adjustment_()_';
+        var imageSaveName = 'adjustment_';
 
         function getXls() {
             $("#manageTable").table2excel({
                 exclude: ".noExl",
                 name: "Worksheet Name",
-                filename: imageSaveName,
+                filename: imageSaveName + '{{date('Y-m-d H:i:s')}}',
                 fileext: ".xls",
                 exclude_img: false,
                 exclude_links: true,
@@ -146,6 +174,8 @@
                         '_token': '{{@csrf_token()}}',
                         'from': '' + $('#datepicker').val() + '',
                         'to': '' + $('#datepicker1').val() + '',
+                        'createUser': '' + $('#createUser').val() + '',
+                        'warehouse': '' + $('#warehouse').val() + '',
                     }
                 },
                 columnDefs: [
@@ -166,6 +196,8 @@
                             '_token': '{{@csrf_token()}}',
                             'from': '' + $('#datepicker').val() + '',
                             'to': '' + $('#datepicker1').val() + '',
+                            'createUser': '' + $('#createUser').val() + '',
+                            'warehouse': '' + $('#warehouse').val() + '',
                         }
                     },
                     "bDestroy": true,
@@ -189,7 +221,11 @@
 
         })
 
-
+        $('#btn1').click(function () {
+            $('.collapse').hide();
+            // $('#demo1').hide();
+            $('#demo').show();
+        });
 
     </script>
 
