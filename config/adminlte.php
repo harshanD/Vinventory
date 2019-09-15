@@ -335,6 +335,11 @@ return [
                     'icon' => 'plus-circle',
                     'url' => '/reports/adjustment',
                     'can' => 'viewTax',
+                ], [
+                    'text' => 'Category Report',
+                    'icon' => 'plus-circle',
+                    'url' => 'reports/category',
+                    'can' => 'viewTax',
                 ],
             ],
         ],

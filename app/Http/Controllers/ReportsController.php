@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Adjustment;
+use App\Categories;
 use App\Locations;
 use App\PO;
 use App\Products;
@@ -113,12 +114,9 @@ class ReportsController extends Controller
 
     public function fetchProductsData(Request $request)
     {
-//        print_r($request->input());
-//        return 'mm';
-
-
         $products = Products::where('status', \Config::get('constants.status.Active'))->get();
 
+        $stockController = new StockController();
 
         $list = array();
         foreach ($products as $key => $product) {
@@ -158,6 +156,9 @@ class ReportsController extends Controller
             if (count($sold) > 0) {
                 $soldSum = ($sold[0]->sold);
             }
+            $qtySum = 0;
+            $qtySum = $stockController->itemQtySumNoteDeletedWareHouses($product->id);
+            $qtyPrice = number_format($qtySum * $product->cost_price, 2);
 
             $list['data'][$key] = array(
                 'item_code' => $product->item_code,
@@ -165,8 +166,86 @@ class ReportsController extends Controller
                 'purchased' => $purchasedSum,
                 'sold' => $soldSum,
                 'profitLess' => number_format($soldSum - $purchasedSum, 2),
+                'stock_available' => '(' . $qtySum . ') ' . $qtyPrice,
             );
 
+        }
+        echo json_encode((isset($list['data']) ? $list : array('data' => array())));
+    }
+
+    public function categoryView(Request $request)
+    {
+
+        return view('vendor.adminlte.reports.categoriesReport.index');
+
+    }
+
+    public function fetchCategoryData(Request $request)
+    {
+
+
+        $stockController = new StockController();
+
+        $list = array();
+
+        $categories = Categories::where('status', \Config::get('constants.status.Active'))->get();
+        foreach ($categories as $key => $category) {
+
+            $purchasedSum = 0;
+            $soldSum = 0;
+            $qtySum = 0;
+            $qtyPrice = 0;
+
+            $products = Products::where('status', \Config::get('constants.status.Active'))->where('category', $category->id)->get();
+            foreach ($products as $key1 => $product) {
+                $dates = array();
+
+                if ($request['from'] != '' && $request['to'] != '') {
+                    $dates = array('from' => $request['from'], 'to' => $request['to']);
+                }
+
+                $purchased = DB::table('po_header')
+                    ->select(DB::raw('ifnull(sum(po_details.qty*po_details.cost_price),0) as purchased'))
+                    ->join('po_details', 'po_details.po_header', '=', 'po_header.id')
+                    ->where('po_details.item_id', '=', $product->id)
+                    ->WhereNull('po_header.deleted_at')
+                    ->when(count($dates) > 0, function ($sold) use ($dates) {
+                        return $sold->whereBetween('po_header.created_at', [$dates['from'] . ' 00:00:00', $dates['to'] . ' 00:00:00']);
+                    })
+                    ->groupBy('item_id')->get();
+
+                $sold = DB::table('invoice')
+                    ->select(DB::raw('ifnull(sum(invoice_details.qty*invoice_details.selling_price),0) as sold'))
+                    ->join('invoice_details', 'invoice_details.invoice_id', '=', 'invoice.id')
+                    ->where('invoice_details.item_id', '=', $product->id)
+                    ->WhereNull('invoice.deleted_at')
+                    ->when(count($dates) > 0, function ($sold) use ($dates) {
+                        return $sold->whereBetween('invoice.created_at', [$dates['from'] . ' 00:00:00', $dates['to'] . ' 00:00:00']);
+                    })
+                    ->groupBy('item_id')->get();
+
+
+                if (count($purchased) > 0) {
+                    $purchasedSum += ($purchased[0]->purchased);
+                }
+
+                if (count($sold) > 0) {
+                    $soldSum += ($sold[0]->sold);
+                }
+
+                $qtySum += $stockController->itemQtySumNoteDeletedWareHouses($product->id);
+                $qtyPrice += $qtySum * $product->cost_price;
+
+
+            }
+            $list['data'][$key] = array(
+                'category_code' => $category->code,
+                'name' => $category->category,
+                'purchased' => $purchasedSum,
+                'sold' => $soldSum,
+                'profitLess' => number_format($soldSum - $purchasedSum, 2),
+                'stock_available' => '(' . $qtySum . ') ' . number_format($qtyPrice, 2),
+            );
         }
         echo json_encode((isset($list['data']) ? $list : array('data' => array())));
     }

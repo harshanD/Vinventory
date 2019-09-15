@@ -203,6 +203,9 @@ Route::post('reports/fetchProductsData', 'ReportsController@fetchProductsData');
 /*adjustment report*/
 Route::get('reports/adjustment', 'ReportsController@adjustmentView');
 Route::post('reports/adjustmentData', 'ReportsController@adjustmentData');
+/*category report*/
+Route::get('reports/category', 'ReportsController@categoryView');
+Route::post('reports/fetchCategoryData', 'ReportsController@fetchCategoryData');
 
 //Route::get('/saskasjbdgjas/{id}', 'PaymentsController@refCodeByGetOutstanding');
 

@@ -25,7 +25,7 @@
         <div class="box">
 
             <div class="box-header with-border">
-                <h3 class="box-title">Product Report</h3>
+                <h3 class="box-title">Categories Report</h3>
 
                 <div class="box-tools pull-right">
                     <div class="btn-group">
@@ -89,8 +89,8 @@
                         <table id="manageTable" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Product Code</th>
-                                <th>Product Name</th>
+                                <th>Category Code</th>
+                                <th>Category Name</th>
                                 <th>Purchased</th>
                                 <th>Sold</th>
                                 <th>Profit and/or Loss</th>
@@ -139,7 +139,7 @@
             manageTable = $('#manageTable').DataTable({
                 "processing": true,
                 "columns": [
-                    {data: 'item_code'},
+                    {data: 'category_code'},
                     {data: 'name'},
                     {data: 'purchased'},
                     {data: 'sold'},
@@ -148,7 +148,7 @@
                 ],
                 ajax: {
                     "type": 'POST',
-                    "url": '/reports/fetchProductsData',
+                    "url": '/reports/fetchCategoryData',
                     "data": {
                         '_token': '{{@csrf_token()}}',
                         'from': '' + $('#datepicker').val() + '',
@@ -168,7 +168,7 @@
                 $('#manageTable').DataTable({
                     ajax: {
                         "type": 'POST',
-                        url: "/reports/fetchProductsData",
+                        url: "/reports/fetchCategoryData",
                         data: {
                             '_token': '{{@csrf_token()}}',
                             'from': '' + $('#datepicker').val() + '',
@@ -178,7 +178,7 @@
                     "bDestroy": true,
                     "processing": true,
                     "columns": [
-                        {data: 'item_code'},
+                        {data: 'category_code'},
                         {data: 'name'},
                         {data: 'purchased'},
                         {data: 'sold'},
