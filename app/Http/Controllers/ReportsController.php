@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Adjustment;
 use App\Brands;
 use App\Categories;
+use App\Invoice;
 use App\Locations;
 use App\PO;
 use App\Products;
 use App\Stock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use PhpParser\Node\Expr\Cast\Object_;
 use function PHPSTORM_META\elementType;
 
@@ -415,4 +417,137 @@ class ReportsController extends Controller
 
         return $datatables->make(true);
     }
+
+    public function dailySalesIndex(Request $request)
+    {
+        $yearMonth = date('Y-m');
+        $table = $this->dratTable(date('m'), date('Y'));
+
+        return view('vendor.adminlte.reports.dailySalesReport.index', ['table' => $table, 'yearMonth' => $yearMonth]);
+    }
+
+    public function dailySalesForMonth(Request $request)
+    {
+        $parts = explode('-', $request['month']);
+        return json_encode($this->dratTable($parts[1], $parts[0]));
+    }
+
+    public function dratTable($month, $year)
+    {
+        /* draw table */
+        $calendar = '<table id="manageTable" cellpadding="0" cellspacing="0" class="table table-bordered calendar">';
+
+        /* table headings */
+        $headings = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+        $calendar .= '<tr class="calendar-row"><td class="calendar-day-head">' . implode('</td><td class="calendar-day-head">', $headings) . '</td></tr>';
+
+        /* days and weeks vars now ... */
+        $running_day = date('w', mktime(0, 0, 0, $month, 1, $year));
+        $days_in_month = date('t', mktime(0, 0, 0, $month, 1, $year));
+        $days_in_this_week = 1;
+        $day_counter = 0;
+        $dates_array = array();
+
+        /* row for week one */
+        $calendar .= '<tr class="calendar-row">';
+
+        /* print "blank" days until the first of the current week */
+        for ($x = 0; $x < $running_day; $x++):
+            $calendar .= '<td class="calendar-day-np"> </td>';
+            $days_in_this_week++;
+        endfor;
+
+        /* keep going with days.... */
+        for ($list_day = 1; $list_day <= $days_in_month; $list_day++):
+            $calendar .= '<td class="calendar-day" >';
+            /* add in the day number */
+            $calendar .= '<div class="day-number">' . $list_day . '</div>';
+
+            /** QUERY THE DATABASE FOR AN ENTRY FOR THIS DAY !!  IF MATCHES FOUND, PRINT THEM !! **/
+            $calendar .= str_repeat('<p>' . $this->dayToDrawSummary($list_day, $month, $year) . '</p>', 1);
+
+            $calendar .= '</td>';
+            if ($running_day == 6):
+                $calendar .= '</tr>';
+                if (($day_counter + 1) != $days_in_month):
+                    $calendar .= '<tr class="calendar-row">';
+                endif;
+                $running_day = -1;
+                $days_in_this_week = 0;
+            endif;
+            $days_in_this_week++;
+            $running_day++;
+            $day_counter++;
+        endfor;
+
+        /* finish the rest of the days in the week */
+        if ($days_in_this_week < 8):
+            for ($x = 1; $x <= (8 - $days_in_this_week); $x++):
+                $calendar .= '<td class="calendar-day-np"> </td>';
+            endfor;
+        endif;
+
+        /* final row */
+        $calendar .= '</tr>';
+
+        /* end the table */
+        $calendar .= '</table>';
+
+        /* all done, return result */
+        return $calendar;
+    }
+
+    public function dayToDrawSummary($day, $month, $year)
+    {
+        $invoices = Invoice::
+        whereDay('invoice_date', '=', $day)
+            ->whereMonth('invoice_date', '=', $month)
+            ->whereYear('invoice_date', '=', $year)
+            ->get();
+
+        $discount = 0;
+        $orderDiscount = 0;
+        $orderTax = 0;
+        $total = 0;
+        $productTax = 0;
+        $productsCost = 0;
+        $productsRevenue = 0;
+
+        if (count($invoices) == 0) {
+            return '';
+        }
+
+        foreach ($invoices as $invoice) {
+            $discount += $invoice->discount;
+            $orderDiscount += $invoice->discount;
+
+            foreach ($invoice->invoiceItems as $invoiceItem) {
+                $productTax += $invoiceItem->tax_val * $invoiceItem->qty;
+                $discount += $invoiceItem->discount;
+                $productsCost += $invoiceItem->qty * $invoiceItem->products->cost_price;
+                $productsRevenue += $invoiceItem->sub_total;
+            }
+
+            $orderTax += $invoice->tax_amount;
+            $total += $invoice->invoice_grand_total;
+        }
+
+        return $table = '<table class="table table-bordered table-striped table-hover">
+                        <tr><td>Discount</td><td style="text-align: right">' . number_format($discount, 2) . '</td></tr>
+                        <tr><td>Product Tax</td><td style="text-align: right">' . number_format($productTax, 2) . '</td></tr>
+                        <tr><td>Order Tax</td><td style="text-align: right">' . number_format($orderTax, 2) . '</td></tr>
+                        <tr><td>Total</td><td style="text-align: right">' . number_format($total, 2) . '</td></tr>
+                        </table>
+                        <div class="row2 collapse multi-collapse" id="multiCollapseExample_' . $day . '-' . $month . '-' . $year . '">
+                        <table class="table table-bordered table-striped table-hover">
+                        <tr><td>Products Revenue</td><td style="text-align: right">' . number_format($productsRevenue, 2) . '</td></tr>
+                        <tr><td>Order Discount</td><td style="text-align: right">' . number_format($orderDiscount, 2) . '</td></tr>
+                        <tr><td>Product Cost</td><td style="text-align: right">' . number_format($productsCost, 2) . '</td></tr>
+                        <tr style="font-weight: bold"><td >Profit</td><td style="text-align: right">' . number_format((($productsRevenue - $orderDiscount) - $productsCost), 2) . '</td></tr>
+                        </table>
+                        </div><span style="float: right"><button class="btn btn-xs btn-success" type="button" data-toggle="collapse"
+                                data-target="#multiCollapseExample_' . $day . '-' . $month . '-' . $year . '" aria-expanded="false"
+                                aria-controls="multiCollapseExample_' . $day . '-' . $month . '-' . $year . '"><i class="fa fa-fw fa-search"></i>More</button></span>';
+    }
+
 }

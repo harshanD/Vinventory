@@ -108,6 +108,10 @@
         autoclose: true,
         format: 'yyyy-mm-dd'
     })
+    $('#monthpicker').datepicker({
+        minViewMode: 1,
+        format: 'yyyy-mm'
+    })
     $(function () {
         //Initialize Select2 Elements
         $('.select2').select2()
