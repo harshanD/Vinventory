@@ -340,6 +340,11 @@ return [
                     'icon' => 'plus-circle',
                     'url' => 'reports/category',
                     'can' => 'viewTax',
+                ],[
+                    'text' => 'Brands Report',
+                    'icon' => 'plus-circle',
+                    'url' => 'reports/brand',
+                    'can' => 'viewTax',
                 ],
             ],
         ],

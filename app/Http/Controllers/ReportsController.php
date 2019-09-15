@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Adjustment;
+use App\Brands;
 use App\Categories;
 use App\Locations;
 use App\PO;
@@ -157,7 +158,11 @@ class ReportsController extends Controller
                 $soldSum = ($sold[0]->sold);
             }
             $qtySum = 0;
-            $qtySum = $stockController->itemQtySumNoteDeletedWareHouses($product->id);
+            if (count($dates) > 0) {
+                $qtySum = $stockController->itemQtySumNoteDeletedWareHousesInDateRange($product->id, $dates['from'], $dates['to']);
+            } else {
+                $qtySum = $stockController->itemQtySumNoteDeletedWareHouses($product->id);
+            }
             $qtyPrice = number_format($qtySum * $product->cost_price, 2);
 
             $list['data'][$key] = array(
@@ -233,7 +238,11 @@ class ReportsController extends Controller
                     $soldSum += ($sold[0]->sold);
                 }
 
-                $qtySum += $stockController->itemQtySumNoteDeletedWareHouses($product->id);
+                if (count($dates) > 0) {
+                    $qtySum = $stockController->itemQtySumNoteDeletedWareHousesInDateRange($product->id, $dates['from'], $dates['to']);
+                } else {
+                    $qtySum = $stockController->itemQtySumNoteDeletedWareHouses($product->id);
+                }
                 $qtyPrice += $qtySum * $product->cost_price;
 
 
@@ -241,6 +250,86 @@ class ReportsController extends Controller
             $list['data'][$key] = array(
                 'category_code' => $category->code,
                 'name' => $category->category,
+                'purchased' => $purchasedSum,
+                'sold' => $soldSum,
+                'profitLess' => number_format($soldSum - $purchasedSum, 2),
+                'stock_available' => '(' . $qtySum . ') ' . number_format($qtyPrice, 2),
+            );
+        }
+        echo json_encode((isset($list['data']) ? $list : array('data' => array())));
+    }
+
+    public function brandsView(Request $request)
+    {
+
+        return view('vendor.adminlte.reports.brandsReport.index');
+    }
+
+    public function fetchBrandsData(Request $request)
+    {
+
+
+        $stockController = new StockController();
+
+        $list = array();
+
+        $brands = Brands::where('status', \Config::get('constants.status.Active'))->get();
+        foreach ($brands as $key => $brand) {
+
+            $purchasedSum = 0;
+            $soldSum = 0;
+            $qtySum = 0;
+            $qtyPrice = 0;
+
+            $products = Products::where('status', \Config::get('constants.status.Active'))->where('category', $brand->id)->get();
+            foreach ($products as $key1 => $product) {
+                $dates = array();
+
+                if ($request['from'] != '' && $request['to'] != '') {
+                    $dates = array('from' => $request['from'], 'to' => $request['to']);
+                }
+
+                $purchased = DB::table('po_header')
+                    ->select(DB::raw('ifnull(sum(po_details.qty*po_details.cost_price),0) as purchased'))
+                    ->join('po_details', 'po_details.po_header', '=', 'po_header.id')
+                    ->where('po_details.item_id', '=', $product->id)
+                    ->WhereNull('po_header.deleted_at')
+                    ->when(count($dates) > 0, function ($sold) use ($dates) {
+                        return $sold->whereBetween('po_header.created_at', [$dates['from'] . ' 00:00:00', $dates['to'] . ' 00:00:00']);
+                    })
+                    ->groupBy('item_id')->get();
+
+                $sold = DB::table('invoice')
+                    ->select(DB::raw('ifnull(sum(invoice_details.qty*invoice_details.selling_price),0) as sold'))
+                    ->join('invoice_details', 'invoice_details.invoice_id', '=', 'invoice.id')
+                    ->where('invoice_details.item_id', '=', $product->id)
+                    ->WhereNull('invoice.deleted_at')
+                    ->when(count($dates) > 0, function ($sold) use ($dates) {
+                        return $sold->whereBetween('invoice.created_at', [$dates['from'] . ' 00:00:00', $dates['to'] . ' 00:00:00']);
+                    })
+                    ->groupBy('item_id')->get();
+
+
+                if (count($purchased) > 0) {
+                    $purchasedSum += ($purchased[0]->purchased);
+                }
+
+                if (count($sold) > 0) {
+                    $soldSum += ($sold[0]->sold);
+                }
+
+                if (count($dates) > 0) {
+                    $qtySum = $stockController->itemQtySumNoteDeletedWareHousesInDateRange($product->id, $dates['from'], $dates['to']);
+                } else {
+                    $qtySum = $stockController->itemQtySumNoteDeletedWareHouses($product->id);
+                }
+                $qtyPrice += $qtySum * $product->cost_price;
+
+
+            }
+            $list['data'][$key] = array(
+                'brand_code' => $brand->code,
+                'name' => $brand->brand,
                 'purchased' => $purchasedSum,
                 'sold' => $soldSum,
                 'profitLess' => number_format($soldSum - $purchasedSum, 2),
