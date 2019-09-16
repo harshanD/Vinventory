@@ -345,6 +345,11 @@ return [
                     'icon' => 'plus-circle',
                     'url' => 'reports/brand',
                     'can' => 'viewTax',
+                ],[
+                    'text' => 'Daily Sales',
+                    'icon' => 'plus-circle',
+                    'url' => 'reports/daily_sales',
+                    'can' => 'viewTax',
                 ],
             ],
         ],
