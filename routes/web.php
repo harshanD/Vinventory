@@ -212,6 +212,9 @@ Route::post('reports/fetchBrandsData', 'ReportsController@fetchBrandsData');
 /*daily sales report*/
 Route::get('reports/daily_sales', 'ReportsController@dailySalesIndex');
 Route::post('reports/daily_sales/{month}', 'ReportsController@dailySalesForMonth');
+/*monthly sales report*/
+Route::get('reports/monthly_sales', 'ReportsController@monthlySalesIndex');
+Route::post('reports/monthly_sales/{year}', 'ReportsController@monthlySalesForMonth');
 
 //Route::get('/saskasjbdgjas/{id}', 'PaymentsController@refCodeByGetOutstanding');
 

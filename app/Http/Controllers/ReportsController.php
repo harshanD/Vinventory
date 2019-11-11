@@ -550,4 +550,108 @@ class ReportsController extends Controller
                                 aria-controls="multiCollapseExample_' . $day . '-' . $month . '-' . $year . '"><i class="fa fa-fw fa-search"></i>More</button></span>';
     }
 
+    public function monthlySalesIndex()
+    {
+        $yearMonth = date('Y');
+        $table = $this->drawMonthTable(date('Y'));
+
+        return view('vendor.adminlte.reports.monthlySalesReport.index', ['table' => $table, 'yearMonth' => $yearMonth]);
+    }
+
+    public function monthlySalesForMonth(Request $request)
+    {
+//        $parts = explode('-', $request['month']);
+        return json_encode($this->drawMonthTable($request['year']));
+    }
+
+    public function drawMonthTable($year)
+    {
+        /* draw table */
+        $calendar = '<table id="manageTable" cellpadding="0" cellspacing="0" class="table table-bordered calendar">';
+
+        /* table headings */
+        $headings = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+        $calendar .= '<tr class="calendar-row"><td class="calendar-day-head">' . implode('</td><td class="calendar-day-head">', $headings) . '</td></tr>';
+
+
+        $months = 1;
+        $month_counter = 0;
+        $dates_array = array();
+
+        /* row for week one */
+        $calendar .= '<tr class="calendar-row">';
+
+        /* print "blank" days until the first of the current week */
+        for ($x = 1; $x < 13; $x++):
+            $calendar .= '<td class="calendar-day-np">';
+            $calendar .= str_repeat('<p>' . $this->monthToDrawSummary($x, $year) . '</p>', 1);
+            $calendar .= '</td>';
+            $months++;
+        endfor;
+
+
+
+
+        /* final row */
+        $calendar .= '</tr>';
+
+        /* end the table */
+        $calendar .= '</table>';
+
+        /* all done, return result */
+        return $calendar;
+    }
+
+    public function monthToDrawSummary($month, $year)
+    {
+        $invoices = Invoice::
+        whereBetween('invoice_date', [$year . '-' . $month . '-01', $year . '-' . $month . '-31'])
+//            whereMonth('invoice_date', '=', $month)
+//            ->whereYear('invoice_date', '=', $year)
+            ->get();
+
+        $discount = 0;
+        $orderDiscount = 0;
+        $orderTax = 0;
+        $total = 0;
+        $productTax = 0;
+        $productsCost = 0;
+        $productsRevenue = 0;
+
+        if (count($invoices) == 0) {
+            return '';
+        }
+
+        foreach ($invoices as $invoice) {
+            $discount += $invoice->discount;
+            $orderDiscount += $invoice->discount;
+
+            foreach ($invoice->invoiceItems as $invoiceItem) {
+                $productTax += $invoiceItem->tax_val * $invoiceItem->qty;
+                $discount += $invoiceItem->discount;
+                $productsCost += $invoiceItem->qty * $invoiceItem->products->cost_price;
+                $productsRevenue += $invoiceItem->sub_total;
+            }
+
+            $orderTax += $invoice->tax_amount;
+            $total += $invoice->invoice_grand_total;
+        }
+
+        return $table = '<table class="table table-bordered table-striped table-hover">
+                        <tr><td>Discount</td><td style="text-align: right">' . number_format($discount, 2) . '</td></tr>
+                        <tr><td>Product Tax</td><td style="text-align: right">' . number_format($productTax, 2) . '</td></tr>
+                        <tr><td>Order Tax</td><td style="text-align: right">' . number_format($orderTax, 2) . '</td></tr>
+                        <tr><td>Total</td><td style="text-align: right">' . number_format($total, 2) . '</td></tr>
+                        </table>
+                        <div class="row2 collapse multi-collapse" id="multiCollapseExample_' . $month . '-' . $year . '">
+                        <table class="table table-bordered table-striped table-hover">
+                        <tr><td>Products Revenue</td><td style="text-align: right">' . number_format($productsRevenue, 2) . '</td></tr>
+                        <tr><td>Order Discount</td><td style="text-align: right">' . number_format($orderDiscount, 2) . '</td></tr>
+                        <tr><td>Product Cost</td><td style="text-align: right">' . number_format($productsCost, 2) . '</td></tr>
+                        <tr style="font-weight: bold"><td >Profit</td><td style="text-align: right">' . number_format((($productsRevenue - $orderDiscount) - $productsCost), 2) . '</td></tr>
+                        </table>
+                        </div><span style="float: right"><button class="btn btn-xs btn-success" type="button" data-toggle="collapse"
+                                data-target="#multiCollapseExample_' . $month . '-' . $year . '" aria-expanded="false"
+                                aria-controls="multiCollapseExample_' . $month . '-' . $year . '"><i class="fa fa-fw fa-search"></i>More</button></span>';
+    }
 }

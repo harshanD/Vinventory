@@ -79,17 +79,17 @@
 
 @if(config('adminlte.plugins.select2'))
     <!-- Select2 -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="{{ asset('custom/select2') }}/select2.min.js"></script>
 @endif
 
 @if(config('adminlte.plugins.datatables'))
     <!-- DataTables with bootstrap 3 renderer -->
-    <script src="//cdn.datatables.net/v/bs/dt-1.10.18/datatables.min.js"></script>
+    <script src="{{ asset('custom/datatable') }}/datatables.min.js"></script>
 @endif
 
 @if(config('adminlte.plugins.chartjs'))
     <!-- ChartJS -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
+    <script src="{{ asset('custom/chartJs/') }}/Chart.bundle.min.js"></script>
 @endif
 
 @yield('adminlte_js')
@@ -111,6 +111,10 @@
     $('#monthpicker').datepicker({
         minViewMode: 1,
         format: 'yyyy-mm'
+    })
+    $('#yearpicker').datepicker({
+        minViewMode: 2,
+        format: 'yyyy'
     })
     $(function () {
         //Initialize Select2 Elements

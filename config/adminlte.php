@@ -350,6 +350,11 @@ return [
                     'icon' => 'plus-circle',
                     'url' => 'reports/daily_sales',
                     'can' => 'viewTax',
+                ],[
+                    'text' => 'Monthly Sales',
+                    'icon' => 'plus-circle',
+                    'url' => 'reports/monthly_sales',
+                    'can' => 'viewTax',
                 ],
             ],
         ],
