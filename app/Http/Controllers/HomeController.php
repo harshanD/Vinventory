@@ -36,7 +36,7 @@ class HomeController extends Controller
         $transfers= $report->last5Transfers();
 //        $customers= $report->last5Customers();
 //        $suppliers= $report->last5Suppliers();
-        return view('home', ['sales' => $sales, 'purchaces' => $purchaces]);
+        return view('home', ['sales' => $sales, 'purchaces' => $purchaces,'transfers'=>$transfers]);
     }
 
     public function registerUserView()

@@ -663,7 +663,7 @@ class ReportsController extends Controller
             $array[$key]['invoice_code'] = $invoice->invoice_code;
             $array[$key]['cus_name'] = $invoice->customers->name;
             $array[$key]['sales_status'] = $invoice->sales_status;
-            $array[$key]['invoice_grand_total'] = number_format($invoice->invoice_grand_total,2);
+            $array[$key]['invoice_grand_total'] = number_format($invoice->invoice_grand_total, 2);
             $array[$key]['payment_status'] = $invoice->payment_status;
 
             $payments = new PaymentsController();
@@ -682,8 +682,8 @@ class ReportsController extends Controller
             $array[$key]['date'] = $po->due_date;
             $array[$key]['referenceCode'] = $po->referenceCode;
             $array[$key]['sup_name'] = $po->suppliers->name;
-            $array[$key]['status'] = $po->sales_status;
-            $array[$key]['grand_total'] = number_format($po->grand_total,2);
+            $array[$key]['status'] = $po->status;
+            $array[$key]['grand_total'] = number_format($po->grand_total, 2);
         }
         return $array;
     }
@@ -693,11 +693,12 @@ class ReportsController extends Controller
         $pos = Transfers::latest()->limit(5)->get();
         $array = [];
         foreach ($pos as $key => $po) {
-            $array[$key]['date'] = $po->due_date;
-            $array[$key]['referenceCode'] = $po->referenceCode;
-            $array[$key]['sup_name'] = $po->suppliers->name;
-            $array[$key]['status'] = $po->sales_status;
-            $array[$key]['grand_total'] = number_format($po->grand_total,2);
+            $array[$key]['date'] = $po->tr_date;
+            $array[$key]['referenceCode'] = $po->tr_reference_code;
+            $array[$key]['from'] = $po->fromLocation->name;
+            $array[$key]['to'] = $po->toLocation->name;
+            $array[$key]['status'] = $po->status;
+            $array[$key]['total'] = number_format($po->grand_total, 2);
         }
         return $array;
     }

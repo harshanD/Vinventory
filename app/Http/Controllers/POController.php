@@ -139,7 +139,7 @@ class POController extends Controller
             ->addColumn('supplierName', function ($query) {
                 return str_limit($query->suppliers->name, 20);
             })->addColumn('sale_status', function ($query) {
-                switch ($query->sales_status):
+                switch ($query->status):
                     case 1:
                         $SaleStatus = '<span class="label label-warning">pending</span>';
                         break;

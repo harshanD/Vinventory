@@ -368,19 +368,28 @@
 
                                             <?php
                                             switch ($purchace['status']):
-                                                case 1:
-                                                    $SaleStatus = '<span class="label label-warning">pending</span>';
+                                                case \Config::get('constants.i_payment_status_name.Partial'):
+                                                    $status = '<span class="label label-warning">Partial</span>';
                                                     break;
-                                                case 2:
-                                                    $SaleStatus = '<span class="label label-success">Completed</span>';
+                                                case \Config::get('constants.i_payment_status_name.Duo'):
+                                                    $status = '<span class="label label-warning">Duo</span>';
+                                                    break;
+                                                case \Config::get('constants.i_payment_status_name.Paid'):
+                                                    $status = '<span class="label label-success">Paid</span>';
+                                                    break;
+                                                case \Config::get('constants.i_payment_status_name.Pending'):
+                                                    $status = '<span class="label label-warning">Pending</span>';
+                                                    break;
+                                                case \Config::get('constants.i_payment_status_name.Over Paid'):
+                                                    $status = '<span class="label label-danger">Over Paid</span>';
                                                     break;
                                                 default:
-                                                    $SaleStatus = '<span class="label label-danger">Nothing</span>';
+                                                    $status = '<span class="label label-warning">Nothing</span>';
                                                     break;
                                             endswitch;
                                             ?>
 
-                                            <td align="center">{!!$SaleStatus !!}</td>
+                                            <td align="center">{!!$status !!}</td>
                                             <td align="right">{{ $purchace['grand_total'] }}</td>
                                         </tr>
                                     @endforeach
@@ -388,7 +397,49 @@
                             </div>
                             <!-- /.tab-pane -->
                             <div class="tab-pane" id="tab_3">
-                                3
+                                <table class="table table-hover">
+                                    <thead>
+                                    <th align="center">#</th>
+                                    <th align="center">Date</th>
+                                    <th align="center">Reference No</th>
+                                    <th align="center">From</th>
+                                    <th align="center">To</th>
+                                    <th align="center">Status</th>
+                                    <th align="center">Amount</th>
+                                    </thead>
+                                    @foreach($transfers as $transfer)
+                                        <tr>
+                                            <td>{{ $loop->iteration}}</td>
+                                            <td>{{ $transfer['date'] }}</td>
+                                            <td>{{ $transfer['referenceCode'] }}</td>
+                                            <td>{{ $transfer['from'] }}</td>
+                                            <td>{{ $transfer['to'] }}</td>
+
+                                            <?php
+                                            switch ($transfer['status']):
+                                                case 1:
+                                                    $status = '<span class="label label-success">Completed</span>';
+                                                    break;
+                                                case 2:
+                                                    $status = '<span class="label label-success">Pending</span>';
+                                                    break;
+                                                case 3:
+                                                    $status = '<span class="label label-success">Send</span>';
+                                                    break;
+                                                case 4:
+                                                    $status = '<span class="label label-warning">Canceled</span>';
+                                                    break;
+                                                default:
+                                                    $status = '<span class="label label-warning">Nothing</span>';
+                                                    break;
+                                            endswitch;
+                                            ?>
+
+                                            <td align="center">{!!$status !!}</td>
+                                            <td align="right">{{ $transfer['total'] }}</td>
+                                        </tr>
+                                    @endforeach
+                                </table>
                             </div><!-- /.tab-pane -->
                             <div class="tab-pane" id="tab_4">
                                 4
