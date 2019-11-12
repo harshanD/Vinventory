@@ -288,7 +288,7 @@
                                     <thead>
                                     <th align="center">#</th>
                                     <th align="center">Date</th>
-                                    <th align="center">Reference Number</th>
+                                    <th align="center">Reference No</th>
                                     <th align="center">Customer</th>
                                     <th align="center">Status</th>
                                     <th align="center">Total</th>
@@ -350,7 +350,41 @@
                             </div>
                             <!-- /.tab-pane -->
                             <div class="tab-pane" id="tab_2">
-                                2
+                                <table class="table table-hover">
+                                    <thead>
+                                    <th align="center">#</th>
+                                    <th align="center">Date</th>
+                                    <th align="center">Reference No</th>
+                                    <th align="center">Supplier</th>
+                                    <th align="center">Status</th>
+                                    <th align="center">Total</th>
+                                    </thead>
+                                    @foreach($purchaces as $purchace)
+                                        <tr>
+                                            <td>{{ $loop->iteration}}</td>
+                                            <td>{{ $purchace['date'] }}</td>
+                                            <td>{{ $purchace['referenceCode'] }}</td>
+                                            <td>{{ $purchace['sup_name'] }}</td>
+
+                                            <?php
+                                            switch ($purchace['status']):
+                                                case 1:
+                                                    $SaleStatus = '<span class="label label-warning">pending</span>';
+                                                    break;
+                                                case 2:
+                                                    $SaleStatus = '<span class="label label-success">Completed</span>';
+                                                    break;
+                                                default:
+                                                    $SaleStatus = '<span class="label label-danger">Nothing</span>';
+                                                    break;
+                                            endswitch;
+                                            ?>
+
+                                            <td align="center">{!!$SaleStatus !!}</td>
+                                            <td align="right">{{ $purchace['grand_total'] }}</td>
+                                        </tr>
+                                    @endforeach
+                                </table>
                             </div>
                             <!-- /.tab-pane -->
                             <div class="tab-pane" id="tab_3">

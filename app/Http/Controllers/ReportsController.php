@@ -10,6 +10,7 @@ use App\Locations;
 use App\PO;
 use App\Products;
 use App\Stock;
+use App\Transfers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -675,12 +676,30 @@ class ReportsController extends Controller
 
     public function last5Purcheses()
     {
-
+        $pos = PO::latest()->limit(5)->get();
+        $array = [];
+        foreach ($pos as $key => $po) {
+            $array[$key]['date'] = $po->due_date;
+            $array[$key]['referenceCode'] = $po->referenceCode;
+            $array[$key]['sup_name'] = $po->suppliers->name;
+            $array[$key]['status'] = $po->sales_status;
+            $array[$key]['grand_total'] = number_format($po->grand_total,2);
+        }
+        return $array;
     }
 
     public function last5Transfers()
     {
-
+        $pos = Transfers::latest()->limit(5)->get();
+        $array = [];
+        foreach ($pos as $key => $po) {
+            $array[$key]['date'] = $po->due_date;
+            $array[$key]['referenceCode'] = $po->referenceCode;
+            $array[$key]['sup_name'] = $po->suppliers->name;
+            $array[$key]['status'] = $po->sales_status;
+            $array[$key]['grand_total'] = number_format($po->grand_total,2);
+        }
+        return $array;
     }
 
     public function last5Customers()

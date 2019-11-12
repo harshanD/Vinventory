@@ -32,11 +32,11 @@ class HomeController extends Controller
     {
         $report = new ReportsController;
         $sales = $report->last5Sales();
-//        $purchaces= $report->last5Purcheses();
-//        $transfers= $report->last5Transfers();
+        $purchaces = $report->last5Purcheses();
+        $transfers= $report->last5Transfers();
 //        $customers= $report->last5Customers();
 //        $suppliers= $report->last5Suppliers();
-        return view('home', ['sales' => $sales]);
+        return view('home', ['sales' => $sales, 'purchaces' => $purchaces]);
     }
 
     public function registerUserView()
