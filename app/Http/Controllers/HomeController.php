@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Http\Controllers\ReportsController;
 
 class HomeController extends Controller
 {
@@ -29,7 +30,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $report = new ReportsController;
+        $sales = $report->last5Sales();
+//        $purchaces= $report->last5Purcheses();
+//        $transfers= $report->last5Transfers();
+//        $customers= $report->last5Customers();
+//        $suppliers= $report->last5Suppliers();
+        return view('home', ['sales' => $sales]);
     }
 
     public function registerUserView()

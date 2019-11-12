@@ -590,8 +590,6 @@ class ReportsController extends Controller
         endfor;
 
 
-
-
         /* final row */
         $calendar .= '</tr>';
 
@@ -653,5 +651,45 @@ class ReportsController extends Controller
                         </div><span style="float: right"><button class="btn btn-xs btn-success" type="button" data-toggle="collapse"
                                 data-target="#multiCollapseExample_' . $month . '-' . $year . '" aria-expanded="false"
                                 aria-controls="multiCollapseExample_' . $month . '-' . $year . '"><i class="fa fa-fw fa-search"></i>More</button></span>';
+    }
+
+    public function last5Sales()
+    {
+        $invoices = Invoice::latest()->limit(5)->get();
+        $array = [];
+        foreach ($invoices as $key => $invoice) {
+            $array[$key]['invoice_date'] = $invoice->invoice_date;
+            $array[$key]['invoice_code'] = $invoice->invoice_code;
+            $array[$key]['cus_name'] = $invoice->customers->name;
+            $array[$key]['sales_status'] = $invoice->sales_status;
+            $array[$key]['invoice_grand_total'] = number_format($invoice->invoice_grand_total,2);
+            $array[$key]['payment_status'] = $invoice->payment_status;
+
+            $payments = new PaymentsController();
+            $paid = $payments->refCodeByGetOutstanding($invoice->invoice_code);
+            $array[$key]['paid'] = number_format($paid, 2);
+
+        }
+        return $array;
+    }
+
+    public function last5Purcheses()
+    {
+
+    }
+
+    public function last5Transfers()
+    {
+
+    }
+
+    public function last5Customers()
+    {
+
+    }
+
+    public function last5Suppliers()
+    {
+
     }
 }
