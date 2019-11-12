@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Adjustment;
 use App\Brands;
 use App\Categories;
+use App\Customer;
 use App\Invoice;
 use App\Locations;
 use App\PO;
@@ -690,22 +691,31 @@ class ReportsController extends Controller
 
     public function last5Transfers()
     {
-        $pos = Transfers::latest()->limit(5)->get();
+        $tras = Transfers::latest()->limit(5)->get();
         $array = [];
-        foreach ($pos as $key => $po) {
-            $array[$key]['date'] = $po->tr_date;
-            $array[$key]['referenceCode'] = $po->tr_reference_code;
-            $array[$key]['from'] = $po->fromLocation->name;
-            $array[$key]['to'] = $po->toLocation->name;
-            $array[$key]['status'] = $po->status;
-            $array[$key]['total'] = number_format($po->grand_total, 2);
+        foreach ($tras as $key => $tra) {
+            $array[$key]['date'] = $tra->tr_date;
+            $array[$key]['referenceCode'] = $tra->tr_reference_code;
+            $array[$key]['from'] = $tra->fromLocation->name;
+            $array[$key]['to'] = $tra->toLocation->name;
+            $array[$key]['status'] = $tra->status;
+            $array[$key]['total'] = number_format($tra->grand_total, 2);
         }
         return $array;
     }
 
     public function last5Customers()
     {
-
+        $cuss = Customer::latest()->limit(5)->get();
+        $array = [];
+        foreach ($cuss as $key => $cus) {
+            $array[$key]['company'] = $cus->company;
+            $array[$key]['name'] = $cus->name;
+            $array[$key]['email'] = $cus->email;
+            $array[$key]['phone'] = $cus->phone;
+            $array[$key]['address'] = $cus->address;
+        }
+        return $array;
     }
 
     public function last5Suppliers()

@@ -442,7 +442,27 @@
                                 </table>
                             </div><!-- /.tab-pane -->
                             <div class="tab-pane" id="tab_4">
-                                4
+                                <table class="table table-hover">
+                                    <thead>
+                                    <th align="center">#</th>
+                                    <th align="center">Company</th>
+                                    <th align="center">Name</th>
+                                    <th align="center">Email</th>
+                                    <th align="center">Phone</th>
+                                    <th align="center">Address</th>
+                                    </thead>
+                                    @foreach($customers as $customer)
+                                        <tr>
+                                            <td>{{ $loop->iteration}}</td>
+                                            <td>{{ $customer['company'] }}</td>
+                                            <td>{{ $customer['name'] }}</td>
+                                            <td>{{ $customer['email'] }}</td>
+                                            <td>{{ $customer['phone'] }}</td>
+
+                                            <td align="left">{{ $customer['address'] }}</td>
+                                        </tr>
+                                    @endforeach
+                                </table>
                             </div><!-- /.tab-pane -->
                             <div class="tab-pane" id="tab_5">
                                 5
