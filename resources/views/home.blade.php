@@ -262,23 +262,23 @@
                             <li><a href="#tab_3" data-toggle="tab">Transfers</a></li>
                             <li><a href="#tab_4" data-toggle="tab">Customers</a></li>
                             <li><a href="#tab_5" data-toggle="tab">Suppliers</a></li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    Actions <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a>
-                                    </li>
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another
-                                            action</a></li>
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something
-                                            else
-                                            here</a></li>
-                                    <li role="presentation" class="divider"></li>
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated
-                                            link</a></li>
-                                </ul>
-                            </li>
+{{--                            <li class="dropdown">--}}
+{{--                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">--}}
+{{--                                    Actions <span class="caret"></span>--}}
+{{--                                </a>--}}
+{{--                                <ul class="dropdown-menu">--}}
+{{--                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a>--}}
+{{--                                    </li>--}}
+{{--                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another--}}
+{{--                                            action</a></li>--}}
+{{--                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something--}}
+{{--                                            else--}}
+{{--                                            here</a></li>--}}
+{{--                                    <li role="presentation" class="divider"></li>--}}
+{{--                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated--}}
+{{--                                            link</a></li>--}}
+{{--                                </ul>--}}
+{{--                            </li>--}}
                             <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a>
                             </li>
                         </ul>
@@ -465,7 +465,27 @@
                                 </table>
                             </div><!-- /.tab-pane -->
                             <div class="tab-pane" id="tab_5">
-                                5
+                                <table class="table table-hover">
+                                    <thead>
+                                    <th align="center">#</th>
+                                    <th align="center">Company</th>
+                                    <th align="center">Name</th>
+                                    <th align="center">Email</th>
+                                    <th align="center">Phone</th>
+                                    <th align="center">Address</th>
+                                    </thead>
+                                    @foreach($suppliers as $supplier)
+                                        <tr>
+                                            <td>{{ $loop->iteration}}</td>
+                                            <td>{{ $supplier['company'] }}</td>
+                                            <td>{{ $supplier['name'] }}</td>
+                                            <td>{{ $supplier['email'] }}</td>
+                                            <td>{{ $supplier['phone'] }}</td>
+
+                                            <td align="left">{{ $supplier['address'] }}</td>
+                                        </tr>
+                                    @endforeach
+                                </table>
                             </div>
                             <!-- /.tab-pane -->
                         </div>

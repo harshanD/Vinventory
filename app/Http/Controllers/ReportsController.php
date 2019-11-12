@@ -11,6 +11,7 @@ use App\Locations;
 use App\PO;
 use App\Products;
 use App\Stock;
+use App\Supplier;
 use App\Transfers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -720,6 +721,15 @@ class ReportsController extends Controller
 
     public function last5Suppliers()
     {
-
+        $sups = Supplier::latest()->limit(5)->get();
+        $array = [];
+        foreach ($sups  as $key => $sup) {
+            $array[$key]['company'] = $sup->company;
+            $array[$key]['name'] = $sup->name;
+            $array[$key]['email'] = $sup->email;
+            $array[$key]['phone'] = $sup->phone;
+            $array[$key]['address'] = $sup->address;
+        }
+        return $array;
     }
 }

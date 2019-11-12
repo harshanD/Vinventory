@@ -35,12 +35,14 @@ class HomeController extends Controller
         $purchaces = $report->last5Purcheses();
         $transfers = $report->last5Transfers();
         $customers = $report->last5Customers();
-//        $suppliers= $report->last5Suppliers();
+        $suppliers= $report->last5Suppliers();
         return view('home', [
             'sales' => $sales,
             'purchaces' => $purchaces,
             'transfers' => $transfers,
-            'customers' => $customers]);
+            'customers' => $customers,
+            'suppliers' => $suppliers
+        ]);
     }
 
     public function registerUserView()
