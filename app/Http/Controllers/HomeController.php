@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Invoice;
+use App\Payments;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -30,12 +33,19 @@ class HomeController extends Controller
      */
     public function index()
     {
+//        Payments::where('parent_reference_code', $code)->sum('value');
+        $invoices = Invoice::with('invoiceItems')->whereMonth('Invoice.invoice_date', '=', 9)->sum('InvoiceDetails.tax_val');
+//        $invoices = $this->Invoice()->whereMonth('invoice_date', '=', 9)->sum('invoice_details.tax_val');
+        print_r($invoices);
+        return 1;
         $report = new ReportsController;
         $sales = $report->last5Sales();
         $purchaces = $report->last5Purcheses();
         $transfers = $report->last5Transfers();
         $customers = $report->last5Customers();
         $suppliers= $report->last5Suppliers();
+
+        $chart = $report->chartData();
         return view('home', [
             'sales' => $sales,
             'purchaces' => $purchaces,

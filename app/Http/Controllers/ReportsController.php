@@ -723,7 +723,7 @@ class ReportsController extends Controller
     {
         $sups = Supplier::latest()->limit(5)->get();
         $array = [];
-        foreach ($sups  as $key => $sup) {
+        foreach ($sups as $key => $sup) {
             $array[$key]['company'] = $sup->company;
             $array[$key]['name'] = $sup->name;
             $array[$key]['email'] = $sup->email;
@@ -731,5 +731,74 @@ class ReportsController extends Controller
             $array[$key]['address'] = $sup->address;
         }
         return $array;
+    }
+
+    public function chartData()
+    {
+
+        $months = array(
+            0 => date('m', strtotime('-2 month')),
+            1 => date('m', strtotime('-1 month')),
+            2 => date('m'),
+        );
+
+        $array = array();
+        foreach ($months as $key => $month) {
+
+            $invoices = Invoice::whereMonth('invoice_date', '=', $month)->get();
+            $soldProductTax = 0;
+            $orderTax = 0;
+            $sales = 0;
+            foreach ($invoices as $invoice) {
+                foreach ($invoice->invoiceItems as $invo) {
+                    $soldProductTax += $invo->tax_val;
+                }
+                $orderTax += $invoice->tax_amount;
+                $sales += $invoice->invoice_grand_total - $invoice->tax_amount;
+            }
+            $array[$key]['soldProductTax'] = $soldProductTax;
+            $array[$key]['orderTax'] = $orderTax;
+            $array[$key]['sales'] = $sales;
+
+            $purs = PO::whereMonth('due_date', '=', $month)->get();
+
+            $poProductTax = 0;
+            $poValue = 0;
+            foreach ($purs as $pur) {
+                foreach ($pur->poDetails as $pod) {
+                    $poProductTax += $pod->tax_val;
+                }
+                $poValue += $pod->grand_total;
+            }
+            $array[$key]['purchases'] = $this->purchases($month);
+            $array[$key]['purchaseProductTax'] = $poProductTax;
+        }
+        return $array;
+
+    }
+
+    public function soldProductTax($month)
+    {
+        $invoices = Invoice::whereMonth('invoice_date', '=', $month)->sum('tax_val')->get();
+    }
+
+    public function orderTax($month)
+    {
+
+    }
+
+    public function sales($month)
+    {
+
+    }
+
+    public function purchases($month)
+    {
+
+    }
+
+    public function purchaseProductTax($month)
+    {
+
     }
 }

@@ -9,7 +9,24 @@
 @section('content')
     <!-- Main content -->
     <section class="content">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Latest Five</h3>
 
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                            title="Collapse">
+                        <i class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip"
+                            title="Remove">
+                        <i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <div class="box-body">
+                <canvas id="myChart" width="400" height="400"></canvas>
+
+            </div>
+        </div>
         <!-- Default box -->
         @if(!\Illuminate\Support\Facades\Auth::user()->hasRole('Guest'))
             <div class="box">
@@ -262,23 +279,23 @@
                             <li><a href="#tab_3" data-toggle="tab">Transfers</a></li>
                             <li><a href="#tab_4" data-toggle="tab">Customers</a></li>
                             <li><a href="#tab_5" data-toggle="tab">Suppliers</a></li>
-{{--                            <li class="dropdown">--}}
-{{--                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">--}}
-{{--                                    Actions <span class="caret"></span>--}}
-{{--                                </a>--}}
-{{--                                <ul class="dropdown-menu">--}}
-{{--                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a>--}}
-{{--                                    </li>--}}
-{{--                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another--}}
-{{--                                            action</a></li>--}}
-{{--                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something--}}
-{{--                                            else--}}
-{{--                                            here</a></li>--}}
-{{--                                    <li role="presentation" class="divider"></li>--}}
-{{--                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated--}}
-{{--                                            link</a></li>--}}
-{{--                                </ul>--}}
-{{--                            </li>--}}
+                            {{--                            <li class="dropdown">--}}
+                            {{--                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">--}}
+                            {{--                                    Actions <span class="caret"></span>--}}
+                            {{--                                </a>--}}
+                            {{--                                <ul class="dropdown-menu">--}}
+                            {{--                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a>--}}
+                            {{--                                    </li>--}}
+                            {{--                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another--}}
+                            {{--                                            action</a></li>--}}
+                            {{--                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something--}}
+                            {{--                                            else--}}
+                            {{--                                            here</a></li>--}}
+                            {{--                                    <li role="presentation" class="divider"></li>--}}
+                            {{--                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated--}}
+                            {{--                                            link</a></li>--}}
+                            {{--                                </ul>--}}
+                            {{--                            </li>--}}
                             <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a>
                             </li>
                         </ul>
@@ -572,3 +589,95 @@
 
     </style>
 @stop
+@section('js')
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                datasets: [{
+                    label: 'Sold Product Tax',
+                    data: [10, 20, 30],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    borderWidth: 1
+                }, {
+                    label: 'Order Tax',
+                    data: [5, 2, 20],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                    ],
+                    borderWidth: 1
+                }, {
+                    label: 'Sales',
+                    data: [5, 2, 20],
+                    backgroundColor: [
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 206, 86, 1)',
+                    ],
+                    borderWidth: 1
+                }, {
+                    label: 'Purchaces',
+                    data: [5, 2, 20],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(75, 192, 192, 1)',
+                    ],
+                    borderWidth: 1
+                }, {
+                    label: 'Purchaces Product Tax',
+                    data: [6, 2, 30],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(75, 192, 192, 1)',
+                    ],
+                    borderWidth: 1
+                }
+                ],
+                labels: ['January', 'February', 'March'],
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+@endsection
