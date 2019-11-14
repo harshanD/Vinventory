@@ -34,10 +34,10 @@ class HomeController extends Controller
     public function index()
     {
 //        Payments::where('parent_reference_code', $code)->sum('value');
-        $invoices = Invoice::with('invoiceItems')->whereMonth('Invoice.invoice_date', '=', 9)->sum('InvoiceDetails.tax_val');
+//        $invoices = Invoice::with('invoiceItems')->whereMonth('Invoice.invoice_date', '=', 9)->sum('InvoiceDetails.tax_val');
 //        $invoices = $this->Invoice()->whereMonth('invoice_date', '=', 9)->sum('invoice_details.tax_val');
-        print_r($invoices);
-        return 1;
+//        print_r($invoices);
+//        return 1;
         $report = new ReportsController;
         $sales = $report->last5Sales();
         $purchaces = $report->last5Purcheses();
@@ -51,7 +51,8 @@ class HomeController extends Controller
             'purchaces' => $purchaces,
             'transfers' => $transfers,
             'customers' => $customers,
-            'suppliers' => $suppliers
+            'suppliers' => $suppliers,
+            'chart' => $chart
         ]);
     }
 

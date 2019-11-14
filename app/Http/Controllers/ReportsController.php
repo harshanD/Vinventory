@@ -754,11 +754,11 @@ class ReportsController extends Controller
                     $soldProductTax += $invo->tax_val;
                 }
                 $orderTax += $invoice->tax_amount;
-                $sales += $invoice->invoice_grand_total - $invoice->tax_amount;
+                $sales += $invoice->invoice_grand_total;
             }
             $array[$key]['soldProductTax'] = $soldProductTax;
             $array[$key]['orderTax'] = $orderTax;
-            $array[$key]['sales'] = $sales;
+            $array[$key]['sales'] = $sales-$soldProductTax;
 
             $purs = PO::whereMonth('due_date', '=', $month)->get();
 
@@ -768,37 +768,20 @@ class ReportsController extends Controller
                 foreach ($pur->poDetails as $pod) {
                     $poProductTax += $pod->tax_val;
                 }
-                $poValue += $pod->grand_total;
+                $poValue += $pur->grand_total;
             }
-            $array[$key]['purchases'] = $this->purchases($month);
+            $array[$key]['purchases'] = $poValue;
             $array[$key]['purchaseProductTax'] = $poProductTax;
+            if ($key == 0) {
+                $array[$key]['month'] = date('F', strtotime('-2 month'));
+            } elseif ($key == 1) {
+                $array[$key]['month'] = date('F', strtotime('-1 month'));
+            } elseif ($key == 2) {
+                $array[$key]['month'] = date('F', strtotime('0 month'));
+            }
+
         }
         return $array;
-
-    }
-
-    public function soldProductTax($month)
-    {
-        $invoices = Invoice::whereMonth('invoice_date', '=', $month)->sum('tax_val')->get();
-    }
-
-    public function orderTax($month)
-    {
-
-    }
-
-    public function sales($month)
-    {
-
-    }
-
-    public function purchases($month)
-    {
-
-    }
-
-    public function purchaseProductTax($month)
-    {
 
     }
 }

@@ -11,7 +11,7 @@
     <section class="content">
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">Latest Five</h3>
+                <h3 class="box-title">Overview Chart</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="box-body">
-                <canvas id="myChart" width="400" height="400"></canvas>
+                <canvas id="myChart" width="400" height="120"></canvas>
 
             </div>
         </div>
@@ -458,6 +458,12 @@
                                     @endforeach
                                 </table>
                             </div><!-- /.tab-pane -->
+
+                            <?php
+//                            echo '<pre>';
+//                            print_r($chart);
+//                            echo '</pre>';
+                            ?>
                             <div class="tab-pane" id="tab_4">
                                 <table class="table table-hover">
                                     <thead>
@@ -597,7 +603,7 @@
             data: {
                 datasets: [{
                     label: 'Sold Product Tax',
-                    data: [10, 20, 30],
+                    data: [<?= $chart[0]['soldProductTax']?>,<?= $chart[1]['soldProductTax']?>, <?= $chart[2]['soldProductTax']?>],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(255, 99, 132, 0.2)',
@@ -611,7 +617,7 @@
                     borderWidth: 1
                 }, {
                     label: 'Order Tax',
-                    data: [5, 2, 20],
+                    data: [<?= $chart[0]['orderTax']?>,<?= $chart[1]['orderTax']?>, <?= $chart[2]['orderTax']?>],
                     backgroundColor: [
                         'rgba(54, 162, 235, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
@@ -625,7 +631,7 @@
                     borderWidth: 1
                 }, {
                     label: 'Sales',
-                    data: [5, 2, 20],
+                    data: [<?= $chart[0]['sales']?>,<?= $chart[1]['sales']?>, <?= $chart[2]['sales']?>],
                     backgroundColor: [
                         'rgba(255, 206, 86, 0.2)',
                         'rgba(255, 206, 86, 0.2)',
@@ -639,7 +645,7 @@
                     borderWidth: 1
                 }, {
                     label: 'Purchaces',
-                    data: [5, 2, 20],
+                    data: [<?= $chart[0]['purchases']?>,<?= $chart[1]['purchases']?>, <?= $chart[2]['purchases']?>],
                     backgroundColor: [
                         'rgba(75, 192, 192, 0.2)',
                         'rgba(75, 192, 192, 0.2)',
@@ -653,7 +659,7 @@
                     borderWidth: 1
                 }, {
                     label: 'Purchaces Product Tax',
-                    data: [6, 2, 30],
+                    data: [<?= $chart[0]['purchaseProductTax']?>,<?= $chart[1]['purchaseProductTax']?>, <?= $chart[2]['purchaseProductTax']?>],
                     backgroundColor: [
                         'rgba(75, 192, 192, 0.2)',
                         'rgba(75, 192, 192, 0.2)',
@@ -667,7 +673,7 @@
                     borderWidth: 1
                 }
                 ],
-                labels: ['January', 'February', 'March'],
+                labels:  [<?= "'".$chart[0]['month']."'"?>,<?= "'".$chart[1]['month']."'"?>, <?= "'".$chart[2]['month']."'"?>],
             },
             options: {
                 scales: {
