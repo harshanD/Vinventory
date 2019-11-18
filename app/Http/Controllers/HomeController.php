@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\ReportsController;
+use Jenssegers\Agent\Agent;
 
 class HomeController extends Controller
 {
@@ -43,16 +44,18 @@ class HomeController extends Controller
         $purchaces = $report->last5Purcheses();
         $transfers = $report->last5Transfers();
         $customers = $report->last5Customers();
-        $suppliers= $report->last5Suppliers();
+        $suppliers = $report->last5Suppliers();
 
         $chart = $report->chartData();
+        $agent = new Agent();
         return view('home', [
             'sales' => $sales,
             'purchaces' => $purchaces,
             'transfers' => $transfers,
             'customers' => $customers,
             'suppliers' => $suppliers,
-            'chart' => $chart
+            'chart' => $chart,
+            'agent' => $agent->isDesktop()
         ]);
     }
 

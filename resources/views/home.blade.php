@@ -9,6 +9,8 @@
 @section('content')
     <!-- Main content -->
     <section class="content">
+
+        @if($agent==1)
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title">Overview Chart</h3>
@@ -27,6 +29,8 @@
 
             </div>
         </div>
+        @endif
+
         <!-- Default box -->
         @if(!\Illuminate\Support\Facades\Auth::user()->hasRole('Guest'))
             <div class="box">
@@ -253,7 +257,26 @@
                     </div>
                 @endif
             </div>
+                @if($agent!=1)
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Overview Chart</h3>
 
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                                        title="Collapse">
+                                    <i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip"
+                                        title="Remove">
+                                    <i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <canvas id="myChart" width="400" height="120"></canvas>
+
+                        </div>
+                    </div>
+                @endif
             {{--    TOP 5--}}
             <div class="box">
                 <div class="box-header with-border">
@@ -272,7 +295,7 @@
                 {{--                    <div class="card-body">--}}
                 {{--                        <div class="row">--}}
                 <!-- Custom Tabs -->
-                    <div class="nav-tabs-custom">
+                    <div class="nav-tabs-custom  table-responsive">
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#tab_1" data-toggle="tab">Sales</a></li>
                             <li><a href="#tab_2" data-toggle="tab">Purchases</a></li>
