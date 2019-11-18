@@ -11,27 +11,27 @@
     <section class="content">
 
         @if($agent==1)
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">Overview Chart</h3>
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Overview Chart</h3>
 
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
-                            title="Collapse">
-                        <i class="fa fa-minus"></i></button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip"
-                            title="Remove">
-                        <i class="fa fa-times"></i></button>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                                title="Collapse">
+                            <i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip"
+                                title="Remove">
+                            <i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <canvas id="myChart" width="400" height="130"></canvas>
+
                 </div>
             </div>
-            <div class="box-body">
-                <canvas id="myChart" width="400" height="120"></canvas>
-
-            </div>
-        </div>
         @endif
 
-        <!-- Default box -->
+    <!-- Default box -->
         @if(!\Illuminate\Support\Facades\Auth::user()->hasRole('Guest'))
             <div class="box">
                 <div class="box-header with-border">
@@ -257,26 +257,26 @@
                     </div>
                 @endif
             </div>
-                @if($agent!=1)
-                    <div class="box">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Overview Chart</h3>
+            @if($agent!=1)
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Overview Chart</h3>
 
-                            <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
-                                        title="Collapse">
-                                    <i class="fa fa-minus"></i></button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip"
-                                        title="Remove">
-                                    <i class="fa fa-times"></i></button>
-                            </div>
-                        </div>
-                        <div class="box-body">
-                            <canvas id="myChart" width="400" height="120"></canvas>
-
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                                    title="Collapse">
+                                <i class="fa fa-minus"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip"
+                                    title="Remove">
+                                <i class="fa fa-times"></i></button>
                         </div>
                     </div>
-                @endif
+                    <div class="box-body">
+                        <canvas id="myChart" width="400" height="180"></canvas>
+
+                    </div>
+                </div>
+            @endif
             {{--    TOP 5--}}
             <div class="box">
                 <div class="box-header with-border">
@@ -483,9 +483,9 @@
                             </div><!-- /.tab-pane -->
 
                             <?php
-//                            echo '<pre>';
-//                            print_r($chart);
-//                            echo '</pre>';
+                            //                            echo '<pre>';
+                            //                            print_r($chart);
+                            //                            echo '</pre>';
                             ?>
                             <div class="tab-pane" id="tab_4">
                                 <table class="table table-hover">
@@ -684,19 +684,19 @@
                     label: 'Purchaces Product Tax',
                     data: [<?= $chart[0]['purchaseProductTax']?>,<?= $chart[1]['purchaseProductTax']?>, <?= $chart[2]['purchaseProductTax']?>],
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(105, 192, 75, 0.2)',
+                        'rgba(105, 192, 75, 0.2)',
+                        'rgba(105, 192, 75, 0.2)',
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(75, 192, 192, 1)',
+                        'rgba(105, 192, 75, 1)',
+                        'rgba(105, 192, 75, 1)',
+                        'rgba(105, 192, 75, 1)',
                     ],
                     borderWidth: 1
                 }
                 ],
-                labels:  [<?= "'".$chart[0]['month']."'"?>,<?= "'".$chart[1]['month']."'"?>, <?= "'".$chart[2]['month']."'"?>],
+                labels: [<?= "'" . $chart[0]['month'] . "'"?>,<?= "'" . $chart[1]['month'] . "'"?>, <?= "'" . $chart[2]['month'] . "'"?>],
             },
             options: {
                 scales: {
