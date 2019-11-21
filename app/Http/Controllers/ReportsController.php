@@ -661,6 +661,7 @@ class ReportsController extends Controller
         $invoices = Invoice::latest()->limit(5)->get();
         $array = [];
         foreach ($invoices as $key => $invoice) {
+            $array[$key]['id'] = $invoice->id;
             $array[$key]['invoice_date'] = $invoice->invoice_date;
             $array[$key]['invoice_code'] = $invoice->invoice_code;
             $array[$key]['cus_name'] = $invoice->customers->name;
@@ -681,6 +682,7 @@ class ReportsController extends Controller
         $pos = PO::latest()->limit(5)->get();
         $array = [];
         foreach ($pos as $key => $po) {
+            $array[$key]['id'] = $po->id;
             $array[$key]['date'] = $po->due_date;
             $array[$key]['referenceCode'] = $po->referenceCode;
             $array[$key]['sup_name'] = $po->suppliers->name;
@@ -695,6 +697,7 @@ class ReportsController extends Controller
         $tras = Transfers::latest()->limit(5)->get();
         $array = [];
         foreach ($tras as $key => $tra) {
+            $array[$key]['id'] = $tra->id;
             $array[$key]['date'] = $tra->tr_date;
             $array[$key]['referenceCode'] = $tra->tr_reference_code;
             $array[$key]['from'] = $tra->fromLocation->name;
@@ -710,6 +713,7 @@ class ReportsController extends Controller
         $cuss = Customer::latest()->limit(5)->get();
         $array = [];
         foreach ($cuss as $key => $cus) {
+            $array[$key]['id'] = $cus->id;
             $array[$key]['company'] = $cus->company;
             $array[$key]['name'] = $cus->name;
             $array[$key]['email'] = $cus->email;
@@ -724,6 +728,7 @@ class ReportsController extends Controller
         $sups = Supplier::latest()->limit(5)->get();
         $array = [];
         foreach ($sups as $key => $sup) {
+            $array[$key]['id'] = $sup->id;
             $array[$key]['company'] = $sup->company;
             $array[$key]['name'] = $sup->name;
             $array[$key]['email'] = $sup->email;

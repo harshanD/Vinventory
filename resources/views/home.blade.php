@@ -336,7 +336,7 @@
                                     <th align="center">paid</th>
                                     </thead>
                                     @foreach($sales as $sale)
-                                        <tr>
+                                        <tr onclick="window.location='/sales/view/{{$sale['id']  }}'" style="cursor: pointer">
                                             <td>{{ $loop->iteration}}</td>
                                             <td>{{ $sale['invoice_date'] }}</td>
                                             <td>{{ $sale['invoice_code'] }}</td>
@@ -400,7 +400,7 @@
                                     <th align="center">Total</th>
                                     </thead>
                                     @foreach($purchaces as $purchace)
-                                        <tr>
+                                        <tr onclick="window.location='/po/view/{{$purchace['id']  }}'" style="cursor: pointer">
                                             <td>{{ $loop->iteration}}</td>
                                             <td>{{ $purchace['date'] }}</td>
                                             <td>{{ $purchace['referenceCode'] }}</td>
@@ -448,7 +448,7 @@
                                     <th align="center">Amount</th>
                                     </thead>
                                     @foreach($transfers as $transfer)
-                                        <tr>
+                                        <tr onclick="window.location='/transfer/view/{{$transfer['id']  }}'" style="cursor: pointer">
                                             <td>{{ $loop->iteration}}</td>
                                             <td>{{ $transfer['date'] }}</td>
                                             <td>{{ $transfer['referenceCode'] }}</td>
@@ -498,7 +498,7 @@
                                     <th align="center">Address</th>
                                     </thead>
                                     @foreach($customers as $customer)
-                                        <tr>
+                                        <tr onclick="window.location='/customer/edit/{{$customer['id']  }}'" style="cursor: pointer">
                                             <td>{{ $loop->iteration}}</td>
                                             <td>{{ $customer['company'] }}</td>
                                             <td>{{ $customer['name'] }}</td>
@@ -521,7 +521,7 @@
                                     <th align="center">Address</th>
                                     </thead>
                                     @foreach($suppliers as $supplier)
-                                        <tr>
+                                        <tr >
                                             <td>{{ $loop->iteration}}</td>
                                             <td>{{ $supplier['company'] }}</td>
                                             <td>{{ $supplier['name'] }}</td>
