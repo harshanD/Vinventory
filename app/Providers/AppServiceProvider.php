@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\ReportsController;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $report = new ReportsController;
+        $notifications = $report->notifications();
+        View::share('notifications', $notifications);
     }
 }

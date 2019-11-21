@@ -9,7 +9,6 @@
 @section('content')
     <!-- Main content -->
     <section class="content">
-
         @if($agent==1)
             <div class="box">
                 <div class="box-header with-border">

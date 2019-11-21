@@ -763,7 +763,7 @@ class ReportsController extends Controller
             }
             $array[$key]['soldProductTax'] = $soldProductTax;
             $array[$key]['orderTax'] = $orderTax;
-            $array[$key]['sales'] = $sales-$soldProductTax;
+            $array[$key]['sales'] = $sales - $soldProductTax;
 
             $purs = PO::whereMonth('due_date', '=', $month)->get();
 
@@ -778,15 +778,42 @@ class ReportsController extends Controller
             $array[$key]['purchases'] = $poValue;
             $array[$key]['purchaseProductTax'] = $poProductTax;
             if ($key == 0) {
-                $array[$key]['month'] = date('F', strtotime('-2 month')).'-'.date('Y');
+                $array[$key]['month'] = date('F', strtotime('-2 month')) . '-' . date('Y');
             } elseif ($key == 1) {
-                $array[$key]['month'] = date('F', strtotime('-1 month')).'-'.date('Y');
+                $array[$key]['month'] = date('F', strtotime('-1 month')) . '-' . date('Y');
             } elseif ($key == 2) {
-                $array[$key]['month'] = date('F', strtotime('0 month')).'-'.date('Y');
+                $array[$key]['month'] = date('F', strtotime('0 month')) . '-' . date('Y');
             }
 
         }
         return $array;
 
     }
+
+    public function notifications()
+    {
+        $array = array();
+        $array['stock'] = $this->stockNotification();
+        return $array;
+    }
+
+    public function stockNotification()
+    {
+        $stock = new  StockController();
+        $data = (object)Products::where(['status' => \Config::get('constants.status.Active')])->get();
+        $list = array();
+        $in = 0;
+        foreach ($data as $key => $product) {
+            if ($product->reorder_activation == \Config::get('constants.status.Active')) {
+
+                $qty = json_decode($stock->itemQtySumNoteDeletedWareHouses($product->id));
+
+                if ($product->reorder_level >= $qty) {
+                    $in++;
+                }
+            }
+        }
+        return $in;
+    }
+
 }
