@@ -66,11 +66,13 @@
                                                 <li>
                                                     <!-- inner menu: contains the actual data -->
                                                     <ul class="menu">
+                                                        @if($notifications['stock']!=0)
                                                         <li>
                                                             <a href="/reports/quantity_alerts">
                                                                 <i class="fa fa-users text-aqua"></i><?=  ($notifications['stock'])?> Item/s Quantity Alerts
                                                             </a>
                                                         </li>
+                                                        @endif
                                                         {{--                                                        <li>--}}
                                                         {{--                                                            <a href="#">--}}
                                                         {{--                                                                <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the--}}
