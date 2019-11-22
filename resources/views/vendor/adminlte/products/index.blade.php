@@ -172,7 +172,6 @@
         })
 
 
-
         function removeProduct(id) {
             // submit the remove from
             $("#removeProductForm").on('submit', function () {
@@ -232,5 +231,27 @@
             });
 
         }
+    </script>
+@endsection
+
+@section('js')
+    <script>
+        $(function () {
+            setTimeout(
+                function () {
+                    $('.image-link-custom').viewbox({
+                        setTitle: true,
+                        margin: 20,
+                        resizeDuration: 300,
+                        openDuration: 200,
+                        closeDuration: 200,
+                        closeButton: true,
+                        navButtons: true,
+                        closeOnSideClick: true,
+                        nextOnContentClick: true
+                    });
+                }, 1000);
+        });
+
     </script>
 @endsection

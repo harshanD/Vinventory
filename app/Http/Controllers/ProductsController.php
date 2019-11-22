@@ -129,7 +129,7 @@ class ProductsController extends Controller
             })->addColumn('unitName', function ($query) {
                 return \Config::get('constants.unit_put.' . $query->unit);
             })->addColumn('image', function ($query) {
-                return '<a href="' . asset('storage/' . $query->img_url) . '"  class="image-link"><img src="' . asset('storage/' . $query->img_url) . '" style="width:50px;height:50px"  alt="placeholder avatar"></a>';
+                return '<a href="' . asset('storage/' . $query->img_url) . '"  class="image-link-custom"><img src="' . asset('storage/' . $query->img_url) . '" style="width:50px;height:50px"  alt="placeholder avatar"></a>';
             })->addColumn('action', function ($query) {
                 $buttons = '';
 
