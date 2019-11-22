@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Adjustment;
+use App\Biller;
 use App\Brands;
 use App\Categories;
 use App\Customer;
@@ -816,4 +817,85 @@ class ReportsController extends Controller
         return $in;
     }
 
+    public function salesIndex(Request $request)
+    {
+        $soldUsers = Adjustment::groupBy('created_by')->get();
+        $customers = Customer::get();
+        $billers = Biller::get();
+        $locations = Locations::all();
+        $products = Products::all();
+//$data = Invoice::where('invoice_code' ,$request->ref)->get();
+//echo  '<pre>';
+//print_r($data);
+//        echo  '</pre>';
+        $sale = new Invoice();
+//        $sale = $sale->select(' invoiceItems.* ');
+        if (isset($request->product) && $request->product != '0') {
+            $sale->whereHas('invoiceItems', function ($query) use ($request) {
+                $query->where('invoiceItems.item_id', $request->input('product'));
+            });
+        }
+        if (isset($request->ref) && $request->ref != '') {
+            $sale = $sale->where('invoice_code', 'LIKE', "%" . $request->ref . "%");
+        }
+        if (isset($request->createdUser) && $request->createdUser != '0') {
+            $sale = $sale->where('created_by', $request->createdUser);
+        }
+        if (isset($request->customer) && $request->customer != '0') {
+            $sale = $sale->where('customer', $request->customer);
+        }
+        if (isset($request->biller) && $request->biller != '0') {
+            $sale = $sale->where('biller', $request->biller);
+        }
+        if (isset($request->warehouse) && $request->warehouse != '0') {
+            $sale = $sale->where('location', $request->warehouse);
+        }
+        if ((isset($request->from) && $request->from != '') && (isset($request->to) && $request->to != '')) {
+            $sale = $sale->whereBetween('created_at', array($request->from, $request->to));
+        }
+        $filteredData = $sale->get();
+
+        return view('vendor.adminlte.reports.salesReport.index', ['filteredData' => $filteredData, 'soldUsers' => $soldUsers, 'warehouses' => $locations, 'billers' => $billers, 'customers' => $customers, 'products' => $products]);
+    }
+
+    public function fetchSaleData(Request $request)
+    {
+        $sale = new Invoice();
+//        $sale = $sale->select(' invoiceItems.* ');
+        if (isset($request->product) && $request->product != '') {
+//            if ($request->has('products')) {
+            /*   $sale->whereHas('invoiceItems', function ($query) use ($request) {
+                   $query->whereIn('invoiceItems.name', $request->input('product'));
+               });*/
+//            }
+//            $sale = $sale->where('name like (?)', ['%$request->product%']);
+        }
+        if (isset($request->ref) && $request->ref != '') {
+            echo $request->ref;
+            $sale->whereHas('invoice_code', function ($query) use ($request) {
+                $query->where('invoice_code ', '=', $request->ref);
+            });
+//            $sale = $sale->where('name', 'like', "'%" . $request->product . "%'");
+        }
+        if (isset($request->crby) && $request->crby != '') {
+
+        }
+        if (isset($request->cus) && $request->cus != '') {
+
+        }
+        if (isset($request->bir) && $request->bir != '') {
+
+        }
+        if (isset($request->wh) && $request->wh != '') {
+
+        }
+        if (isset($request->sd) && $request->sd != '') {
+
+        }
+        if (isset($request->ed) && $request->ed != '') {
+
+        }
+        $data = $sale->get();
+        print_r($data);
+    }
 }

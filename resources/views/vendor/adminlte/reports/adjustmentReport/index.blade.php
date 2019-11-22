@@ -25,7 +25,7 @@
         <div class="box">
 
             <div class="box-header with-border">
-                <h3 class="box-title">Product Report</h3>
+                <h3 class="box-title">Adjustment Report</h3>
 
                 <div class="box-tools pull-right">
 

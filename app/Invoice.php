@@ -18,6 +18,11 @@ class Invoice extends Model
         return $this->hasMany(InvoiceDetails::class, 'invoice_id', 'id');
     }
 
+    function products()
+    {
+        return $this->hasManyThrough(Products::class, InvoiceDetails::class, 'invoice_id', 'id');
+    }
+
     function locations()
     {
         return $this->hasOne(Locations::class, 'id', 'location');
