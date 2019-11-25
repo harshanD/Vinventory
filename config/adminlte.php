@@ -340,25 +340,30 @@ return [
                     'icon' => 'plus-circle',
                     'url' => 'reports/category',
                     'can' => 'viewTax',
-                ],[
+                ], [
                     'text' => 'Brands Report',
                     'icon' => 'plus-circle',
                     'url' => 'reports/brand',
                     'can' => 'viewTax',
-                ],[
+                ], [
                     'text' => 'Daily Sales',
                     'icon' => 'plus-circle',
                     'url' => 'reports/daily_sales',
                     'can' => 'viewTax',
-                ],[
+                ], [
                     'text' => 'Monthly Sales',
                     'icon' => 'plus-circle',
                     'url' => 'reports/monthly_sales',
                     'can' => 'viewTax',
-                ],[
+                ], [
                     'text' => 'Sales Report',
                     'icon' => 'plus-circle',
                     'url' => 'reports/sales',
+                    'can' => 'viewTax',
+                ], [
+                    'text' => 'Payments Report',
+                    'icon' => 'plus-circle',
+                    'url' => 'reports/payment',
                     'can' => 'viewTax',
                 ],
             ],

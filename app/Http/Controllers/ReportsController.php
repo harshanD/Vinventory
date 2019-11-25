@@ -9,6 +9,7 @@ use App\Categories;
 use App\Customer;
 use App\Invoice;
 use App\Locations;
+use App\Payments;
 use App\PO;
 use App\Products;
 use App\Stock;
@@ -819,7 +820,7 @@ class ReportsController extends Controller
 
     public function salesIndex(Request $request)
     {
-        $soldUsers = Adjustment::groupBy('created_by')->get();
+        $soldUsers = Invoice::groupBy('created_by')->get();
         $customers = Customer::get();
         $billers = Biller::get();
         $locations = Locations::all();
@@ -856,44 +857,104 @@ class ReportsController extends Controller
         return view('vendor.adminlte.reports.salesReport.index', ['filteredData' => $filteredData, 'soldUsers' => $soldUsers, 'warehouses' => $locations, 'billers' => $billers, 'customers' => $customers, 'products' => $products]);
     }
 
-    public function fetchSaleData(Request $request)
+    public function paymentIndex(Request $request)
     {
-        $sale = new Invoice();
-//        $sale = $sale->select(' invoiceItems.* ');
-        if (isset($request->product) && $request->product != '') {
-//            if ($request->has('products')) {
-            /*   $sale->whereHas('invoiceItems', function ($query) use ($request) {
-                   $query->whereIn('invoiceItems.name', $request->input('product'));
-               });*/
-//            }
-//            $sale = $sale->where('name like (?)', ['%$request->product%']);
+        $payUsers = Payments::groupBy('created_by')->get();
+        $customers = Customer::get();
+        $billers = Biller::get();
+        $supplier = Supplier::all();
+        $products = Products::all();
+
+        $payment = new Payments();
+        if (isset($request->payRef) && $request->payRef != '') {
+            $payment = $payment->where('reference_code', 'LIKE', "%" . $request->payRef . "%");
         }
-        if (isset($request->ref) && $request->ref != '') {
-            echo $request->ref;
-            $sale->whereHas('invoice_code', function ($query) use ($request) {
-                $query->where('invoice_code ', '=', $request->ref);
-            });
-//            $sale = $sale->where('name', 'like', "'%" . $request->product . "%'");
+        if (isset($request->payBy) && $request->payBy != '0') {
+            $payment = $payment->where('pay_type', $request->payBy);
         }
-        if (isset($request->crby) && $request->crby != '') {
+        if (isset($request->cNumber) && $request->cNumber != '') {
+            $payment = $payment->where(' cheque_no', $request->cNumber);
+        }
+        if (isset($request->createdUser) && $request->createdUser != '0') {
+            $payment = $payment->where('created_by', $request->createdUser);
+        }
+        if ((isset($request->from) && $request->from != '') && (isset($request->to) && $request->to != '')) {
+            $payment = $payment->whereBetween('created_at', array($request->from, $request->to));
+        }
+
+
+        $filteredData = $payment->get();
+
+        $out = array();
+        $cusKey = 0;
+        foreach ($filteredData as $key => $pay) {
+
+            switch (substr($pay->parent_reference_code, 0, 2)):
+                case 'PO':
+                    $poData = new PO();
+                    $poData = $poData->where('referenceCode', $pay->parent_reference_code);
+                    /*po searching*/
+                    if (isset($request->purRef) && $request->purRef != '') {
+                        $poData = $poData->where('referenceCode', 'LIKE', "%" . $request->purRef . "%");
+                    }
+                    if (isset($request->supplier) && $request->supplier != '0') {
+                        $poData = $poData->where('supplier', $request->supplier);
+                    }
+
+                    $poData = $poData->get();
+
+                    if ($poData->isNotEmpty()) {
+
+                        $out[$cusKey]['id'] = $pay->id;
+                        $out[$cusKey]['date'] = $pay->date;
+                        $out[$cusKey]['paymentReference'] = $pay->reference_code;
+                        $out[$cusKey]['saleReference'] = '';
+                        $out[$cusKey]['purReference'] = $pay->parent_reference_code;
+                        $out[$cusKey]['paidBy'] = $pay->pay_type;
+                        $out[$cusKey]['amount'] = $pay->value;
+                        $out[$cusKey]['type'] = $pay->pay_type;
+                        $out[$cusKey]['lastUpdated'] = $pay->updated_at;
+//                        $out[$cusKey]['typeeee'] = 'pooooo';
+                        ++$cusKey;
+                    }
+                    break;
+                case 'IV':
+                    $ivData = new Invoice();
+                    $ivData = $ivData->where('invoice_code', $pay->parent_reference_code);
+                    /*invoice searching*/
+                    if (isset($request->saleRef) && $request->saleRef != '') {
+                        $ivData = $ivData->where('invoice_code', 'LIKE', "%" . $request->saleRef . "%");
+                    }
+                    if (isset($request->customer) && $request->customer != '0') {
+                        $ivData = $ivData->where('customer', $request->customer);
+                    }
+                    if (isset($request->biller) && $request->biller != '0') {
+                        $ivData = $ivData->where('biller', $request->biller);
+                    }
+                    $ivData = $ivData->get();
+
+                    if ($ivData->isNotEmpty()) {
+                        $out[$cusKey]['id'] = $pay->id;
+                        $out[$cusKey]['date'] = $pay->date;
+                        $out[$cusKey]['paymentReference'] = $pay->reference_code;
+                        $out[$cusKey]['saleReference'] = $pay->parent_reference_code;
+                        $out[$cusKey]['purReference'] = '';
+                        $out[$cusKey]['paidBy'] = $pay->pay_type;
+                        $out[$cusKey]['amount'] = $pay->value;
+                        $out[$cusKey]['lastUpdated'] = $pay->updated_at;
+//                        $out[$cusKey]['typeeee'] = 'invoice';
+                        ++$cusKey;
+                    }
+
+                    break;
+            endswitch;
 
         }
-        if (isset($request->cus) && $request->cus != '') {
-
-        }
-        if (isset($request->bir) && $request->bir != '') {
-
-        }
-        if (isset($request->wh) && $request->wh != '') {
-
-        }
-        if (isset($request->sd) && $request->sd != '') {
-
-        }
-        if (isset($request->ed) && $request->ed != '') {
-
-        }
-        $data = $sale->get();
-        print_r($data);
+//        echo $foo_sql = $poData->toSql();
+//        echo '<pre>';
+//        print_r($out);
+//        echo '</pre>';
+        return view('vendor.adminlte.reports.paymentReport.index', ['filteredData' => $out, 'payUsers' => $payUsers, 'suppliers' => $supplier, 'billers' => $billers, 'customers' => $customers, 'products' => $products]);
     }
+
 }

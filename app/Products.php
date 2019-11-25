@@ -19,11 +19,11 @@ class Products extends Model
 
     public function categories()
     {
-        return $this->hasOne(Categories::class ,'id','category' );
+        return $this->hasOne(Categories::class, 'id', 'category');
     }
 
     public function brands()
     {
-        return $this->hasOne(Brands::class,'id','brand');
+        return $this->hasOne(Brands::class, 'id', 'brand');
     }
 }
