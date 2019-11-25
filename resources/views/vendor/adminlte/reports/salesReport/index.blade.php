@@ -66,7 +66,7 @@
                                         <option value="0">Select Product</option>
                                         @foreach($products as $pro)
                                             <option
-                                                <?= (app('request')->input('product') == $pro->name) ? 'selected' : ''; ?> value="{{$pro->id}}">{{$pro->name}}</option>
+                                                <?= (app('request')->input('product') == $pro->id) ? 'selected' : ''; ?> value="{{$pro->id}}">{{$pro->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -156,14 +156,14 @@
                         </div>
                     </form>
                     <div class="table-responsive">
-                        <table id="manageTable" class="table table-bordered table-striped">
+                        <table id="manageTable" class="table table-bordered table-striped table table-hover">
                             <thead>
                             <tr>
                                 <th>Date</th>
                                 <th>Reference No</th>
                                 <th>Biller</th>
                                 <th>Customer</th>
-                                <th>Product</th>
+                                <th>Product(Qty)</th>
                                 <th>Grand Total</th>
                                 <th>Paid</th>
                                 <th>Balance</th>
@@ -172,18 +172,47 @@
                             </thead>
                             <tbody>
                             @foreach($filteredData as $filData)
-                                <tr>
+                                <?php $ss = $filData->invoiceItems;
+
+                                switch ($filData->payment_status):
+                                    case 1:
+                                        $payStatus = '<span class="label label-warning">pending</span>';
+                                        break;
+                                    case 2:
+                                        $payStatus = '<span class="label label-warning">Due</span>';
+                                        break;
+                                    case 3:
+                                        $payStatus = '<span class="label label-warning">Partial</span>';
+                                        break;
+                                    case 4:
+                                        $payStatus = '<span class="label label-success">Paid</span>';
+                                        break;
+                                    case 5:
+                                        $payStatus = '<span class="label label-danger">Over Paid</span>';
+                                        break;
+                                    default:
+                                        $payStatus = '<span class="label label-danger">Nothing</span>';
+                                        break;
+                                endswitch;
+                                ?>
+                                <tr onclick="window.location='/sales/view/{{$filData->id  }}'" style="cursor: pointer" >
                                     <th>{{$filData->invoice_date}}</th>
                                     <th>{{$filData->invoice_code}}</th>
                                     <th>{{$filData->billers->name}}</th>
                                     <th>{{$filData->customers->name}}</th>
-                                    <th><?php $ss = $filData->products;
-                                        print_r($ss)
-                                        ?></th>
-                                    <th>{{$filData->invoice_date}}</th>
-                                    <th>{{$filData->invoice_date}}</th>
-                                    <th>{{$filData->invoice_date}}</th>
-                                    <th>{{$filData->invoice_date}}</th>
+                                    <th>
+                                        @foreach($ss as $s)
+                                            @if($s->products->id==app('request')->input('product'))
+                                                <?= '<strong>' . ($s->products->name) . '</strong>' . '(' . $s->qty . ')' . '<br>'?>
+                                            @else
+                                                <?= ($s->products->name) . '(' . $s->qty . ')' . '<br>'?>
+                                            @endif
+                                        @endforeach
+                                    </th>
+                                    <th>{{number_format($filData->invoice_grand_total,2)}}</th>
+                                    <th>{{number_format($filData->paid,2)}}</th>
+                                    <th>{{number_format($filData->invoice_grand_total-$filData->paid,2)}}</th>
+                                    <th>{!! $payStatus !!}</th>
 
                                 </tr>
                             @endforeach
@@ -224,68 +253,22 @@
         var manageTable;
 
         $(document).ready(function () {
-            manageTable = $('#manageTable').DataTable({
-                "processing": true,
-                "columns": [
-                    {data: 'date'},
-                    {data: 'reference_code'},
-                    {data: 'location'},
-                    {data: 'created_by'},
-                    {data: 'note'},
-                ],
-                ajax: {
-                    "type": 'POST',
-                    "url": '/reports/adjustmentData',
-                    "data": {
-                        '_token': '{{@csrf_token()}}',
-                        'from': '' + $('#datepicker').val() + '',
-                        'to': '' + $('#datepicker1').val() + '',
-                        'createUser': '' + $('#createUser').val() + '',
-                        'warehouse': '' + $('#warehouse').val() + '',
-                    }
-                },
+            $('#manageTable').DataTable({
+                "order": [[0, "desc"]],
                 columnDefs: [
                     {
-                        "targets": [2, 3, 4], // your case first column
+                        "targets": [5, 6, 7], // your case first column
                         "className": "text-right",
-                    },
+                    }, {
+                        "targets": [8], // your case first column
+                        "className": "text-center",
+                    }, {
+                        "targets": [4, 8], // your case first column
+                        "orderable": false
+                    }
                 ],
-                "bDestroy": true
             });
-
-            $("#search").on("click", function () {
-                $('#manageTable').DataTable({
-                    ajax: {
-                        "type": 'POST',
-                        url: "/reports/adjustmentData",
-                        data: {
-                            '_token': '{{@csrf_token()}}',
-                            'from': '' + $('#datepicker').val() + '',
-                            'to': '' + $('#datepicker1').val() + '',
-                            'createUser': '' + $('#createUser').val() + '',
-                            'warehouse': '' + $('#warehouse').val() + '',
-                        }
-                    },
-                    "bDestroy": true,
-                    // "processing": true,
-                    "columns": [
-                        {data: 'date'},
-                        {data: 'reference_code'},
-                        {data: 'location'},
-                        {data: 'created_by'},
-                        {data: 'note'},
-                    ],
-                    columnDefs: [
-                        {
-                            "targets": [2, 3, 4], // your case first column
-                            "className": "text-right",
-                        },
-                    ],
-                });
-
-            });
-
-        })
+        });
 
         $('#btn1').click(function () {
             $('.collapse').hide();

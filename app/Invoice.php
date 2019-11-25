@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Controllers\PaymentsController;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
@@ -12,15 +13,18 @@ class Invoice extends Model
     use SoftDeletes;
     use Userstamps;
     protected $table = 'invoice';
+    protected $appends = ['paid'];
+
+    function getPaidAttribute()
+    {
+        $payments = new PaymentsController();
+        $pending = $payments->refCodeByGetOutstanding($this->invoice_code);
+        return $pending;
+    }
 
     function invoiceItems()
     {
-        return $this->hasMany(InvoiceDetails::class, 'invoice_id', 'id');
-    }
-
-    function products()
-    {
-        return $this->hasManyThrough(Products::class, InvoiceDetails::class, 'invoice_id', 'id');
+        return $this->hasMany(InvoiceDetails::class, 'invoice_id', 'id')->with('products');
     }
 
     function locations()

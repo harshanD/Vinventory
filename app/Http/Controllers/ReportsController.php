@@ -824,15 +824,12 @@ class ReportsController extends Controller
         $billers = Biller::get();
         $locations = Locations::all();
         $products = Products::all();
-//$data = Invoice::where('invoice_code' ,$request->ref)->get();
-//echo  '<pre>';
-//print_r($data);
-//        echo  '</pre>';
+
         $sale = new Invoice();
-//        $sale = $sale->select(' invoiceItems.* ');
+//        $sale =  $sale->invoiceItems->where('item_id',1);
         if (isset($request->product) && $request->product != '0') {
-            $sale->whereHas('invoiceItems', function ($query) use ($request) {
-                $query->where('invoiceItems.item_id', $request->input('product'));
+            $sale = $sale->whereHas('invoiceItems', function ($query) use ($request) {
+                $query->where('item_id', [$request->product]);
             });
         }
         if (isset($request->ref) && $request->ref != '') {
@@ -853,8 +850,9 @@ class ReportsController extends Controller
         if ((isset($request->from) && $request->from != '') && (isset($request->to) && $request->to != '')) {
             $sale = $sale->whereBetween('created_at', array($request->from, $request->to));
         }
+//        echo $foo_sql = $sale->toSql();
         $filteredData = $sale->get();
-
+//        dd(DB::getQueryLog());
         return view('vendor.adminlte.reports.salesReport.index', ['filteredData' => $filteredData, 'soldUsers' => $soldUsers, 'warehouses' => $locations, 'billers' => $billers, 'customers' => $customers, 'products' => $products]);
     }
 
