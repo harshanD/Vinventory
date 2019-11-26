@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Controllers\PaymentsController;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
@@ -13,6 +14,14 @@ class PO extends Model
     public $timestamps = true;
     protected $table = 'po_header';
     use Userstamps;
+    protected $appends = ['paid'];
+
+    function getPaidAttribute()
+    {
+        $payments = new PaymentsController();
+        $pending = $payments->refCodeByGetOutstanding($this->referenceCode);
+        return $pending;
+    }
 
     function poDetails()
     {

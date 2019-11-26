@@ -375,6 +375,11 @@ return [
                     'icon' => 'plus-circle',
                     'url' => 'reports/monthly_purchases',
                     'can' => 'viewTax',
+                ], [
+                    'text' => 'Purchases Report',
+                    'icon' => 'plus-circle',
+                    'url' => 'reports/purchases',
+                    'can' => 'viewTax',
                 ],
             ],
         ],

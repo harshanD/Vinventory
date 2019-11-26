@@ -949,6 +949,41 @@ class ReportsController extends Controller
         return view('vendor.adminlte.reports.salesReport.index', ['filteredData' => $filteredData, 'soldUsers' => $soldUsers, 'warehouses' => $locations, 'billers' => $billers, 'customers' => $customers, 'products' => $products]);
     }
 
+    public function purchasesIndex(Request $request)
+    {
+        $poUsers = PO::groupBy('created_by')->get();
+        $suppliers = Supplier::get();
+        $locations = Locations::all();
+        $products = Products::all();
+
+        $pos = new PO();
+//        $pos =  $pos->invoiceItems->where('item_id',1);
+        if (isset($request->product) && $request->product != '0') {
+            $pos = $pos->whereHas('poDetails', function ($query) use ($request) {
+                $query->where('item_id', [$request->product]);
+            });
+        }
+        if (isset($request->ref) && $request->ref != '') {
+            $pos = $pos->where('referenceCode', 'LIKE', "%" . $request->ref . "%");
+        }
+        if (isset($request->createdUser) && $request->createdUser != '0') {
+            $pos = $pos->where('created_by', $request->createdUser);
+        }
+        if (isset($request->supplier) && $request->supplier != '0') {
+            $pos = $pos->where('supplier', $request->supplier);
+        }
+        if (isset($request->warehouse) && $request->warehouse != '0') {
+            $pos = $pos->where('location', $request->warehouse);
+        }
+        if ((isset($request->from) && $request->from != '') && (isset($request->to) && $request->to != '')) {
+            $pos = $pos->whereBetween('created_at', array($request->from, $request->to));
+        }
+//        echo $foo_sql = $pos->toSql();
+        $filteredData = $pos->get();
+//        dd(DB::getQueryLog());
+        return view('vendor.adminlte.reports.purchasesReport.index', ['filteredData' => $filteredData, 'soldUsers' => $poUsers, 'warehouses' => $locations, 'suppliers' => $suppliers, 'products' => $products]);
+    }
+
     public function paymentIndex(Request $request)
     {
         $payUsers = Payments::groupBy('created_by')->get();

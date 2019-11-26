@@ -225,6 +225,8 @@ Route::post('reports/daily_purchases/{month}', 'ReportsController@dailyPurchases
 /*monthly purchases report*/
 Route::get('reports/monthly_purchases', 'ReportsController@monthlyPurchasesIndex');
 Route::post('reports/monthly_purchases/{year}', 'ReportsController@monthlyPurchasesForMonth');
+/*sales report*/
+Route::get('reports/purchases', 'ReportsController@purchasesIndex');
 
 //Route::get('/saskasjbdgjas/{id}', 'PaymentsController@refCodeByGetOutstanding');
 
