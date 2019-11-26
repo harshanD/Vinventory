@@ -219,6 +219,10 @@ Route::post('reports/monthly_sales/{year}', 'ReportsController@monthlySalesForMo
 Route::get('reports/sales', 'ReportsController@salesIndex');
 /*payments report*/
 Route::get('reports/payment', 'ReportsController@paymentIndex');
+/*daily sales report*/
+Route::get('reports/daily_purchases', 'ReportsController@dailyPurchasesIndex');
+Route::post('reports/daily_purchases/{month}', 'ReportsController@dailyPurchasesForMonth');
+
 
 //Route::get('/saskasjbdgjas/{id}', 'PaymentsController@refCodeByGetOutstanding');
 

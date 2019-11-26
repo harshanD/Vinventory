@@ -426,7 +426,7 @@ class ReportsController extends Controller
     public function dailySalesIndex(Request $request)
     {
         $yearMonth = date('Y-m');
-        $table = $this->dratTable(date('m'), date('Y'));
+        $table = $this->drawTable(date('m'), date('Y'));
 
         return view('vendor.adminlte.reports.dailySalesReport.index', ['table' => $table, 'yearMonth' => $yearMonth]);
     }
@@ -434,16 +434,16 @@ class ReportsController extends Controller
     public function dailySalesForMonth(Request $request)
     {
         $parts = explode('-', $request['month']);
-        return json_encode($this->dratTable($parts[1], $parts[0]));
+        return json_encode($this->drawTable($parts[1], $parts[0]));
     }
 
-    public function dratTable($month, $year)
+    public function drawTable($month, $year, $type = 'invoice')
     {
         /* draw table */
         $calendar = '<table id="manageTable" cellpadding="0" cellspacing="0" class="table table-bordered calendar">';
 
         /* table headings */
-        $headings = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+        $headings = array('Sunday' . $type, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
         $calendar .= '<tr class="calendar-row"><td class="calendar-day-head">' . implode('</td><td class="calendar-day-head">', $headings) . '</td></tr>';
 
         /* days and weeks vars now ... */
@@ -467,9 +467,11 @@ class ReportsController extends Controller
             $calendar .= '<td class="calendar-day" >';
             /* add in the day number */
             $calendar .= '<div class="day-number">' . $list_day . '</div>';
+            $outData = '';
+            $outData = ($type == 'invoice') ? $this->dayToDrawSummary($list_day, $month, $year) : $this->POdayToDrawSummary($list_day, $month, $year);
 
             /** QUERY THE DATABASE FOR AN ENTRY FOR THIS DAY !!  IF MATCHES FOUND, PRINT THEM !! **/
-            $calendar .= str_repeat('<p>' . $this->dayToDrawSummary($list_day, $month, $year) . '</p>', 1);
+            $calendar .= str_repeat('<p>' . $outData . '</p>', 1);
 
             $calendar .= '</td>';
             if ($running_day == 6):
@@ -553,6 +555,49 @@ class ReportsController extends Controller
                         </div><span style="float: right"><button class="btn btn-xs btn-success" type="button" data-toggle="collapse"
                                 data-target="#multiCollapseExample_' . $day . '-' . $month . '-' . $year . '" aria-expanded="false"
                                 aria-controls="multiCollapseExample_' . $day . '-' . $month . '-' . $year . '"><i class="fa fa-fw fa-search"></i>More</button></span>';
+    }
+
+    public function POdayToDrawSummary($day, $month, $year)
+    {
+        $pos = PO::
+        whereDay('due_date', '=', $day)
+            ->whereMonth('due_date', '=', $month)
+            ->whereYear('due_date', '=', $year)
+            ->get();
+
+        $discount = 0;
+        $orderDiscount = 0;
+        $orderTax = 0;
+        $total = 0;
+        $productTax = 0;
+        $productsCost = 0;
+        $productsRevenue = 0;
+
+        if (count($pos) == 0) {
+            return '';
+        }
+
+        foreach ($pos as $po) {
+            $discount += $po->discount;
+//            $orderDiscount += $po->discount;
+
+            foreach ($po->poDetails as $poItem) {
+                $productTax += $poItem->tax_val * $poItem->qty;
+                $discount += $poItem->discount;
+                $productsCost += $poItem->qty * $poItem->product->cost_price;
+                $productsRevenue += $poItem->sub_total;
+            }
+
+            $orderTax += $po->tax;
+            $total += $po->grand_total;
+        }
+
+        return $table = '<table class="table table-bordered table-striped table-hover">
+                        <tr><td>Discount</td><td style="text-align: right">' . number_format($discount, 2) . '</td></tr>
+                        <tr><td>Product Tax</td><td style="text-align: right">' . number_format($productTax, 2) . '</td></tr>
+                        <tr><td>Order Tax</td><td style="text-align: right">' . number_format($orderTax, 2) . '</td></tr>
+                        <tr><td>Total</td><td style="text-align: right">' . number_format($total, 2) . '</td></tr>
+                        </table>';
     }
 
     public function monthlySalesIndex()
@@ -957,4 +1002,17 @@ class ReportsController extends Controller
         return view('vendor.adminlte.reports.paymentReport.index', ['filteredData' => $out, 'payUsers' => $payUsers, 'suppliers' => $supplier, 'billers' => $billers, 'customers' => $customers, 'products' => $products]);
     }
 
+    public function dailyPurchasesIndex(Request $request)
+    {
+        $yearMonth = date('Y-m');
+        $table = $this->drawTable(date('m'), date('Y'), 'po');
+
+        return view('vendor.adminlte.reports.dailyPurchasesReport.index', ['table' => $table, 'yearMonth' => $yearMonth]);
+    }
+
+    public function dailyPurchasesForMonth(Request $request)
+    {
+        $parts = explode('-', $request['month']);
+        return json_encode($this->drawTable($parts[1], $parts[0], 'po'));
+    }
 }

@@ -365,6 +365,11 @@ return [
                     'icon' => 'plus-circle',
                     'url' => 'reports/payment',
                     'can' => 'viewTax',
+                ], [
+                    'text' => 'Daily Purchases',
+                    'icon' => 'plus-circle',
+                    'url' => 'reports/daily_purchases',
+                    'can' => 'viewTax',
                 ],
             ],
         ],
