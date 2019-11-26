@@ -614,7 +614,7 @@ class ReportsController extends Controller
         return json_encode($this->drawMonthTable($request['year']));
     }
 
-    public function drawMonthTable($year)
+    public function drawMonthTable($year, $type = 'invoice')
     {
         /* draw table */
         $calendar = '<table id="manageTable" cellpadding="0" cellspacing="0" class="table table-bordered calendar">';
@@ -631,10 +631,14 @@ class ReportsController extends Controller
         /* row for week one */
         $calendar .= '<tr class="calendar-row">';
 
+
         /* print "blank" days until the first of the current week */
         for ($x = 1; $x < 13; $x++):
+            $outData = '';
+            $outData = ($type == 'invoice') ? $this->monthToDrawSummary($x, $year) : $this->POmonthToDrawSummary($x, $year);
+
             $calendar .= '<td class="calendar-day-np">';
-            $calendar .= str_repeat('<p>' . $this->monthToDrawSummary($x, $year) . '</p>', 1);
+            $calendar .= str_repeat('<p>' . $outData . '</p>', 1);
             $calendar .= '</td>';
             $months++;
         endfor;
@@ -701,6 +705,49 @@ class ReportsController extends Controller
                         </div><span style="float: right"><button class="btn btn-xs btn-success" type="button" data-toggle="collapse"
                                 data-target="#multiCollapseExample_' . $month . '-' . $year . '" aria-expanded="false"
                                 aria-controls="multiCollapseExample_' . $month . '-' . $year . '"><i class="fa fa-fw fa-search"></i>More</button></span>';
+    }
+
+    public function POmonthToDrawSummary($month, $year)
+    {
+        $pos = PO::
+        whereBetween('due_date', [$year . '-' . $month . '-01', $year . '-' . $month . '-31'])
+//            whereMonth('invoice_date', '=', $month)
+//            ->whereYear('invoice_date', '=', $year)
+            ->get();
+
+        $discount = 0;
+        $orderDiscount = 0;
+        $orderTax = 0;
+        $total = 0;
+        $productTax = 0;
+        $productsCost = 0;
+        $productsRevenue = 0;
+
+        if (count($pos) == 0) {
+            return '';
+        }
+
+        foreach ($pos as $po) {
+            $discount += $po->discount;
+            $orderDiscount += $po->discount;
+
+            foreach ($po->poDetails as $poDetail) {
+                $productTax += $poDetail->tax_val * $poDetail->qty;
+                $discount += $poDetail->discount;
+                $productsCost += $poDetail->qty * $poDetail->product->cost_price;
+                $productsRevenue += $poDetail->sub_total;
+            }
+
+            $orderTax += $po->tax;
+            $total += $po->grand_total;
+        }
+
+        return $table = '<table class="table table-bordered table-striped table-hover">
+                        <tr><td>Discount</td><td style="text-align: right">' . number_format($discount, 2) . '</td></tr>
+                        <tr><td>Product Tax</td><td style="text-align: right">' . number_format($productTax, 2) . '</td></tr>
+                        <tr><td>Order Tax</td><td style="text-align: right">' . number_format($orderTax, 2) . '</td></tr>
+                        <tr><td>Total</td><td style="text-align: right">' . number_format($total, 2) . '</td></tr>
+                        </table>';
     }
 
     public function last5Sales()
@@ -1014,5 +1061,19 @@ class ReportsController extends Controller
     {
         $parts = explode('-', $request['month']);
         return json_encode($this->drawTable($parts[1], $parts[0], 'po'));
+    }
+
+    public function monthlyPurchasesIndex()
+    {
+        $yearMonth = date('Y');
+        $table = $this->drawMonthTable(date('Y'), 'po');
+
+        return view('vendor.adminlte.reports.monthlyPurchasesReport.index', ['table' => $table, 'yearMonth' => $yearMonth]);
+    }
+
+    public function monthlyPurchasesForMonth(Request $request)
+    {
+//        $parts = explode('-', $request['month']);
+        return json_encode($this->drawMonthTable($request['year'], 'po'));
     }
 }
