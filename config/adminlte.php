@@ -380,6 +380,11 @@ return [
                     'icon' => 'plus-circle',
                     'url' => 'reports/purchases',
                     'can' => 'viewTax',
+                ], [
+                    'text' => 'Customers Report',
+                    'icon' => 'plus-circle',
+                    'url' => 'reports/customers',
+                    'can' => 'viewTax',
                 ],
             ],
         ],

@@ -187,9 +187,7 @@ class ReportsController extends Controller
 
     public function categoryView(Request $request)
     {
-
         return view('vendor.adminlte.reports.categoriesReport.index');
-
     }
 
     public function fetchCategoryData(Request $request)
@@ -1108,7 +1106,50 @@ class ReportsController extends Controller
 
     public function monthlyPurchasesForMonth(Request $request)
     {
-//        $parts = explode('-', $request['month']);
         return json_encode($this->drawMonthTable($request['year'], 'po'));
     }
+
+    public function customersView(Request $request)
+    {
+        return view('vendor.adminlte.reports.customersReport.index');
+    }
+
+    public function fetchCustomersData(Request $request)
+    {
+
+        $list = array();
+
+        $customers = Invoice::with('customers')->where('status', \Config::get('constants.status.Active'))->groupBy('customer');
+
+        if ((isset($request['from']) && $request['from']) && (isset($request['to']) && $request['to'])) {
+            $customers = $customers->whereBetween('invoice_date', array($request['from'], $request['to']));
+        }
+
+        $customers = $customers->get();
+
+        $saleCount = 0;
+        $totAmount = 0;
+        $paid = 0;
+        foreach ($customers as $key => $customer) {
+            $customerInvoices = Invoice::where('status', \Config::get('constants.status.Active'))->where('customer', $customer->customer)->get();
+            foreach ($customerInvoices as $customerInvoice) {
+                ++$saleCount;
+                $totAmount += $customerInvoice->invoice_grand_total;
+                $paid += $customerInvoice->paid;
+            }
+            $list['data'][$key] = array(
+                'company' => $customer->customers->company,
+                'name' => $customer->customers->name,
+                'phone' => $customer->customers->phone,
+                'email' => $customer->customers->email,
+                'saleCount' => $saleCount,
+                'totAmount' => number_format($totAmount, 2),
+                'paid' => number_format($paid, 2),
+                'balance' => number_format(($totAmount - $paid), 2)
+            );
+        }
+
+        echo json_encode((isset($list['data']) ? $list : array('data' => array())));
+    }
+
 }
