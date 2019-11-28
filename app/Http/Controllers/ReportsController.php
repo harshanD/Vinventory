@@ -1159,8 +1159,42 @@ class ReportsController extends Controller
         $billers = Biller::get();
         $locations = Locations::all();
 
-        return view('vendor.adminlte.reports.customersReport.customerReport.index', ['soldUsers' => $soldUsers, 'payUsers' => $payUsers, 'warehouses' => $locations, 'billers' => $billers]);
+        $totPaid = $this->customerPaid($id);
+        $totSale = $this->customerForSale($id);
+
+        $heaeder = array(
+            'saleAmount' => number_format($totSale, 2),
+            'totPaid' => number_format($totPaid, 2),
+            'dueAmount' => number_format($totSale - $totPaid, 2),
+            'totSale' => $this->customerForSaleCount($id),
+        );
+
+
+        return view('vendor.adminlte.reports.customersReport.customerReport.index', ['header' => $heaeder, 'soldUsers' => $soldUsers, 'payUsers' => $payUsers, 'warehouses' => $locations, 'billers' => $billers]);
     }
+
+    public function customerForSale($id)
+    {
+        $sum = Invoice::where('customer', $id)->sum('invoice_grand_total');
+        return $sum;
+    }
+
+    public function customerForSaleCount($id)
+    {
+        $sum = Invoice::where('customer', $id)->count();
+        return $sum;
+    }
+
+    public function customerPaid($id)
+    {
+        $invoices = Invoice::where('customer', $id)->get();
+        $sum = 0;
+        foreach ($invoices as $invo) {
+            $sum += $invo->paid;
+        }
+        return $sum;
+    }
+
 
     public function fetchCustomerSaleData(Request $request)
     {
