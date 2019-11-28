@@ -1116,7 +1116,6 @@ class ReportsController extends Controller
 
     public function fetchCustomersData(Request $request)
     {
-
         $list = array();
 
         $customers = Invoice::with('customers')->where('status', \Config::get('constants.status.Active'))->groupBy('customer');
@@ -1145,11 +1144,115 @@ class ReportsController extends Controller
                 'saleCount' => $saleCount,
                 'totAmount' => number_format($totAmount, 2),
                 'paid' => number_format($paid, 2),
-                'balance' => number_format(($totAmount - $paid), 2)
+                'balance' => number_format(($totAmount - $paid), 2),
+                'action' => "<a class=\"btn btn-primary  btn-xs\" href=\"customer_report/" . $customer->customer . "\" role=\"button\">View Report</a>"
             );
         }
 
         echo json_encode((isset($list['data']) ? $list : array('data' => array())));
     }
 
+    public function customerDetails(Request $request, $id)
+    {
+        $soldUsers = Invoice::groupBy('created_by')->get();
+        $payUsers = Payments::groupBy('created_by')->get();
+        $billers = Biller::get();
+        $locations = Locations::all();
+
+        return view('vendor.adminlte.reports.customersReport.customerReport.index', ['soldUsers' => $soldUsers, 'payUsers' => $payUsers, 'warehouses' => $locations, 'billers' => $billers]);
+    }
+
+    public function fetchCustomerSaleData(Request $request)
+    {
+        $sale = new Invoice();
+
+        if (isset($request->saleCreatedUser) && $request->saleCreatedUser != '0') {
+            $sale = $sale->where('created_by', $request->saleCreatedUser);
+        }
+        if (isset($request->customerId) && $request->customerId != '0') {
+            $sale = $sale->where('customer', $request->customerId);
+        }
+
+        if (isset($request->saleBiller) && $request->saleBiller != '0') {
+            $sale = $sale->where('biller', $request->saleBiller);
+        }
+        if (isset($request->saleWarehouse) && $request->saleWarehouse != '0') {
+            $sale = $sale->where('location', $request->saleWarehouse);
+        }
+        if ((isset($request->SaleFrom) && $request->SaleFrom != '') && (isset($request->SaleTo) && $request->SaleTo != '')) {
+            $sale = $sale->whereBetween('created_at', array($request->SaleFrom, $request->SaleTo));
+        }
+//        echo $foo_sql = $sale->toSql();
+        $filteredData = $sale->get();
+
+        $list = array();
+        foreach ($filteredData as $key => $invoice) {
+
+            $products = "";
+
+            foreach ($invoice->invoiceItems as $invoItem) {
+                $products .= $invoItem->products->name . '(' . $invoItem->qty . ')' . '<br>';
+            }
+            switch ($invoice->payment_status):
+                case 1:
+                    $payStatus = '<span class="label label-warning">pending</span>';
+                    break;
+                case 2:
+                    $payStatus = '<span class="label label-warning">Due</span>';
+                    break;
+                case 3:
+                    $payStatus = '<span class="label label-warning">Partial</span>';
+                    break;
+                case 4:
+                    $payStatus = '<span class="label label-success">Paid</span>';
+                    break;
+                case 5:
+                    $payStatus = '<span class="label label-danger">Over Paid</span>';
+                    break;
+                default:
+                    $payStatus = '<span class="label label-danger">Nothing</span>';
+                    break;
+            endswitch;
+
+            $list['data'][$key] = array(
+                'date' => $invoice->invoice_date,
+                'reference' => $invoice->invoice_code,
+                'biller' => $invoice->billers->name,
+                'products' => $products,
+                'grandTotal' => number_format($invoice->invoice_grand_total, 2),
+                'paid' => number_format($invoice->paid, 2),
+                'balance' => number_format($invoice->invoice_grand_total - $invoice->paid, 2),
+                'paymentStatus' => $payStatus,
+            );
+        }
+        echo json_encode((isset($list['data']) ? $list : array('data' => array())));
+    }
+
+    public function fetchCustomerPaymentData(Request $request)
+    {
+        $payment = new Payments();
+        if (isset($request->customerId) && $request->customerId != '0') {
+            $payment = $payment->whereHas('invoices', function ($query) use ($request) {
+                $query->where('customer', [$request->customerId]);
+            });
+        }
+        if ((isset($request->payFrom) && $request->payFrom != '') && (isset($request->payTo) && $request->payTo != '')) {
+            $payment = $payment->whereBetween('created_at', array($request->payFrom, $request->payTo));
+        }
+//        echo $foo_sql = $payment->toSql();
+
+        $filteredData = $payment->get();
+
+        $list = array();
+        foreach ($filteredData as $key => $payment) {
+            $list['data'][$key] = array(
+                'date' => $payment->date,
+                'payReference' => $payment->reference_code,
+                'saleReference' => $payment->parent_reference_code,
+                'paidBy' => $payment->pay_type,
+                'amount' => number_format($payment->value, 2),
+            );
+        }
+        echo json_encode((isset($list['data']) ? $list : array('data' => array())));
+    }
 }

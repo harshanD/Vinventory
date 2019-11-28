@@ -97,6 +97,7 @@
                                 <th>Total Amount</th>
                                 <th>Paid</th>
                                 <th>Balance</th>
+                                <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -122,7 +123,7 @@
             toggle: false
         })
         var imageDivId = 'capture';
-        var imageSaveName = 'categories_()_';
+        var imageSaveName = 'customers_()_';
 
         function getXls() {
             $("#manageTable").table2excel({
@@ -151,6 +152,7 @@
                     {data: 'totAmount'},
                     {data: 'paid'},
                     {data: 'balance'},
+                    {data: 'action'},
                 ],
                 ajax: {
                     "type": 'POST',
@@ -195,6 +197,7 @@
                         {data: 'totAmount'},
                         {data: 'paid'},
                         {data: 'balance'},
+                        {data: 'action'},
                     ],
                     columnDefs: [
                         {
@@ -208,7 +211,6 @@
                 });
 
             });
-
         })
     </script>
 @endsection

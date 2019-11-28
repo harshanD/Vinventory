@@ -18,9 +18,9 @@ class Payments extends Model
         return $this->belongsTo(PO::class, 'parent_reference_code', 'referenceCode');
     }
 
-    public function invoices()
+    public function invoices()// usable
     {
-        return $this->belongsTo(Invoice::class, 'parent_reference_code', 'invoice_code');
+        return $this->hasOne(Invoice::class, 'invoice_code', 'parent_reference_code');
     }
 
 }

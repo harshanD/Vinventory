@@ -229,7 +229,10 @@ Route::post('reports/monthly_purchases/{year}', 'ReportsController@monthlyPurcha
 Route::get('reports/purchases', 'ReportsController@purchasesIndex');
 /*category report*/
 Route::get('reports/customers', 'ReportsController@customersView');
+Route::get('reports/customer_report/{id}', 'ReportsController@customerDetails');
 Route::post('reports/fetchCustomersData', 'ReportsController@fetchCustomersData');
+Route::post('reports/fetchCustomerSaleData', 'ReportsController@fetchCustomerSaleData');
+Route::post('reports/fetchCustomerPaymentData', 'ReportsController@fetchCustomerPaymentData');
 
 
 //Route::get('/saskasjbdgjas/{id}', 'PaymentsController@refCodeByGetOutstanding');
