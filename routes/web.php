@@ -14,12 +14,12 @@
 Route::get('/', function () {
     return redirect('login');
 })->middleware('verified');
-
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
 Auth::routes(['verify' => true]);
+
+
+Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
+
 
 Route::get('/user/register', 'HomeController@registerUserView');
 Route::post('user/create', 'HomeController@registerUser');

@@ -250,13 +250,25 @@
                 </div>
 
                 @else
-                    <div class="alert alert-warning alert-dismissible f" role="alert">
-                        <strong>Hi {{ \Illuminate\Support\Facades\Auth::user()->name }} !</strong> Please Contact System
-                        Administrator.
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+                    @if(\Illuminate\Support\Facades\Auth::user()->hasVerifiedEmail())
+                        <div class="alert alert-warning alert-dismissible f" role="alert">
+                            <strong>Hi , {{ \Illuminate\Support\Facades\Auth::user()->name }} !</strong> Your Email has
+                            verified. Please Contact System
+                            Administrator.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @else
+                        <div class="alert alert-warning alert-dismissible f" role="alert">
+                            <strong>Hi , {{ \Illuminate\Support\Facades\Auth::user()->name }} !</strong>
+                            Please check your inbox and verify email address.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
+
                 @endif
             </div>
             @if($agent!=1)
