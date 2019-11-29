@@ -198,16 +198,22 @@ class HomeController extends Controller
 
     }
 
-    public function profile()
+    public function profile(Role $role)
     {
         if (!Permissions::getRolePermissions('viewProfile')) {
             abort(403, 'Unauthorized action.');
         }
-        $data = Role::orderBy('name', 'asc')->get();
+
+        if (Auth::user()->hasRole('Guest')) {
+            $role = $role->where('name', 'Guest');
+        }
+        $role = $role->orderBy('name', 'asc');
+        $role = $role->get();
+
         $user = User::with('roles')
             ->where('users.id', Auth::id())
             ->get();
-        return view('vendor.adminlte.users.edit', ['roles' => $data, 'user' => $user]);
+        return view('vendor.adminlte.users.edit', ['roles' => $role, 'user' => $user]);
     }
 
     public function userEditView($id)
