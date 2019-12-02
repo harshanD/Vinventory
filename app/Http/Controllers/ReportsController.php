@@ -12,9 +12,11 @@ use App\Locations;
 use App\Payments;
 use App\PO;
 use App\Products;
+use App\Role;
 use App\Stock;
 use App\Supplier;
 use App\Transfers;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -886,6 +888,7 @@ class ReportsController extends Controller
     {
         $array = array();
         $array['stock'] = $this->stockNotification();
+        $array['guests'] = $this->guestsCount(); // email verified count of guests
         return $array;
     }
 
@@ -906,6 +909,16 @@ class ReportsController extends Controller
             }
         }
         return $in;
+    }
+
+    public function guestsCount()
+    {
+        $user = new User();
+        $user = $user->whereHas('roles', function ($query) {
+            $query->where('roles.name', 'Guest')->where('email_verified_at', '!=', null);
+        });
+
+        return $user->count();
     }
 
     public function salesIndex(Request $request)

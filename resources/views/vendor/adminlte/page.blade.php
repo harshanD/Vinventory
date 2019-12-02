@@ -70,8 +70,16 @@
                                                             @if($notifications['stock']!=0)
                                                                 <li>
                                                                     <a href="/reports/quantity_alerts">
-                                                                        <i class="fa fa-users text-aqua"></i><?=  ($notifications['stock'])?>
+                                                                        <i class="fa fa-tags text-aqua"></i><?=  ($notifications['stock'])?>
                                                                         Item/s Quantity Alerts
+                                                                    </a>
+                                                                </li>
+                                                            @endif
+                                                            @if($notifications['guests']!=0)
+                                                                <li>
+                                                                    <a href="/reports/quantity_alerts">
+                                                                        <i class="fa fa-users text-aqua"></i><?=  ($notifications['guests'])?>
+                                                                        new Registered Users
                                                                     </a>
                                                                 </li>
                                                             @endif

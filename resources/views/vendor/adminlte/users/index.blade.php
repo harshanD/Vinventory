@@ -58,6 +58,7 @@
                         <tr>
                             <th>Full Name</th>
                             <th>Email</th>
+                            <th>Email Verification</th>
                             <th>status</th>
                             <th>Phone</th>
                             <th>Role</th>
@@ -67,6 +68,7 @@
                         </thead>
                         <tbody>
                         <tr>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -131,13 +133,14 @@
                     null,
                     null,
                     {"orderable": false},
+                    {"orderable": false},
                     null,
                     null,
                     {"orderable": false},
                 ],
                 columnDefs: [
                     {
-                        "targets": [2, 3, 5], // your case first column
+                        "targets": [2, 4, 6], // your case first column
                         "className": "text-center",
                     }
                 ],

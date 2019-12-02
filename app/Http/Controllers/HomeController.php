@@ -34,11 +34,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-//        Payments::where('parent_reference_code', $code)->sum('value');
-//        $invoices = Invoice::with('invoiceItems')->whereMonth('Invoice.invoice_date', '=', 9)->sum('InvoiceDetails.tax_val');
-//        $invoices = $this->Invoice()->whereMonth('invoice_date', '=', 9)->sum('invoice_details.tax_val');
-//        print_r($invoices);
-//        return 1;
+
         $report = new ReportsController;
         $sales = $report->last5Sales();
         $purchaces = $report->last5Purcheses();
@@ -129,8 +125,7 @@ class HomeController extends Controller
             'gender' => 'required',
         ]);
 
-//print_r($request->input());
-//return 'dd';
+
         if (($request->input('password')) != '' || ($request->input('new_password')) != '' || ($request->input('password_confirmation')) != '') {
             $this->validate($request, [
                 'password' => 'required',
@@ -254,6 +249,7 @@ class HomeController extends Controller
             $result['data'][$key] = array(
                 $value->name,
                 $value->email,
+                ($value->email_verified_at == null) ? '<span class="label label-danger">Not verified</span>' : '<span class="label label-success">Verified</span>',
                 $status,
                 ($value->phone == null) ? '--' : $value->phone,
                 $value->roles[0]->name,
