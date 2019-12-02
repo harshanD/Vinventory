@@ -52,7 +52,7 @@
                         </strong> {{ session()->get('error') }}
                     </div>
                 @endif
-                <div class="table-responsive" style="height: 100%">
+                <div class="<?= $table_responsive ?>" style="height: 100%">
                     <table id="invoiceTable" class="table table-bordered table-striped">
                         <thead>
                         <tr>

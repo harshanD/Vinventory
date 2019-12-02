@@ -155,7 +155,7 @@
                             </div>
                         </div>
                     </form>
-                    <div class="table-responsive">
+                    <div class="<?= $table_responsive ?>">
                         <table id="manageTable" class="table table-bordered table-striped table table-hover">
                             <thead>
                             <tr>

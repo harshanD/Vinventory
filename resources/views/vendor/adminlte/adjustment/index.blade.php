@@ -53,7 +53,7 @@
                         </strong> {{ session()->get('error') }}
                     </div>
                 @endif
-                <div class="table-responsive">
+                <div class="<?= $table_responsive ?>">
                     <table id="poTable" class="table table-bordered table-striped">
                         <thead>
                         <tr>

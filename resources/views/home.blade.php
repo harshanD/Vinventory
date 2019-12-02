@@ -11,7 +11,7 @@
     <section class="content">
 
         @if(!\Illuminate\Support\Facades\Auth::user()->hasRole('Guest'))
-            @if($agent==1)
+            @if($desktop)
                 <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title">Overview Chart</h3>
@@ -271,7 +271,7 @@
 
                 @endif
             </div>
-            @if($agent!=1)
+            @if(!$desktop)
                 <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title">Overview Chart</h3>
@@ -310,7 +310,7 @@
                     {{--                    <div class="card-body">--}}
                     {{--                        <div class="row">--}}
                     <!-- Custom Tabs -->
-                        <div class="nav-tabs-custom  table-responsive">
+                        <div class="nav-tabs-custom  <?= $table_responsive ?>">
                             <ul class="nav nav-tabs">
                                 <li class="active"><a href="#tab_1" data-toggle="tab">Sales</a></li>
                                 <li><a href="#tab_2" data-toggle="tab">Purchases</a></li>

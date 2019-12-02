@@ -62,7 +62,7 @@
                     <p>{{$transfers->fromLocation->telephone }}<br>{{$transfers->fromLocation->email}}</p>
                 </div>
             </div>
-            <div class="table-responsive">
+            <div class="<?= $table_responsive ?>">
                 <table class="table table-bordered table-hover table-striped order-table">
                     <thead>
                     <tr>

@@ -85,7 +85,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="clearfix"></div>
-            <div class="table-responsive">
+            <div class="<?= $table_responsive ?>">
                 <table class="table table-bordered table-hover table-striped order-table">
                     <thead>
                     <tr>

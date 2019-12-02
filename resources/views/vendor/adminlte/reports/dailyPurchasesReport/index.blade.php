@@ -139,7 +139,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="table-responsive" id="drawTable">
+                    <div class="<?= $table_responsive ?>" id="drawTable">
                         {!! $table !!}
 
                     </div>

@@ -55,7 +55,7 @@
             </div>
             <div class="box-body">
                 <div id="messages"></div>
-                <div class="table-responsive">
+                <div class="<?= $table_responsive ?>">
                     <table id="manageTable" class="table table-bordered table-striped">
                         <thead>
                         <tr>

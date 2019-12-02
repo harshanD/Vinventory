@@ -59,7 +59,7 @@
             </div>
             <div id="capture">
                 <div class="box-body">
-                    <div class="table-responsive">
+                    <div class="<?= $table_responsive ?>">
                         <table id="manageTable" class="table table-bordered table-striped">
                             <thead>
                             <tr>

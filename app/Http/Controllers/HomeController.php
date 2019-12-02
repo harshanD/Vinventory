@@ -43,7 +43,6 @@ class HomeController extends Controller
         $suppliers = $report->last5Suppliers();
 
         $chart = $report->chartData();
-        $agent = new Agent();
         return view('home', [
             'sales' => $sales,
             'purchaces' => $purchaces,
@@ -51,7 +50,6 @@ class HomeController extends Controller
             'customers' => $customers,
             'suppliers' => $suppliers,
             'chart' => $chart,
-            'agent' => $agent->isDesktop()
         ]);
     }
 

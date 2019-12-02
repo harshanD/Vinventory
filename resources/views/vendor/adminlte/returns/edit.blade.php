@@ -227,7 +227,7 @@
                     </div>
 
                     <div class="box-body">
-                        <div class="table-responsive">
+                        <div class="<?= $table_responsive ?>">
                             <table id="poTable" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
@@ -445,7 +445,7 @@
 
                             </div>
                             <div class="box-body">
-                                <div class="table-responsive">
+                                <div class="<?= $table_responsive ?>">
                                     <table class="table table-bordered table-striped">
                                         <thead>
 

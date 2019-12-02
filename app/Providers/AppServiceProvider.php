@@ -6,6 +6,7 @@ use App\Http\Controllers\ReportsController;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Jenssegers\Agent\Agent;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $report = new ReportsController;
         $notifications = $report->notifications();
-        View::share('notifications', $notifications);
+        $agent = new Agent();
+        View::share(['notifications' => $notifications, 'desktop' => $agent->isDesktop(), 'table_responsive' => ($agent->isDesktop()) ? '' : 'table-responsive']);
     }
 }

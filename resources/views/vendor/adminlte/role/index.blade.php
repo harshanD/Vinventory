@@ -53,7 +53,7 @@
             </div>
             <div class="box-body">
                 <div id="messages"></div>
-                <div class="table-responsive">
+                <div class="<?= $table_responsive ?>">
                     <table id="manageTable" class="table table-bordered responsive">
                         <thead>
                         <tr>
@@ -107,7 +107,7 @@
                             <p class="help-block" id="error_role_name"></p>
                         </div>
                         {{--                        <div class="form-group">--}}
-                        <table class="table table-responsive">
+                        <table class="table <?= $table_responsive ?>">
                             <thead>
                             <tr>
                                 <th></th>
@@ -345,7 +345,7 @@
                                    placeholder="Enter Company" autocomplete="off">
                             <p class="help-block" id="error_e_role"></p>
                         </div>
-                        <table class="table table-responsive">
+                        <table class="table <?= $table_responsive ?>">
                             <thead>
                             <tr>
                                 <th></th>

@@ -99,7 +99,7 @@
 
             <div id="capture">
                 <div class="box-body">
-                    <div class="nav-tabs-custom  table-responsive">
+                    <div class="nav-tabs-custom  <?= $table_responsive ?>">
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#tab_1" data-toggle="tab">Sales</a></li>
                             <li><a href="#tab_2" data-toggle="tab">Payments</a></li>

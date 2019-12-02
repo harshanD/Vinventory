@@ -118,7 +118,7 @@
 
                 <!-- Table row -->
                 <div class="row">
-                    <div class="col-xs-12 table-responsive">
+                    <div class="col-xs-12 <?= $table_responsive ?>">
                         <table class="table table-striped">
                             <thead>
                             <tr>
