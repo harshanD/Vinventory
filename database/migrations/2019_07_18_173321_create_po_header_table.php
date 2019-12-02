@@ -28,6 +28,7 @@ class CreatePoHeaderTable extends Migration
             $table->double('grand_total')->unsigned();
             $table->tinyInteger('status')->length(2)->comment('1=received,2=ordered,3=pending,4=canceled')->default(3);
             $table->tinyInteger('payment_status')->length(2)->comment('1=pending,2=due,3=partial,4=paid')->default(1);
+            $table->tinyInteger('approve_status')->length(2)->comment('0=not_approve,1=approved')->default(0);
             $table->string('remark')->nullable();
             $table->softDeletes();
             $table->timestamps();

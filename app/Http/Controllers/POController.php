@@ -241,6 +241,11 @@ class POController extends Controller
                     $addPaymentLink = "<li><a style='cursor: pointer' onclick=\"addPayments(" . $query->id . ",'PO')\">Add Payments</a></li>";
                 }
 
+                $approvePO = "<li><a>PO Approved</a></li>";
+                if ($query->approve_status) {
+                    $approvePO = "<li><a style='cursor: pointer' onclick=\"approvePO(" . $query->id . ")\">Approve PO</a></li>";
+                }
+
                 return $buttons = "<div class=\"btn-group\">
                   <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
                   <button type=\"button\" class=\"btn btn-default btn-flat dropdown-toggle\" data-toggle=\"dropdown\">
@@ -256,6 +261,8 @@ class POController extends Controller
                     " . $addPaymentLink . "
                     <li><a href=\"/po/printpo/" . $query->id . "\">Download as PDF</a></li>
                     <li><a href=\"/send/email/" . $query->id . "\">Send Mail</a></li>
+                    <li class=\"divider\"></li>
+                    " . $approvePO . "
                     <li class=\"divider\"></li>
                    " . $deleteButton . "
                   </ul>
@@ -609,5 +616,20 @@ class POController extends Controller
             $request->session()->flash('message-type', 'success');
             return redirect()->route('po.manage');
         }
+    }
+
+    public function approvePO(Request $request)
+    {
+        $podata = PO::find($request['id']);
+        $podata->approve_status = 1;
+
+        if ($podata->save()) {
+            $request->session()->flash('message', 'PO Approved');
+            $request->session()->flash('message-type', 'error');
+        } else {
+            $request->session()->flash('message', 'PO Approved fail');
+            $request->session()->flash('message-type', 'success');
+        }
+        echo json_encode(array('success' => true));
     }
 }

@@ -582,6 +582,24 @@
             });
         }
 
+        function approvePO(id) {
+            $.ajax({
+                url: '/po/approvePO',
+                type: 'POST',
+                data: {
+                    '_token': '{{@csrf_token()}}',
+                    'id': id,
+                }, // /converting the form data into array and sending it to server
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        window.location.href = '/po/manage';
+                    }
+                },
+                error: function (request, status, errorThrown) {
+                }
+            });
+        }
 
     </script>
 @endsection
