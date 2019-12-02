@@ -77,7 +77,7 @@
                                                             @endif
                                                             @if($notifications['guests']!=0)
                                                                 <li>
-                                                                    <a href="/reports/quantity_alerts">
+                                                                    <a href="/user/manage">
                                                                         <i class="fa fa-users text-aqua"></i><?=  ($notifications['guests'])?>
                                                                         new Registered Users
                                                                     </a>
