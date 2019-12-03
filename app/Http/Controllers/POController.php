@@ -134,7 +134,7 @@ class POController extends Controller
 
     public function fetchPOData()
     {
-        $query = PO::select(['id', 'supplier', 'referenceCode', 'due_date as date', 'payment_status', 'grand_total', 'status']);
+        $query = PO::select(['id', 'supplier', 'referenceCode', 'due_date as date', 'payment_status', 'approve_status', 'grand_total', 'status']);
         return Datatables::of($query)
             ->addColumn('supplierName', function ($query) {
                 return str_limit($query->suppliers->name, 20);
@@ -241,8 +241,8 @@ class POController extends Controller
                     $addPaymentLink = "<li><a style='cursor: pointer' onclick=\"addPayments(" . $query->id . ",'PO')\">Add Payments</a></li>";
                 }
 
-                $approvePO = "<li><a>PO Approved</a></li>";
-                if ($query->approve_status) {
+                $approvePO = "<li><a>PO Approved </a></li>";
+                if ($query->approve_status == \Config::get('constants.po_approve.Not_approved')) {
                     $approvePO = "<li><a style='cursor: pointer' onclick=\"approvePO(" . $query->id . ")\">Approve PO</a></li>";
                 }
 
@@ -624,7 +624,7 @@ class POController extends Controller
         $podata->approve_status = 1;
 
         if ($podata->save()) {
-            $request->session()->flash('message', 'PO Approved');
+            $request->session()->flash('message', 'PO Approved (' . $podata->referenceCode . ')');
             $request->session()->flash('message-type', 'error');
         } else {
             $request->session()->flash('message', 'PO Approved fail');

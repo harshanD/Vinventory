@@ -22,6 +22,10 @@ return [
         '3' => 'Pending',
         '4' => 'Canceled',
     ],
+    'po_approve' => [
+        'Approved' => '1',
+        'Not_approved' => '0',
+    ],
     'taxActive' => [
         'Active' => '2',
         'Inactive' => '1',
