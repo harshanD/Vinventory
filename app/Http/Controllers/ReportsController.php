@@ -117,9 +117,7 @@ class ReportsController extends Controller
 
     public function productsView(Request $request)
     {
-
         return view('vendor.adminlte.reports.productsReport.index');
-
     }
 
     public function fetchProductsData(Request $request)
@@ -896,7 +894,6 @@ class ReportsController extends Controller
     {
         $stock = new  StockController();
         $data = (object)Products::where(['status' => \Config::get('constants.status.Active')])->get();
-        $list = array();
         $in = 0;
         foreach ($data as $key => $product) {
             if ($product->reorder_activation == \Config::get('constants.status.Active')) {
@@ -924,10 +921,10 @@ class ReportsController extends Controller
     public function salesIndex(Request $request)
     {
         $soldUsers = Invoice::groupBy('created_by')->get();
-        $customers = Customer::get();
-        $billers = Biller::get();
-        $locations = Locations::all();
-        $products = Products::all();
+        $customers = Customer::where(['status' => \Config::get('constants.status.Active')])->get();
+        $billers = Biller::where(['status' => \Config::get('constants.status.Active')])->get();
+        $locations = Locations::where(['status' => \Config::get('constants.status.Active')])->get();
+        $products = Products::where(['status' => \Config::get('constants.status.Active')])->get();
 
         $sale = new Invoice();
 //        $sale =  $sale->invoiceItems->where('item_id',1);
@@ -963,9 +960,9 @@ class ReportsController extends Controller
     public function purchasesIndex(Request $request)
     {
         $poUsers = PO::groupBy('created_by')->get();
-        $suppliers = Supplier::get();
-        $locations = Locations::all();
-        $products = Products::all();
+        $suppliers = Supplier::where(['status' => \Config::get('constants.status.Active')])->get();
+        $locations = Locations::where(['status' => \Config::get('constants.status.Active')])->get();
+        $products = Products::where(['status' => \Config::get('constants.status.Active')])->get();
 
         $pos = new PO();
 //        $pos =  $pos->invoiceItems->where('item_id',1);
@@ -998,10 +995,10 @@ class ReportsController extends Controller
     public function paymentIndex(Request $request)
     {
         $payUsers = Payments::groupBy('created_by')->get();
-        $customers = Customer::get();
-        $billers = Biller::get();
-        $supplier = Supplier::all();
-        $products = Products::all();
+        $customers = Customer::where(['status' => \Config::get('constants.status.Active')])->get();
+        $billers = Biller::where(['status' => \Config::get('constants.status.Active')])->get();
+        $supplier = Supplier::where(['status' => \Config::get('constants.status.Active')])->get();
+        $products = Products::where(['status' => \Config::get('constants.status.Active')])->get();
 
         $payment = new Payments();
         if (isset($request->payRef) && $request->payRef != '') {
@@ -1169,8 +1166,8 @@ class ReportsController extends Controller
     {
         $soldUsers = Invoice::groupBy('created_by')->get();
         $payUsers = Payments::groupBy('created_by')->get();
-        $billers = Biller::get();
-        $locations = Locations::all();
+        $billers = Biller::where(['status' => \Config::get('constants.status.Active')])->get();
+        $locations = Locations::where(['status' => \Config::get('constants.status.Active')])->get();
 
         $totPaid = $this->customerPaid($id);
         $totSale = $this->customerForSale($id);
