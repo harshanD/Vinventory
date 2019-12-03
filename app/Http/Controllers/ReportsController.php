@@ -1124,6 +1124,11 @@ class ReportsController extends Controller
         return view('vendor.adminlte.reports.customersReport.index');
     }
 
+    public function suppliersView(Request $request)
+    {
+        return view('vendor.adminlte.reports.suppliersReport.index');
+    }
+
     public function fetchCustomersData(Request $request)
     {
         $list = array();
@@ -1162,6 +1167,43 @@ class ReportsController extends Controller
         echo json_encode((isset($list['data']) ? $list : array('data' => array())));
     }
 
+    public function fetchSuppliersData(Request $request)
+    {
+        $list = array();
+
+        $suppliers = PO::with('suppliers')->groupBy('supplier');
+
+        if ((isset($request['from']) && $request['from']) && (isset($request['to']) && $request['to'])) {
+            $suppliers = $suppliers->whereBetween('due_date', array($request['from'], $request['to']));
+        }
+
+        $suppliers = $suppliers->get();
+        $saleCount = 0;
+        $totAmount = 0;
+        $paid = 0;
+        foreach ($suppliers as $key => $supplier) {
+            $supplierPOS = PO::where('supplier', $supplier->supplier)->get();
+            foreach ($supplierPOS as $supplierPO) {
+                ++$saleCount;
+                $totAmount += $supplierPO->grand_total;
+                $paid += $supplierPO->paid;
+            }
+            $list['data'][$key] = array(
+                'company' => $supplier->suppliers->company,
+                'name' => $supplier->suppliers->name,
+                'phone' => $supplier->suppliers->phone,
+                'email' => $supplier->suppliers->email,
+                'saleCount' => $saleCount,
+                'totAmount' => number_format($totAmount, 2),
+                'paid' => number_format($paid, 2),
+                'balance' => number_format(($totAmount - $paid), 2),
+                'action' => "<a class=\"btn btn-primary  btn-xs\" href=\"supplier_report/" . $supplier->supplier . "\" role=\"button\">View Report</a>"
+            );
+        }
+
+        echo json_encode((isset($list['data']) ? $list : array('data' => array())));
+    }
+
     public function customerDetails(Request $request, $id)
     {
         $soldUsers = Invoice::groupBy('created_by')->get();
@@ -1183,6 +1225,25 @@ class ReportsController extends Controller
         return view('vendor.adminlte.reports.customersReport.customerReport.index', ['header' => $heaeder, 'soldUsers' => $soldUsers, 'payUsers' => $payUsers, 'warehouses' => $locations, 'billers' => $billers]);
     }
 
+    public function suppliersDetails(Request $request, $id)
+    {
+        $soldUsers = PO::groupBy('created_by')->get();
+        $locations = Locations::where(['status' => \Config::get('constants.status.Active')])->get();
+
+        $totPaid = $this->supplierToPaid($id);
+        $totPur = $this->supplierForPurchases($id);
+
+        $heaeder = array(
+            'saleAmount' => number_format($totPur, 2),
+            'totPaid' => number_format($totPaid, 2),
+            'dueAmount' => number_format($totPur - $totPaid, 2),
+            'totPur' => $this->supplierForPurchasesCount($id),
+        );
+
+
+        return view('vendor.adminlte.reports.suppliersReport.customerReport.index', ['header' => $heaeder, 'soldUsers' => $soldUsers, 'warehouses' => $locations]);
+    }
+
     public function customerForSale($id)
     {
         $sum = Invoice::where('customer', $id)->sum('invoice_grand_total');
@@ -1192,6 +1253,18 @@ class ReportsController extends Controller
     public function customerForSaleCount($id)
     {
         $sum = Invoice::where('customer', $id)->count();
+        return $sum;
+    }
+
+    public function supplierForPurchases($id)
+    {
+        $sum = PO::where('supplier', $id)->sum('grand_total');
+        return $sum;
+    }
+
+    public function supplierForPurchasesCount($id)
+    {
+        $sum = PO::where('supplier', $id)->count();
         return $sum;
     }
 
@@ -1205,6 +1278,15 @@ class ReportsController extends Controller
         return $sum;
     }
 
+    public function supplierToPaid($id)
+    {
+        $pos = PO::where('supplier', $id)->get();
+        $sum = 0;
+        foreach ($pos as $po) {
+            $sum += $po->paid;
+        }
+        return $sum;
+    }
 
     public function fetchCustomerSaleData(Request $request)
     {
@@ -1224,7 +1306,7 @@ class ReportsController extends Controller
             $sale = $sale->where('location', $request->saleWarehouse);
         }
         if ((isset($request->SaleFrom) && $request->SaleFrom != '') && (isset($request->SaleTo) && $request->SaleTo != '')) {
-            $sale = $sale->whereBetween('created_at', array($request->SaleFrom, $request->SaleTo));
+            $sale = $sale->whereBetween('invoice_date', array($request->SaleFrom, $request->SaleTo));
         }
 //        echo $foo_sql = $sale->toSql();
         $filteredData = $sale->get();
@@ -1272,6 +1354,69 @@ class ReportsController extends Controller
         echo json_encode((isset($list['data']) ? $list : array('data' => array())));
     }
 
+    public function fetchSuppliersPurData(Request $request)
+    {
+        $pos = new PO();
+
+        if (isset($request->saleCreatedUser) && $request->saleCreatedUser != '0') {
+            $pos = $pos->where('created_by', $request->saleCreatedUser);
+        }
+        if (isset($request->supplierId) && $request->supplierId != '0') {
+            $pos = $pos->where('supplier', $request->supplierId);
+        }
+
+        if (isset($request->saleWarehouse) && $request->saleWarehouse != '0') {
+            $pos = $pos->where('location', $request->saleWarehouse);
+        }
+        if ((isset($request->SaleFrom) && $request->SaleFrom != '') && (isset($request->SaleTo) && $request->SaleTo != '')) {
+            $pos = $pos->whereBetween('due_date', array($request->SaleFrom, $request->SaleTo));
+        }
+//        echo $foo_sql = $pos->toSql();
+        $filteredData = $pos->get();
+
+        $list = array();
+        foreach ($filteredData as $key => $po) {
+
+            $products = "";
+
+            foreach ($po->poDetails as $poItem) {
+                $products .= $poItem->product->name . '(' . $poItem->qty . ')' . '<br>';
+            }
+            switch ($po->payment_status):
+                case 1:
+                    $payStatus = '<span class="label label-warning">pending</span>';
+                    break;
+                case 2:
+                    $payStatus = '<span class="label label-warning">Due</span>';
+                    break;
+                case 3:
+                    $payStatus = '<span class="label label-warning">Partial</span>';
+                    break;
+                case 4:
+                    $payStatus = '<span class="label label-success">Paid</span>';
+                    break;
+                case 5:
+                    $payStatus = '<span class="label label-danger">Over Paid</span>';
+                    break;
+                default:
+                    $payStatus = '<span class="label label-danger">Nothing</span>';
+                    break;
+            endswitch;
+
+            $list['data'][$key] = array(
+                'date' => $po->due_date,
+                'reference' => $po->referenceCode,
+                'warehouse' => $po->locations->name,
+                'products' => $products,
+                'grandTotal' => number_format($po->grand_total, 2),
+                'paid' => number_format($po->paid, 2),
+                'balance' => number_format($po->grand_total - $po->paid, 2),
+                'paymentStatus' => $payStatus,
+            );
+        }
+        echo json_encode((isset($list['data']) ? $list : array('data' => array())));
+    }
+
     public function fetchCustomerPaymentData(Request $request)
     {
         $payment = new Payments();
@@ -1293,6 +1438,34 @@ class ReportsController extends Controller
                 'date' => $payment->date,
                 'payReference' => $payment->reference_code,
                 'saleReference' => $payment->parent_reference_code,
+                'paidBy' => $payment->pay_type,
+                'amount' => number_format($payment->value, 2),
+            );
+        }
+        echo json_encode((isset($list['data']) ? $list : array('data' => array())));
+    }
+
+    public function fetchSuppliersPaymentData(Request $request)
+    {
+        $payment = new Payments();
+        if (isset($request->supplierId) && $request->supplierId != '0') {
+            $payment = $payment->whereHas('po', function ($query) use ($request) {
+                $query->where('supplier', [$request->supplierId]);
+            });
+        }
+        if ((isset($request->payFrom) && $request->payFrom != '') && (isset($request->payTo) && $request->payTo != '')) {
+            $payment = $payment->whereBetween('created_at', array($request->payFrom, $request->payTo));
+        }
+//        echo $foo_sql = $payment->toSql();
+
+        $filteredData = $payment->get();
+
+        $list = array();
+        foreach ($filteredData as $key => $payment) {
+            $list['data'][$key] = array(
+                'date' => $payment->date,
+                'payReference' => $payment->reference_code,
+                'purReference' => $payment->parent_reference_code,
                 'paidBy' => $payment->pay_type,
                 'amount' => number_format($payment->value, 2),
             );

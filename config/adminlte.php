@@ -385,6 +385,11 @@ return [
                     'icon' => 'plus-circle',
                     'url' => 'reports/customers',
                     'can' => 'viewTax',
+                ], [
+                    'text' => 'Suppliers Report',
+                    'icon' => 'plus-circle',
+                    'url' => 'reports/suppliers',
+                    'can' => 'viewTax',
                 ],
             ],
         ],

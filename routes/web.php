@@ -228,13 +228,18 @@ Route::get('reports/monthly_purchases', 'ReportsController@monthlyPurchasesIndex
 Route::post('reports/monthly_purchases/{year}', 'ReportsController@monthlyPurchasesForMonth');
 /*sales report*/
 Route::get('reports/purchases', 'ReportsController@purchasesIndex');
-/*category report*/
+/*customer report*/
 Route::get('reports/customers', 'ReportsController@customersView');
 Route::get('reports/customer_report/{id}', 'ReportsController@customerDetails');
 Route::post('reports/fetchCustomersData', 'ReportsController@fetchCustomersData');
 Route::post('reports/fetchCustomerSaleData', 'ReportsController@fetchCustomerSaleData');
 Route::post('reports/fetchCustomerPaymentData', 'ReportsController@fetchCustomerPaymentData');
-
+/*supplier report*/
+Route::get('reports/suppliers', 'ReportsController@suppliersView');
+Route::get('reports/supplier_report/{id}', 'ReportsController@suppliersDetails');
+Route::post('reports/fetchSuppliersData', 'ReportsController@fetchSuppliersData');
+Route::post('reports/fetchSuppliersPurData', 'ReportsController@fetchSuppliersPurData');
+Route::post('reports/fetchSuppliersPaymentData', 'ReportsController@fetchSuppliersPaymentData');
 
 //Route::get('/saskasjbdgjas/{id}', 'PaymentsController@refCodeByGetOutstanding');
 
