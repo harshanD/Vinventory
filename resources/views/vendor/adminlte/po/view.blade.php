@@ -166,6 +166,15 @@
                 <!-- /.row -->
 
                 <div class="row">
+                    @if($po->approve_status)
+                        <?php
+                        $url = asset('storage/img/approved.png');
+                        ?>
+                        <div class="col-xs-4 col-xs-offset-1 align-self-end" style="float: left">
+                            <img src="{{ ($url) }}" class="rounded-circle z-depth-1-half avatar-pic"
+                                 alt="placeholder avatar">
+                        </div>
+                    @endif
                     <div class="col-xs-4 col-xs-offset-1 align-self-end" style="float: right">
                         <div class="well well-sm">
                             <p>Created by : {{$po->creator->name}} </p>
@@ -181,6 +190,8 @@
                     <div class="col-xs-12">
                         {{--                        <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i>--}}
                         {{--                            Print</a>--}}
+
+
                         <div style="float: right">
                             <button type="button" onclick="showPayments({{$po->id}},'PO')" class="btn btn-success"><i
                                         class="fa fa-credit-card"></i>
