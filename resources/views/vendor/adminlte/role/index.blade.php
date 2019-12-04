@@ -394,6 +394,28 @@
                             </tr>
                             {{-- reports end--}}
                             <tr>
+                                <td>Notifications</td>
+                                <td> -</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="notifications" class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Quantity Alerts</td>
+                                <td><input type="checkbox" name="permission[]" value="quantityAlerts"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">New Registered Users</td>
+                                <td><input type="checkbox" name="permission[]" value="newRegisteredUsers"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
                                 <td>Profile</td>
                                 <td> -</td>
                                 <td> -</td>
@@ -803,6 +825,31 @@
                                 <td> -</td>
                             </tr>
                             {{-- reports end--}}
+                            <tr>
+                                <td>Notifications</td>
+                                <td> -</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="notifications" id="notifications"
+                                           class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Quantity Alerts</td>
+                                <td><input type="checkbox" name="permission[]" value="quantityAlerts"
+                                           id="quantityAlerts"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">New Registered Users</td>
+                                <td><input type="checkbox" name="permission[]" value="newRegisteredUsers"
+                                           id="newRegisteredUsers"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
                             <tr>
                                 <td>Profile</td>
                                 <td> -</td>

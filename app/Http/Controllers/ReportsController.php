@@ -922,8 +922,16 @@ class ReportsController extends Controller
     public function notifications()
     {
         $array = array();
-        $array['stock'] = $this->stockNotification();
-        $array['guests'] = $this->guestsCount(); // email verified count of guests
+
+        if (Permissions::getRolePermissions('notifications')) {
+//            if (Permissions::getRolePermissions('quantityAlerts') === true) {
+            $array['stock'] = $this->stockNotification();
+//            }
+//            if (Permissions::getRolePermissions('newRegisteredUsers') ) {
+            $array['guests'] = $this->guestsCount(); // email verified count of guests
+//            }
+        }
+
         return $array;
     }
 

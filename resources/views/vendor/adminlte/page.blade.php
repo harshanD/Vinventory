@@ -57,7 +57,8 @@
                             <!-- Navbar Right Menu -->
                                 <div class="navbar-custom-menu">
                                     <ul class="nav navbar-nav">
-                                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(['Admin','Manager','Accountant']))
+                                        {{--                                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(['Admin','Manager','Accountant']))--}}
+                                        @if(  \App\Http\Controllers\Permissions::getRolePermissions('notifications'))
                                             <li class="dropdown notifications-menu">
                                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                                     <i class="fa fa-bell-o"></i>
@@ -67,21 +68,25 @@
                                                     <li>
                                                         <!-- inner menu: contains the actual data -->
                                                         <ul class="menu">
-                                                            @if($notifications['stock']!=0)
-                                                                <li>
-                                                                    <a href="/reports/quantity_alerts">
-                                                                        <i class="fa fa-tags text-aqua"></i><?=  ($notifications['stock'])?>
-                                                                        Item/s Quantity Alerts
-                                                                    </a>
-                                                                </li>
+                                                            @if(  \App\Http\Controllers\Permissions::getRolePermissions('quantityAlerts'))
+                                                                @if($notifications['stock']!=0)
+                                                                    <li>
+                                                                        <a href="/reports/quantity_alerts">
+                                                                            <i class="fa fa-tags text-aqua"></i><?=  ($notifications['stock'])?>
+                                                                            Item/s Quantity Alerts
+                                                                        </a>
+                                                                    </li>
+                                                                @endif
                                                             @endif
-                                                            @if($notifications['guests']!=0)
-                                                                <li>
-                                                                    <a href="/user/manage">
-                                                                        <i class="fa fa-users text-aqua"></i><?=  ($notifications['guests'])?>
-                                                                        new Registered Users
-                                                                    </a>
-                                                                </li>
+                                                            @if(  \App\Http\Controllers\Permissions::getRolePermissions('newRegisteredUsers'))
+                                                                @if($notifications['guests']!=0)
+                                                                    <li>
+                                                                        <a href="/user/manage">
+                                                                            <i class="fa fa-users text-aqua"></i><?=  ($notifications['guests'])?>
+                                                                            new Registered Users
+                                                                        </a>
+                                                                    </li>
+                                                                @endif
                                                             @endif
                                                             {{--                                                        <li>--}}
                                                             {{--                                                            <a href="#">--}}
