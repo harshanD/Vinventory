@@ -8,7 +8,7 @@
 ?>
 @extends('adminlte::page')
 
-@section('title', 'AdminLTE')
+@section('title', 'V-Inventory')
 
 @section('content_header')
     <ol class="breadcrumb">
