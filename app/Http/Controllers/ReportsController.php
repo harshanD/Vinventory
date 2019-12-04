@@ -32,7 +32,9 @@ class ReportsController extends Controller
 
     public function warehouseStock(Request $request)
     {
-
+        if (!Permissions::getRolePermissions('warehouseStockReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $warehouse = !isset($request['id']) ? 'All Warehouses' : '';
 
         $stock = new  StockController();
@@ -80,6 +82,9 @@ class ReportsController extends Controller
 
     public function quantityAlerts(Request $request)
     {
+        if (!Permissions::getRolePermissions('productQualityAlerts')) {
+            abort(403, 'Unauthorized action.');
+        }
         $warehouse = !isset($request['id']) ? 'All Warehouses' : '';
 
         $stock = new  StockController();
@@ -117,11 +122,17 @@ class ReportsController extends Controller
 
     public function productsView(Request $request)
     {
+        if (!Permissions::getRolePermissions('productsReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.reports.productsReport.index');
     }
 
     public function fetchProductsData(Request $request)
     {
+        if (!Permissions::getRolePermissions('productsReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $products = Products::where('status', \Config::get('constants.status.Active'))->get();
 
         $stockController = new StockController();
@@ -187,13 +198,17 @@ class ReportsController extends Controller
 
     public function categoryView(Request $request)
     {
+        if (!Permissions::getRolePermissions('categoryReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.reports.categoriesReport.index');
     }
 
     public function fetchCategoryData(Request $request)
     {
-
-
+        if (!Permissions::getRolePermissions('categoryReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $stockController = new StockController();
 
         $list = array();
@@ -266,13 +281,17 @@ class ReportsController extends Controller
 
     public function brandsView(Request $request)
     {
-
+        if (!Permissions::getRolePermissions('brandsReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.reports.brandsReport.index');
     }
 
     public function fetchBrandsData(Request $request)
     {
-
+        if (!Permissions::getRolePermissions('brandsReport')) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $stockController = new StockController();
 
@@ -346,6 +365,9 @@ class ReportsController extends Controller
 
     public function adjustmentView()
     {
+        if (!Permissions::getRolePermissions('adjustmentsReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $adjustments = Adjustment::groupBy('created_by')->get();
         $locations = Locations::all();
 
@@ -354,6 +376,9 @@ class ReportsController extends Controller
 
     public function adjustmentData(Request $request)
     {
+        if (!Permissions::getRolePermissions('adjustmentsReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $dates = array('from' => $request['from'], 'to' => $request['to']);
 
         if (($request['from'] != '' && $request['to'] != '') && $request['warehouse'] == '0' && $request['createUser'] == '0') {
@@ -423,6 +448,9 @@ class ReportsController extends Controller
 
     public function dailySalesIndex(Request $request)
     {
+        if (!Permissions::getRolePermissions('dailySales')) {
+            abort(403, 'Unauthorized action.');
+        }
         $yearMonth = date('Y-m');
         $table = $this->drawTable(date('m'), date('Y'));
 
@@ -431,6 +459,9 @@ class ReportsController extends Controller
 
     public function dailySalesForMonth(Request $request)
     {
+        if (!Permissions::getRolePermissions('dailySales')) {
+            abort(403, 'Unauthorized action.');
+        }
         $parts = explode('-', $request['month']);
         return json_encode($this->drawTable($parts[1], $parts[0]));
     }
@@ -600,6 +631,9 @@ class ReportsController extends Controller
 
     public function monthlySalesIndex()
     {
+        if (!Permissions::getRolePermissions('monthlySales')) {
+            abort(403, 'Unauthorized action.');
+        }
         $yearMonth = date('Y');
         $table = $this->drawMonthTable(date('Y'));
 
@@ -608,6 +642,9 @@ class ReportsController extends Controller
 
     public function monthlySalesForMonth(Request $request)
     {
+        if (!Permissions::getRolePermissions('monthlySales')) {
+            abort(403, 'Unauthorized action.');
+        }
 //        $parts = explode('-', $request['month']);
         return json_encode($this->drawMonthTable($request['year']));
     }
@@ -920,6 +957,9 @@ class ReportsController extends Controller
 
     public function salesIndex(Request $request)
     {
+        if (!Permissions::getRolePermissions('salesReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $soldUsers = Invoice::groupBy('created_by')->get();
         $customers = Customer::where(['status' => \Config::get('constants.status.Active')])->get();
         $billers = Biller::where(['status' => \Config::get('constants.status.Active')])->get();
@@ -959,6 +999,9 @@ class ReportsController extends Controller
 
     public function purchasesIndex(Request $request)
     {
+        if (!Permissions::getRolePermissions('purchasesReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $poUsers = PO::groupBy('created_by')->get();
         $suppliers = Supplier::where(['status' => \Config::get('constants.status.Active')])->get();
         $locations = Locations::where(['status' => \Config::get('constants.status.Active')])->get();
@@ -994,6 +1037,9 @@ class ReportsController extends Controller
 
     public function paymentIndex(Request $request)
     {
+        if (!Permissions::getRolePermissions('paymentsReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $payUsers = Payments::groupBy('created_by')->get();
         $customers = Customer::where(['status' => \Config::get('constants.status.Active')])->get();
         $billers = Biller::where(['status' => \Config::get('constants.status.Active')])->get();
@@ -1094,6 +1140,9 @@ class ReportsController extends Controller
 
     public function dailyPurchasesIndex(Request $request)
     {
+        if (!Permissions::getRolePermissions('dailyPurchases')) {
+            abort(403, 'Unauthorized action.');
+        }
         $yearMonth = date('Y-m');
         $table = $this->drawTable(date('m'), date('Y'), 'po');
 
@@ -1102,12 +1151,18 @@ class ReportsController extends Controller
 
     public function dailyPurchasesForMonth(Request $request)
     {
+        if (!Permissions::getRolePermissions('dailyPurchases')) {
+            abort(403, 'Unauthorized action.');
+        }
         $parts = explode('-', $request['month']);
         return json_encode($this->drawTable($parts[1], $parts[0], 'po'));
     }
 
     public function monthlyPurchasesIndex()
     {
+        if (!Permissions::getRolePermissions('monthlyPurchases')) {
+            abort(403, 'Unauthorized action.');
+        }
         $yearMonth = date('Y');
         $table = $this->drawMonthTable(date('Y'), 'po');
 
@@ -1116,21 +1171,33 @@ class ReportsController extends Controller
 
     public function monthlyPurchasesForMonth(Request $request)
     {
+        if (!Permissions::getRolePermissions('monthlyPurchases')) {
+            abort(403, 'Unauthorized action.');
+        }
         return json_encode($this->drawMonthTable($request['year'], 'po'));
     }
 
     public function customersView(Request $request)
     {
+        if (!Permissions::getRolePermissions('customersReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.reports.customersReport.index');
     }
 
     public function suppliersView(Request $request)
     {
+        if (!Permissions::getRolePermissions('suppliersReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.adminlte.reports.suppliersReport.index');
     }
 
     public function fetchCustomersData(Request $request)
     {
+        if (!Permissions::getRolePermissions('customersReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $list = array();
 
         $customers = Invoice::with('customers')->where('status', \Config::get('constants.status.Active'))->groupBy('customer');
@@ -1169,6 +1236,9 @@ class ReportsController extends Controller
 
     public function fetchSuppliersData(Request $request)
     {
+        if (!Permissions::getRolePermissions('suppliersReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $list = array();
 
         $suppliers = PO::with('suppliers')->groupBy('supplier');
@@ -1206,6 +1276,9 @@ class ReportsController extends Controller
 
     public function customerDetails(Request $request, $id)
     {
+        if (!Permissions::getRolePermissions('customersReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $soldUsers = Invoice::groupBy('created_by')->get();
         $payUsers = Payments::groupBy('created_by')->get();
         $billers = Biller::where(['status' => \Config::get('constants.status.Active')])->get();
@@ -1227,6 +1300,9 @@ class ReportsController extends Controller
 
     public function suppliersDetails(Request $request, $id)
     {
+        if (!Permissions::getRolePermissions('suppliersReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $soldUsers = PO::groupBy('created_by')->get();
         $locations = Locations::where(['status' => \Config::get('constants.status.Active')])->get();
 
@@ -1290,6 +1366,9 @@ class ReportsController extends Controller
 
     public function fetchCustomerSaleData(Request $request)
     {
+        if (!Permissions::getRolePermissions('customersReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $sale = new Invoice();
 
         if (isset($request->saleCreatedUser) && $request->saleCreatedUser != '0') {
@@ -1356,6 +1435,9 @@ class ReportsController extends Controller
 
     public function fetchSuppliersPurData(Request $request)
     {
+        if (!Permissions::getRolePermissions('suppliersReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $pos = new PO();
 
         if (isset($request->saleCreatedUser) && $request->saleCreatedUser != '0') {
@@ -1419,6 +1501,9 @@ class ReportsController extends Controller
 
     public function fetchCustomerPaymentData(Request $request)
     {
+        if (!Permissions::getRolePermissions('customersReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $payment = new Payments();
         if (isset($request->customerId) && $request->customerId != '0') {
             $payment = $payment->whereHas('invoices', function ($query) use ($request) {
@@ -1447,6 +1532,9 @@ class ReportsController extends Controller
 
     public function fetchSuppliersPaymentData(Request $request)
     {
+        if (!Permissions::getRolePermissions('suppliersReport')) {
+            abort(403, 'Unauthorized action.');
+        }
         $payment = new Payments();
         if (isset($request->supplierId) && $request->supplierId != '0') {
             $payment = $payment->whereHas('po', function ($query) use ($request) {

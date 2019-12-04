@@ -286,6 +286,113 @@
                                 <td><input type="checkbox" name="permission[]" value="viewReports" class="minimal"></td>
                                 <td> -</td>
                             </tr>
+                            {{-- reports start --}}
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Warehouse Stock Chart</td>
+                                <td><input type="checkbox" name="permission[]" value="warehouseStockReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Product Quality Alerts</td>
+                                <td><input type="checkbox" name="permission[]" value="productQualityAlerts"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Products Report</td>
+                                <td><input type="checkbox" name="permission[]" value="productsReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Adjustments Report</td>
+                                <td><input type="checkbox" name="permission[]" value="adjustmentsReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Category Report</td>
+                                <td><input type="checkbox" name="permission[]" value="categoryReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Brands Report</td>
+                                <td><input type="checkbox" name="permission[]" value="brandsReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Daily Sales</td>
+                                <td><input type="checkbox" name="permission[]" value="dailySales"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Monthly Sales</td>
+                                <td><input type="checkbox" name="permission[]" value="monthlySales"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Sales Report</td>
+                                <td><input type="checkbox" name="permission[]" value="salesReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Payments Report</td>
+                                <td><input type="checkbox" name="permission[]" value="paymentsReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Daily Purchases</td>
+                                <td><input type="checkbox" name="permission[]" value="dailyPurchases"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Monthly Purchases</td>
+                                <td><input type="checkbox" name="permission[]" value="monthlyPurchases"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Purchases Report</td>
+                                <td><input type="checkbox" name="permission[]" value="purchasesReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Customers Report</td>
+                                <td><input type="checkbox" name="permission[]" value="customersReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Suppliers Report</td>
+                                <td><input type="checkbox" name="permission[]" value="suppliersReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            {{-- reports end--}}
                             <tr>
                                 <td>Profile</td>
                                 <td> -</td>
@@ -578,6 +685,124 @@
                                            class="minimal"></td>
                                 <td> -</td>
                             </tr>
+                            {{-- reports start --}}
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Warehouse Stock Chart</td>
+                                <td><input type="checkbox" name="permission[]" value="warehouseStockReport"
+                                           id="warehouseStockReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Product Quality Alerts</td>
+                                <td><input type="checkbox" name="permission[]" value="productQualityAlerts"
+                                           id=productQualityAlerts"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Products Report</td>
+                                <td><input type="checkbox" name="permission[]" value="productsReport"
+                                           id="productsReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Adjustments Report</td>
+                                <td><input type="checkbox" name="permission[]" value="adjustmentsReport"
+                                           id="adjustmentsReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Category Report</td>
+                                <td><input type="checkbox" name="permission[]" value="categoryReport"
+                                           id="categoryReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Brands Report</td>
+                                <td><input type="checkbox" name="permission[]" value="brandsReport" id="brandsReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Daily Sales</td>
+                                <td><input type="checkbox" name="permission[]" value="dailySales" id="dailySales"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Monthly Sales</td>
+                                <td><input type="checkbox" name="permission[]" value="monthlySales" id="monthlySales"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Sales Report</td>
+                                <td><input type="checkbox" name="permission[]" value="salesReport" id="salesReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Payments Report</td>
+                                <td><input type="checkbox" name="permission[]" value="paymentsReport"
+                                           id="paymentsReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Daily Purchases</td>
+                                <td><input type="checkbox" name="permission[]" value="dailyPurchases"
+                                           id="dailyPurchases"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Monthly Purchases</td>
+                                <td><input type="checkbox" name="permission[]" value="monthlyPurchases"
+                                           id="monthlyPurchases"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Purchases Report</td>
+                                <td><input type="checkbox" name="permission[]" value="purchasesReport"
+                                           id="purchasesReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Customers Report</td>
+                                <td><input type="checkbox" name="permission[]" value="customersReport"
+                                           id="customersReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">Suppliers Report</td>
+                                <td><input type="checkbox" name="permission[]" value="suppliersReport"
+                                           id="suppliersReport"
+                                           class="minimal"></td>
+                                <td> -</td>
+                            </tr>
+                            {{-- reports end--}}
                             <tr>
                                 <td>Profile</td>
                                 <td> -</td>
