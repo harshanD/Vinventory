@@ -110,7 +110,7 @@ return [
     'menu' => [
         'MAIN NAVIGATION',
         [
-            'text' => 'Home',
+            'text' => 'Dashboard',
             'url' => '/home',
             'icon' => 'home',
             'label_color' => 'success',
