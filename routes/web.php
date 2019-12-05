@@ -241,7 +241,7 @@ Route::post('reports/fetchSuppliersData', 'ReportsController@fetchSuppliersData'
 Route::post('reports/fetchSuppliersPurData', 'ReportsController@fetchSuppliersPurData');
 Route::post('reports/fetchSuppliersPaymentData', 'ReportsController@fetchSuppliersPaymentData');
 
-//Route::get('/saskasjbdgjas/{id}', 'PaymentsController@refCodeByGetOutstanding');
+//Route::get('/saskasjbdgjas/', 'ReportsController@notifications');
 
 Route::group(['middleware' => 'auth'], function () {
     //    Route::get('/link1', function ()    {

@@ -923,15 +923,19 @@ class ReportsController extends Controller
     {
         $array = array();
 
-        if (Permissions::getRolePermissions('notifications')) {
+//        if (Permissions::getRolePermissions('notifications')) {
 //            if (Permissions::getRolePermissions('quantityAlerts') === true) {
-            $array['stock'] = $this->stockNotification();
+        $array['stock'] = $this->stockNotification();
 //            }
-//            if (Permissions::getRolePermissions('newRegisteredUsers') ) {
+//        if (Permissions::getRolePermissions('newRegisteredUsers')) {
             $array['guests'] = $this->guestsCount(); // email verified count of guests
-//            }
-        }
+////        }
+////        }
+//        echo '--';
+//        var_dump(Permissions::getRolePermissions('notifications'));
+//        echo '--';
 
+//        return '--';
         return $array;
     }
 
