@@ -433,7 +433,48 @@
                                 <td> -</td>
                             </tr>
                             {{-- dashbord  end --}}
-
+                            <tr>
+                                <td>Purchase Order - Stock Receive</td>
+                                <td> -</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="poStockReceive"
+                                           class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td>Purchase Order - Approve</td>
+                                <td> -</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="poApprove"
+                                           class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Purchase Order - Send EMail</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="poMail"
+                                           class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Sales - Send EMail</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="salesMail"
+                                           class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Transfers - Send EMail</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="transfersMail"
+                                           class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
                             <tr>
                                 <td>Profile</td>
                                 <td> -</td>
@@ -889,6 +930,50 @@
                                 <td> -</td>
                             </tr>
                             {{-- dashbord  end --}}
+                            <tr>
+                                <td>Purchase Order - Stock Receive</td>
+                                <td> -</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="poStockReceive"
+                                           id="poStockReceive"
+                                           class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td>Purchase Order - Approve</td>
+                                <td> -</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="poApprove" id="poApprove"
+                                           class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Purchase Order - Send EMail</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="poMail" id="poMail"
+                                           class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Sales - Send EMail</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="salesMail" id="salesMail"
+                                           class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Transfers - Send EMail</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="transfersMail" id="transfersMail"
+                                           class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+
                             <tr>
                                 <td>Profile</td>
                                 <td> -</td>

@@ -192,6 +192,10 @@ class TransfersController extends Controller
                     $deleteButton .= "<li><a style='cursor: pointer' onclick=\"deletePo(" . $query->id . ")\">Delete Transfer</a></li>";
                 }
 
+                $sendMail = "";
+                if (Permissions::getRolePermissions('transfersMail')) {
+                    $sendMail = "<li><a href=\"/send/transfers/email/" . $query->id . "\">Email Transfer</a></li>";
+                }
 
                 return $buttons = "<div class=\"btn-group\">
                   <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
@@ -203,7 +207,7 @@ class TransfersController extends Controller
                     " . $editbutton . "
                     <li><a href=\"/transfer/view/" . $query->id . "\">Transfer details</a></li>
                      <li><a href=\"/transfer/print/" . $query->id . "\">Download as PDF</a></li>
-                     <li><a href=\"/send/transfers/email/" . $query->id . "\">Email Transfer</a></li>
+                     " . $sendMail . "
                     <li class=\"divider\"></li>
                      " . $deleteButton . "
                   </ul>

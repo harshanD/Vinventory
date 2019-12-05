@@ -243,6 +243,10 @@ class InvoiceController extends Controller
                     $addPaymentLink = "<li><a style='cursor: pointer' onclick=\"addPayments(" . $query->id . ",'IV')\">Add Payments</a></li>";
                 }
 
+                $sendMail = "";
+                if (Permissions::getRolePermissions('salesMail')) {
+                    $sendMail = "<li><a href=\"/send/sale/email/" . $query->id . "\">Email Sale</a></li>";
+                }
 
                 return "<div class=\"btn-group\">
                   <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
@@ -256,7 +260,7 @@ class InvoiceController extends Controller
                     <li><a style='cursor: pointer' onclick=\"showPayments(" . $query->id . ",'IV')\">View Payments</a></li>
                     " . $addPaymentLink . "
                     <li><a href=\"/sales/print/" . $query->id . "\">Download as PDF</a></li>
-                    <li><a href=\"/send/sale/email/" . $query->id . "\">Email Sale</a></li>
+                       " . $sendMail . "
                     <li class=\"divider\"></li>
                      " . $deleteButton . "
                   </ul>

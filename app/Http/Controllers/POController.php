@@ -230,9 +230,11 @@ class POController extends Controller
                         $recQty += $poitem->received_qty;
                     }
                 }
-                if ($recQty < $poQty) {
-                    $statusOfReceiveAll = "<li><a style='cursor: pointer' onclick=\"receiveAll(" . $query->id . ")\">Receive All</a></li>";
-                    $statusOfpartiallyReceiveAll = "<li><a style='cursor: pointer' onclick=\"partiallyReceive(" . $query->id . ")\">Partially Receive</a></li>";
+                if (Permissions::getRolePermissions('poStockReceive')) {
+                    if ($recQty < $poQty) {
+                        $statusOfReceiveAll = "<li><a style='cursor: pointer' onclick=\"receiveAll(" . $query->id . ")\">Receive All</a></li>";
+                        $statusOfpartiallyReceiveAll = "<li><a style='cursor: pointer' onclick=\"partiallyReceive(" . $query->id . ")\">Partially Receive</a></li>";
+                    }
                 }
 
                 /*payments check as full pad or duo*/
@@ -241,9 +243,17 @@ class POController extends Controller
                     $addPaymentLink = "<li><a style='cursor: pointer' onclick=\"addPayments(" . $query->id . ",'PO')\">Add Payments</a></li>";
                 }
 
-                $approvePO = "<li><a>PO Approved </a></li>";
-                if ($query->approve_status == \Config::get('constants.po_approve.Not_approved')) {
-                    $approvePO = "<li><a style='cursor: pointer' onclick=\"approvePO(" . $query->id . ")\">Approve PO</a></li>";
+                $approvePO = "";
+                if (Permissions::getRolePermissions('poApprove')) {
+                    $approvePO = "<li class=\"divider\"></li><li><a>PO Approved </a></li>";
+                    if ($query->approve_status == \Config::get('constants.po_approve.Not_approved')) {
+                        $approvePO = "<li class=\"divider\"></li><li><a style='cursor: pointer' onclick=\"approvePO(" . $query->id . ")\">Approve PO</a></li>";
+                    }
+                }
+
+                $sendMail = "";
+                if (Permissions::getRolePermissions('poMail')) {
+                    $sendMail = "<li><a href=\"/send/email/" . $query->id . "\">Send Mail</a></li>";
                 }
 
                 return $buttons = "<div class=\"btn-group\">
@@ -260,8 +270,8 @@ class POController extends Controller
                     <li><a style='cursor: pointer' onclick=\"showPayments(" . $query->id . ",'PO')\">View Payments</a></li>
                     " . $addPaymentLink . "
                     <li><a href=\"/po/printpo/" . $query->id . "\">Download as PDF</a></li>
-                    <li><a href=\"/send/email/" . $query->id . "\">Send Mail</a></li>
-                    <li class=\"divider\"></li>
+                    " . $sendMail . "
+              
                     " . $approvePO . "
                     <li class=\"divider\"></li>
                    " . $deleteButton . "
