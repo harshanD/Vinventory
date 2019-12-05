@@ -415,6 +415,25 @@
                                            class="minimal"></td>
                                 <td> -</td>
                             </tr>
+                            {{-- dashbord --}}
+                            <tr>
+                                <td>Dashboard - Overview Chart</td>
+                                <td> -</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="dashChart" class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td>Dashboard - Top 5</td>
+                                <td> -</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="dashTop" class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+                            {{-- dashbord  end --}}
+
                             <tr>
                                 <td>Profile</td>
                                 <td> -</td>
@@ -850,6 +869,26 @@
                                            class="minimal"></td>
                                 <td> -</td>
                             </tr>
+                            {{-- dashbord --}}
+                            <tr>
+                                <td>Dashboard - Overview Chart</td>
+                                <td> -</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="dashChart" id="dashChart"
+                                           class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td>Dashboard - Top 5</td>
+                                <td> -</td>
+                                <td> -</td>
+                                <td><input type="checkbox" name="permission[]" value="dashTop" id="dashTop"
+                                           class="minimal">
+                                </td>
+                                <td> -</td>
+                            </tr>
+                            {{-- dashbord  end --}}
                             <tr>
                                 <td>Profile</td>
                                 <td> -</td>
