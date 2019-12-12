@@ -52,16 +52,18 @@ class POController extends Controller
             'datepicker' => 'required|date',
             'status' => ['required', Rule::notIn(['0'])],
             'location' => ['required', Rule::notIn(['0'])],
-            'referenceNo' => 'required|unique:po_header,referenceCode|max:100',
+            'referenceNo' => 'required|unique:po_header,referenceCode|max:97',
             'supplier' => ['required', Rule::notIn(['0'])],
             'grand_tax_id' => 'required',
 
         ]);
 
+        $refCode = (substr($request->input('referenceNo'), 0, 2) !== 'PO') ? "PO-" . $request->input('referenceNo') : $request->input('referenceNo');
+
         $po = new PO();
         $po->due_date = $request->input('datepicker');
         $po->location = $request->input('location');
-        $po->referenceCode = $request->input('referenceNo');
+        $po->referenceCode = $refCode;
         $po->supplier = $request->input('supplier');
         $po->tax = $request->input('grand_tax');
         $po->discount = $request->input('grand_discount');
@@ -104,7 +106,7 @@ class POController extends Controller
             $request->session()->flash('message', 'Error in the database while creating the PO');
             $request->session()->flash('message-type', 'error');
         } else {
-            $request->session()->flash('message', 'Successfully created ' . "[ Ref NO:" . $request->input('referenceNo') . " ]");
+            $request->session()->flash('message', 'Successfully created ' . "[ Ref NO:" . $refCode . " ]");
             $request->session()->flash('message-type', 'success');
         }
         echo json_encode(array('success' => true));
@@ -336,17 +338,19 @@ class POController extends Controller
             'datepicker' => 'required|date',
             'status' => ['required', Rule::notIn(['0'])],
             'location' => ['required', Rule::notIn(['0'])],
-            'referenceNo' => 'required|unique:po_header,referenceCode,' . $id . '|max:100',
+            'referenceNo' => 'required|unique:po_header,referenceCode,' . $id . '|max:97',
             'supplier' => ['required', Rule::notIn(['0'])],
             'grand_tax_id' => 'required',
         ]);
 
         $validator->validate();
 
+        $refCode = (substr($request->input('referenceNo'), 0, 2) !== 'PO') ? "PO-" . $request->input('referenceNo') : $request->input('referenceNo');
+
         $po = PO::find($id);
         $po->due_date = $request->input('datepicker');
         $po->location = $request->input('location');
-        $po->referenceCode = $request->input('referenceNo');
+        $po->referenceCode = $refCode;
         $po->supplier = $request->input('supplier');
         $po->tax = $request->input('grand_tax');
         $po->discount = $request->input('grand_discount');
@@ -396,7 +400,7 @@ class POController extends Controller
             $request->session()->flash('message', 'Error in the database while updating the PO');
             $request->session()->flash('message-type', 'error');
         } else {
-            $request->session()->flash('message', 'Successfully Updated ' . "[ Ref NO:" . $request->input('referenceNo') . " ]");
+            $request->session()->flash('message', 'Successfully Updated ' . "[ Ref NO:" . $refCode . " ]");
             $request->session()->flash('message-type', 'success');
         }
         echo json_encode(array('success' => true));

@@ -55,7 +55,7 @@ class InvoiceController extends Controller
         }
         $request->validate([
             'datepicker' => 'required|date',
-            'referenceNo' => 'required|unique:invoice,invoice_code|max:100',
+            'referenceNo' => 'required|unique:invoice,invoice_code|max:97',
             'biller' => ['required', Rule::notIn(['0'])],
             'customer' => ['required', Rule::notIn(['0'])],
             'saleStatus' => ['required', Rule::notIn(['0'])],
@@ -65,9 +65,11 @@ class InvoiceController extends Controller
 
         ]);
 
+
+        $refCode = (substr($request->input('referenceNo'), 0, 2) !== 'IV') ? "IV-" . $request->input('referenceNo') : $request->input('referenceNo');
 // invoice data save
         $iv = new Invoice();
-        $iv->invoice_code = $request->input('referenceNo');
+        $iv->invoice_code = $refCode;
         $iv->invoice_date = $request->input('datepicker');
         $iv->location = $request->input('location');
         $iv->biller = $request->input('biller');
@@ -88,7 +90,7 @@ class InvoiceController extends Controller
         // stock reduce
         $stockAdd = new Stock();
         $stockAdd->po_reference_code = 'INVOICE-S';
-        $stockAdd->receive_code = $request->input('referenceNo') . '-S';
+        $stockAdd->receive_code = $refCode . '-S';
         $stockAdd->location = $request->input('location');
         $stockAdd->receive_date = $request->input('datepicker');
         $stockAdd->remarks = '';
@@ -99,9 +101,9 @@ class InvoiceController extends Controller
         $costPrice = $request->input('costPrice');
         $p_tax = $request->input('p_tax');
         $unit = $request->input('unit');
-        $subtot = $request->input('subtot');
-        $discount = $request->input('discount');
         $tax_id = $request->input('tax_id');
+        $discount = $request->input('discount');
+        $subtot = $request->input('subtot');
 
         foreach ($items as $id => $item) {
 
@@ -135,7 +137,7 @@ class InvoiceController extends Controller
             $request->session()->flash('message', 'Error in the database while creating the Invoice');
             $request->session()->flash('message-type', 'error');
         } else {
-            $request->session()->flash('message', 'Successfully created ' . "[ Ref NO:" . $request->input('referenceNo') . " ]");
+            $request->session()->flash('message', 'Successfully created ' . "[ Ref NO:" . $refCode . " ]");
             $request->session()->flash('message-type', 'success');
         }
         echo json_encode(array('success' => true));
@@ -282,7 +284,7 @@ class InvoiceController extends Controller
             'datepicker' => 'required|date',
             'saleStatus' => ['required', Rule::notIn(['0'])],
             'location' => ['required', Rule::notIn(['0'])],
-            'referenceNo' => 'required|unique:invoice,invoice_code,' . $id . '|max:100',
+            'referenceNo' => 'required|unique:invoice,invoice_code,' . $id . '|max:97',
             'biller' => ['required', Rule::notIn(['0'])],
             'customer' => ['required', Rule::notIn(['0'])],
             'paymetStatus' => ['required', Rule::notIn(['0'])],
@@ -292,9 +294,11 @@ class InvoiceController extends Controller
 
         $validator->validate();
 
+        $refCode = (substr($request->input('referenceNo'), 0, 2) !== 'IV') ? "IV-" . $request->input('referenceNo') : $request->input('referenceNo');
+
         $iv = Invoice::find($id);
         $olderrefNo = $iv->invoice_code;
-        $iv->invoice_code = $request->input('referenceNo');
+        $iv->invoice_code = $refCode;
         $iv->invoice_date = $request->input('datepicker');
         $iv->location = $request->input('location');
         $iv->biller = $request->input('biller');
@@ -314,7 +318,7 @@ class InvoiceController extends Controller
         $stockSubstct = Stock::updateOrCreate([                         /* FROM */
             'receive_code' => $olderrefNo . '-S'
         ], [
-            'receive_code' => $request->input('referenceNo') . '-S',
+            'receive_code' => $refCode . '-S',
             'receive_date' => $request->input('datepicker'),
             'remarks' => '',
             'location' => $request->input('location'),
@@ -336,7 +340,7 @@ class InvoiceController extends Controller
             $invoItemDel = Invoice::where('id', '=', $iv->id)->firstOrFail();
             $invoItemDel->invoiceItems()->whereIn('item_id', $deletedItems)->delete();
 
-            $StockItemDel = Stock::where('id', '=', $request->input('referenceNo') . '-S')->firstOrFail();
+            $StockItemDel = Stock::where('id', '=', $refCode . '-S')->firstOrFail();
             $StockItemDel->stockItems()->whereIn('item_id', $deletedItems)->delete();
         }
 
@@ -381,7 +385,7 @@ class InvoiceController extends Controller
             $request->session()->flash('message', 'Error in the database while updating the Invoice');
             $request->session()->flash('message-type', 'error');
         } else {
-            $request->session()->flash('message', 'Successfully Updated ' . "[ Ref NO:" . $request->input('referenceNo') . " ]");
+            $request->session()->flash('message', 'Successfully Updated ' . "[ Ref NO:" . $refCode . " ]");
             $request->session()->flash('message-type', 'success');
         }
         echo json_encode(array('success' => true));
