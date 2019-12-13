@@ -200,7 +200,7 @@
                                 <input type="text" placeholder="Select Date" name="datepicker"
                                        value="{{date('Y-m-d')}}"
                                        class="form-control pull-right" id="datepicker1">
-                                <p class="help-block" id="error_datepicker"></p>
+                                <p class="help-block" id="error_datepicker1"></p>
                             </div>
 
                             <div class="form-group">
@@ -404,7 +404,7 @@
                             $('#error_recNo').html(request.responseJSON.errors.recNo[0]);
                         }
                         if (typeof request.responseJSON.errors.datepicker !== 'undefined') {
-                            $('#error_datepicker').html(request.responseJSON.errors.datepicker[0]);
+                            $('#error_datepicker1').html(request.responseJSON.errors.datepicker[0]);
                         }
 
                     }
@@ -428,8 +428,6 @@
                         // if (response.success) {
                         window.location.href = '/po/manage';
                         // }
-
-
                     },
                     error: function (request, status, errorThrown) {
 

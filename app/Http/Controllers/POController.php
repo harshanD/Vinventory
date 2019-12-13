@@ -432,7 +432,7 @@ class POController extends Controller
 
         $niceNames = array(
             'recNo' => 'receive code',
-            'datepicker' => 'receive date',
+            'datepicker1' => 'receive date',
         );
         $validator->setAttributeNames($niceNames);
 
@@ -443,19 +443,40 @@ class POController extends Controller
         $po->status = 1;
         $po->save();
 
+        //check po stock partially received before or not
+//        $stock = Stock::where('po_reference_code', $request->input('recNo'));
+//
+//        if (empty($stock)) {
+//            $stock->po_reference_code = $po->referenceCode;
+//            $stock->receive_code = $request->input('recNo');
+//            $stock->location = $po->location;
+//            $stock->receive_date = $request->input('datepicker');
+//            $stock->remarks = $request->input('note');
+//        }else{
         $stock = new Stock();
         $stock->po_reference_code = $po->referenceCode;
         $stock->receive_code = $request->input('recNo');
         $stock->location = $po->location;
         $stock->receive_date = $request->input('datepicker');
         $stock->remarks = $request->input('note');
+//        }
         $stock->save();
 
         foreach ($po->poDetails as $poItem) {
 
+//            stock items for add reserving qty
+//            $preStockSum = 0;
+//            $preStockItems = StockItems::where(['po_reference_code' => $request->input('recNo'), 'item_id' => $poItem->id]);
+//            if (!empty($preStockItems)) {
+//                foreach ($preStockItems as $preStockItem) {
+//                    $preStockSum += $preStockItem->qty;
+//                }
+//            }
+            /*PO table updated as all items stock as received*/
             $poitemOb = PoDetails::find($poItem->id);
-            $receQty = ($poItem->qty - $poitemOb->received_qty);
-            $poitemOb->received_qty = $receQty;
+//            $receQty = (($poItem->qty - $preStockSum) - $poitemOb->received_qty);
+            $receQty = ($poitemOb->qty - $poitemOb->received_qty);
+            $poitemOb->received_qty = $poitemOb->qty;
             $poitemOb->save();
 
 //            products foe add as available stock qty
@@ -463,16 +484,14 @@ class POController extends Controller
             $products->availability = $products->availability + $receQty;
             $products->save();
 
-//            stock items for add reserving qty
+            //            stock items for add reserving qty
             $stockItems = new StockItems();
-            $stockItems->item_id = $poItem->id;
+            $stockItems->item_id = $poItem->item_id;
             $stockItems->qty = $receQty;
             $stockItems->cost_price = $poitemOb->cost_price;
             $stockItems->tax_per = $poitemOb->tax_percentage;
             $stock->stockItems()->save($stockItems);
-
         }
-
 
         if (!($stock)) {
             $request->session()->flash('message', 'Error in the database while updating the PO');
@@ -481,7 +500,7 @@ class POController extends Controller
             $request->session()->flash('message', 'Successfully Received All' . "[ Ref NO:" . $stock->receive_code . " ]");
             $request->session()->flash('message-type', 'success');
         }
-        return redirect()->route('po.manage');
+        echo json_encode(array('success' => true));
     }
 
     public function partiallyReceive(Request $request)
