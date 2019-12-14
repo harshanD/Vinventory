@@ -78,6 +78,8 @@ Route::get('/products/fetchProductsData', 'ProductsController@fetchProductsData'
 Route::get('/products/fetchProductsList/{id}', 'ProductsController@fetchProductsList');
 Route::post('/products/remove', 'ProductsController@removeProductData');
 Route::post('/products/fetchProductDataById', 'ProductsController@fetchProductDataById');
+Route::post('/products/showItem', 'ProductsController@showItem');
+
 
 /* PO */
 Route::get('/po/add', ['as' => 'po.add', 'uses' => 'POController@index']);

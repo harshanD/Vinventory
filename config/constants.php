@@ -29,6 +29,9 @@ return [
     'taxActive' => [
         'Active' => '2',
         'Inactive' => '1',
+    ], 'taxStatus' => [
+        '2' => 'Inclusive',
+        '1' => 'Exclusive',
     ],
     'i_sale_status' => [
         'Pending' => '1',

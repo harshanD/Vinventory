@@ -85,6 +85,7 @@
                             <td></td>
                             <td></td>
                             <td>
+                                <a href="" class="btn btn-default"><i class="fa fa-view"></i></a>
                                 <a href="" class="btn btn-default"><i class="fa fa-edit"></i></a>
                                 <a href="" class="btn btn-default"><i class="fa fa-trash"></i></a>
                             </td>
@@ -129,9 +130,14 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
 
+        <div class="modal fade" tabindex="-1" role="dialog" id="productViewModal">
+        </div>
     </section>
 
+@endsection
 
+
+@section('js')
     <script type="text/javascript">
         var manageTable;
         $(document).ready(function () {
@@ -231,11 +237,7 @@
             });
 
         }
-    </script>
-@endsection
 
-@section('js')
-    <script>
         $(function () {
             setTimeout(
                 function () {
@@ -252,6 +254,25 @@
                     });
                 }, 1000);
         });
+
+        function showProductDetails(id) {
+            $.ajax({
+                url: "/products/showItem",
+                type: 'POST',
+                data: {
+                    id: id,
+                    "_token": "{{ csrf_token() }}",
+                },
+                dataType: 'json',
+                success: function (response) {
+                    $('#productViewModal').html(response.html);
+                    $('#productViewModal').modal({
+                        show: 'true'
+                    });
+
+                },
+            });
+        }
 
     </script>
 @endsection

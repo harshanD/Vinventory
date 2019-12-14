@@ -159,7 +159,12 @@ class StockController extends Controller
 
             $product = (object)Products::find($AddedStockItem->item_id)->toArray();
 
-            if ($product->status == \Config::get('constants.status.Active')) {
+            $statusCheck = false;
+            if (!empty($request->input('checkStatus'))) {
+                $statusCheck = true;
+            }
+
+            if ($product->status == \Config::get('constants.status.Active') || $statusCheck) {
 
                 $list[$key++] = array(
                     'id' => $AddedStockItem->item_id,

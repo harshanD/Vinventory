@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Categories;
 use App\Invoice;
+use App\Locations;
 use App\Products;
 use App\Brands;
 use App\Stock;
@@ -132,7 +133,9 @@ class ProductsController extends Controller
                 return '<a href="' . asset('storage/' . $query->img_url) . '"  class="image-link-custom"><img src="' . asset('storage/' . $query->img_url) . '" style="width:50px;height:50px"  alt="placeholder avatar"></a>';
             })->addColumn('action', function ($query) {
                 $buttons = '';
-
+                if (Permissions::getRolePermissions('viewProduct')) {
+                    $buttons .= '<a  onclick="showProductDetails(' . $query->id . ')" class="btn btn-default"><i class="fa fa-eye"></i></a>';
+                }
                 if (Permissions::getRolePermissions('updateProduct')) {
                     $buttons .= '<a  href="' . url("/products/edit/" . $query->id) . '" class="btn btn-default"><i class="fa fa-pencil"></i></a>';
                 }
@@ -328,5 +331,43 @@ class ProductsController extends Controller
         echo json_encode($list);
     }
 
+    public function showItem(Request $request)
+    {
+        $product = Products::find($request['id']);
+        $stock = new StockController();
+        $warehouses = Locations::all();
+//print_r($product->name);
+        $data = array();
+        $data['name'] = $product->name;
+        $data['code'] = $product->item_code;
+        $data['image'] = $product->img_url;
+        $data['brand'] = $product->brands->brand;
+        $data['category'] = $product->categories->category;
+        $data['cost'] = $product->cost_price;
+        $data['price'] = $product->selling_price;
+        $data['taxRate'] = (\Config::get('constants.taxActive.Active') == $product->tax_method && $product->tax != 0) ? Tax::find($product->tax)->get()->toArray()[0]['value'] : 0;
+        $data['taxMethod'] = \Config::get('constants.taxStatus.' . $product->tax_method);
+        $data['alertQty'] = $product->reorder_level;
 
+        $i = 0;
+        foreach ($warehouses as $warehouse) {
+            $request['wh'] = $warehouse->id;
+            $request['idItem'] = $product->id;
+            $request['requirement'] = 'array';
+            $request['checkStatus'] = true;
+
+            $stockData = $stock->fetchProductsOneWarehouseWiseItem($request);
+
+            $warehouseStock[$i] = array(
+                'name' => $warehouse->name,
+                'qty' => (isset($stockData[0]['sum'])) ? $stockData[0]['sum'] : 0,
+            );
+            $i++;
+        }
+
+        $data['warehouses'] = $warehouseStock;
+
+        $view = view('vendor.adminlte.products.view', ['data' => $data])->render();
+        return response()->json(['html' => $view]);
+    }
 }
