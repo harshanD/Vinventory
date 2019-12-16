@@ -31,7 +31,7 @@ class AdminSeeder extends Seeder
             'Sales Person',
             'Guest');
 
-        $permissions = 'a:36:{i:0;s:10:"createUser";i:1;s:10:"updateUser";i:2;s:12:"viewUserList";i:3;s:10:"deleteUser";i:4;s:11:"createGroup";i:5;s:11:"updateGroup";i:6;s:9:"viewGroup";i:7;s:11:"deleteGroup";i:8;s:11:"createBrand";i:9;s:11:"updateBrand";i:10;s:9:"viewBrand";i:11;s:11:"deleteBrand";i:12;s:14:"createCategory";i:13;s:14:"updateCategory";i:14;s:12:"viewCategory";i:15;s:14:"deleteCategory";i:16;s:11:"createStore";i:17;s:11:"updateStore";i:18;s:9:"viewStore";i:19;s:11:"deleteStore";i:20;s:15:"createAttribute";i:21;s:15:"updateAttribute";i:22;s:13:"viewAttribute";i:23;s:15:"deleteAttribute";i:24;s:13:"createProduct";i:25;s:13:"updateProduct";i:26;s:11:"viewProduct";i:27;s:13:"deleteProduct";i:28;s:11:"createOrder";i:29;s:11:"updateOrder";i:30;s:9:"viewOrder";i:31;s:11:"deleteOrder";i:32;s:11:"viewReports";i:33;s:13:"updateCompany";i:34;s:11:"viewProfile";i:35;s:13:"updateSetting";}';
+        $permissions = 'a:89:{i:0;s:10:"createUser";i:1;s:10:"updateUser";i:2;s:8:"viewUser";i:3;s:10:"deleteUser";i:4;s:10:"createRole";i:5;s:10:"updateRole";i:6;s:8:"viewRole";i:7;s:10:"deleteRole";i:8;s:11:"createBrand";i:9;s:11:"updateBrand";i:10;s:9:"viewBrand";i:11;s:11:"deleteBrand";i:12;s:14:"createCategory";i:13;s:14:"updateCategory";i:14;s:12:"viewCategory";i:15;s:14:"deleteCategory";i:16;s:12:"createBiller";i:17;s:12:"updateBiller";i:18;s:10:"viewBiller";i:19;s:12:"deleteBiller";i:20;s:14:"createCustomer";i:21;s:14:"updateCustomer";i:22;s:12:"viewCustomer";i:23;s:14:"deleteCustomer";i:24;s:14:"createSupplier";i:25;s:14:"updateSupplier";i:26;s:12:"viewSupplier";i:27;s:14:"deleteSupplier";i:28;s:15:"createWarehouse";i:29;s:15:"updateWarehouse";i:30;s:13:"viewWarehouse";i:31;s:15:"deleteWarehouse";i:32;s:13:"createProduct";i:33;s:13:"updateProduct";i:34;s:11:"viewProduct";i:35;s:13:"deleteProduct";i:36;s:11:"createOrder";i:37;s:11:"updateOrder";i:38;s:9:"viewOrder";i:39;s:11:"deleteOrder";i:40;s:10:"createSale";i:41;s:10:"updateSale";i:42;s:8:"viewSale";i:43;s:10:"deleteSale";i:44;s:14:"createTransfer";i:45;s:14:"updateTransfer";i:46;s:12:"viewTransfer";i:47;s:14:"deleteTransfer";i:48;s:16:"createAdjustment";i:49;s:16:"updateAdjustment";i:50;s:14:"viewAdjustment";i:51;s:16:"deleteAdjustment";i:52;s:13:"createReturns";i:53;s:13:"updateReturns";i:54;s:11:"viewReturns";i:55;s:13:"deleteReturns";i:56;s:9:"createTax";i:57;s:9:"updateTax";i:58;s:7:"viewTax";i:59;s:9:"deleteTax";i:60;s:10:"viewPeople";i:61;s:12:"viewSettings";i:62;s:11:"viewReports";i:63;s:20:"warehouseStockReport";i:64;s:20:"productQualityAlerts";i:65;s:14:"productsReport";i:66;s:17:"adjustmentsReport";i:67;s:14:"categoryReport";i:68;s:12:"brandsReport";i:69;s:10:"dailySales";i:70;s:12:"monthlySales";i:71;s:11:"salesReport";i:72;s:14:"paymentsReport";i:73;s:14:"dailyPurchases";i:74;s:16:"monthlyPurchases";i:75;s:15:"purchasesReport";i:76;s:15:"customersReport";i:77;s:15:"suppliersReport";i:78;s:13:"notifications";i:79;s:14:"quantityAlerts";i:80;s:18:"newRegisteredUsers";i:81;s:9:"dashChart";i:82;s:7:"dashTop";i:83;s:14:"poStockReceive";i:84;s:9:"poApprove";i:85;s:6:"poMail";i:86;s:9:"salesMail";i:87;s:13:"transfersMail";i:88;s:11:"viewProfile";}';
         foreach ($roles as $role):
             Role::create(
                 [
@@ -59,20 +59,20 @@ class AdminSeeder extends Seeder
         DB::insert("INSERT INTO `po_details` (`id`, `po_header`, `item_id`, `cost_price`, `qty`, `received_qty`, `tax_val`, `tax_percentage`, `discount`, `sub_total`, `created_at`, `updated_at`) VALUES ('0', '1', '1', '80', '100', '30', '0', '0', '0', '8000', '2019-08-17 04:41:39', '2019-08-18 07:03:35'), ('0', '2', '1', '80', '10', '10', '0', '0', '0', '800', '2019-08-17 05:13:02', '2019-08-17 10:25:33')");
         DB::insert("INSERT INTO `products_supplier` (`products_id`, `supplier_id`, `created_at`, `updated_at`) VALUES ('1', '1', NULL, NULL), 
 ('1', '2', NULL, NULL), ('2', '1', NULL, NULL), ('2', '2', NULL, NULL)");
-        DB::insert("INSERT INTO `stock` (`id`, `po_reference_code`, `receive_code`, `receive_date`, `location`, `remarks`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES 
-('0', 'PO/M-000002', 'PR-000001', '2019-08-17', '1', NULL, '0', NULL, '2019-08-17 10:25:33', '2019-08-17 10:25:33'),
- ('0', 'PO-000001', 'PR-000002', '2019-08-19', '1', 'note fpr partailly 1', '0', NULL, '2019-08-18 06:35:08', '2019-08-18 06:35:08'), 
- ('0', 'PO-000001', 'PR-000003', '2019-08-18', '1', NULL, '0', NULL, '2019-08-18 06:38:40', '2019-08-18 06:38:40'), 
- ('0', 'PO-000001', 'PR-000004', '2019-08-18', '1', NULL, '0', NULL, '2019-08-18 06:51:36', '2019-08-18 06:51:36'),
- ('0', 'PO-000001', 'PR-000005', '2019-08-18', '1', NULL, '0', NULL, '2019-08-18 06:53:48', '2019-08-18 06:53:48'),
-  ('0', 'PO-000001', 'PR-000006', '2019-08-18', '1', NULL, '0', NULL, '2019-08-18 06:54:07', '2019-08-18 06:54:07'), 
-  ('0', 'PO-000001', 'PR-000007', '2019-08-18', '1', NULL, '0', NULL, '2019-08-18 06:54:35', '2019-08-18 06:54:35'), 
-  ('0', 'PO-000001', 'PR-000008', '2019-08-18', '1', NULL, '0', NULL, '2019-08-18 07:03:35', '2019-08-18 07:03:35')");
-        DB::insert("INSERT INTO `stock_items` (`id`, `stock_id`, `item_id`, `qty`, `method`, `created_at`, `updated_at`) VALUES 
-('0', '1', '2', '10', 'A', '2019-08-17 10:25:33', '2019-08-17 10:25:33'), ('0', '2', '1', '5', 'A', '2019-08-18 06:35:08', '2019-08-18 06:35:08'),
- ('0', '3', '1', '6', 'A', '2019-08-18 06:38:40', '2019-08-18 06:38:40'), ('0', '4', '1', '2', 'A', '2019-08-18 06:51:36', '2019-08-18 06:51:36'),
-  ('0', '5', '1', '1', 'A', '2019-08-18 06:53:48', '2019-08-18 06:53:48'), ('0', '6', '1', '6', 'A', '2019-08-18 06:54:35', '2019-08-18 06:54:35'),
-   ('0', '7', '1', '10', 'A', '2019-08-18 07:03:35', '2019-08-18 07:03:35')");
+//        DB::insert("INSERT INTO `stock` (`id`, `po_reference_code`, `receive_code`, `receive_date`, `location`, `remarks`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
+//('0', 'PO/M-000002', 'PR-000001', '2019-08-17', '1', NULL, '0', NULL, '2019-08-17 10:25:33', '2019-08-17 10:25:33'),
+// ('0', 'PO-000001', 'PR-000002', '2019-08-19', '1', 'note fpr partailly 1', '0', NULL, '2019-08-18 06:35:08', '2019-08-18 06:35:08'),
+// ('0', 'PO-000001', 'PR-000003', '2019-08-18', '1', NULL, '0', NULL, '2019-08-18 06:38:40', '2019-08-18 06:38:40'),
+// ('0', 'PO-000001', 'PR-000004', '2019-08-18', '1', NULL, '0', NULL, '2019-08-18 06:51:36', '2019-08-18 06:51:36'),
+// ('0', 'PO-000001', 'PR-000005', '2019-08-18', '1', NULL, '0', NULL, '2019-08-18 06:53:48', '2019-08-18 06:53:48'),
+//  ('0', 'PO-000001', 'PR-000006', '2019-08-18', '1', NULL, '0', NULL, '2019-08-18 06:54:07', '2019-08-18 06:54:07'),
+//  ('0', 'PO-000001', 'PR-000007', '2019-08-18', '1', NULL, '0', NULL, '2019-08-18 06:54:35', '2019-08-18 06:54:35'),
+//  ('0', 'PO-000001', 'PR-000008', '2019-08-18', '1', NULL, '0', NULL, '2019-08-18 07:03:35', '2019-08-18 07:03:35')");
+//        DB::insert("INSERT INTO `stock_items` (`id`, `stock_id`, `item_id`, `qty`, `method`, `created_at`, `updated_at`) VALUES
+//('0', '1', '2', '10', 'A', '2019-08-17 10:25:33', '2019-08-17 10:25:33'), ('0', '2', '1', '5', 'A', '2019-08-18 06:35:08', '2019-08-18 06:35:08'),
+// ('0', '3', '1', '6', 'A', '2019-08-18 06:38:40', '2019-08-18 06:38:40'), ('0', '4', '1', '2', 'A', '2019-08-18 06:51:36', '2019-08-18 06:51:36'),
+//  ('0', '5', '1', '1', 'A', '2019-08-18 06:53:48', '2019-08-18 06:53:48'), ('0', '6', '1', '6', 'A', '2019-08-18 06:54:35', '2019-08-18 06:54:35'),
+//   ('0', '7', '1', '10', 'A', '2019-08-18 07:03:35', '2019-08-18 07:03:35')");
 
         DB::insert("INSERT INTO `tax_profiles` (`id`, `name`, `code`, `value`, `type`, `status`, `deleted_at`, `created_at`, `updated_at`, `created_by`, `updated_by`, `deleted_by`) VALUES ('0', 'No Tax', '0%', '0', 'Percentage', '0', NULL, '2019-08-20 17:57:51', '2019-08-28 11:21:10', NULL, NULL, NULL)");
         DB::insert("INSERT INTO `tax_profiles` (`id`, `name`, `code`, `value`, `type`, `status`, `deleted_at`, `created_at`, `updated_at`, `created_by`, `updated_by`, `deleted_by`) VALUES ('0', '20 % tax', '20 %', '20', 'Percentage', '0', NULL, '2019-08-28 11:22:35', '2019-08-28 11:22:35', NULL, NULL, NULL)");
