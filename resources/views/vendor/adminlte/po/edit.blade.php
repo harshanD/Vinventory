@@ -200,9 +200,9 @@
                                     <th>Product (Code - Name)</th>
                                     <th>Net Unit Cost (Rs)</th>
                                     <th>Quantity</th>
-                                    <th>Discount</th>
-                                    <th>Product Tax</th>
-                                    <th>Subtotal</th>
+                                    <th>Discount(Rs)</th>
+                                    <th>Product Tax(Rs)</th>
+                                    <th>Subtotal(Rs)</th>
                                     <th style="text-align:center"><i class="fa fa-trash"></i></th>
                                 </tr>
                                 </thead>
@@ -244,7 +244,7 @@
 
                                         </td>
                                         <td class='tax'
-                                            id='tax_{{ $poItem->item_id }}'>{{ number_format($poItem->tax_val,2)}}</td>
+                                            id='tax_{{ $poItem->item_id }}'>{{ number_format($poItem->tax_val*$poItem->qty,2)}}</td>
                                         <td class='subtot'
                                             id='subtot_{{ $poItem->item_id }}'>{{ number_format($poItem->sub_total,2) }}</td>
                                         <td style="text-align: center"><i class="glyphicon glyphicon-remove"
@@ -429,16 +429,16 @@
                             </div>
                             <div class="box-body">
                                 <div class="<?= $table_responsive ?>">
-                                <table class="table table-bordered table-striped">
-                                    <thead>
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
 
-                                    <th style="width: 25%">Net Unit Cost (Rs)</th>
-                                    <th style="width: 25%" id="nucost"></th>
-                                    <th style="width: 25%">Product Tax</th>
-                                    <th style="width: 25%" id="ptx"></th>
+                                        <th style="width: 25%">Net Unit Cost (Rs)</th>
+                                        <th style="width: 25%" id="nucost"></th>
+                                        <th style="width: 25%">Product Tax</th>
+                                        <th style="width: 25%" id="ptx"></th>
 
-                                    </thead>
-                                </table>
+                                        </thead>
+                                    </table>
                                 </div>
                                 <br>
                                 <div class="panel panel-default">
@@ -654,7 +654,7 @@
         }
 
         function qtyChanging(id) {
-            qtyValidating('quantity_'+id);
+            qtyValidating('quantity_' + id);
             $('#tax_' + id).text((toNumber($('#p_tax_h' + id).val()) * $('#quantity_' + id).val()).format(2));
             var subTot = ((toNumber($('#costPrice_' + id).text()) * toNumber($('#quantity_' + id).val())) + toNumber(($('#tax_' + id).text())));
             $('#quantity_h' + id).val(toNumber($('#quantity_' + id).val()));
@@ -764,10 +764,10 @@
 
                     $('#pUnit').html("");
                     if (item.unit == '2') { /*piece*/
-                        var unitSelecter = "<option value='1'>Piece</option>" +
+                        var unitSelecter = "<option value='2'>Piece</option>" +
                             "<option value='12'>Dozen Box</option>";
-                    } else if (item.unit == '1') { /*kilograms*/
-                        var unitSelecter = "<option value='1'>Kilograms</option>";
+                    } else if (item.unit == '3') { /*kilograms*/
+                        var unitSelecter = "<option value='3'>Kilograms</option>";
                     } else { /*meter*/
                         var unitSelecter = "<option value='1'>meters</option>";
                     }

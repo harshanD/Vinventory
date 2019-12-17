@@ -42,19 +42,19 @@
                         <td style="font-weight: bold"><?= $data['category'] ?></td>
                     </tr>
                     <tr>
-                        <td style="width: 100px;text-align: right">Cost</td>
+                        <td style="width: 100px;text-align: right">Cost (Rs)</td>
                         <td width="20px"></td>
-                        <td style="font-weight: bold"><?= $data['cost'] ?></td>
+                        <td style="font-weight: bold"><?= number_format($data['cost'], 2)?></td>
                     </tr>
                     <tr>
-                        <td style="width: 100px;text-align: right">Price</td>
+                        <td style="width: 100px;text-align: right">Price (Rs)</td>
                         <td width="20px"></td>
-                        <td style="font-weight: bold"><?= $data['price'] ?></td>
+                        <td style="font-weight: bold"><?= number_format($data['price'], 2)?></td>
                     </tr>
                     <tr>
                         <td style="width: 100px;text-align: right">Tax Rate</td>
                         <td width="20px"></td>
-                        <td style="font-weight: bold"><?= $data['taxRate'] ?></td>
+                        <td style="font-weight: bold"><?= $data['taxRate'] . " %"?></td>
                     </tr>
                     <tr>
                         <td style="width: 100px;text-align: right">Tax Method</td>

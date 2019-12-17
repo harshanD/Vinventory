@@ -161,7 +161,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="price">Product Price<span class="mandatory"> *</span></label>
+                                    <label for="price">Product Price (Rs)<span class="mandatory"> *</span></label>
                                     <input type="text"
                                            value="<?= (old('price') != '') ? old('price') : $product->selling_price;?>"
                                            class="form-control number" id="price"
@@ -247,7 +247,9 @@
                                     <div class="btn btn-mdb-color btn-rounded float-center">
                                         <input name="product_image" id="product_image" type="file">
                                     </div>
-
+                                    @error('product_image')
+                                    <p class="help-block">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <div class="form-group">

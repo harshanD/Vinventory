@@ -63,6 +63,9 @@ class ProductsController extends Controller
             'secondary_name' => ($request['secondary_name'] != '') ? 'required|unique:products,short_name' : '',
         ]);
 
+        if ($request->file('product_image') != null) {
+            $request->validate($request, ['product_image' => 'image|mimes:jpeg,png,jpg|max:2048',]);
+        }
         $product = new Products();
         $product->name = $request->input('product_name');
         $product->item_code = $request->input('product_code');
@@ -214,6 +217,12 @@ class ProductsController extends Controller
             'secondary_name' => ($request['secondary_name'] != '') ? 'required|unique:products,short_name,' . $id . '' : '',
         ]);
 
+        if ($request->file('product_image') != null) {
+            $validator = Validator::make($request->all(), [
+                'product_image' => 'image|mimes:jpeg,png,jpg|max:2048'
+            ]);
+//            $request->validate($request, ['product_image' => 'image|mimes:jpeg,png,jpg|max:2048',]);
+        }
 
         $niceNames = array(//            'product_name' => 'Products',
         );

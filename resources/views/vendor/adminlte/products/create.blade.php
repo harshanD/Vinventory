@@ -223,6 +223,9 @@
                                     <div class="btn btn-mdb-color btn-rounded float-center">
                                         <input name="product_image" id="product_image" type="file">
                                     </div>
+                                    @error('product_image')
+                                    <p class="help-block">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
 

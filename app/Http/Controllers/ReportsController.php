@@ -156,7 +156,7 @@ class ReportsController extends Controller
                 ->groupBy('item_id')->get();
 
             $sold = DB::table('invoice')
-                ->select(DB::raw('ifnull(sum(invoice_details.qty*invoice_details.selling_price),0) as sold'))
+                ->select(DB::raw('ifnull(sum(invoice_details.qty*invoice_details.selling_price),0) as sold , ifnull(sum(invoice_details.qty),0) as soldQty'))
                 ->join('invoice_details', 'invoice_details.invoice_id', '=', 'invoice.id')
                 ->where('invoice_details.item_id', '=', $product->id)
                 ->WhereNull('invoice.deleted_at')
@@ -167,6 +167,7 @@ class ReportsController extends Controller
 
             $purchasedSum = 0;
             $soldSum = 0;
+            $costValue = 0;
 
             if (count($purchased) > 0) {
                 $purchasedSum = ($purchased[0]->purchased);
@@ -174,6 +175,7 @@ class ReportsController extends Controller
 
             if (count($sold) > 0) {
                 $soldSum = ($sold[0]->sold);
+                $costValue = $sold[0]->soldQty * $product->cost_price;
             }
             $qtySum = 0;
             if (count($dates) > 0) {
@@ -186,9 +188,9 @@ class ReportsController extends Controller
             $list['data'][$key] = array(
                 'item_code' => $product->item_code,
                 'name' => $product->name,
-                'purchased' => $purchasedSum,
-                'sold' => $soldSum,
-                'profitLess' => number_format($soldSum - $purchasedSum, 2),
+                'purchased' => number_format($purchasedSum, 2),
+                'sold' => number_format($soldSum, 2),
+                'profitLess' => number_format($soldSum - $costValue, 2),
                 'stock_available' => '(' . $qtySum . ') ' . $qtyPrice,
             );
 
@@ -218,6 +220,7 @@ class ReportsController extends Controller
 
             $purchasedSum = 0;
             $soldSum = 0;
+            $costValue = 0;
             $qtySum = 0;
             $qtyPrice = 0;
 
@@ -240,7 +243,7 @@ class ReportsController extends Controller
                     ->groupBy('item_id')->get();
 
                 $sold = DB::table('invoice')
-                    ->select(DB::raw('ifnull(sum(invoice_details.qty*invoice_details.selling_price),0) as sold'))
+                    ->select(DB::raw('ifnull(sum(invoice_details.qty*invoice_details.selling_price),0) as sold , ifnull(sum(invoice_details.qty),0) as soldQty'))
                     ->join('invoice_details', 'invoice_details.invoice_id', '=', 'invoice.id')
                     ->where('invoice_details.item_id', '=', $product->id)
                     ->WhereNull('invoice.deleted_at')
@@ -256,6 +259,7 @@ class ReportsController extends Controller
 
                 if (count($sold) > 0) {
                     $soldSum += ($sold[0]->sold);
+                    $costValue += $sold[0]->soldQty * $product->cost_price;
                 }
 
                 if (count($dates) > 0) {
@@ -270,9 +274,9 @@ class ReportsController extends Controller
             $list['data'][$key] = array(
                 'category_code' => $category->code,
                 'name' => $category->category,
-                'purchased' => $purchasedSum,
-                'sold' => $soldSum,
-                'profitLess' => number_format($soldSum - $purchasedSum, 2),
+                'purchased' => number_format($purchasedSum, 2),
+                'sold' => number_format($soldSum, 2),
+                'profitLess' => number_format($soldSum - $costValue, 2),
                 'stock_available' => '(' . $qtySum . ') ' . number_format($qtyPrice, 2),
             );
         }
@@ -302,10 +306,11 @@ class ReportsController extends Controller
 
             $purchasedSum = 0;
             $soldSum = 0;
+            $costValue = 0;
             $qtySum = 0;
             $qtyPrice = 0;
 
-            $products = Products::where('status', \Config::get('constants.status.Active'))->where('category', $brand->id)->get();
+            $products = Products::where('status', \Config::get('constants.status.Active'))->where('brand', $brand->id)->get();
             foreach ($products as $key1 => $product) {
                 $dates = array();
 
@@ -324,7 +329,7 @@ class ReportsController extends Controller
                     ->groupBy('item_id')->get();
 
                 $sold = DB::table('invoice')
-                    ->select(DB::raw('ifnull(sum(invoice_details.qty*invoice_details.selling_price),0) as sold'))
+                    ->select(DB::raw('ifnull(sum(invoice_details.qty*invoice_details.selling_price),0) as sold , ifnull(sum(invoice_details.qty),0) as soldQty'))
                     ->join('invoice_details', 'invoice_details.invoice_id', '=', 'invoice.id')
                     ->where('invoice_details.item_id', '=', $product->id)
                     ->WhereNull('invoice.deleted_at')
@@ -340,6 +345,7 @@ class ReportsController extends Controller
 
                 if (count($sold) > 0) {
                     $soldSum += ($sold[0]->sold);
+                    $costValue += $sold[0]->soldQty * $product->cost_price;
                 }
 
                 if (count($dates) > 0) {
@@ -354,9 +360,9 @@ class ReportsController extends Controller
             $list['data'][$key] = array(
                 'brand_code' => $brand->code,
                 'name' => $brand->brand,
-                'purchased' => $purchasedSum,
-                'sold' => $soldSum,
-                'profitLess' => number_format($soldSum - $purchasedSum, 2),
+                'purchased' => number_format($purchasedSum, 2),
+                'sold' => number_format($soldSum, 2),
+                'profitLess' => number_format($soldSum - $costValue, 2),
                 'stock_available' => '(' . $qtySum . ') ' . number_format($qtyPrice, 2),
             );
         }
@@ -928,7 +934,7 @@ class ReportsController extends Controller
         $array['stock'] = $this->stockNotification();
 //            }
 //        if (Permissions::getRolePermissions('newRegisteredUsers')) {
-            $array['guests'] = $this->guestsCount(); // email verified count of guests
+        $array['guests'] = $this->guestsCount(); // email verified count of guests
 ////        }
 ////        }
 //        echo '--';

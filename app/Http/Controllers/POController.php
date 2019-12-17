@@ -637,8 +637,10 @@ class POController extends Controller
         $type = 'Purchase order';
         $reference_number = $podata->referenceCode;
 
-        $attach = $pdf->output();
-        Mail::to($email)->send(new SendMailable($name, $reference_number, $type, $UserCompany, config('adminlte.title', 'AdminLTE 2'), $attach, $path));
+        if (isset($email) && $email != null) {
+            $attach = $pdf->output();
+            Mail::to($email)->send(new SendMailable($name, $reference_number, $type, $UserCompany, config('adminlte.title', 'AdminLTE 2'), $attach, $path));
+        }
 
         if (count(Mail::failures()) > 0) {
             $request->session()->flash('message', 'Email sent fail to ' . $name . ' (' . $email . ') ');

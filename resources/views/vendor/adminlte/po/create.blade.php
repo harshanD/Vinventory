@@ -188,7 +188,7 @@
                                     <th>Quantity</th>
                                     <th>Discount (Rs)</th>
                                     <th>Product Tax (Rs)</th>
-                                    <th>Subtotal</th>
+                                    <th>Subtotal (Rs)</th>
                                     <th style="text-align:center"><i class="fa fa-trash"></i></th>
                                 </tr>
                                 </thead>
@@ -684,10 +684,10 @@
 
                     $('#pUnit').html("");
                     if (item.unit == '2') { /*piece*/
-                        var unitSelecter = "<option value='1'>Piece</option>" +
+                        var unitSelecter = "<option value='2'>Piece</option>" +
                             "<option value='12'>Dozen Box</option>";
-                    } else if (item.unit == '1') { /*kilograms*/
-                        var unitSelecter = "<option value='1'>Kilograms</option>";
+                    } else if (item.unit == '3') { /*kilograms*/
+                        var unitSelecter = "<option value='3'>Kilograms</option>";
                     } else { /*meter*/
                         var unitSelecter = "<option value='1'>meters</option>";
                     }
