@@ -12,8 +12,8 @@
 
 @section('content_header')
     <ol class="breadcrumb">
-        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Manage Suppliers</li>
+        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li class="active">Purchase Report</li>
     </ol>
 @stop
 
@@ -152,9 +152,9 @@
                                 <th>Location</th>
                                 <th>Supplier</th>
                                 <th>Product(Qty)</th>
-                                <th>Grand Total</th>
-                                <th>Paid</th>
-                                <th>Balance</th>
+                                <th>Grand Total(Rs)</th>
+                                <th>Paid(Rs)</th>
+                                <th>Balance(Rs)</th>
                                 <th>Status</th>
                             </tr>
                             </thead>

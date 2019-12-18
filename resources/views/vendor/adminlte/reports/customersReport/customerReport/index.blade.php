@@ -12,8 +12,9 @@
 
 @section('content_header')
     <ol class="breadcrumb">
-        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Manage Suppliers</li>
+        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li ><a href="{{url('/reports/suppliers')}}"> Customer Report</a></li>
+        <li class="active">Customer Report</li>
     </ol>
 @stop
 
@@ -207,9 +208,9 @@
                                     <th align="center">Reference No</th>
                                     <th align="center">Biller</th>
                                     <th align="center">Product</th>
-                                    <th align="center">Grand Total</th>
-                                    <th align="center">Paid</th>
-                                    <th align="center">Balance</th>
+                                    <th align="center">Grand Total(Rs)</th>
+                                    <th align="center">Paid(Rs)</th>
+                                    <th align="center">Balance(Rs)</th>
                                     <th align="center">Payment Status</th>
                                     </thead>
 

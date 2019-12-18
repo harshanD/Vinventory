@@ -18,6 +18,7 @@ use App\Supplier;
 use App\Transfers;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use PhpParser\Node\Expr\Cast\Object_;
@@ -929,19 +930,15 @@ class ReportsController extends Controller
     {
         $array = array();
 
-//        if (Permissions::getRolePermissions('notifications')) {
-//            if (Permissions::getRolePermissions('quantityAlerts') === true) {
-        $array['stock'] = $this->stockNotification();
-//            }
-//        if (Permissions::getRolePermissions('newRegisteredUsers')) {
-        $array['guests'] = $this->guestsCount(); // email verified count of guests
-////        }
-////        }
-//        echo '--';
-//        var_dump(Permissions::getRolePermissions('notifications'));
-//        echo '--';
+        $stockCount = $this->stockNotification();
+        if ($stockCount != 0) {
+            $array['stock'] = $stockCount;
+        }
 
-//        return '--';
+        $guests = $this->guestsCount(); // email verified count of guests
+        if ($guests != 0) {
+            $array['guests'] = $guests;
+        }
         return $array;
     }
 
@@ -1340,31 +1337,31 @@ class ReportsController extends Controller
 
     public function customerForSale($id)
     {
-        $sum = Invoice::where('customer', $id)->sum('invoice_grand_total');
+        $sum = Invoice::where('customer', $id)->whereMonth('invoice_date', date('m'))->sum('invoice_grand_total');
         return $sum;
     }
 
     public function customerForSaleCount($id)
     {
-        $sum = Invoice::where('customer', $id)->count();
+        $sum = Invoice::where('customer', $id)->whereMonth('invoice_date', date('m'))->count();
         return $sum;
     }
 
     public function supplierForPurchases($id)
     {
-        $sum = PO::where('supplier', $id)->sum('grand_total');
+        $sum = PO::where('supplier', $id)->whereMonth('due_date', date('m'))->sum('grand_total');
         return $sum;
     }
 
     public function supplierForPurchasesCount($id)
     {
-        $sum = PO::where('supplier', $id)->count();
+        $sum = PO::where('supplier', $id)->whereMonth('due_date', date('m'))->count();
         return $sum;
     }
 
     public function customerPaid($id)
     {
-        $invoices = Invoice::where('customer', $id)->get();
+        $invoices = Invoice::where('customer', $id)->whereMonth('invoice_date', date('m'))->get();
         $sum = 0;
         foreach ($invoices as $invo) {
             $sum += $invo->paid;
@@ -1374,7 +1371,7 @@ class ReportsController extends Controller
 
     public function supplierToPaid($id)
     {
-        $pos = PO::where('supplier', $id)->get();
+        $pos = PO::where('supplier', $id)->whereMonth('due_date', date('m'))->get();
         $sum = 0;
         foreach ($pos as $po) {
             $sum += $po->paid;

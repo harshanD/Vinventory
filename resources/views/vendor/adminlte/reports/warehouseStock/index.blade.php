@@ -12,8 +12,8 @@
 
 @section('content_header')
     <ol class="breadcrumb">
-        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Manage Suppliers</li>
+        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li class="active">Warehouse Report</li>
     </ol>
 @stop
 
@@ -53,7 +53,8 @@
                                 </li>
                             @endforeach
                             <li class="divider"></li>
-                            <li><a style="cursor: pointer" onclick="getImage()"><i class="fa fa-file-image-o"></i>Save As
+                            <li><a style="cursor: pointer" onclick="getImage()"><i class="fa fa-file-image-o"></i>Save
+                                    As
                                     Image</a></li>
                             {{--                            <li class="divider"></li>--}}
 
@@ -127,9 +128,9 @@
             element: 'sales-donut',
             resize: true,
             data: [
-                {label: "Stock Value By Price", color: '#5D96CD', value: '{{$data['stockValueByPrice']}}'},
-                {label: "Stock Value By Cost", color: '#171719', value: '{{$data['stockValueByCost']}}'},
-                {label: "Profit Estimate", color: '#89E676', value: '{{$data['profitEstimate']}}'}
+                {label: "Stock Value By Price(RS)", color: '#5D96CD', value: '{{$data['stockValueByPrice']}}'},
+                {label: "Stock Value By Cost(RS)", color: '#171719', value: '{{$data['stockValueByCost']}}'},
+                {label: "Profit Estimate(RS)", color: '#89E676', value: '{{$data['profitEstimate']}}'}
             ]
         });
 

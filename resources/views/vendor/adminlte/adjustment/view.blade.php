@@ -12,7 +12,7 @@
 
 @section('content_header')
     <ol class="breadcrumb">
-        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
         <li><a href="{{url('/adjustment/manage')}}">Adjustment Manage</a></li>
         <li class="active">View Adjustment</li>
     </ol>

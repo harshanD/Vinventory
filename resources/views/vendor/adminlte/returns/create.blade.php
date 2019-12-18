@@ -12,7 +12,7 @@
 
 @section('content_header')
     <ol class="breadcrumb">
-        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
         <li class="active">Create Return</li>
     </ol>
 @stop
@@ -729,10 +729,10 @@
 
                     $('#pUnit').html("");
                     if (item.unit == '2') { /*piece*/
-                        var unitSelecter = "<option value='1'>Piece</option>" +
+                        var unitSelecter = "<option value='2'>Piece</option>" +
                             "<option value='12'>Dozen Box</option>";
-                    } else if (item.unit == '1') { /*kilograms*/
-                        var unitSelecter = "<option value='1'>Kilograms</option>";
+                    } else if (item.unit == '3') { /*kilograms*/
+                        var unitSelecter = "<option value='3'>Kilograms</option>";
                     } else { /*meter*/
                         var unitSelecter = "<option value='1'>meters</option>";
                     }

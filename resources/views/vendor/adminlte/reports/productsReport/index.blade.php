@@ -12,8 +12,8 @@
 
 @section('content_header')
     <ol class="breadcrumb">
-        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Manage Suppliers</li>
+        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li class="active">Products Report</li>
     </ol>
 @stop
 
@@ -91,9 +91,9 @@
                             <tr>
                                 <th>Product Code</th>
                                 <th>Product Name</th>
-                                <th>Purchased</th>
-                                <th>Sold</th>
-                                <th>Profit and/or Loss</th>
+                                <th>Purchased(Rs)</th>
+                                <th>Sold(Rs)</th>
+                                <th>Profit and/or Loss(Rs)</th>
                                 <th>Stock (Qty)Amt</th>
                             </tr>
                             </thead>

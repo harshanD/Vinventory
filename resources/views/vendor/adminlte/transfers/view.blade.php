@@ -12,14 +12,14 @@
 
 @section('content_header')
     <ol class="breadcrumb">
-        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
         <li><a href="{{url('transfer/manage')}}">Transfers Manage</a></li>
         <li class="active">View Transfer</li>
     </ol>
 @stop
 
 @section('content')
-    <section>
+    <section class="content">
 
         <div class="box">
             <div class="box-header with-border">

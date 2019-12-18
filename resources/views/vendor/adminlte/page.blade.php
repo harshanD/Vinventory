@@ -59,61 +59,66 @@
                                     <ul class="nav navbar-nav">
                                         {{--                                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(['Admin','Manager','Accountant']))--}}
                                         @if(  \App\Http\Controllers\Permissions::getRolePermissions('notifications'))
-                                            <li class="dropdown notifications-menu">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                    <i class="fa fa-bell-o"></i>
-                                                    <span class="label label-warning">{{ count($notifications) }}</span>
-                                                </a>
-                                                <ul class="dropdown-menu">
-                                                    <li>
-                                                        <!-- inner menu: contains the actual data -->
-                                                        <ul class="menu">
-                                                            @if(  \App\Http\Controllers\Permissions::getRolePermissions('quantityAlerts'))
-                                                                @if($notifications['stock']!=0)
-                                                                    <li>
-                                                                        <a href="/reports/quantity_alerts">
-                                                                            <i class="fa fa-tags text-aqua"></i><?=  ($notifications['stock'])?>
-                                                                            Item/s Quantity Alerts
-                                                                        </a>
-                                                                    </li>
+                                            @if( count($notifications)!=0)
+                                                <li class="dropdown notifications-menu">
+                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                        <i class="fa fa-bell-o"></i>
+
+                                                        <span class="label label-warning">{{ count($notifications) }}</span>
+
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <!-- inner menu: contains the actual data -->
+                                                            <ul class="menu">
+                                                                @if(  \App\Http\Controllers\Permissions::getRolePermissions('quantityAlerts'))
+                                                                    @if(isset($notifications['stock']) && $notifications['stock']!=0)
+                                                                        <li>
+                                                                            <a href="/reports/quantity_alerts">
+                                                                                <i class="fa fa-tags text-aqua"></i><?=  ($notifications['stock'])?>
+                                                                                Item/s Quantity Alerts
+                                                                            </a>
+                                                                        </li>
+                                                                    @endif
                                                                 @endif
-                                                            @endif
-                                                            @if(  \App\Http\Controllers\Permissions::getRolePermissions('newRegisteredUsers'))
-                                                                @if($notifications['guests']!=0)
-                                                                    <li>
-                                                                        <a href="/user/manage">
-                                                                            <i class="fa fa-users text-aqua"></i><?=  ($notifications['guests'])?>
-                                                                            new Registered Users
-                                                                        </a>
-                                                                    </li>
+                                                                @if(  \App\Http\Controllers\Permissions::getRolePermissions('newRegisteredUsers'))
+                                                                    @if(isset($notifications['guests']) && $notifications['guests']!=0)
+                                                                        <li>
+                                                                            <a href="/user/manage">
+                                                                                <i class="fa fa-users text-aqua"></i><?=  ($notifications['guests'])?>
+                                                                                new Registered Users
+                                                                            </a>
+                                                                        </li>
+                                                                    @endif
                                                                 @endif
-                                                            @endif
-                                                            {{--                                                        <li>--}}
-                                                            {{--                                                            <a href="#">--}}
-                                                            {{--                                                                <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the--}}
-                                                            {{--                                                                page and may cause design problems--}}
-                                                            {{--                                                            </a>--}}
-                                                            {{--                                                        </li>--}}
-                                                            {{--                                                        <li>--}}
-                                                            {{--                                                            <a href="#">--}}
-                                                            {{--                                                                <i class="fa fa-users text-red"></i> 5 new members joined--}}
-                                                            {{--                                                            </a>--}}
-                                                            {{--                                                        </li>--}}
-                                                            {{--                                                        <li>--}}
-                                                            {{--                                                            <a href="#">--}}
-                                                            {{--                                                                <i class="fa fa-shopping-cart text-green"></i> 25 sales made--}}
-                                                            {{--                                                            </a>--}}
-                                                            {{--                                                        </li>--}}
-                                                            {{--                                                        <li>--}}
-                                                            {{--                                                            <a href="#">--}}
-                                                            {{--                                                                <i class="fa fa-user text-red"></i> You changed your username--}}
-                                                            {{--                                                            </a>--}}
-                                                            {{--                                                        </li>--}}
-                                                        </ul>
-                                                    </li>
-                                                    {{--                                                <li class="footer"><a href="#">View all</a></li>--}}
-                                                </ul>
-                                            </li>
+
+                                                                {{--                                                        <li>--}}
+                                                                {{--                                                            <a href="#">--}}
+                                                                {{--                                                                <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the--}}
+                                                                {{--                                                                page and may cause design problems--}}
+                                                                {{--                                                            </a>--}}
+                                                                {{--                                                        </li>--}}
+                                                                {{--                                                        <li>--}}
+                                                                {{--                                                            <a href="#">--}}
+                                                                {{--                                                                <i class="fa fa-users text-red"></i> 5 new members joined--}}
+                                                                {{--                                                            </a>--}}
+                                                                {{--                                                        </li>--}}
+                                                                {{--                                                        <li>--}}
+                                                                {{--                                                            <a href="#">--}}
+                                                                {{--                                                                <i class="fa fa-shopping-cart text-green"></i> 25 sales made--}}
+                                                                {{--                                                            </a>--}}
+                                                                {{--                                                        </li>--}}
+                                                                {{--                                                        <li>--}}
+                                                                {{--                                                            <a href="#">--}}
+                                                                {{--                                                                <i class="fa fa-user text-red"></i> You changed your username--}}
+                                                                {{--                                                            </a>--}}
+                                                                {{--                                                        </li>--}}
+                                                            </ul>
+                                                        </li>
+                                                        {{--                                                <li class="footer"><a href="#">View all</a></li>--}}
+                                                    </ul>
+                                                </li>
+                                            @endif
                                         @endif
                                         <li class="dropdown user user-menu">
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"

@@ -12,8 +12,8 @@
 
 @section('content_header')
     <ol class="breadcrumb">
-        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Monthly Sales</li>
+        <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li class="active">Monthly Purchases Report</li>
     </ol>
 @stop
 
@@ -87,7 +87,7 @@
         <div class="box">
 
             <div class="box-header with-border">
-                <h3 class="box-title">Monthly Sales Report</h3>
+                <h3 class="box-title">Monthly Purchases Report</h3>
 
                 <div class="box-tools pull-right">
                     <div class="btn-group">
@@ -123,10 +123,10 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label for="suggest_product">Year</label> <input type="text" name="month"
-                                                                                  value="{{$yearMonth}}"
-                                                                                  class="form-control input-xs"
-                                                                                  id="yearpicker"
-                                                                                  autocomplete="off">
+                                                                                 value="{{$yearMonth}}"
+                                                                                 class="form-control input-xs"
+                                                                                 id="yearpicker"
+                                                                                 autocomplete="off">
                                 <input type="hidden" name="product" value="" id="report_product_id" class="input-xs">
                             </div>
                         </div>

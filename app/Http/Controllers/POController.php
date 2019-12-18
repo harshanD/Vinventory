@@ -215,7 +215,7 @@ class POController extends Controller
                 }
 
                 //incremental code
-                $lastStockRefCode = Stock::where('receive_code', 'like', '%R-%')->withTrashed()->get()->last();
+                $lastStockRefCode = Stock::where('receive_code', 'like', 'R-%')->withTrashed()->get()->last();
 //                $data = (isset($lastStockRefCode->receive_code)) ? str_replace("TR-", "PR-", str_replace("-S", "", str_replace("-A", "", $lastStockRefCode->receive_code))) : 'R-000000';
                 $data = (isset($lastStockRefCode->receive_code)) ? $lastStockRefCode->receive_code : 'R-000000';
                 $code = preg_replace_callback("|(\d+)|", "self::replace", $data);
