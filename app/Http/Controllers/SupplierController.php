@@ -37,7 +37,7 @@ class SupplierController extends Controller
             'supplier' => 'required|unique:supplier,name|max:100|regex:/^[\pL\s\-]+$/u',
             'company' => 'required|max:100',
             'address' => 'required|max:200',
-            'phone' => 'required|between:10,12',
+            'phone' =>'required|digits:10',
             'email' => 'required|email|max:100',
             'status' => 'required',
         ]);
@@ -109,7 +109,7 @@ class SupplierController extends Controller
             'edit_supplier' => 'required|unique:supplier,name,' . $id . '|max:100',
             'edit_company' => 'required|max:100',
             'edit_address' => 'required|max:200',
-            'edit_phone' => 'required|between:10,12',
+            'edit_phone' => 'required|digits:10',
             'edit_email' => 'required|email|max:100',
         ]);
 

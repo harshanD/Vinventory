@@ -241,14 +241,22 @@
                         <div class="col-md-6">
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label>Supplier/s<span class="mandatory"> *</span><?php print_r(old("supplier"))?>
+                                    <label>Supplier/s<span class="mandatory"> *</span>
                                     </label>
+                                    <?php
+
+                                    $oldSuppler = array();
+                                    if (!is_null(old("supplier"))) {
+                                        $oldSuppler = old("supplier");
+                                    }
+//                                    var_dump(in_array('1', $oldSuppler))
+                                    ?>
                                     <select class="form-control select2" multiple="multiple" name="supplier[]"
                                             id="supplier"
                                             data-placeholder="Select a State"
                                             style="width: 100%;">
                                         @foreach($suppliers as $key =>  $supplier)
-                                            <option value="{{ $supplier->id}}" {{ (isset(old("supplier")[$key]))?(old("supplier")[$key]== $supplier->id? "selected":""):'' }}>{{ $supplier->name }}</option>
+                                            <option value="{{ $supplier->id}}" {{ (!is_null(old("supplier")))?(in_array($supplier->id, $oldSuppler)? "selected":""):'' }}>{{ $supplier->name }}</option>
                                         @endforeach
                                     </select>
                                     @error('supplier')

@@ -163,7 +163,7 @@
                                 <div class="form-group">
                                     <label for="price">Product Price (Rs)<span class="mandatory"> *</span></label>
                                     <input type="text"
-                                           value="<?= (old('price') != '') ? old('price') : $product->selling_price;?>"
+                                           value="<?= (old('price') != '') ? old('price') : number_format($product->selling_price, 2);?>"
                                            class="form-control number" id="price"
                                            name="price"
                                            placeholder="Enter price"
@@ -175,7 +175,7 @@
                                 <div class="form-group">
                                     <label for="price">Product Cost (Rs)<span class="mandatory"> *</span></label>
                                     <input type="text"
-                                           value="<?= (old('cost') != '') ? old('cost') : $product->cost_price;?>"
+                                           value="<?= (old('cost') != '') ? old('cost') : number_format($product->cost_price, 2);?>"
                                            class="form-control number" id="cost"
                                            name="cost"
                                            placeholder="Enter cost"
@@ -255,9 +255,11 @@
                                 <div class="form-group">
                                     <label for="price">Status</label>
                                     <select class="form-control select2" name="status" id="status">
-                                        <option value="0" {{ (old("status")== 0||$product->status == 0? "selected":"") }}>Active
+                                        <option value="0" {{ (old("status")== 0||$product->status == 0? "selected":"") }}>
+                                            Active
                                         </option>
-                                        <option value="1" {{ (old("status")== 1||$product->status == 1? "selected":"") }}>Inactive
+                                        <option value="1" {{ (old("status")== 1||$product->status == 1? "selected":"") }}>
+                                            Inactive
                                         </option>
                                     </select>
                                 </div>

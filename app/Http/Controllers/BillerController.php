@@ -29,7 +29,7 @@ class BillerController extends Controller
             'company' => 'required|max:100|regex:/(^[A-Za-z0-9 ]+$)+/',
             'name' => 'required|max:100|unique:biller,name|regex:/(^[A-Za-z0-9 ]+$)+/',
             'email' => 'required|email|max:191|',
-            'phone' => 'required|between:10,12',
+            'phone' => 'required|digits:10',
             'address' => 'required|max:191|',
         ]);
 
@@ -61,7 +61,7 @@ class BillerController extends Controller
             'company' => 'required|max:100|regex:/(^[A-Za-z0-9 ]+$)+/',
             'name' => 'required|max:100|unique:biller,name,' . $id . '|regex:/(^[A-Za-z0-9 ]+$)+/',
             'email' => 'required|email|max:191|',
-            'phone' => 'required|between:10,12',
+            'phone' => 'required|digits:10',
             'address' => 'required|max:191|',
         ]);
 

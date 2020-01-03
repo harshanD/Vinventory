@@ -68,7 +68,7 @@ class HomeController extends Controller
             'password' => 'required:min:6',
             'cpassword' => 'required|same:password',
             'fname' => 'required|min:4|max:100|regex:/^[\pL\s\-]+$/u',
-            'phone' => 'required|between:10,12',
+            'phone' => 'required|digits:10',
             'gender' => 'required',
         ]);
 

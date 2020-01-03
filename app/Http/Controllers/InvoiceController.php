@@ -250,6 +250,15 @@ class InvoiceController extends Controller
                     $sendMail = "<li><a href=\"/send/sale/email/" . $query->id . "\">Email Sale</a></li>";
                 }
 
+                $paymentsAdd = "";
+                if (Permissions::getRolePermissions('createPayments')) {
+                    $paymentsAdd = $addPaymentLink;
+                }
+                $paymentsView = "";
+                if (Permissions::getRolePermissions('viewPayments')) {
+                    $paymentsView = "<li><a style='cursor: pointer' onclick=\"showPayments(" . $query->id . ",'IV')\">View Payments</a></li>";
+                }
+
                 return "<div class=\"btn-group\">
                   <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
                   <button type=\"button\" class=\"btn btn-default btn-flat dropdown-toggle\" data-toggle=\"dropdown\">
@@ -259,8 +268,8 @@ class InvoiceController extends Controller
                   <ul class=\"dropdown-menu\" role=\"menu\">
                       " . $editbutton . "
                     <li><a href=\"/sales/view/" . $query->id . "\">Sale details view</a></li>
-                    <li><a style='cursor: pointer' onclick=\"showPayments(" . $query->id . ",'IV')\">View Payments</a></li>
-                    " . $addPaymentLink . "
+                    " . $paymentsView . "
+                    " . $paymentsAdd . "
                     <li><a href=\"/sales/print/" . $query->id . "\">Download as PDF</a></li>
                        " . $sendMail . "
                     <li class=\"divider\"></li>

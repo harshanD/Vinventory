@@ -265,6 +265,21 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td>Payments</td>
+                                <td><input type="checkbox" name="permission[]"
+                                           value="createPayments" class="minimal">
+                                </td>
+                                <td><input type="checkbox" name="permission[]"
+                                           value="updatePayments" class="minimal">
+                                </td>
+                                <td><input type="checkbox" name="permission[]" value="viewPayments"
+                                           class="minimal">
+                                </td>
+                                <td><input type="checkbox" name="permission[]"
+                                           value="deletePayments" class="minimal">
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>People</td>
                                 <td> -</td>
                                 <td> -</td>
@@ -741,6 +756,21 @@
                                 </td>
                                 <td><input type="checkbox" name="permission[]"
                                            value="deleteTax" id="deleteTax" class="minimal">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Payments</td>
+                                <td><input type="checkbox" name="permission[]"
+                                           value="createPayments" id="createPayments" class="minimal">
+                                </td>
+                                <td><input type="checkbox" name="permission[]"
+                                           value="updatePayments" id="updatePayments" class="minimal">
+                                </td>
+                                <td><input type="checkbox" id="viewPayments" name="permission[]" value="viewPayments"
+                                           class="minimal">
+                                </td>
+                                <td><input type="checkbox" id="deletePayments" name="permission[]"
+                                           value="deletePayments" class="minimal">
                                 </td>
                             </tr>
                             <tr>

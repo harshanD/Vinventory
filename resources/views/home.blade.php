@@ -441,7 +441,7 @@
                                                     case \Config::get('constants.i_payment_status_name.Pending'):
                                                         $status = '<span class="label label-warning">Pending</span>';
                                                         break;
-                                                    case \Config::get('constants.i_payment_status_name.Over Paid'):
+                                                    case \Config::get('constants.i_payment_status_name.Over_Paid'):
                                                         $status = '<span class="label label-danger">Over Paid</span>';
                                                         break;
                                                     default:

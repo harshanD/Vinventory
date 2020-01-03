@@ -38,7 +38,7 @@ class LocationsController extends Controller
             'code' => 'required|unique:locations,code|max:100',
             'address' => 'required|max:200',
             'person' => 'required|max:100|regex:/^[\pL\s\-]+$/u',
-            'phone' => 'required|between:10,12',
+            'phone' => 'required|digits:10',
             'email' => 'required|email|max:100',
             'status' => 'required',
         ]);
@@ -114,7 +114,7 @@ class LocationsController extends Controller
             'edit_code' => 'required|unique:locations,code,' . $id . '|max:100',
             'edit_address' => 'required|max:200',
             'edit_person' => 'required|max:100|regex:/^[\pL\s\-]+$/u',
-            'edit_phone' => 'required|between:10,12',
+            'edit_phone' => 'required|digits:10',
             'edit_email' => 'required|email|max:100',
         ]);
 

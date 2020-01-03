@@ -54,10 +54,12 @@ class TransfersController extends Controller
             'toLocation' => ['required', Rule::notIn(['0'])],
         ]);
 
+        $refCode = (substr($request->input('referenceNo'), 0, 2) !== 'TR') ? "TR-" . $request->input('referenceNo') : $request->input('referenceNo');
+
 //        print_r($request->input());
 //        return 'ss';
         $tr = new Transfers();
-        $tr->tr_reference_code = $request->input('referenceNo');
+        $tr->tr_reference_code = $refCode;
         $tr->tr_date = $request->input('datepicker');
         $tr->from_location = $request->input('fromLocation');
         $tr->to_location = $request->input('toLocation');
@@ -69,7 +71,7 @@ class TransfersController extends Controller
         // add stock to stock table
         $stockAdd = new Stock();
         $stockAdd->po_reference_code = 'TRANSFER-A';
-        $stockAdd->receive_code = $request->input('referenceNo') . '-A';
+        $stockAdd->receive_code = $refCode . '-A';
         $stockAdd->location = $request->input('toLocation');
         $stockAdd->receive_date = $request->input('datepicker');
         $stockAdd->remarks = $request->input('note');
@@ -78,7 +80,7 @@ class TransfersController extends Controller
         //  subtract from stock table
         $stockSubstct = new Stock();
         $stockSubstct->po_reference_code = 'TRANSFER-S';
-        $stockSubstct->receive_code = $request->input('referenceNo') . '-S';
+        $stockSubstct->receive_code = $refCode . '-S';
         $stockSubstct->location = $request->input('fromLocation');
         $stockSubstct->receive_date = $request->input('datepicker');
         $stockSubstct->remarks = $request->input('note');
@@ -119,7 +121,7 @@ class TransfersController extends Controller
             $request->session()->flash('message', 'Error in the database while creating the Transfers');
             $request->session()->flash('message-type', 'error');
         } else {
-            $request->session()->flash('message', 'Successfully Transferred ' . "[ Ref NO:" . $request->input('referenceNo') . " ]");
+            $request->session()->flash('message', 'Successfully Transferred ' . "[ Ref NO:" . $refCode . " ]");
             $request->session()->flash('message-type', 'success');
         }
         echo json_encode(array('success' => true));
@@ -233,10 +235,11 @@ class TransfersController extends Controller
             'toLocation' => ['required', Rule::notIn(['0'])],
         ]);
 
+        $refCode = (substr($request->input('referenceNo'), 0, 2) !== 'TR') ? "TR-" . $request->input('referenceNo') : $request->input('referenceNo');
 
         $tr = Transfers::find($id);
         $olederRefCode = $tr->tr_reference_code;
-        $tr->tr_reference_code = $request->input('referenceNo');
+        $tr->tr_reference_code = $refCode;
         $tr->tr_date = $request->input('datepicker');
         $tr->from_location = $request->input('fromLocation');
         $tr->to_location = $request->input('toLocation');
@@ -250,7 +253,7 @@ class TransfersController extends Controller
         $stockAdd = Stock::updateOrCreate([                             /* TO */
             'receive_code' => $olederRefCode . '-A'
         ], [
-            'receive_code' => $request->input('referenceNo') . '-A',
+            'receive_code' => $refCode . '-A',
             'receive_date' => $request->input('datepicker'),
             'remarks' => $request->input('note'),
             'location' => $request->input('toLocation'),
@@ -260,7 +263,7 @@ class TransfersController extends Controller
         $stockSubstct = Stock::updateOrCreate([                         /* FROM */
             'receive_code' => $olederRefCode . '-S'
         ], [
-            'receive_code' => $request->input('referenceNo') . '-S',
+            'receive_code' => $refCode . '-S',
             'receive_date' => $request->input('datepicker'),
             'remarks' => $request->input('note'),
             'location' => $request->input('fromLocation'),
@@ -328,7 +331,7 @@ class TransfersController extends Controller
             $request->session()->flash('message', 'Error in the database while updating the Transfers');
             $request->session()->flash('message-type', 'error');
         } else {
-            $request->session()->flash('message', 'Successfully Updated ' . "[ Ref NO:" . $request->input('referenceNo') . " ]");
+            $request->session()->flash('message', 'Successfully Updated ' . "[ Ref NO:" . $refCode . " ]");
             $request->session()->flash('message-type', 'success');
         }
         echo json_encode(array('success' => true));

@@ -13,6 +13,9 @@ class PaymentsController extends Controller
 {
     public function addPayment(Request $request)
     {
+        if (!Permissions::getRolePermissions('createPayments')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'datepicker' => 'required|date',
             'reference_no' => 'required|unique:payments,reference_code|max:100',
@@ -44,7 +47,7 @@ class PaymentsController extends Controller
 
 
         if ($grand_total < $totalPaid) {
-            $getSum->payment_status = \Config::get('constants.i_payment_status_name.Over Paid');
+            $getSum->payment_status = \Config::get('constants.i_payment_status_name.Over_Paid');
         } elseif ($grand_total > $totalPaid) {
             $getSum->payment_status = \Config::get('constants.i_payment_status_name.Partial');
         } elseif ($grand_total == $totalPaid) {
@@ -64,6 +67,9 @@ class PaymentsController extends Controller
 
     public function editPayment(Request $request)
     {
+        if (!Permissions::getRolePermissions('updatePayments')) {
+            abort(403, 'Unauthorized action.');
+        }
         $id = $request['id'];
 
         $request->validate([
@@ -96,7 +102,7 @@ class PaymentsController extends Controller
         }
 
         if ($grand_total < $totalPaid) {
-            $getSum->payment_status = \Config::get('constants.i_payment_status_name.Over Paid');
+            $getSum->payment_status = \Config::get('constants.i_payment_status_name.Over_Paid');
         } elseif ($grand_total > $totalPaid) {
             $getSum->payment_status = \Config::get('constants.i_payment_status_name.Partial');
         } elseif ($grand_total == $totalPaid) {
@@ -122,6 +128,9 @@ class PaymentsController extends Controller
 
     public function paymentsShow(Request $request)
     {
+        if (!Permissions::getRolePermissions('viewPayments')) {
+            abort(403, 'Unauthorized action.');
+        }
         if ($request['type'] == 'PO') {
             $parent = PO::find($request['id']);
 
@@ -184,6 +193,9 @@ class PaymentsController extends Controller
 
     public function delete(Request $request)
     {
+        if (!Permissions::getRolePermissions('deletePayments')) {
+            abort(403, 'Unauthorized action.');
+        }
         $payment = Payments::find($request['id']);
         $payment->delete();
         if ($request['type'] == 'PO') {
@@ -197,7 +209,7 @@ class PaymentsController extends Controller
         $totalPaid = $this->refCodeByGetOutstanding($request['parent_reference_code']);
 
         if ($grand_total < $totalPaid) {
-            $getSum->payment_status = \Config::get('constants.i_payment_status_name.Over Paid');
+            $getSum->payment_status = \Config::get('constants.i_payment_status_name.Over_Paid');
         } elseif ($grand_total > $totalPaid) {
             $getSum->payment_status = \Config::get('constants.i_payment_status_name.Partial');
         } elseif ($grand_total == $totalPaid) {

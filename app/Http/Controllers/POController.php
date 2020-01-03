@@ -177,7 +177,7 @@ class POController extends Controller
                     case \Config::get('constants.i_payment_status_name.Pending'):
                         $status = '<span class="label label-warning">Pending</span>';
                         break;
-                    case \Config::get('constants.i_payment_status_name.Over Paid'):
+                    case \Config::get('constants.i_payment_status_name.Over_Paid'):
                         $status = '<span class="label label-danger">Over Paid</span>';
                         break;
                     default:
@@ -258,6 +258,15 @@ class POController extends Controller
                     $sendMail = "<li><a href=\"/send/email/" . $query->id . "\">Send Mail</a></li>";
                 }
 
+                $paymentsAdd = "";
+                if (Permissions::getRolePermissions('createPayments')) {
+                    $paymentsAdd = $addPaymentLink;
+                }
+                $paymentsView = "";
+                if (Permissions::getRolePermissions('viewPayments')) {
+                    $paymentsView = "<li><a style='cursor: pointer' onclick=\"showPayments(" . $query->id . ",'PO')\">View Payments</a></li>";
+                }
+
                 return $buttons = "<div class=\"btn-group\">
                   <button type=\"button\" class=\"btn btn-default btn-flat\">Action</button>
                   <button type=\"button\" class=\"btn btn-default btn-flat dropdown-toggle\" data-toggle=\"dropdown\">
@@ -269,8 +278,8 @@ class POController extends Controller
                     " . $statusOfReceiveAll . "
                     " . $statusOfpartiallyReceiveAll . "
                     <li><a href=\"/po/view/" . $query->id . "\">Purchase details view</a></li>
-                    <li><a style='cursor: pointer' onclick=\"showPayments(" . $query->id . ",'PO')\">View Payments</a></li>
-                    " . $addPaymentLink . "
+                    " . $paymentsView . "
+                    " . $paymentsAdd . "
                     <li><a href=\"/po/printpo/" . $query->id . "\">Download as PDF</a></li>
                     " . $sendMail . "
               

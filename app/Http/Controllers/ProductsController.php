@@ -48,7 +48,7 @@ class ProductsController extends Controller
         }
         $request->validate([
             'product_name' => 'required|unique:products,name|max:100',
-            'product_code' => 'required|max:191',
+            'product_code' => 'required|unique:products,item_code|max:191',
             'sku' => 'required|max:191',
             'weight' => 'required|numeric',
             'brand' => ['required', Rule::notIn(['0'])],
@@ -202,7 +202,7 @@ class ProductsController extends Controller
         $id = $request['id'];
         $validator = Validator::make($request->all(), [
             'product_name' => 'required|unique:products,name,' . $id . '|max:100',
-            'product_code' => 'required|max:191',
+            'product_code' => 'required|unique:products,item_code,' . $id . 'max:191',
             'sku' => 'required|max:191',
             'weight' => 'required',
             'brand' => ['required', Rule::notIn(['0'])],

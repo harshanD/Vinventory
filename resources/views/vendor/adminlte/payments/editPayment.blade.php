@@ -15,13 +15,13 @@
                     style="display: none; width: 0px; height: 0px;"></button>
             {{@csrf_field()}}
             <div class="modal-body">
-                <p>Please fill in the information below. The field labels marked with * are required input
+                <p>Please fill in the information below. The field labels marked with <span class="mandatory"> *</span> are required input
                     fields.</p>
 
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group has-feedback">
-                            <label for="date">Date *</label>
+                            <label for="date">Date <span class="mandatory"> *</span></label>
                             <input type="text" name="datepicker" value="{{$payment->date}}"
                                    class="form-control" id="datepicker2"
                             >
@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label for="reference_no">Reference No</label>
+                            <label for="reference_no">Reference No<span class="mandatory"> *</span></label>
                             <input type="text" name="reference_no" value="{{$payment->reference_code}}"
                                    class="form-control tip"
                                    id="reference_no">
@@ -50,7 +50,7 @@
                                 <div class="col-sm-6">
                                     <div class="payment">
                                         <div class="form-group has-feedback">
-                                            <label for="amount_1">Amount *</label> <input name="amount"
+                                            <label for="amount_1">Amount <span class="mandatory"> *</span></label> <input name="amount"
                                                                                           type="text"
                                                                                           value="{{$payment->value}}"
                                                                                           id="amount"
@@ -64,7 +64,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <label for="reference_no">Paying by *</label>
+                                    <label for="reference_no">Paying by <span class="mandatory"> *</span></label>
                                     <div class="form-group has-feedback">
                                         <select name="paid_by" id="paid_by" class="form-control paid_by"
                                                 required="required" data-bv-field="paid_by" tabindex="-1"

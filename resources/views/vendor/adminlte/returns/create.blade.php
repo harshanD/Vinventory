@@ -109,7 +109,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>biller<span class="mandatory"> *</span></label>
+                                    <label>Biller<span class="mandatory"> *</span></label>
 
                                     <div class="input-group date">
                                         <div class="input-group-addon">
@@ -233,11 +233,11 @@
                                 <tr>
                                     <th>Product (Code - Name)</th>
                                     <th hidden>Serial No</th>
-                                    <th>Net Unit Price</th>
+                                    <th>Net Unit Price(Rs)</th>
                                     <th>Quantity</th>
-                                    <th>Discount</th>
-                                    <th>Product Tax</th>
-                                    <th>Subtotal</th>
+                                    <th>Discount(Rs)</th>
+                                    <th>Product Tax(Rs)</th>
+                                    <th>Subtotal(Rs)</th>
                                     <th style="text-align:center"><i class="fa fa-trash"></i></th>
                                 </tr>
                                 </thead>

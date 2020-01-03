@@ -316,36 +316,6 @@ return [
             'can' => 'viewReports',
             'submenu' => [
                 [
-                    'text' => 'Warehouse Stock Chart',
-                    'icon' => 'plus-circle',
-                    'url' => '/reports/warehouse_stock',
-                    'can' => 'warehouseStockReport',
-                ], [
-                    'text' => 'Product Quality Alerts',
-                    'icon' => 'plus-circle',
-                    'url' => '/reports/quantity_alerts',
-                    'can' => 'productQualityAlerts',
-                ], [
-                    'text' => 'Products Report',
-                    'icon' => 'plus-circle',
-                    'url' => '/reports/products',
-                    'can' => 'productsReport',
-                ], [
-                    'text' => 'Adjustments Report',
-                    'icon' => 'plus-circle',
-                    'url' => '/reports/adjustment',
-                    'can' => 'adjustmentsReport',
-                ], [
-                    'text' => 'Category Report',
-                    'icon' => 'plus-circle',
-                    'url' => 'reports/category',
-                    'can' => 'categoryReport',
-                ], [
-                    'text' => 'Brands Report',
-                    'icon' => 'plus-circle',
-                    'url' => 'reports/brand',
-                    'can' => 'brandsReport',
-                ], [
                     'text' => 'Daily Sales',
                     'icon' => 'plus-circle',
                     'url' => 'reports/daily_sales',
@@ -390,6 +360,36 @@ return [
                     'icon' => 'plus-circle',
                     'url' => 'reports/suppliers',
                     'can' => 'suppliersReport',
+                ], [
+                    'text' => 'Product Quality Alerts',
+                    'icon' => 'plus-circle',
+                    'url' => '/reports/quantity_alerts',
+                    'can' => 'productQualityAlerts',
+                ], [
+                    'text' => 'Products Report',
+                    'icon' => 'plus-circle',
+                    'url' => '/reports/products',
+                    'can' => 'productsReport',
+                ], [
+                    'text' => 'Adjustments Report',
+                    'icon' => 'plus-circle',
+                    'url' => '/reports/adjustment',
+                    'can' => 'adjustmentsReport',
+                ], [
+                    'text' => 'Category Report',
+                    'icon' => 'plus-circle',
+                    'url' => 'reports/category',
+                    'can' => 'categoryReport',
+                ], [
+                    'text' => 'Brands Report',
+                    'icon' => 'plus-circle',
+                    'url' => 'reports/brand',
+                    'can' => 'brandsReport',
+                ],[
+                    'text' => 'Warehouse Stock Chart',
+                    'icon' => 'plus-circle',
+                    'url' => '/reports/warehouse_stock',
+                    'can' => 'warehouseStockReport',
                 ],
             ],
         ],

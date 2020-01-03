@@ -55,10 +55,11 @@ class StockReturnController extends Controller
             'location' => ['required', Rule::notIn(['0'])],
         ]);
 
-//        print_r($request->input());
-//        return 'ss';
+
+        $refCode = (substr($request->input('referenceNo'), 0, 2) !== 'RETURNS') ? "RETURNS-" . $request->input('referenceNo') : $request->input('referenceNo');
+
         $sr = new StockReturn();
-        $sr->return_reference_code = $request->input('referenceNo');
+        $sr->return_reference_code = $refCode;
         $sr->date = $request->input('datepicker');
         $sr->location = $request->input('location');
         $sr->biller = $request->input('biller');
@@ -77,7 +78,7 @@ class StockReturnController extends Controller
         // stock reduce
         $stockAdd = new Stock();
         $stockAdd->po_reference_code = 'RETURNS-A';
-        $stockAdd->receive_code = $request->input('referenceNo') . '-A';
+        $stockAdd->receive_code = $refCode . '-A';
         $stockAdd->location = $request->input('location');
         $stockAdd->receive_date = $request->input('datepicker');
         $stockAdd->remarks = '';
@@ -123,7 +124,7 @@ class StockReturnController extends Controller
             $request->session()->flash('message', 'Error in the database while creating the Return');
             $request->session()->flash('message-type', 'error');
         } else {
-            $request->session()->flash('message', 'Successfully created ' . "[ Ref NO:" . $request->input('referenceNo') . " ]");
+            $request->session()->flash('message', 'Successfully created ' . "[ Ref NO:" . $refCode . " ]");
             $request->session()->flash('message-type', 'success');
         }
         echo json_encode(array('success' => true));
@@ -235,10 +236,11 @@ class StockReturnController extends Controller
             'location' => ['required', Rule::notIn(['0'])],
         ]);
 
+        $refCode = (substr($request->input('referenceNo'), 0, 2) !== 'RETURNS') ? "RETURNS-" . $request->input('referenceNo') : $request->input('referenceNo');
 
         $sr = StockReturn::find($id);
         $olederRefCode = $sr->return_reference_code;
-        $sr->return_reference_code = $request->input('referenceNo');
+        $sr->return_reference_code = $refCode;
         $sr->date = $request->input('datepicker');
         $sr->location = $request->input('location');
         $sr->biller = $request->input('biller');
@@ -257,7 +259,7 @@ class StockReturnController extends Controller
         $stockAdd = Stock::updateOrCreate([                             /* TO */
             'receive_code' => $olederRefCode . '-A'
         ], [
-            'receive_code' => $request->input('referenceNo') . '-A',
+            'receive_code' => $refCode . '-A',
             'receive_date' => $request->input('datepicker'),
             'remarks' => $request->input('note'),
             'location' => $request->input('location'),
@@ -325,7 +327,7 @@ class StockReturnController extends Controller
             $request->session()->flash('message', 'Error in the database while updating the Stock Return');
             $request->session()->flash('message-type', 'error');
         } else {
-            $request->session()->flash('message', 'Successfully Updated ' . "[ Ref NO:" . $request->input('referenceNo') . " ]");
+            $request->session()->flash('message', 'Successfully Updated ' . "[ Ref NO:" . $refCode . " ]");
             $request->session()->flash('message-type', 'success');
         }
         echo json_encode(array('success' => true));
