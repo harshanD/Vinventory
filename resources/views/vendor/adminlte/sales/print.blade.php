@@ -204,6 +204,18 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-xs-6">
+            </div>
+            <div class="col-xs-6">
+            </div>
+            <div class="col-xs-6">
+                <div class="well well-sm">
+                    <p>Printed by: {{\Illuminate\Support\Facades\Auth::user()->name}} </p>
+                    <p>Date: {{date('Y-m-d H:i:s')}}</p>
+                </div>
+            </div>
+        </div>
         {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>--}}
 
         {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>--}}

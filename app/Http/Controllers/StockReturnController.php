@@ -375,7 +375,7 @@ class StockReturnController extends Controller
         $customer = $trdata->customers;
 //        return view('vendor.adminlte.returns.print', ['location' => $location, 'customer' => $customer, 'biller' => $biller, 'returns' => $trdata]);
         $pdf = PDF::loadView('vendor.adminlte.returns.print', ['location' => $location, 'customer' => $customer, 'biller' => $biller, 'returns' => $trdata]);
-        return $pdf->download('print.pdf');
+        return $pdf->download('return_' . $trdata->return_reference_code . '.pdf');
 //        exit(0);
 
     }

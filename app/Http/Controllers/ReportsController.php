@@ -217,6 +217,7 @@ class ReportsController extends Controller
         $list = array();
 
         $categories = Categories::where('status', \Config::get('constants.status.Active'))->get();
+
         foreach ($categories as $key => $category) {
 
             $purchasedSum = 0;
@@ -224,7 +225,7 @@ class ReportsController extends Controller
             $costValue = 0;
             $qtySum = 0;
             $qtyPrice = 0;
-
+            $qtyCatSum = 0;
             $products = Products::where('status', \Config::get('constants.status.Active'))->where('category', $category->id)->get();
             foreach ($products as $key1 => $product) {
                 $dates = array();
@@ -268,9 +269,9 @@ class ReportsController extends Controller
                 } else {
                     $qtySum = $stockController->itemQtySumNoteDeletedWareHouses($product->id);
                 }
-                $qtyPrice += $qtySum * $product->cost_price;
+                $qtyPrice += ($qtySum > 0) ? $qtySum * $product->cost_price : 0;
 
-
+                $qtyCatSum += ($qtySum > 0) ? $qtySum : 0;
             }
             $list['data'][$key] = array(
                 'category_code' => $category->code,
@@ -278,7 +279,7 @@ class ReportsController extends Controller
                 'purchased' => number_format($purchasedSum, 2),
                 'sold' => number_format($soldSum, 2),
                 'profitLess' => number_format($soldSum - $costValue, 2),
-                'stock_available' => '(' . $qtySum . ') ' . number_format($qtyPrice, 2),
+                'stock_available' => '(' . $qtyCatSum . ') ' . number_format($qtyPrice, 2),
             );
         }
         echo json_encode((isset($list['data']) ? $list : array('data' => array())));
@@ -310,7 +311,7 @@ class ReportsController extends Controller
             $costValue = 0;
             $qtySum = 0;
             $qtyPrice = 0;
-
+            $qtyBrandSum = 0;
             $products = Products::where('status', \Config::get('constants.status.Active'))->where('brand', $brand->id)->get();
             foreach ($products as $key1 => $product) {
                 $dates = array();
@@ -354,9 +355,9 @@ class ReportsController extends Controller
                 } else {
                     $qtySum = $stockController->itemQtySumNoteDeletedWareHouses($product->id);
                 }
-                $qtyPrice += $qtySum * $product->cost_price;
+                $qtyPrice += ($qtySum > 0) ? $qtySum * $product->cost_price : 0;
 
-
+                $qtyBrandSum += ($qtySum > 0) ? $qtySum : 0;
             }
             $list['data'][$key] = array(
                 'brand_code' => $brand->code,
@@ -364,7 +365,7 @@ class ReportsController extends Controller
                 'purchased' => number_format($purchasedSum, 2),
                 'sold' => number_format($soldSum, 2),
                 'profitLess' => number_format($soldSum - $costValue, 2),
-                'stock_available' => '(' . $qtySum . ') ' . number_format($qtyPrice, 2),
+                'stock_available' => '(' . $qtyBrandSum . ') ' . number_format($qtyPrice, 2),
             );
         }
         echo json_encode((isset($list['data']) ? $list : array('data' => array())));

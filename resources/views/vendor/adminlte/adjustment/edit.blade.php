@@ -165,11 +165,7 @@
                             </tr>
                             </thead>
                             <tbody id="poBody">
-                            <?php
-                            echo '<pre>';
-                            //                            print_r());
-                            //                            echo '</pre>';
-                            ?>
+
                             @isset($added->stockItems)
                                 @foreach($added->stockItems as $addsItem)
 

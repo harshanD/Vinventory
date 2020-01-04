@@ -617,7 +617,7 @@ class POController extends Controller
 //        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
 //        return view('vendor.adminlte.po.printPo', ['locations' => $locations, 'suppliers' => $supplier, 'po' => $podata]);
         $pdf = PDF::loadView('vendor.adminlte.po.printPo', ['locations' => $locations, 'suppliers' => $supplier, 'po' => $podata]);
-        return $pdf->download('printPo.pdf');
+        return $pdf->download('po_' . $podata->referenceCode . '.pdf');
 //        exit(0);
     }
 

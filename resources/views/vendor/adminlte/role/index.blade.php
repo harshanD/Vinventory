@@ -311,7 +311,7 @@
                             </tr>
                             <tr>
                                 <td></td>
-                                <td colspan="2">Product Quality Alerts</td>
+                                <td colspan="2">Product Quantity Alerts</td>
                                 <td><input type="checkbox" name="permission[]" value="productQualityAlerts"
                                            class="minimal"></td>
                                 <td> -</td>
@@ -808,7 +808,7 @@
                             </tr>
                             <tr>
                                 <td></td>
-                                <td colspan="2">Product Quality Alerts</td>
+                                <td colspan="2">Product Quantity Alerts</td>
                                 <td><input type="checkbox" name="permission[]" value="productQualityAlerts"
                                            id=productQualityAlerts"
                                            class="minimal"></td>

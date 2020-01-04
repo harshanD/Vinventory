@@ -423,9 +423,7 @@ class InvoiceController extends Controller
         $customer = $ivdata->customers;
 //return view('vendor.adminlte.sales.print', ['location' => $location, 'customer' => $customer, 'biller' => $biller, 'sales' => $ivdata]);
         $pdf = PDF::loadView('vendor.adminlte.sales.print', ['location' => $location, 'customer' => $customer, 'biller' => $biller, 'sales' => $ivdata]);
-        return $pdf->download('print.pdf');
-
-
+        return $pdf->download('iv_' . $ivdata->invoice_code . '.pdf');
     }
 
     public function delete(Request $request, $id)

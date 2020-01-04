@@ -169,7 +169,7 @@ class TransfersController extends Controller
                         $status = '<span class="label label-success">Completed</span>';
                         break;
                     case 2:
-                        $status = '<span class="label label-success">Pending</span>';
+                        $status = '<span class="label label-warning">Pending</span>';
                         break;
                     case 3:
                         $status = '<span class="label label-success">Send</span>';
@@ -379,7 +379,7 @@ class TransfersController extends Controller
 //        $pdf = PDF::loadView('vendor.adminlte.transfers.test');
 //        $pdf->save(storage_path().'printPo.pdf');
 //        return $pdf->stream('printPo.pdf');
-        return $pdf->download('printPo.pdf');
+        return $pdf->download('transfer_' . $trdata->tr_reference_code . '.pdf');
 //        exit(0);
 
     }

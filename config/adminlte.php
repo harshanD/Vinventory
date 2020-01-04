@@ -361,7 +361,7 @@ return [
                     'url' => 'reports/suppliers',
                     'can' => 'suppliersReport',
                 ], [
-                    'text' => 'Product Quality Alerts',
+                    'text' => 'Product Quantity Alerts',
                     'icon' => 'plus-circle',
                     'url' => '/reports/quantity_alerts',
                     'can' => 'productQualityAlerts',

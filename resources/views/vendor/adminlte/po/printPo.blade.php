@@ -134,7 +134,18 @@
                     <p>Stamp &amp; Signature</p>
                 </div>
             </div>
-
+            <div class="row">
+                <div class="col-xs-6">
+                </div>
+                <div class="col-xs-6">
+                </div>
+                <div class="col-xs-6">
+                    <div class="well well-sm">
+                        <p>Printed by: {{\Illuminate\Support\Facades\Auth::user()->name}} </p>
+                        <p>Date: {{date('Y-m-d H:i:s')}}</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

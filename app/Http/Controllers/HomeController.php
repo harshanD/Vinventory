@@ -250,6 +250,7 @@ class HomeController extends Controller
                 ($value->email_verified_at == null) ? '<span class="label label-danger">Not verified</span>' : '<span class="label label-success">Verified</span>',
                 $status,
                 ($value->phone == null) ? '--' : $value->phone,
+//                $value->roles,
                 $value->roles[0]->name,
                 $buttons
             );

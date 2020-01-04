@@ -27,14 +27,14 @@
                                 <td>{{number_format($payment->value,2)}}</td>
                                 <td>{{$payment->pay_type}}</td>
                                 <td>
-                                    @if (!\App\Http\Controllers\Permissions::getRolePermissions('updatePayments'))
+                                    @if (\App\Http\Controllers\Permissions::getRolePermissions('updatePayments'))
                                         <button type="button" class="btn btn-default"
                                                 onclick="editPayment( {{$payment->id}} {{','. "'".$type."'"}})"
                                                 data-toggle="modal" data-target="#editTaxModal"><i
                                                     class="fa fa-pencil"></i>
                                         </button>
                                     @endif
-                                    @if (!\App\Http\Controllers\Permissions::getRolePermissions('deletePayments'))
+                                    @if (\App\Http\Controllers\Permissions::getRolePermissions('deletePayments'))
                                         <button type="button" class="btn btn-default"
                                                 onclick="deletePayment({{$payment->id}}{{','. "'".$type."'"}})"
                                                 data-toggle="modal"

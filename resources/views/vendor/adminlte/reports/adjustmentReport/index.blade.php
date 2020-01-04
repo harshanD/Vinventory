@@ -180,8 +180,8 @@
                 },
                 columnDefs: [
                     {
-                        "targets": [2, 3, 4], // your case first column
-                        "className": "text-right",
+                        "targets": [0,2, 3, 4], // your case first column
+                        "className": "text-center",
                     },
                 ],
                 "bDestroy": true
@@ -211,8 +211,8 @@
                     ],
                     columnDefs: [
                         {
-                            "targets": [2, 3, 4], // your case first column
-                            "className": "text-right",
+                            "targets": [0,2, 3, 4], // your case first column
+                            "className": "text-center",
                         },
                     ],
                 });
