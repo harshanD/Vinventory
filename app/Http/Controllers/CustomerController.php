@@ -105,7 +105,7 @@ class CustomerController extends Controller
             }
 
             if (Permissions::getRolePermissions('deleteCustomer')) {
-                $deleteButton .= "<li><a style='cursor: pointer' onclick=\"deleteCustomer(" . $value->id . ")\">Delete Transfer</a></li>";
+                $deleteButton .= "<li><a style='cursor: pointer' onclick=\"deleteCustomer(" . $value->id . ")\">Delete Customer</a></li>";
             }
 
 

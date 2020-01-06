@@ -41,7 +41,6 @@ class StockReturnController extends Controller
         return view('vendor.adminlte.returns.create', ['locations' => $locations, 'tax' => $tax, 'lastRefCode' => $code, 'billers' => $billers, 'customers' => $customers]);
     }
 
-
     public function create(Request $request)
     {
         if (!Permissions::getRolePermissions('createSupplier')) {
@@ -56,7 +55,7 @@ class StockReturnController extends Controller
         ]);
 
 
-        $refCode = (substr($request->input('referenceNo'), 0, 2) !== 'RETURNS') ? "RETURNS-" . $request->input('referenceNo') : $request->input('referenceNo');
+        $refCode = (substr($request->input('referenceNo'), 0, 7) !== 'RETURNS') ? "RETURNS-" . $request->input('referenceNo') : $request->input('referenceNo');
 
         $sr = new StockReturn();
         $sr->return_reference_code = $refCode;

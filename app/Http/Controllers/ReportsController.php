@@ -915,9 +915,9 @@ class ReportsController extends Controller
             $array[$key]['purchases'] = $poValue;
             $array[$key]['purchaseProductTax'] = $poProductTax;
             if ($key == 0) {
-                $array[$key]['month'] = date('F', strtotime('-2 month')) . '-' . date('Y');
+                $array[$key]['month'] = date('F', strtotime('-2 month')) . '-' . date('Y', strtotime('-2 month'));
             } elseif ($key == 1) {
-                $array[$key]['month'] = date('F', strtotime('-1 month')) . '-' . date('Y');
+                $array[$key]['month'] = date('F', strtotime('-1 month')) . '-' . date('Y', strtotime('-1 month'));
             } elseif ($key == 2) {
                 $array[$key]['month'] = date('F', strtotime('0 month')) . '-' . date('Y');
             }
