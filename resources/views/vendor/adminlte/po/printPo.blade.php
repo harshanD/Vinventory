@@ -34,7 +34,8 @@
                         <br>
                         <p style="font-weight:bold;">
                             Status: {{ \Config::get('constants.po_status_to_name.'.$po->status)}}</p>
-                        <p style="font-weight:bold;">Payment Status: Pending</p>
+                        <p style="font-weight:bold;">Payment Status: {{ \Config::get('constants.i_payment_status_value.'.$po->payment_status)}}</p>
+                        <p style="font-weight:bold;">Approve Status:  <?= ($po->approve_status)?'Approved':'Not Approved' ?></p>
                         <br>
                         Reference: {{$po->referenceCode}}</div>
                     <div class="col-xs-6 pull-right text-right order_barcodes">
@@ -112,20 +113,18 @@
                     <tr>
                         <td colspan="5" style="text-align:right; font-weight:bold;">Paid (Rs)
                         </td>
-                        <td style="text-align:right; font-weight:bold;">  {{number_format(00,2)}}</td>
+                        <td style="text-align:right; font-weight:bold;">{{number_format($po->paid,2)}}</td>
                     </tr>
                     <tr>
                         <td colspan="5" style="text-align:right; font-weight:bold;">Balance (Rs)
                         </td>
-                        <td style="text-align:right; font-weight:bold;">{{number_format($po->grand_total,2)}}</td>
+                        <td style="text-align:right; font-weight:bold;">{{number_format($po->grand_total-$po->paid,2)}}</td>
                     </tr>
 
                     </tfoot>
                 </table>
             </div>
             <div class="row">
-                <div class="col-xs-12">
-                </div>
                 <div class="col-xs-4  pull-right">
                     <p>Created by: {{$po->creator->name}} </p>
                     <p>&nbsp;</p>

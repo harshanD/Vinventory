@@ -235,7 +235,7 @@ class StockReturnController extends Controller
             'location' => ['required', Rule::notIn(['0'])],
         ]);
 
-        $refCode = (substr($request->input('referenceNo'), 0, 2) !== 'RETURNS') ? "RETURNS-" . $request->input('referenceNo') : $request->input('referenceNo');
+        $refCode = (substr($request->input('referenceNo'), 0, 7) !== 'RETURNS') ? "RETURNS-" . $request->input('referenceNo') : $request->input('referenceNo');
 
         $sr = StockReturn::find($id);
         $olederRefCode = $sr->return_reference_code;

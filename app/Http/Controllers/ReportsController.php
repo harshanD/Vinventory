@@ -184,8 +184,8 @@ class ReportsController extends Controller
             } else {
                 $qtySum = $stockController->itemQtySumNoteDeletedWareHouses($product->id);
             }
-            $qtyPrice = number_format($qtySum * $product->cost_price, 2);
-
+            $qtyPrice = number_format(($qtySum > 0) ? $qtySum * $product->cost_price : 0, 2);
+            $qtySum = ($qtySum > 0) ? $qtySum : 0;
             $list['data'][$key] = array(
                 'item_code' => $product->item_code,
                 'name' => $product->name,
@@ -1070,7 +1070,7 @@ class ReportsController extends Controller
             $payment = $payment->where('pay_type', $request->payBy);
         }
         if (isset($request->cNumber) && $request->cNumber != '') {
-            $payment = $payment->where(' cheque_no', $request->cNumber);
+            $payment = $payment->where('cheque_no', $request->cNumber);
         }
         if (isset($request->createdUser) && $request->createdUser != '0') {
             $payment = $payment->where('created_by', $request->createdUser);

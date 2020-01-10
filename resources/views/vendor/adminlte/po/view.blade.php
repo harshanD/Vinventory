@@ -98,7 +98,7 @@
                             <p style="font-weight:bold;">{{$po->due_date}}</p>
                             <p style="font-weight:bold;">
                                 Status: {{ \Config::get('constants.po_status_to_name.'.$po->status)}}</p>
-                            <p style="font-weight:bold;">Payment Status: Pending</p>
+                            <p style="font-weight:bold;">Payment Status: {{ \Config::get('constants.i_payment_status_value.'.$po->payment_status)}}</p>
                         </div>
                         <div class="col-xs-12 order_barcodes">
                             <span>
@@ -152,11 +152,11 @@
                             </tr>
                             <tr style="font-weight: bold">
                                 <td style="text-align: right" colspan="5">Paid (Rs)</td>
-                                <td style="text-align: right">{{number_format(00,2)}}</td>
+                                <td style="text-align:right; font-weight:bold;">{{number_format($po->paid,2)}}</td>
                             </tr>
                             <tr style="font-weight: bold">
                                 <td style="text-align: right" colspan="5">Balance (Rs)</td>
-                                <td style="text-align: right">{{number_format($po->grand_total,2)}}</td>
+                                <td style="text-align: right">{{number_format($po->grand_total-$po->paid,2)}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -193,10 +193,12 @@
 
 
                         <div style="float: right">
+                            @if(\App\Http\Controllers\Permissions::getRolePermissions('viewPayments'))
                             <button type="button" onclick="showPayments({{$po->id}},'PO')" class="btn btn-success"><i
                                         class="fa fa-credit-card"></i>
                                 View Payments
                             </button>
+                            @endif
                             <a class="btn btn-success" href='{{url('po/printpo/'.$po->id)}}'>
                                 <i class="fa fa-file-pdf-o"></i><span class="hidden-sm hidden-xs"> PDF</span>
                             </a>

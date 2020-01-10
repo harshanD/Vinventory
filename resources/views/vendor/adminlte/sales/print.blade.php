@@ -160,12 +160,12 @@
                     <tr>
                         <td colspan="6" style="text-align:right; font-weight:bold;">Paid (Rs)
                         </td>
-                        <td style="text-align:right; font-weight:bold;">{{number_format(0,2)}}</td>
+                        <td style="text-align:right; font-weight:bold;">{{number_format($sales->paid,2)}}</td>
                     </tr>
                     <tr>
                         <td colspan="6" style="text-align:right; font-weight:bold;">Balance (Rs)
                         </td>
-                        <td style="text-align:right; font-weight:bold;">{{number_format($sales->invoice_grand_total,2)}}</td>
+                        <td style="text-align:right; font-weight:bold;">{{number_format($sales->invoice_grand_total-$sales->paid,2)}}</td>
                     </tr>
                     </tfoot>
 
