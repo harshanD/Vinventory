@@ -893,7 +893,7 @@ class ReportsController extends Controller
             $sales = 0;
             foreach ($invoices as $invoice) {
                 foreach ($invoice->invoiceItems as $invo) {
-                    $soldProductTax += $invo->tax_val;
+                    $soldProductTax += $invo->tax_val * $invo->qty;
                 }
                 $orderTax += $invoice->tax_amount;
                 $sales += $invoice->invoice_grand_total;
@@ -908,7 +908,7 @@ class ReportsController extends Controller
             $poValue = 0;
             foreach ($purs as $pur) {
                 foreach ($pur->poDetails as $pod) {
-                    $poProductTax += $pod->tax_val;
+                    $poProductTax += $pod->tax_val * $pod->qty;
                 }
                 $poValue += $pur->grand_total;
             }

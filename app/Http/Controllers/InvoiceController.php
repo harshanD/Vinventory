@@ -287,8 +287,6 @@ class InvoiceController extends Controller
 
     public function editInvoData(Request $request, $id)
     {
-//        print_r($request->input());
-//        return '1111';
         $validator = Validator::make($request->all(), [
             'datepicker' => 'required|date',
             'saleStatus' => ['required', Rule::notIn(['0'])],
@@ -315,7 +313,7 @@ class InvoiceController extends Controller
         $iv->tax_amount = self::numberFormatRemove(number_format($request->input('grand_tax'), 2));
         $iv->discount = self::numberFormatRemove(number_format($request->input('grand_discount'), 2));
         $iv->discount_val_or_per = ($request->input('wholeDiscount') == '') ? 0 : self::numberFormatRemove(number_format($request->input('wholeDiscount'), 2));
-        $iv->invoice_grand_total = $request->input('grand_total');
+        $iv->invoice_grand_total = self::numberFormatRemove(number_format($request->input('grand_total'), 2));
         $iv->tax_per = $request->input('grand_tax_id');
         $iv->sales_status = $request->input('saleStatus');
         $iv->status = \Config::get('constants.status.Active');
@@ -349,7 +347,7 @@ class InvoiceController extends Controller
             $invoItemDel = Invoice::where('id', '=', $iv->id)->firstOrFail();
             $invoItemDel->invoiceItems()->whereIn('item_id', $deletedItems)->delete();
 
-            $StockItemDel = Stock::where('id', '=', $refCode . '-S')->firstOrFail();
+            $StockItemDel = Stock::where('receive_code', '=', $refCode . '-S')->firstOrFail();
             $StockItemDel->stockItems()->whereIn('item_id', $deletedItems)->delete();
         }
 

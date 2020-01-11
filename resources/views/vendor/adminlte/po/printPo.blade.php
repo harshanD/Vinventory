@@ -81,14 +81,17 @@
                     </tr>
                     </thead>
                     <tbody>
-
+                    <?php $productTax = 0?>
                     @foreach($po->poDetails as $key => $p)
+                        <?php
+                        $productTax += $p->tax_val * $p->qty;
+                        ?>
                         <tr>
                             <td>{{$key+1}}</td>
                             <td>{{$p->product->name}}( {{$p->product->item_code }} )</td>
                             <td>{{$p->qty}}</td>
                             <td style="text-align: right">{{number_format(($p->cost_price),2)}}</td>
-                            <td style="text-align: right">{{number_format($p->tax_per,2)}}</td>
+                            <td style="text-align: right">{{number_format($p->tax_val * $p->qty,2)}}</td>
                             <td style="text-align: right">{{number_format($p->sub_total,2)}}</td>
                         </tr>
                     @endforeach
@@ -99,7 +102,7 @@
                         <td colspan="4" style="text-align:right;">Total (Rs)
                         </td>
                         <td style="text-align:right;">
-                            {{number_format($po->tax,2)}}
+                            {{number_format($productTax,2)}}
                         </td>
                         <td style="text-align:right;">
                             {{number_format($po->grand_total,2)}}

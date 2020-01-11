@@ -161,6 +161,8 @@ class TransfersController extends Controller
                 return str_limit($query->toLocation->name, 20);
             })->addColumn('fromLocation', function ($query) {
                 return str_limit($query->fromLocation->name, 20);
+            })->addColumn('grand_total', function ($query) {
+                return number_format($query->grand_total, 2);
             })->addColumn('total', function ($query) {
                 return number_format($query->tot_tax + $query->grand_total, 2);
             })->addColumn('status', function ($query) {

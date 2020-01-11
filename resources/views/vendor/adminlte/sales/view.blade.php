@@ -107,7 +107,7 @@
                             <?php $tot = 0;$incr = 0;$taxTot = 0;$disTot = 0; ?>
                             @foreach($sales->invoiceItems as $item)
                                 <?php $tot += $item->sub_total;
-                                $taxTot += $item->tax_val;
+                                $taxTot += $item->tax_val*$item->qty;
                                 $disTot += $item->discount;
                                 ?>
                                 <td style="text-align:center; width:40px; vertical-align:middle;">{{++$incr}}</td>
@@ -121,7 +121,7 @@
                                 </td>
                                 <td style="width: 120px; text-align:right; vertical-align:middle;">
                                     {{--                                <small>(S)</small>--}}
-                                    {{number_format($item->tax_val,2)}}
+                                    {{number_format($item->tax_val*$item->qty,2)}}
                                 </td>
                                 <td style="width: 120px; text-align:right; vertical-align:middle;">
                                     {{--                                <small>(S)</small>--}}

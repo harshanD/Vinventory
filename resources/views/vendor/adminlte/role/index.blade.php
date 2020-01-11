@@ -810,7 +810,7 @@
                                 <td></td>
                                 <td colspan="2">Product Quantity Alerts</td>
                                 <td><input type="checkbox" name="permission[]" value="productQualityAlerts"
-                                           id=productQualityAlerts"
+                                           id="productQualityAlerts"
                                            class="minimal"></td>
                                 <td> -</td>
                             </tr>

@@ -98,7 +98,8 @@
                             <p style="font-weight:bold;">{{$po->due_date}}</p>
                             <p style="font-weight:bold;">
                                 Status: {{ \Config::get('constants.po_status_to_name.'.$po->status)}}</p>
-                            <p style="font-weight:bold;">Payment Status: {{ \Config::get('constants.i_payment_status_value.'.$po->payment_status)}}</p>
+                            <p style="font-weight:bold;">Payment
+                                Status: {{ \Config::get('constants.i_payment_status_value.'.$po->payment_status)}}</p>
                         </div>
                         <div class="col-xs-12 order_barcodes">
                             <span>
@@ -131,19 +132,23 @@
                             </tr>
                             </thead>
                             <tbody>
+                            <?php $productTax = 0?>
                             @foreach($po->poDetails as $key => $p)
+                                <?php
+                                $productTax += $p->tax_val * $p->qty;
+                                ?>
                                 <tr>
                                     <td>{{$key+1}}</td>
                                     <td>{{$p->product->name}}</td>
                                     <td>{{$p->qty}}</td>
                                     <td>{{number_format($p->cost_price,2)}}</td>
-                                    <td style="text-align: right">{{number_format($p->tax_val,2)}}</td>
+                                    <td style="text-align: right">{{number_format($p->tax_val*$p->qty,2)}}</td>
                                     <td style="text-align: right">{{number_format($p->sub_total,2)}}</td>
                                 </tr>
                             @endforeach
                             <tr style="font-weight: bold">
                                 <td colspan="4" style="text-align: right">Total (Rs)</td>
-                                <td style="text-align: right">{{number_format($po->tax,2)}}</td>
+                                <td style="text-align: right">{{number_format($productTax,2)}}</td>
                                 <td style="text-align: right">{{number_format($po->grand_total,2)}}</td>
                             </tr>
                             <tr style="font-weight: bold">
@@ -194,10 +199,11 @@
 
                         <div style="float: right">
                             @if(\App\Http\Controllers\Permissions::getRolePermissions('viewPayments'))
-                            <button type="button" onclick="showPayments({{$po->id}},'PO')" class="btn btn-success"><i
-                                        class="fa fa-credit-card"></i>
-                                View Payments
-                            </button>
+                                <button type="button" onclick="showPayments({{$po->id}},'PO')" class="btn btn-success">
+                                    <i
+                                            class="fa fa-credit-card"></i>
+                                    View Payments
+                                </button>
                             @endif
                             <a class="btn btn-success" href='{{url('po/printpo/'.$po->id)}}'>
                                 <i class="fa fa-file-pdf-o"></i><span class="hidden-sm hidden-xs"> PDF</span>

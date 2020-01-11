@@ -483,7 +483,7 @@
                                                         $status = '<span class="label label-success">Completed</span>';
                                                         break;
                                                     case 2:
-                                                        $status = '<span class="label label-success">Pending</span>';
+                                                        $status = '<span class="label label-warning">Pending</span>';
                                                         break;
                                                     case 3:
                                                         $status = '<span class="label label-success">Send</span>';
